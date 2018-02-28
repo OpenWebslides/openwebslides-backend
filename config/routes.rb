@@ -29,10 +29,6 @@ Rails.application.routes.draw do
       # Collaborations relationship
       jsonapi_related_resources :collaborations
       jsonapi_links :collaborations, :only => :show
-
-      # Conversions relationship
-      jsonapi_related_resources :conversions
-      jsonapi_links :conversions, :only => :show
     end
 
     ##
@@ -67,19 +63,6 @@ Rails.application.routes.draw do
       jsonapi_link :deck, :only => :show
 
       get '/raw' => 'assets#raw'
-    end
-
-    ##
-    # Conversions API (immutable)
-    #
-    jsonapi_resources :conversions, :only => %i[create show] do
-      # Deck relationship
-      jsonapi_related_resource :deck
-      jsonapi_link :deck, :only => :show
-
-      # User relationship
-      jsonapi_related_resource :user
-      jsonapi_link :user, :only => :show
     end
 
     ##

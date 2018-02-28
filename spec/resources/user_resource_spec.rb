@@ -21,21 +21,21 @@ RSpec.describe UserResource, :type => :resource do
   describe 'fields' do
     context 'for a guest' do
       it 'should have a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id first_name last_name decks collaborations conversions]
+        expect(subject.fetchable_fields).to match_array %i[id first_name last_name decks collaborations]
       end
     end
 
     context 'for a user' do
       let(:context) { { :current_user => build(:user) } }
       it 'should have a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id first_name last_name decks collaborations conversions]
+        expect(subject.fetchable_fields).to match_array %i[id first_name last_name decks collaborations]
       end
     end
 
     context 'for a user' do
       let(:context) { { :current_user => user } }
       it 'should have a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id first_name last_name email decks collaborations conversions]
+        expect(subject.fetchable_fields).to match_array %i[id first_name last_name email decks collaborations]
       end
     end
 

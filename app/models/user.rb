@@ -27,10 +27,6 @@ class User < ApplicationRecord
            :dependent => :destroy,
            :inverse_of => :user
 
-  has_many :conversions,
-           :dependent => :destroy,
-           :inverse_of => :user
-
   has_many :grants,
            :dependent => :destroy
 

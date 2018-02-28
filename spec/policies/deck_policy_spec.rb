@@ -28,7 +28,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_notifications
-        expect(subject).to forbid_action :show_conversion
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -45,7 +44,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to forbid_action :show_collaborators
         expect(subject).to forbid_action :show_assets
         expect(subject).to forbid_action :show_notifications
-        expect(subject).to forbid_action :show_conversion
         expect(subject).to forbid_action :show_conversations
         expect(subject).to forbid_action :show_annotations
       end
@@ -62,7 +60,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to forbid_action :show_collaborators
         expect(subject).to forbid_action :show_assets
         expect(subject).to forbid_action :show_notifications
-        expect(subject).to forbid_action :show_conversion
         expect(subject).to forbid_action :show_conversations
         expect(subject).to forbid_action :show_annotations
       end
@@ -90,7 +87,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_notifications
-        expect(subject).to forbid_action :show_conversion
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -107,7 +103,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_notifications
-        expect(subject).to forbid_action :show_conversion
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -124,7 +119,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to forbid_action :show_collaborators
         expect(subject).to forbid_action :show_assets
         expect(subject).to forbid_action :show_notifications
-        expect(subject).to forbid_action :show_conversion
         expect(subject).to forbid_action :show_conversations
         expect(subject).to forbid_action :show_annotations
       end
@@ -153,7 +147,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_notifications
-        expect(subject).to forbid_action :show_conversion
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -171,7 +164,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_notifications
-        expect(subject).to forbid_action :show_conversion
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -189,7 +181,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_notifications
-        expect(subject).to forbid_action :show_conversion
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -218,7 +209,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_notifications
-        expect(subject).to permit_action :show_conversion
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -236,7 +226,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_notifications
-        expect(subject).to permit_action :show_conversion
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -254,7 +243,6 @@ RSpec.describe DeckPolicy do
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_notifications
-        expect(subject).to permit_action :show_conversion
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end

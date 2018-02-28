@@ -23,7 +23,6 @@ module OpenWebslides
   class Configuration
     attr_accessor :repository_path,
                   :template_path,
-                  :conversion_jar_path,
                   :default_template,
                   :tmpdir,
                   :oauth2,
@@ -45,7 +44,6 @@ module OpenWebslides
       #
       raise 'repository_path' unless Dir.exist? repository_path
       raise 'template_path' unless Dir.exist? template_path
-      raise 'conversion_jar_path' unless File.exist? conversion_jar_path
       raise 'default_template' unless Dir.exist? File.join template_path, default_template
 
       ##

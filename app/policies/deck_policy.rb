@@ -82,15 +82,6 @@ class DeckPolicy < ApplicationPolicy
   end
 
   ##
-  # Relationship: conversion
-  #
-  def show_conversion?
-    # Users can only show conversion if the deck is destroyable
-    # Authorize the user separately in the controller
-    destroy?
-  end
-
-  ##
   # Relationship: conversations
   #
   def show_conversations?

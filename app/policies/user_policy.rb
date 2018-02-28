@@ -57,14 +57,6 @@ class UserPolicy < ApplicationPolicy
   end
 
   ##
-  # Relationships: conversions
-  #
-  def show_conversions?
-    # Users can only show their own conversions relationships
-    !@user.nil? && @user == @record
-  end
-
-  ##
   # Relationships: annotations
   #
   def show_annotations?

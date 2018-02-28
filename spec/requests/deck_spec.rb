@@ -44,7 +44,6 @@ RSpec.describe 'Deck API', :type => :request do
     }.to_json
   end
 
-
   describe 'GET /' do
     before do
       create_list :deck, 3
@@ -247,6 +246,5 @@ RSpec.describe 'Deck API', :type => :request do
 
   # TODO: user relationship
   # TODO: collaborators relationship
-  # TODO: conversion relationship
   # TODO: assets relationship
 end

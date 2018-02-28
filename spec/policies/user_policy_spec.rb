@@ -19,7 +19,6 @@ RSpec.describe UserPolicy do
     it { is_expected.to permit_action :show_decks }
     it { is_expected.to permit_action :show_collaborations }
     it { is_expected.to permit_action :show_notifications }
-    it { is_expected.to forbid_action :show_conversions }
     it { is_expected.to permit_action :show_annotations }
   end
 
@@ -35,7 +34,6 @@ RSpec.describe UserPolicy do
     it { is_expected.to permit_action :show_decks }
     it { is_expected.to permit_action :show_collaborations }
     it { is_expected.to permit_action :show_notifications }
-    it { is_expected.to forbid_action :show_conversions }
     it { is_expected.to permit_action :show_annotations }
   end
 
@@ -50,7 +48,6 @@ RSpec.describe UserPolicy do
     it { is_expected.to permit_action :show_decks }
     it { is_expected.to permit_action :show_collaborations }
     it { is_expected.to permit_action :show_notifications }
-    it { is_expected.to permit_action :show_conversions }
     it { is_expected.to permit_action :show_annotations }
   end
 end

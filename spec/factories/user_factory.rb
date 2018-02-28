@@ -17,10 +17,6 @@ FactoryBot.define do
       identities { build_list :identity, 3 }
     end
 
-    trait :with_conversions do
-      conversions { build_list :conversion, 3 }
-    end
-
     trait :confirmed do
       after :build, &:confirm
     end

@@ -21,7 +21,6 @@ class UserResource < ApplicationResource
   #
   has_many :decks
   has_many :collaborations
-  has_many :conversions
 
   ##
   # Filters

@@ -38,18 +38,6 @@ ActiveRecord::Schema.define(version: 20170822131444) do
     t.index ["filename", "deck_id"], name: "index_assets_on_filename_and_deck_id", unique: true
   end
 
-  create_table "conversions", force: :cascade do |t|
-    t.string "filename"
-    t.string "name"
-    t.integer "status"
-    t.integer "deck_id"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["deck_id"], name: "index_conversions_on_deck_id"
-    t.index ["user_id"], name: "index_conversions_on_user_id"
-  end
-
   create_table "decks", force: :cascade do |t|
     t.string "name"
     t.string "canonical_name"

@@ -47,10 +47,6 @@ class Deck < ApplicationRecord
            :dependent => :destroy,
            :inverse_of => :deck
 
-  has_one :conversion,
-          :dependent => :destroy,
-          :inverse_of => :deck
-
   has_many :annotations,
            :dependent => :destroy,
            :inverse_of => :deck

@@ -62,7 +62,6 @@ RSpec.describe Deck, :type => :model do
     it { is_expected.to have_many(:collaborators).through(:grants).inverse_of(:collaborations) }
     it { is_expected.to have_many(:assets).dependent(:destroy).inverse_of(:deck) }
     it { is_expected.to have_many(:notifications).dependent(:destroy).inverse_of(:deck) }
-    it { is_expected.to have_one(:conversion).dependent(:destroy).inverse_of(:deck) }
     it { is_expected.to have_many(:annotations).dependent(:destroy).inverse_of(:deck) }
     it { is_expected.to have_many(:conversations).inverse_of(:deck) }
 
