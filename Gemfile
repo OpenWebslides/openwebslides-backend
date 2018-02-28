@@ -100,8 +100,8 @@ group :test do
   gem 'jsonapi-resources-matchers'
 
   # Factory pattern for testing
-  gem 'factory_girl'
-  gem 'factory_girl_rails'
+  gem 'factory_bot'
+  gem 'factory_bot_rails'
 
   # Fake data generator
   gem 'faker'

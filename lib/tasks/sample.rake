@@ -6,7 +6,7 @@ namespace :db do
     # Because this file gets eagerly loaded in production,
     # test environment-only dependencies need to be required on runtime only
     require 'faker'
-    require 'factory_girl'
+    require 'factory_bot'
 
     ##
     # Database size factor (10 =~ 100 users)

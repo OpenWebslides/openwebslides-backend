@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :conversion do
     filename { File.basename Faker::File.file_name }
     name { filename.split('.').first }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :asset do
     filename { Faker::File.file_name('')[1..-1] }
 
