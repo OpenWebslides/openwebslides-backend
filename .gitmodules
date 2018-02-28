@@ -3,4 +3,4 @@
 	url = https://github.com/OpenWebslides/template-shower-ows.git
 [submodule "web"]
 	path = web
-	url = git@github.com:OpenWebslides/openwebslides-frontend.git
+	url = https://github.com/OpenWebslides/openwebslides-frontend.git
