@@ -4,3 +4,6 @@
 [submodule "lib/assets/conversion"]
 	path = lib/assets/conversion
 	url = https://github.com/OpenWebslides/conversion-tool-binaries.git
+[submodule "web"]
+	path = web
+	url = git@github.com:OpenWebslides/openwebslides-frontend.git

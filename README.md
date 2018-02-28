@@ -11,15 +11,11 @@ Install the following software first:
 - Yarn
 - NodeJS 7.6.0
 
-Then install all dependencies:
+Then install all backend dependencies:
 
 ```
-$ # Back-end dependencies
 $ gem install bundler --no-ri --no-rdoc
 $ bundle install
-
-$ # Front-end dependencies (based in client folder)
-$ cd client && yarn install
 ```
 
 Initialize and update the git submodules:
@@ -27,6 +23,13 @@ Initialize and update the git submodules:
 ```
 $ git submodule init
 $ git submodule update
+```
+
+And install all frontend dependencies:
+
+```
+$ cd web
+$ yarn install
 ```
 
 Enable git pre-commit hooks:
