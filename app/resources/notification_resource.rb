@@ -11,7 +11,7 @@ class NotificationResource < ApplicationResource
   #
   attribute :event_type
   attribute :user_name
-  attribute :deck_name
+  attribute :topic_name
 
   ##
   # Relationships
@@ -19,14 +19,14 @@ class NotificationResource < ApplicationResource
   has_one :user,
           :always_include_linkage_data => true
 
-  has_one :deck,
+  has_one :topic,
           :always_include_linkage_data => true
 
   ##
   # Filters
   #
   filter :user
-  filter :deck
+  filter :topic
   filter :event_type,
          :verify => ->(values, _) { values.map(&:downcase) & Notification.event_types.keys }
 
@@ -48,8 +48,8 @@ class NotificationResource < ApplicationResource
     @model.user.name
   end
 
-  def deck_name
-    @model.deck.name
+  def topic_name
+    @model.topic.name
   end
 
   def meta(options)

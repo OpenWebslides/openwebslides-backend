@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Asset, :type => :model do
-  let(:asset) { create :asset, :with_deck }
-  let(:deck) { create :deck }
+  let(:asset) { create :asset, :with_topic }
+  let(:topic) { create :topic }
 
   describe 'attributes' do
     it { is_expected.not_to allow_value(nil).for(:filename) }
@@ -18,13 +18,13 @@ RSpec.describe Asset, :type => :model do
       expect(asset).to be_valid
     end
 
-    it 'is unique over decks' do
-      proc = -> { Asset.create! :filename => asset.filename, :deck => asset.deck }
+    it 'is unique over topics' do
+      proc = -> { Asset.create! :filename => asset.filename, :topic => asset.topic }
       expect(proc).to raise_error ActiveRecord::RecordInvalid
     end
   end
 
   describe 'associations' do
-    it { is_expected.to belong_to(:deck).inverse_of(:assets) }
+    it { is_expected.to belong_to(:topic).inverse_of(:assets) }
   end
 end

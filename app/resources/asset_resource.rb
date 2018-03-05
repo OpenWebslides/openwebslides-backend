@@ -16,7 +16,7 @@ class AssetResource < ApplicationResource
   ##
   # Relationships
   #
-  has_one :deck
+  has_one :topic
 
   ##
   # Filters

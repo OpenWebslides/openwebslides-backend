@@ -74,7 +74,7 @@ class CommentsController < ApplicationController
 
   def comment_params
     resource_params.merge :user_id => relationship_params[:user],
-                          :deck_id => relationship_params[:deck],
+                          :topic_id => relationship_params[:topic],
                           :conversation_id => relationship_params[:conversation]
   end
 

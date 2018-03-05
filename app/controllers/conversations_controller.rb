@@ -74,7 +74,7 @@ class ConversationsController < ApplicationController
 
   def conversation_params
     resource_params.merge :user_id => relationship_params[:user],
-                          :deck_id => relationship_params[:deck]
+                          :topic_id => relationship_params[:topic]
   end
 
   def service

@@ -36,11 +36,11 @@ RSpec.describe 'conversations routing', :type => :routing do
     expect(:delete => route).not_to be_routable
   end
 
-  it 'routes conversation deck relationship endpoint' do
-    route = '/api/conversations/foo/relationships/deck'
-    params = { :conversation_id => 'foo', :relationship => 'deck' }
+  it 'routes conversation topic relationship endpoint' do
+    route = '/api/conversations/foo/relationships/topic'
+    params = { :conversation_id => 'foo', :relationship => 'topic' }
 
-    expect(:get => '/api/conversations/foo/deck').to route_to 'decks#get_related_resource', params.merge(:source => 'conversations')
+    expect(:get => '/api/conversations/foo/topic').to route_to 'topics#get_related_resource', params.merge(:source => 'conversations')
 
     expect(:get => route).to route_to 'conversations#show_relationship', params
     expect(:patch => route).not_to be_routable

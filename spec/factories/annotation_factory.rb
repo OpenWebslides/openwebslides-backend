@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :annotation do
     content_item_id { Faker::Number.number 2 }
     user { build :user }
-    deck { build :deck }
+    topic { build :topic }
 
     factory :conversation, :class => Conversation do
       conversation_type { %i[question note].sample }
@@ -16,7 +16,7 @@ FactoryBot.define do
       text { Faker::Lorem.sentence(3) }
 
       conversation do
-        build :conversation, :deck => deck, :content_item_id => content_item_id
+        build :conversation, :topic => topic, :content_item_id => content_item_id
       end
     end
   end

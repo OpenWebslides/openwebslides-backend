@@ -20,8 +20,8 @@ class AssetsController < ApplicationController
 
   # POST /assets
   def create
-    @deck = Deck.find params[:deck_id]
-    @asset = Asset.new :deck => @deck,
+    @topic = Topic.find params[:topic_id]
+    @asset = Asset.new :topic => @topic,
                        :filename => File.basename(uploaded_filename)
 
     authorize @asset

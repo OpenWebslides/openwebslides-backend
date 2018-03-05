@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe DeckPolicy do
-  subject { described_class.new user, deck }
+RSpec.describe TopicPolicy do
+  subject { described_class.new user, topic }
 
-  let(:deck) { build :deck, :state => :public_access, :user => user }
+  let(:topic) { build :topic, :state => :public_access, :user => user }
 
   context 'for a guest' do
     let(:user) { nil }
@@ -14,11 +14,11 @@ RSpec.describe DeckPolicy do
     it { is_expected.to forbid_action :create }
 
     it 'should not permit :create for another user' do
-      expect(described_class.new(build(:user), deck)).to forbid_action :create
+      expect(described_class.new(build(:user), topic)).to forbid_action :create
     end
 
-    context 'for public decks' do
-      let(:deck) { build :deck, :state => :public_access }
+    context 'for public topics' do
+      let(:topic) { build :topic, :state => :public_access }
       it 'should permit only read' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
@@ -33,8 +33,8 @@ RSpec.describe DeckPolicy do
       end
     end
 
-    context 'for protected decks' do
-      let(:deck) { build :deck, :state => :protected_access }
+    context 'for protected topics' do
+      let(:topic) { build :topic, :state => :protected_access }
       it 'should not permit anything' do
         expect(subject).to forbid_action :show
         expect(subject).to forbid_action :update
@@ -49,8 +49,8 @@ RSpec.describe DeckPolicy do
       end
     end
 
-    context 'for private decks' do
-      let(:deck) { build :deck, :state => :private_access }
+    context 'for private topics' do
+      let(:topic) { build :topic, :state => :private_access }
       it 'should not permit anything' do
         expect(subject).to forbid_action :show
         expect(subject).to forbid_action :update
@@ -73,11 +73,11 @@ RSpec.describe DeckPolicy do
     it { is_expected.to permit_action :create }
 
     it 'should not permit :create for another user' do
-      expect(described_class.new(build(:user), deck)).to forbid_action :create
+      expect(described_class.new(build(:user), topic)).to forbid_action :create
     end
 
-    context 'for public decks' do
-      let(:deck) { build :deck, :state => :public_access }
+    context 'for public topics' do
+      let(:topic) { build :topic, :state => :public_access }
       it 'should permit only read' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
@@ -92,8 +92,8 @@ RSpec.describe DeckPolicy do
       end
     end
 
-    context 'for protected decks' do
-      let(:deck) { build :deck, :state => :protected_access }
+    context 'for protected topics' do
+      let(:topic) { build :topic, :state => :protected_access }
       it 'should permit only read' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
@@ -108,8 +108,8 @@ RSpec.describe DeckPolicy do
       end
     end
 
-    context 'for private decks' do
-      let(:deck) { build :deck, :state => :private_access }
+    context 'for private topics' do
+      let(:topic) { build :topic, :state => :private_access }
       it 'should not permit anything' do
         expect(subject).to forbid_action :show
         expect(subject).to forbid_action :update
@@ -126,18 +126,18 @@ RSpec.describe DeckPolicy do
   end
 
   context 'for a collaborator' do
-    let(:user) { build :user, :with_decks }
+    let(:user) { build :user, :with_topics }
 
     it { is_expected.to permit_action :index }
     it { is_expected.to permit_action :create }
 
     it 'should not permit :create for another user' do
-      expect(described_class.new(build(:user), deck)).to forbid_action :create
+      expect(described_class.new(build(:user), topic)).to forbid_action :create
     end
 
-    context 'for public decks' do
-      let(:deck) { build :deck, :with_collaborators, :state => :public_access }
-      let(:user) { deck.collaborators.first }
+    context 'for public topics' do
+      let(:topic) { build :topic, :with_collaborators, :state => :public_access }
+      let(:user) { topic.collaborators.first }
       it 'should permit update' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
@@ -152,9 +152,9 @@ RSpec.describe DeckPolicy do
       end
     end
 
-    context 'for protected decks' do
-      let(:deck) { build :deck, :with_collaborators, :state => :protected_access }
-      let(:user) { deck.collaborators.first }
+    context 'for protected topics' do
+      let(:topic) { build :topic, :with_collaborators, :state => :protected_access }
+      let(:user) { topic.collaborators.first }
       it 'should not permit anything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
@@ -169,9 +169,9 @@ RSpec.describe DeckPolicy do
       end
     end
 
-    context 'for private decks' do
-      let(:deck) { build :deck, :with_collaborators, :state => :private_access }
-      let(:user) { deck.collaborators.first }
+    context 'for private topics' do
+      let(:topic) { build :topic, :with_collaborators, :state => :private_access }
+      let(:user) { topic.collaborators.first }
       it 'should not permit anything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
@@ -188,18 +188,18 @@ RSpec.describe DeckPolicy do
   end
 
   context 'for a user' do
-    let(:user) { build :user, :with_decks }
+    let(:user) { build :user, :with_topics }
 
     it { is_expected.to permit_action :index }
     it { is_expected.to permit_action :create }
 
     it 'should not permit :create for another user' do
-      expect(described_class.new(build(:user), deck)).to forbid_action :create
+      expect(described_class.new(build(:user), topic)).to forbid_action :create
     end
 
-    context 'for public decks' do
-      let(:deck) { build :deck, :state => :public_access }
-      let(:user) { deck.user }
+    context 'for public topics' do
+      let(:topic) { build :topic, :state => :public_access }
+      let(:user) { topic.user }
       it 'should permit everything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
@@ -214,9 +214,9 @@ RSpec.describe DeckPolicy do
       end
     end
 
-    context 'for protected decks' do
-      let(:deck) { build :deck, :state => :protected_access }
-      let(:user) { deck.user }
+    context 'for protected topics' do
+      let(:topic) { build :topic, :state => :protected_access }
+      let(:user) { topic.user }
       it 'should permit everything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
@@ -231,9 +231,9 @@ RSpec.describe DeckPolicy do
       end
     end
 
-    context 'for private decks' do
-      let(:deck) { build :deck, :state => :private_access }
-      let(:user) { deck.user }
+    context 'for private topics' do
+      let(:topic) { build :topic, :state => :private_access }
+      let(:user) { topic.user }
       it 'should permit everything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update

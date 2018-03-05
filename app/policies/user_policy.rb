@@ -30,10 +30,10 @@ class UserPolicy < ApplicationPolicy
   end
 
   ##
-  # Relationships: decks
+  # Relationships: topics
   #
-  def show_decks?
-    # Users can only show decks relationships if the user is showable
+  def show_topics?
+    # Users can only show topics relationships if the user is showable
     # Policy scope separately in the controller
     show?
   end
@@ -51,7 +51,7 @@ class UserPolicy < ApplicationPolicy
   # Relationship: notifications
   #
   def show_notifications?
-    # Users can only show notifications if the deck is showable
+    # Users can only show notifications if the topic is showable
     # Policy scope separately in the controller
     show?
   end

@@ -17,10 +17,10 @@ RSpec.describe Comment, :type => :model do
   describe 'scope' do
     let(:conversation) { create :conversation }
 
-    it 'deck must be equal to its parent conversation' do
+    it 'topic must be equal to its parent conversation' do
       comment = build :comment,
                       :conversation => conversation,
-                      :deck => create(:deck),
+                      :topic => create(:topic),
                       :content_item_id => conversation.content_item_id
 
       expect(comment).not_to be_valid
@@ -29,7 +29,7 @@ RSpec.describe Comment, :type => :model do
     it 'content_item_id must be equal to its parent conversation' do
       comment = build :comment,
                       :conversation => conversation,
-                      :deck => conversation.deck,
+                      :topic => conversation.topic,
                       :content_item_id => Faker::Number.number(2)
 
       expect(comment.content_item_id).not_to eq comment.conversation.content_item_id
@@ -40,7 +40,7 @@ RSpec.describe Comment, :type => :model do
     it 'is equal to its parent conversation' do
       comment = build :comment,
                       :conversation => conversation,
-                      :deck => conversation.deck,
+                      :topic => conversation.topic,
                       :content_item_id => conversation.content_item_id
 
       expect(comment).to be_valid
@@ -52,7 +52,7 @@ RSpec.describe Comment, :type => :model do
       it 'is not valid' do
         comment = build :comment,
                         :conversation => conversation,
-                        :deck => conversation.deck,
+                        :topic => conversation.topic,
                         :content_item_id => conversation.content_item_id
 
         expect(comment).not_to be_valid
@@ -65,7 +65,7 @@ RSpec.describe Comment, :type => :model do
       it 'is not valid' do
         comment = build :comment,
                         :conversation => conversation,
-                        :deck => conversation.deck,
+                        :topic => conversation.topic,
                         :content_item_id => conversation.content_item_id
 
         expect(comment).not_to be_valid

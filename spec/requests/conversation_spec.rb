@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Conversations API', :type => :request do
   let(:user) { create :user, :confirmed }
-  let(:deck) { create :deck }
+  let(:topic) { create :topic }
 
   let(:conversation) { create :conversation, :user => user }
 
@@ -28,7 +28,7 @@ RSpec.describe 'Conversations API', :type => :request do
         :type => 'conversations',
         :attributes => attributes,
         :relationships => {
-          :deck => { :data => { :type => 'decks', :id => deck.id } },
+          :topic => { :data => { :type => 'topics', :id => topic.id } },
           :user => { :data => { :type => 'users', :id => user.id } }
         }
       }

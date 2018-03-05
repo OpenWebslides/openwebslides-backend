@@ -23,7 +23,7 @@ class User < ApplicationRecord
   has_many :identities,
            :dependent => :destroy
 
-  has_many :decks,
+  has_many :topics,
            :dependent => :destroy,
            :inverse_of => :user
 
@@ -31,9 +31,9 @@ class User < ApplicationRecord
            :dependent => :destroy
 
   has_many :collaborations,
-           :class_name => 'Deck',
+           :class_name => 'Topic',
            :through => :grants,
-           :source => :deck,
+           :source => :topic,
            :inverse_of => :collaborators
 
   has_many :notifications,

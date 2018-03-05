@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DecksController < ApplicationController
+class TopicsController < ApplicationController
   include Relationships
   include RelatedResources
 
@@ -19,57 +19,57 @@ class DecksController < ApplicationController
   # Resource
   #
 
-  # GET /decks
+  # GET /topics
   def index
-    @decks = policy_scope Deck
+    @topics = policy_scope Topic
 
-    jsonapi_render :json => @decks
+    jsonapi_render :json => @topics
   end
 
-  # POST /decks
+  # POST /topics
   def create
     begin
-      @deck = Deck.new deck_params
+      @topic = Topic.new topic_params
     rescue ArgumentError
-      # FIXME: Deck.new throws ArgumentError when :state is invalid
+      # FIXME: Topic.new throws ArgumentError when :state is invalid
       # See https://github.com/rails/rails/issues/13971#issuecomment-287030984
-      @deck = Deck.new deck_params.merge :state => ''
+      @topic = Topic.new topic_params.merge :state => ''
       invalid_state = true
     end
 
-    authorize @deck
+    authorize @topic
 
     if service.create
-      jsonapi_render :json => @deck, :status => :created
+      jsonapi_render :json => @topic, :status => :created
     else
-      # Explicitly add errors here, because @deck.errors gets cleared on #save
-      @deck.errors.add :state, 'is invalid' if invalid_state
-      jsonapi_render_errors :json => @deck, :status => :unprocessable_entity
+      # Explicitly add errors here, because @topic.errors gets cleared on #save
+      @topic.errors.add :state, 'is invalid' if invalid_state
+      jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
     end
   end
 
-  # GET /decks/:id
+  # GET /topics/:id
   def show
-    @deck = Deck.find params[:id]
+    @topic = Topic.find params[:id]
 
-    authorize @deck
+    authorize @topic
 
-    if request.accept == JSONAPI::DECK_MEDIA_TYPE
+    if request.accept == JSONAPI::TOPIC_MEDIA_TYPE
       body = service.read
 
       render :body => body, :content_type => 'text/html', :encoding => 'utf-8'
     else
-      jsonapi_render :json => @deck
+      jsonapi_render :json => @topic
     end
   end
 
-  # PUT/PATCH /decks/:id
+  # PUT/PATCH /topics/:id
   def update
-    @deck = Deck.find params[:id]
+    @topic = Topic.find params[:id]
 
-    authorize @deck
+    authorize @topic
 
-    if request.content_type == JSONAPI::DECK_MEDIA_TYPE
+    if request.content_type == JSONAPI::TOPIC_MEDIA_TYPE
       update_content
     else
       update_model
@@ -90,22 +90,22 @@ class DecksController < ApplicationController
     return jsonapi_render_errors :json => @request unless @request.errors.blank?
 
     if service.update resource_params
-      jsonapi_render :json => @deck
+      jsonapi_render :json => @topic
     else
-      jsonapi_render_errors :json => @deck, :status => :unprocessable_entity
+      jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
     end
   rescue ArgumentError
-    # FIXME: Deck.new throws ArgumentError when :state is invalid
+    # FIXME: Topic.new throws ArgumentError when :state is invalid
     # See https://github.com/rails/rails/issues/13971#issuecomment-287030984
-    @deck.errors.add :state, 'is invalid'
-    jsonapi_render_errors :json => @deck, :status => :unprocessable_entity
+    @topic.errors.add :state, 'is invalid'
+    jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
   end
 
-  # DELETE /decks/:id
+  # DELETE /topics/:id
   def destroy
-    @deck = Deck.find params[:id]
+    @topic = Topic.find params[:id]
 
-    authorize @deck
+    authorize @topic
 
     service.delete
 
@@ -120,11 +120,11 @@ class DecksController < ApplicationController
 
   protected
 
-  def deck_params
+  def topic_params
     resource_params.merge :user_id => relationship_params[:user]
   end
 
   def service
-    DeckService.new @deck
+    TopicService.new @topic
   end
 end

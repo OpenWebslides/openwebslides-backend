@@ -5,31 +5,31 @@ class AssetPolicy < ApplicationPolicy
   # Resource
   #
   def create?
-    # Users can create but only for updatable decks
-    deck_policy.update?
+    # Users can create but only for updatable topics
+    topic_policy.update?
   end
 
   def show?
-    # Users can show but only for showable decks
-    deck_policy.show?
+    # Users can show but only for showable topics
+    topic_policy.show?
   end
 
   def update?
-    # Users can update but only for updatable decks
-    deck_policy.update?
+    # Users can update but only for updatable topics
+    topic_policy.update?
   end
 
   def destroy?
-    # Users can destroy but only for updatable decks
-    deck_policy.update?
+    # Users can destroy but only for updatable topics
+    topic_policy.update?
   end
 
   ##
-  # Relationship: deck
+  # Relationship: topic
   #
-  def show_deck?
-    # Users can show an asset but only for showable decks
-    deck_policy.show?
+  def show_topic?
+    # Users can show an asset but only for showable topics
+    topic_policy.show?
   end
 
   ##
@@ -37,14 +37,14 @@ class AssetPolicy < ApplicationPolicy
   #
   class Scope < Scope
     def resolve
-      # Defer asset scoping to the respective decks
-      DeckPolicy::Scope.new(@user, scope.joins(:deck)).resolve
+      # Defer asset scoping to the respective topics
+      TopicPolicy::Scope.new(@user, scope.joins(:topic)).resolve
     end
   end
 
   private
 
-  def deck_policy
-    @deck_policy ||= Pundit.policy! @user, @record.deck
+  def topic_policy
+    @topic_policy ||= Pundit.policy! @user, @record.topic
   end
 end

@@ -4,8 +4,8 @@ FactoryBot.define do
   factory :asset do
     filename { Faker::File.file_name('')[1..-1] }
 
-    trait :with_deck do
-      deck { build :deck }
+    trait :with_topic do
+      topic { build :topic }
     end
   end
 end

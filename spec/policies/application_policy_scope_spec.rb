@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe ApplicationPolicy::Scope do
   let(:user) { create :user }
 
-  context 'all decks' do
-    subject { described_class.new(user, Deck).resolve }
+  context 'all topics' do
+    subject { described_class.new(user, Topic).resolve }
 
     it 'should raise an error' do
       expect(-> { subject }).to raise_error OpenWebslides::NotImplementedError

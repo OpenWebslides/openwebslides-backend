@@ -14,24 +14,24 @@ RSpec.describe CommentResource, :type => :resource do
   it { is_expected.to have_attribute :text }
 
   it { is_expected.to have_one :user }
-  it { is_expected.to have_one :deck }
+  it { is_expected.to have_one :topic }
   it { is_expected.to have_one :conversation }
 
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id content_item_id user deck text conversation rating rated secret edited flagged deleted]
+      expect(subject.fetchable_fields).to match_array %i[id content_item_id user topic text conversation rating rated secret edited flagged deleted]
     end
 
     context 'hidden state' do
       before { comment.hide }
 
       it 'should have a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id content_item_id user deck conversation rating rated secret edited flagged deleted]
+        expect(subject.fetchable_fields).to match_array %i[id content_item_id user topic conversation rating rated secret edited flagged deleted]
       end
     end
 
     it 'should have a valid set of creatable fields' do
-      expect(described_class.creatable_fields).to match_array %i[content_item_id user deck text conversation]
+      expect(described_class.creatable_fields).to match_array %i[content_item_id user topic text conversation]
     end
 
     it 'should have a valid set of updatable fields' do

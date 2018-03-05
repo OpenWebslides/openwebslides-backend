@@ -100,24 +100,24 @@ RSpec.describe 'User API', :type => :request do
     end
   end
 
-  describe 'decks relationship' do
-    describe 'GET /relationships/decks' do
+  describe 'topics relationship' do
+    describe 'GET /relationships/topics' do
       before do
         add_accept_header
         add_auth_header
 
-        create :deck, :user => user
+        create :topic, :user => user
       end
 
       it 'returns successful' do
-        get user_relationships_decks_path(:user_id => user.id), :headers => headers
+        get user_relationships_topics_path(:user_id => user.id), :headers => headers
 
         expect(response.status).to eq 200
         expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
 
         json = JSON.parse response.body
-        expect(json['data'].count).to eq Deck.where(:user => user).count
-        expect(json['data'].first['type']).to eq 'decks'
+        expect(json['data'].count).to eq Topic.where(:user => user).count
+        expect(json['data'].first['type']).to eq 'topics'
       end
     end
 
@@ -126,24 +126,24 @@ RSpec.describe 'User API', :type => :request do
         add_accept_header
         add_auth_header
 
-        user.decks << create(:deck)
+        user.topics << create(:topic)
       end
 
       it 'returns successful' do
-        get user_decks_path(:user_id => user.id), :headers => headers
+        get user_topics_path(:user_id => user.id), :headers => headers
 
         expect(response.status).to eq 200
         expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
 
         json = JSON.parse response.body
-        expect(json['data'].count).to eq user.decks.count
-        expect(json['data'].first['type']).to eq 'decks'
+        expect(json['data'].count).to eq user.topics.count
+        expect(json['data'].first['type']).to eq 'topics'
       end
     end
 
-    # TODO: POST /relationships/decks
-    # TODO: PATCH /relationships/decks
-    # TODO: DELETE /relationships/decks
+    # TODO: POST /relationships/topics
+    # TODO: PATCH /relationships/topics
+    # TODO: DELETE /relationships/topics
   end
 
   describe 'collaborations relationship' do
@@ -152,8 +152,8 @@ RSpec.describe 'User API', :type => :request do
         add_accept_header
         add_auth_header
 
-        deck = create :deck
-        deck.collaborators << user
+        topic = create :topic
+        topic.collaborators << user
       end
 
       it 'returns successful' do
@@ -164,7 +164,7 @@ RSpec.describe 'User API', :type => :request do
 
         json = JSON.parse response.body
         expect(json['data'].count).to eq 1
-        expect(json['data'].first['type']).to eq 'decks'
+        expect(json['data'].first['type']).to eq 'topics'
       end
     end
 
@@ -173,7 +173,7 @@ RSpec.describe 'User API', :type => :request do
         add_accept_header
         add_auth_header
 
-        user.collaborations << create(:deck)
+        user.collaborations << create(:topic)
       end
 
       it 'returns successful' do
@@ -184,7 +184,7 @@ RSpec.describe 'User API', :type => :request do
 
         json = JSON.parse response.body
         expect(json['data'].count).to eq user.collaborations.count
-        expect(json['data'].first['type']).to eq 'decks'
+        expect(json['data'].first['type']).to eq 'topics'
       end
     end
 

@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Comments API', :type => :request do
   let(:user) { create :user, :confirmed }
   let(:conversation) { create :conversation, :user => user }
-  let(:comment) { create :comment, :conversation => conversation, :deck => conversation.deck, :content_item_id => conversation.content_item_id, :user => user }
+  let(:comment) { create :comment, :conversation => conversation, :topic => conversation.topic, :content_item_id => conversation.content_item_id, :user => user }
 
   let(:text) { Faker::Lorem.sentences(4).join(' ') }
 
@@ -23,7 +23,7 @@ RSpec.describe 'Comments API', :type => :request do
         :attributes => attributes,
         :relationships => {
           :conversation => { :data => { :type => 'conversations', :id => conversation.id } },
-          :deck => { :data => { :type => 'decks', :id => conversation.deck.id } },
+          :topic => { :data => { :type => 'topics', :id => conversation.topic.id } },
           :user => { :data => { :type => 'users', :id => user.id } }
         }
       }

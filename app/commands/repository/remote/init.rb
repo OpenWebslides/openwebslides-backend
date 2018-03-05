@@ -10,7 +10,7 @@ module Repository
         return unless OpenWebslides.config.github.enabled
 
         options = {
-          :description => @receiver.description || 'OpenWebslides slidedeck',
+          :description => @receiver.description || 'OpenWebslides slidetopic',
           :private => !@receiver.public_access?,
           :has_issues => false,
           :has_wiki => false,

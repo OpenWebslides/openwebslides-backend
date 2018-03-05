@@ -17,12 +17,12 @@ RSpec.describe Notification, :type => :model do
     end
 
     it 'has a valid :event_type enum' do
-      expect(%w[deck_created deck_updated]).to eq Notification.event_types.keys
+      expect(%w[topic_created topic_updated]).to eq Notification.event_types.keys
     end
   end
 
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of(:notifications) }
-    it { is_expected.to belong_to(:deck).inverse_of(:notifications) }
+    it { is_expected.to belong_to(:topic).inverse_of(:notifications) }
   end
 end

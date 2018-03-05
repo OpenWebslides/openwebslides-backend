@@ -9,8 +9,8 @@ FactoryBot.define do
     password_confirmation { password }
     tos_accepted true
 
-    trait :with_decks do
-      decks { build_list :deck, 3 }
+    trait :with_topics do
+      topics { build_list :topic, 3 }
     end
 
     trait :with_identities do

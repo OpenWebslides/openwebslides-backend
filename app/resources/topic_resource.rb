@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 ##
-# Slide deck resource
+# Slide topic resource
 #
-class DeckResource < ApplicationResource
+class TopicResource < ApplicationResource
   ##
   # Attributes
   #
@@ -26,7 +26,7 @@ class DeckResource < ApplicationResource
   filter :name
   filter :description
   filter :state,
-         :verify => ->(values, _) { values & Deck.states.keys }
+         :verify => ->(values, _) { values & Topic.states.keys }
 
   ##
   # Callbacks

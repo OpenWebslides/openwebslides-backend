@@ -14,15 +14,15 @@ class Asset < ApplicationRecord
   ##
   # Associations
   #
-  belongs_to :deck, :required => true,
-                    :inverse_of => :assets
+  belongs_to :topic, :required => true,
+             :inverse_of => :assets
 
   ##
   # Validations
   #
   validates :filename,
             :presence => true,
-            :uniqueness => { :scope => :deck }
+            :uniqueness => { :scope => :topic }
 
   ##
   # Callbacks

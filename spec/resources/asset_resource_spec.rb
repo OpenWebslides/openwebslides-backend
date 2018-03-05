@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe AssetResource, :type => :resource do
-  let(:asset) { create :asset, :with_deck }
+  let(:asset) { create :asset, :with_topic }
   let(:context) { {} }
 
   before do
@@ -21,15 +21,15 @@ RSpec.describe AssetResource, :type => :resource do
 
   it { is_expected.to have_attribute :filename }
 
-  it { is_expected.to have_one :deck }
+  it { is_expected.to have_one :topic }
 
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id filename deck]
+      expect(subject.fetchable_fields).to match_array %i[id filename topic]
     end
 
     it 'should have a valid set of creatable fields' do
-      expect(described_class.creatable_fields).to match_array %i[filename deck]
+      expect(described_class.creatable_fields).to match_array %i[filename topic]
     end
 
     it 'should have a valid set of updatable fields' do

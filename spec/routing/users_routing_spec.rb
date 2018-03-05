@@ -23,11 +23,11 @@ RSpec.describe 'users routing', :type => :routing do
     expect(:delete => route).to route_to 'users#destroy', :id => 'foo'
   end
 
-  it 'routes user decks relationship endpoint' do
-    route = '/api/users/foo/relationships/decks'
-    params = { :user_id => 'foo', :relationship => 'decks' }
+  it 'routes user topics relationship endpoint' do
+    route = '/api/users/foo/relationships/topics'
+    params = { :user_id => 'foo', :relationship => 'topics' }
 
-    expect(:get => '/api/users/foo/decks').to route_to 'decks#get_related_resources', params.merge(:source => 'users')
+    expect(:get => '/api/users/foo/topics').to route_to 'topics#get_related_resources', params.merge(:source => 'users')
 
     expect(:get => route).to route_to 'users#show_relationship', params
     expect(:patch => route).not_to be_routable
@@ -40,7 +40,7 @@ RSpec.describe 'users routing', :type => :routing do
     route = '/api/users/foo/relationships/collaborations'
     params = { :user_id => 'foo', :relationship => 'collaborations' }
 
-    expect(:get => '/api/users/foo/collaborations').to route_to 'decks#get_related_resources', params.merge(:source => 'users')
+    expect(:get => '/api/users/foo/collaborations').to route_to 'topics#get_related_resources', params.merge(:source => 'users')
 
     expect(:get => route).to route_to 'users#show_relationship', params
     expect(:patch => route).not_to be_routable

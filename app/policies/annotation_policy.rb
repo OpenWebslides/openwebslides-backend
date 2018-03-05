@@ -6,39 +6,39 @@ class AnnotationPolicy < ApplicationPolicy
   #
   def create?
     return false if @user.nil?
-    return false if @record.deck.nil?
+    return false if @record.topic.nil?
     return false if @record.user.nil?
 
-    # Users can create but only for showable deck and updatable user
-    deck_policy.show? && user_policy.update?
+    # Users can create but only for showable topic and updatable user
+    topic_policy.show? && user_policy.update?
   end
 
   def show?
-    # Users can show but only for showable deck
-    deck_policy.show? && user_policy.show?
+    # Users can show but only for showable topic
+    topic_policy.show? && user_policy.show?
   end
 
   def update?
     return false if @user.nil?
-    return false if @record.deck.nil?
+    return false if @record.topic.nil?
     return false if @record.user.nil?
 
-    # Users can update but only for showable deck and updatable user
-    deck_policy.show? && user_policy.update?
+    # Users can update but only for showable topic and updatable user
+    topic_policy.show? && user_policy.update?
   end
 
   def destroy?
     return false if @user.nil?
 
-    # Users can destroy but only for showable deck and updatable user
-    deck_policy.show? && user_policy.update?
+    # Users can destroy but only for showable topic and updatable user
+    topic_policy.show? && user_policy.update?
   end
 
   def flag?
     return false if @user.nil?
 
-    # Users can flag but only for updatable deck
-    deck_policy.update?
+    # Users can flag but only for updatable topic
+    topic_policy.update?
   end
 
   ##
@@ -52,13 +52,13 @@ class AnnotationPolicy < ApplicationPolicy
   end
 
   ##
-  # Relationship: deck
+  # Relationship: topic
   #
-  def show_deck?
+  def show_topic?
     return false if @record.user.nil?
 
-    # Users can show user but only for showable deck
-    deck_policy.show?
+    # Users can show user but only for showable topic
+    topic_policy.show?
   end
 
   ##
@@ -66,15 +66,15 @@ class AnnotationPolicy < ApplicationPolicy
   #
   class Scope < Scope
     def resolve
-      # Defer annotation scoping to the respective decks
-      DeckPolicy::Scope.new(@user, scope.joins(:deck)).resolve
+      # Defer annotation scoping to the respective topics
+      TopicPolicy::Scope.new(@user, scope.joins(:topic)).resolve
     end
   end
 
   private
 
-  def deck_policy
-    @deck_policy ||= Pundit.policy! @user, @record.deck
+  def topic_policy
+    @topic_policy ||= Pundit.policy! @user, @record.topic
   end
 
   def user_policy

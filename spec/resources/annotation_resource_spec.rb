@@ -15,15 +15,15 @@ RSpec.describe AnnotationResource, :type => :resource do
   it { is_expected.to have_attribute :rated }
 
   it { is_expected.to have_one :user }
-  it { is_expected.to have_one :deck }
+  it { is_expected.to have_one :topic }
 
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id content_item_id user deck rating rated secret edited flagged deleted]
+      expect(subject.fetchable_fields).to match_array %i[id content_item_id user topic rating rated secret edited flagged deleted]
     end
 
     it 'should have a valid set of creatable fields' do
-      expect(described_class.creatable_fields).to match_array %i[content_item_id user deck]
+      expect(described_class.creatable_fields).to match_array %i[content_item_id user topic]
     end
 
     it 'should have a valid set of updatable fields' do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :deck do
+  factory :topic do
     name { Faker::Lorem.words(4).join ' ' }
     description { Faker::Lorem.words(20).join ' ' }
     state :public_access

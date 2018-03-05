@@ -14,19 +14,19 @@ module Repository
         File.delete asset_file
 
         # Commit
-        exec_deck Git::Commit do |c|
+        exec_topic Git::Commit do |c|
           c.author = @author
           c.message = "Delete #{@receiver.filename}"
         end
 
         # Update timestamps
         @receiver.touch
-        @receiver.deck.touch
+        @receiver.topic.touch
 
         return unless OpenWebslides.config.github.enabled
 
         # Sync remote
-        exec_deck Remote::Sync
+        exec_topic Remote::Sync
       end
     end
   end

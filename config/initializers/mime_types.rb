@@ -6,8 +6,8 @@
 # Mime::Type.register "text/richtext", :rtf
 
 module JSONAPI
-  # MIME type for deck contents
-  DECK_MEDIA_TYPE = 'text/html'
+  # MIME type for topic contents
+  TOPIC_MEDIA_TYPE = 'text/html'
 
   # MIME type for file uploads
   UPLOAD_MEDIA_TYPE = 'multipart/form-data'

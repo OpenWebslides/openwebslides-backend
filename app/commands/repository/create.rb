@@ -11,7 +11,7 @@ module Repository
         exec Filesystem::Init
         exec Git::Init
 
-        # Render empty deck
+        # Render empty topic
         exec Filesystem::Render do |c|
           c.content = ''
         end

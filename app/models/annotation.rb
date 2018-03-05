@@ -17,7 +17,7 @@ class Annotation < ApplicationRecord
              :required => true,
              :inverse_of => :annotations
 
-  belongs_to :deck,
+  belongs_to :topic,
              :required => true,
              :inverse_of => :annotations
 

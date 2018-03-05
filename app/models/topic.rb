@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 ##
-# A slide deck
+# A slide topic
 #
-class Deck < ApplicationRecord
+class Topic < ApplicationRecord
   ##
   # Properties
   #
 
-  # Deck title
+  # Topic title
   property :name
 
-  # Deck description
+  # Topic description
   property :description
 
   # Unique name
@@ -28,7 +28,7 @@ class Deck < ApplicationRecord
   #
   belongs_to :user,
              :required => true,
-             :inverse_of => :decks
+             :inverse_of => :topics
 
   has_many :grants,
            :dependent => :destroy
@@ -41,18 +41,18 @@ class Deck < ApplicationRecord
 
   has_many :assets,
            :dependent => :destroy,
-           :inverse_of => :deck
+           :inverse_of => :topic
 
   has_many :notifications,
            :dependent => :destroy,
-           :inverse_of => :deck
+           :inverse_of => :topic
 
   has_many :annotations,
            :dependent => :destroy,
-           :inverse_of => :deck
+           :inverse_of => :topic
 
   has_many :conversations,
-           :inverse_of => :deck
+           :inverse_of => :topic
 
   ##
   # Validations

@@ -21,7 +21,7 @@ class AnnotationResource < ApplicationResource
   # Relationships
   #
   has_one :user
-  has_one :deck
+  has_one :topic
 
   ##
   # Filters
@@ -41,7 +41,7 @@ class AnnotationResource < ApplicationResource
   end
 
   def self.updatable_fields(context = {})
-    super(context) - %i[content_item_id user deck rating rated edited flagged deleted]
+    super(context) - %i[content_item_id user topic rating rated edited flagged deleted]
   end
 
   def meta(options)

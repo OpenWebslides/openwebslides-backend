@@ -2,11 +2,11 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Deck API', :type => :request do
+RSpec.describe 'Topic API', :type => :request do
   let(:name) { Faker::Lorem.words(4).join(' ') }
 
   let(:user) { create :user, :confirmed }
-  let(:deck) { create :deck, :user => user }
+  let(:topic) { create :topic, :user => user }
 
   let(:attributes) do
     {
@@ -20,7 +20,7 @@ RSpec.describe 'Deck API', :type => :request do
   def request_body(attributes)
     {
       :data => {
-        :type => 'decks',
+        :type => 'topics',
         :attributes => attributes,
         :relationships => {
           :user => {
@@ -37,7 +37,7 @@ RSpec.describe 'Deck API', :type => :request do
   def update_body(id, attributes)
     {
       :data => {
-        :type => 'decks',
+        :type => 'topics',
         :id => id,
         :attributes => attributes
       }
@@ -46,13 +46,13 @@ RSpec.describe 'Deck API', :type => :request do
 
   describe 'GET /' do
     before do
-      create_list :deck, 3
+      create_list :topic, 3
 
       add_accept_header
     end
 
     it 'returns successful' do
-      get decks_path
+      get topics_path
 
       expect(response.status).to eq 200
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
@@ -69,7 +69,7 @@ RSpec.describe 'Deck API', :type => :request do
     end
 
     it 'rejects empty name' do
-      post decks_path, :params => request_body(attributes.merge :name => ''), :headers => headers
+      post topics_path, :params => request_body(attributes.merge :name => ''), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
@@ -77,7 +77,7 @@ RSpec.describe 'Deck API', :type => :request do
     end
 
     it 'rejects no name' do
-      post decks_path, :params => request_body(attributes.except :name), :headers => headers
+      post topics_path, :params => request_body(attributes.except :name), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
@@ -85,7 +85,7 @@ RSpec.describe 'Deck API', :type => :request do
     end
 
     it 'rejects empty state' do
-      post decks_path, :params => request_body(attributes.merge :state => ''), :headers => headers
+      post topics_path, :params => request_body(attributes.merge :state => ''), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
@@ -93,7 +93,7 @@ RSpec.describe 'Deck API', :type => :request do
     end
 
     it 'rejects invalid state' do
-      post decks_path, :params => request_body(attributes.merge :state => 'foo'), :headers => headers
+      post topics_path, :params => request_body(attributes.merge :state => 'foo'), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq [JSONAPI::VALIDATION_ERROR, JSONAPI::VALIDATION_ERROR]
@@ -101,7 +101,7 @@ RSpec.describe 'Deck API', :type => :request do
     end
 
     it 'returns successful' do
-      post decks_path, :params => request_body(attributes), :headers => headers
+      post topics_path, :params => request_body(attributes), :headers => headers
 
       expect(response.status).to eq 201
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
@@ -119,14 +119,14 @@ RSpec.describe 'Deck API', :type => :request do
       end
 
       it 'rejects an invalid id' do
-        get deck_path(:id => 0), :headers => headers
+        get topic_path(:id => 0), :headers => headers
 
         expect(response.status).to eq 404
         expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
       end
 
       it 'returns successful' do
-        get deck_path(:id => deck.id), :headers => headers
+        get topic_path(:id => topic.id), :headers => headers
 
         expect(response.status).to eq 200
         expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
@@ -139,14 +139,14 @@ RSpec.describe 'Deck API', :type => :request do
       end
 
       it 'rejects an invalid id' do
-        get deck_path(:id => 0), :headers => headers
+        get topic_path(:id => 0), :headers => headers
 
         expect(response.status).to eq 404
         expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
       end
 
       it 'returns successful' do
-        get deck_path(:id => deck.id), :headers => headers
+        get topic_path(:id => topic.id), :headers => headers
 
         expect(response.status).to eq 200
         expect(response.content_type).to eq 'text/html'
@@ -163,15 +163,15 @@ RSpec.describe 'Deck API', :type => :request do
       end
 
       it 'rejects id not equal to URL' do
-        patch deck_path(:id => deck.id), :params => update_body(999, :name => 'foo'), :headers => headers
+        patch topic_path(:id => topic.id), :params => update_body(999, :name => 'foo'), :headers => headers
 
         expect(response.status).to eq 400
         expect(jsonapi_error_code(response)).to eq JSONAPI::KEY_NOT_INCLUDED_IN_URL
         expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
       end
 
-      it 'rejects non-existant decks' do
-        patch deck_path(:id => 999), :params => update_body(999, :name => 'foo'), :headers => headers
+      it 'rejects non-existant topics' do
+        patch topic_path(:id => 999), :params => update_body(999, :name => 'foo'), :headers => headers
 
         expect(response.status).to eq 404
         expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
@@ -179,7 +179,7 @@ RSpec.describe 'Deck API', :type => :request do
       end
 
       it 'rejects empty name' do
-        patch deck_path(:id => deck.id), :params => update_body(deck.id, :name => ''), :headers => headers
+        patch topic_path(:id => topic.id), :params => update_body(topic.id, :name => ''), :headers => headers
 
         expect(response.status).to eq 422
         expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
@@ -187,7 +187,7 @@ RSpec.describe 'Deck API', :type => :request do
       end
 
       it 'rejects invalid state' do
-        patch deck_path(:id => deck.id), :params => update_body(deck.id, attributes.merge(:state => 'foo')), :headers => headers
+        patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes.merge(:state => 'foo')), :headers => headers
 
         expect(response.status).to eq 422
         expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
@@ -195,13 +195,13 @@ RSpec.describe 'Deck API', :type => :request do
       end
 
       it 'updates name' do
-        expect(deck.name).not_to eq name
-        patch deck_path(:id => deck.id), :params => update_body(deck.id, :name => name), :headers => headers
+        expect(topic.name).not_to eq name
+        patch topic_path(:id => topic.id), :params => update_body(topic.id, :name => name), :headers => headers
 
-        deck.reload
+        topic.reload
         expect(response.status).to eq 200
         expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-        expect(deck.name).to eq name
+        expect(topic.name).to eq name
       end
     end
 
@@ -212,7 +212,7 @@ RSpec.describe 'Deck API', :type => :request do
       end
 
       it 'updates html' do
-        patch deck_path(:id => deck.id), :params => '<html></html>', :headers => headers
+        patch topic_path(:id => topic.id), :params => '<html></html>', :headers => headers
 
         expect(response.status).to eq 204
       end
@@ -224,21 +224,21 @@ RSpec.describe 'Deck API', :type => :request do
       add_auth_header
     end
 
-    it 'rejects non-existant decks' do
-      delete deck_path(:id => '0'), :headers => headers
+    it 'rejects non-existant topics' do
+      delete topic_path(:id => '0'), :headers => headers
 
-      deck.reload
-      expect(deck).not_to be_destroyed
+      topic.reload
+      expect(topic).not_to be_destroyed
 
       expect(response.status).to eq 404
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
     end
 
-    it 'deletes a deck' do
-      id = deck.id
-      delete deck_path(:id => deck.id), :headers => headers
+    it 'deletes a topic' do
+      id = topic.id
+      delete topic_path(:id => topic.id), :headers => headers
 
-      expect(-> { Deck.find id }).to raise_error ActiveRecord::RecordNotFound
+      expect(-> { Topic.find id }).to raise_error ActiveRecord::RecordNotFound
 
       expect(response.status).to eq 204
     end

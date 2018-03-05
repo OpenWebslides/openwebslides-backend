@@ -22,9 +22,9 @@ Rails.application.routes.draw do
     # User API
     #
     jsonapi_resources :users, :except => %i[create update] do
-      # Decks relationship
-      jsonapi_related_resources :decks
-      jsonapi_links :decks, :only => :show
+      # Topics relationship
+      jsonapi_related_resources :topics
+      jsonapi_links :topics, :only => :show
 
       # Collaborations relationship
       jsonapi_related_resources :collaborations
@@ -32,9 +32,9 @@ Rails.application.routes.draw do
     end
 
     ##
-    # Decks API
+    # Topics API
     #
-    jsonapi_resources :decks do
+    jsonapi_resources :topics do
       # Owner relationship
       jsonapi_related_resource :user
       jsonapi_link :user, :only => :show
@@ -58,9 +58,9 @@ Rails.application.routes.draw do
     # Assets API
     #
     jsonapi_resources :assets, :only => %i[show destroy] do
-      # Deck relationship
-      jsonapi_related_resource :deck
-      jsonapi_link :deck, :only => :show
+      # Topic relationship
+      jsonapi_related_resource :topic
+      jsonapi_link :topic, :only => :show
 
       get '/raw' => 'assets#raw'
     end
@@ -69,9 +69,9 @@ Rails.application.routes.draw do
     # Notifications API (immutable)
     #
     jsonapi_resources :notifications, :only => %i[index show] do
-      # Deck relationship
-      jsonapi_related_resource :deck
-      jsonapi_link :deck, :only => :show
+      # Topic relationship
+      jsonapi_related_resource :topic
+      jsonapi_link :topic, :only => :show
 
       # User relationship
       jsonapi_related_resource :user
@@ -82,9 +82,9 @@ Rails.application.routes.draw do
     # Annotations API
     #
     jsonapi_resources :conversations, :except => %i[index] do
-      # Deck relationship
-      jsonapi_related_resource :deck
-      jsonapi_link :deck, :only => :show
+      # Topic relationship
+      jsonapi_related_resource :topic
+      jsonapi_link :topic, :only => :show
 
       # User relationship
       jsonapi_related_resource :user
@@ -102,9 +102,9 @@ Rails.application.routes.draw do
     end
 
     jsonapi_resources :comments, :except => %i[index] do
-      # Deck relationship
-      jsonapi_related_resource :deck
-      jsonapi_links :deck, :only => :show
+      # Topic relationship
+      jsonapi_related_resource :topic
+      jsonapi_links :topic, :only => :show
 
       # User relationship
       jsonapi_related_resource :user

@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Assets API', :type => :request do
-  let(:asset) { create :asset, :with_deck }
-  let(:deck) { asset.deck }
-  let(:user) { deck.user }
+  let(:asset) { create :asset, :with_topic }
+  let(:topic) { asset.topic }
+  let(:user) { topic.user }
 
   let(:asset_file) { Rails.root.join 'spec', 'support', 'asset.png' }
 
@@ -19,14 +19,14 @@ RSpec.describe 'Assets API', :type => :request do
     end
 
     it 'rejects without Content-Disposition' do
-      post deck_assets_path(:deck_id => deck.id), :params => @body, :headers => headers.except('Content-Disposition')
+      post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers.except('Content-Disposition')
 
       expect(response.status).to eq 400
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
     end
 
     it 'rejects filename already taken' do
-      post deck_assets_path(:deck_id => deck.id), :params => @body, :headers => headers.merge('Content-Disposition' => "attachment; filename=\"#{asset.filename}\"")
+      post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers.merge('Content-Disposition' => "attachment; filename=\"#{asset.filename}\"")
 
       expect(response.status).to eq 422
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
@@ -34,14 +34,14 @@ RSpec.describe 'Assets API', :type => :request do
     end
 
     it 'rejects media types not allowed' do
-      post deck_assets_path(:deck_id => deck.id), :params => @body, :headers => headers.merge('Content-Type' => 'application/octet-stream')
+      post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers.merge('Content-Type' => 'application/octet-stream')
 
       expect(response.status).to eq 415
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
     end
 
     it 'returns successful' do
-      post deck_assets_path(:deck_id => deck.id), :params => @body, :headers => headers
+      post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers
 
       expect(response.status).to eq 201
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE

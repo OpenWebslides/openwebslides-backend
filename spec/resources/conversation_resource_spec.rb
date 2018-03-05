@@ -16,19 +16,19 @@ RSpec.describe ConversationResource, :type => :resource do
   it { is_expected.to have_attribute :text }
 
   it { is_expected.to have_one :user }
-  it { is_expected.to have_one :deck }
+  it { is_expected.to have_one :topic }
   it { is_expected.to have_many :comments }
 
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id content_item_id user deck conversation_type title text comments rating rated secret edited flagged deleted]
+      expect(subject.fetchable_fields).to match_array %i[id content_item_id user topic conversation_type title text comments rating rated secret edited flagged deleted]
     end
 
     context 'hidden state' do
       before { conversation.hide }
 
       it 'should have a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id content_item_id user deck conversation_type comments rating rated secret edited flagged deleted]
+        expect(subject.fetchable_fields).to match_array %i[id content_item_id user topic conversation_type comments rating rated secret edited flagged deleted]
       end
     end
 

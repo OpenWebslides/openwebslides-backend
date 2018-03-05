@@ -15,7 +15,7 @@ RSpec.describe Annotation, :type => :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of(:annotations) }
-    it { is_expected.to belong_to(:deck).inverse_of(:annotations) }
+    it { is_expected.to belong_to(:topic).inverse_of(:annotations) }
 
     it { is_expected.to have_many(:ratings).dependent(:destroy).inverse_of(:annotation) }
   end

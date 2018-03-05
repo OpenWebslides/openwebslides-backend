@@ -5,7 +5,7 @@ require 'rails_helper'
 ##
 # This script will iterate over all the relations in all of the models, and
 # check if there is a policy action defined for both the relation
-# (e.g. UserPolicy#show_decks?) and the inverse relation (e.g. DeckPolicy#show_user?)
+# (e.g. UserPolicy#show_topics?) and the inverse relation (e.g. TopicPolicy#show_user?)
 #
 
 ##
@@ -21,7 +21,7 @@ MODEL_BLACKLIST = [
 #
 ACTION_BLACKLIST = {
   UserPolicy => %i[show_identities? show_grants? show_ratings?],
-  DeckPolicy => %i[show_grants?],
+  TopicPolicy => %i[show_grants?],
   AnnotationPolicy => %i[show_ratings?],
   ConversationPolicy => %i[show_ratings?],
   CommentPolicy => %i[show_ratings?],

@@ -8,17 +8,17 @@ RSpec.describe NotificationPolicy::Scope do
   let(:owner) { create :user }
 
   before :each do
-    d1 = create :deck
-    d2 = create :deck, :user => owner
-    d3 = create :deck, :state => :protected_access
-    d4 = create :deck, :state => :private_access
-    d5 = create :deck, :state => :private_access, :user => owner
+    d1 = create :topic
+    d2 = create :topic, :user => owner
+    d3 = create :topic, :state => :protected_access
+    d4 = create :topic, :state => :private_access
+    d5 = create :topic, :state => :private_access, :user => owner
 
-    create :notification, :deck => d1, :user => d1.user
-    create :notification, :deck => d2, :user => d2.user
-    create :notification, :deck => d3, :user => d3.user
-    create :notification, :deck => d4, :user => d4.user
-    create :notification, :deck => d5, :user => d5.user
+    create :notification, :topic => d1, :user => d1.user
+    create :notification, :topic => d2, :user => d2.user
+    create :notification, :topic => d3, :user => d3.user
+    create :notification, :topic => d4, :user => d4.user
+    create :notification, :topic => d5, :user => d5.user
   end
 
   context 'for a guest' do

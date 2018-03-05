@@ -16,7 +16,7 @@ RSpec.describe UserPolicy do
     it { is_expected.to forbid_action :update }
     it { is_expected.to forbid_action :destroy }
 
-    it { is_expected.to permit_action :show_decks }
+    it { is_expected.to permit_action :show_topics }
     it { is_expected.to permit_action :show_collaborations }
     it { is_expected.to permit_action :show_notifications }
     it { is_expected.to permit_action :show_annotations }
@@ -31,7 +31,7 @@ RSpec.describe UserPolicy do
     it { is_expected.to forbid_action :update }
     it { is_expected.to forbid_action :destroy }
 
-    it { is_expected.to permit_action :show_decks }
+    it { is_expected.to permit_action :show_topics }
     it { is_expected.to permit_action :show_collaborations }
     it { is_expected.to permit_action :show_notifications }
     it { is_expected.to permit_action :show_annotations }
@@ -45,7 +45,7 @@ RSpec.describe UserPolicy do
     it { is_expected.to permit_action :update }
     it { is_expected.to permit_action :destroy }
 
-    it { is_expected.to permit_action :show_decks }
+    it { is_expected.to permit_action :show_topics }
     it { is_expected.to permit_action :show_collaborations }
     it { is_expected.to permit_action :show_notifications }
     it { is_expected.to permit_action :show_annotations }

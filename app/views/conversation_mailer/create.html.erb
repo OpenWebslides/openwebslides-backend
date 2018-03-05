@@ -1,7 +1,7 @@
-<p>Hello <%= @deck.user.first_name %>!</p>
+<p>Hello <%= @topic.user.first_name %>!</p>
 
 <p>
-  <strong><%= "#{@user.first_name} #{@user.last_name}" %></strong> posted a <%= @conversation.conversation_type %> on the slide deck <strong><%= @deck.name %></strong>:
+  <strong><%= "#{@user.first_name} #{@user.last_name}" %></strong> posted a <%= @conversation.conversation_type %> on the slide topic <strong><%= @topic.name %></strong>:
 </p>
 
 <p>
@@ -10,4 +10,4 @@
   </blockquote>
 </p>
 
-<p><%= link_to 'View complete conversation', deck_url(@deck) %></p>
+<p><%= link_to 'View complete conversation', topic_url(@topic) %></p>

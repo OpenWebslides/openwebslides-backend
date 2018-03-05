@@ -78,8 +78,8 @@ namespace :db do
         puts "Creating #{deck_count} decks for user #{i + 1}/#{user_count}"
 
         deck_count.times do
-          deck = user.decks.build :name => Faker::Lorem.words.join(' '),
-                                  :state => %i[public_access protected_access private_access].sample
+          deck = user.topics.build :name => Faker::Lorem.words.join(' '),
+                                   :state => %i[public_access protected_access private_access].sample
 
           # 80% of the decks have a description
           deck.description = Faker::Lorem.words(10).join(' ') if prob 0.8

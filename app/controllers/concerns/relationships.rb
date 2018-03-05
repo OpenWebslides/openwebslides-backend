@@ -16,10 +16,10 @@ module Relationships
 
     if model_klass.reflect_on_association(params[:relationship]).macro == :has_many
       # Policy scope RELATIONSHIP_CLASS
-      # Authorize RELATIONSHIP_CLASS#show_INVERSE_RELATIONSHIP? (e.g. DeckPolicy#show_collaborators?)
+      # Authorize RELATIONSHIP_CLASS#show_INVERSE_RELATIONSHIP? (e.g. TopicPolicy#show_collaborators?)
       policy_scope(@resource.send params[:relationship]).each { |resource| authorize_inverse_relationship resource }
     else
-      # Authorize RELATIONSHIP_CLASS#show_INVERSE_RELATIONSHIP? (e.g. DeckPolicy#show_collaborators?)
+      # Authorize RELATIONSHIP_CLASS#show_INVERSE_RELATIONSHIP? (e.g. TopicPolicy#show_collaborators?)
       authorize_inverse_relationship @resource.send params[:relationship]
     end
 
@@ -55,7 +55,7 @@ module Relationships
 
     relationship_klass = model_klass.reflect_on_association(params[:relationship]).klass
 
-    # Authorize RELATIONSHIP_CLASS#destroy_INVERSE_RELATIONSHIP? (e.g. DeckPolicy#destroy_collaborators?)
+    # Authorize RELATIONSHIP_CLASS#destroy_INVERSE_RELATIONSHIP? (e.g. TopicPolicy#destroy_collaborators?)
     # FIXME: does not support polymorphic relationships (`type` is ignored)
     params[:data].pluck(:id).each do |id|
       resource = relationship_klass.find id

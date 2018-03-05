@@ -19,7 +19,7 @@ class UserResource < ApplicationResource
   ##
   # Relationships
   #
-  has_many :decks
+  has_many :topics
   has_many :collaborations
 
   ##

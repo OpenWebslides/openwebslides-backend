@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Flags API', :type => :request do
   let(:user) { create :user, :confirmed }
-  let(:deck) { create :deck, :user => user }
-  let(:conversation) { create :conversation, :deck => deck }
+  let(:topic) { create :topic, :user => user }
+  let(:conversation) { create :conversation, :topic => topic }
 
   let(:params) do
     {
@@ -53,7 +53,7 @@ RSpec.describe 'Flags API', :type => :request do
   end
 
   context 'comments' do
-    let(:annotation) { create :comment, :conversation => conversation, :deck => conversation.deck, :content_item_id => conversation.content_item_id }
+    let(:annotation) { create :comment, :conversation => conversation, :topic => conversation.topic, :content_item_id => conversation.content_item_id }
 
     describe 'POST /' do
       before do

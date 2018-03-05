@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170822131444) do
+ActiveRecord::Schema.define(version: 20180305095726) do
 
   create_table "annotations", force: :cascade do |t|
     t.string "type"
     t.string "content_item_id"
     t.integer "user_id"
-    t.integer "deck_id"
+    t.integer "topic_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "text"
@@ -25,37 +25,25 @@ ActiveRecord::Schema.define(version: 20170822131444) do
     t.integer "state"
     t.string "title"
     t.index ["conversation_id"], name: "index_annotations_on_conversation_id"
-    t.index ["deck_id"], name: "index_annotations_on_deck_id"
+    t.index ["topic_id"], name: "index_annotations_on_topic_id"
     t.index ["user_id"], name: "index_annotations_on_user_id"
   end
 
   create_table "assets", force: :cascade do |t|
     t.string "filename"
-    t.integer "deck_id"
+    t.integer "topic_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["deck_id"], name: "index_assets_on_deck_id"
-    t.index ["filename", "deck_id"], name: "index_assets_on_filename_and_deck_id", unique: true
-  end
-
-  create_table "decks", force: :cascade do |t|
-    t.string "name"
-    t.string "canonical_name"
-    t.integer "state", default: 0
-    t.string "description"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "template"
-    t.index ["user_id"], name: "index_decks_on_user_id"
+    t.index ["filename", "topic_id"], name: "index_assets_on_filename_and_topic_id", unique: true
+    t.index ["topic_id"], name: "index_assets_on_topic_id"
   end
 
   create_table "grants", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.integer "deck_id", null: false
-    t.index ["deck_id", "user_id"], name: "index_grants_on_deck_id_and_user_id", unique: true
-    t.index ["deck_id"], name: "index_grants_on_deck_id"
-    t.index ["user_id", "deck_id"], name: "index_grants_on_user_id_and_deck_id", unique: true
+    t.integer "topic_id", null: false
+    t.index ["topic_id", "user_id"], name: "index_grants_on_topic_id_and_user_id", unique: true
+    t.index ["topic_id"], name: "index_grants_on_topic_id"
+    t.index ["user_id", "topic_id"], name: "index_grants_on_user_id_and_topic_id", unique: true
     t.index ["user_id"], name: "index_grants_on_user_id"
   end
 
@@ -72,10 +60,10 @@ ActiveRecord::Schema.define(version: 20170822131444) do
   create_table "notifications", force: :cascade do |t|
     t.integer "event_type"
     t.integer "user_id"
-    t.integer "deck_id"
+    t.integer "topic_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["deck_id"], name: "index_notifications_on_deck_id"
+    t.index ["topic_id"], name: "index_notifications_on_topic_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
@@ -86,6 +74,18 @@ ActiveRecord::Schema.define(version: 20170822131444) do
     t.index ["annotation_id"], name: "index_ratings_on_annotation_id"
     t.index ["user_id", "annotation_id"], name: "index_ratings_on_user_id_and_annotation_id", unique: true
     t.index ["user_id"], name: "index_ratings_on_user_id"
+  end
+
+  create_table "topics", force: :cascade do |t|
+    t.string "name"
+    t.string "canonical_name"
+    t.integer "state", default: 0
+    t.string "description"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "template"
+    t.index ["user_id"], name: "index_topics_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

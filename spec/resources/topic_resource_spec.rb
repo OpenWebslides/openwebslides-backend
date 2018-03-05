@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe DeckResource, :type => :resource do
-  let(:deck) { create :deck }
+RSpec.describe TopicResource, :type => :resource do
+  let(:topic) { create :topic }
   let(:context) { {} }
 
-  let(:nil_deck) { create :deck, :description => nil }
+  let(:nil_topic) { create :topic, :description => nil }
 
-  subject { described_class.new deck, context }
+  subject { described_class.new topic, context }
 
   it { is_expected.to have_primary_key :id }
 
@@ -27,7 +27,7 @@ RSpec.describe DeckResource, :type => :resource do
     end
 
     it 'should omit empty fields' do
-      subject { described_class.new nil_deck, context }
+      subject { described_class.new nil_topic, context }
       expect(subject.fetchable_fields).to match_array %i[id name state description template user collaborators assets conversations]
     end
 

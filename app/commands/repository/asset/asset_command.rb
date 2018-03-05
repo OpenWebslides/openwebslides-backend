@@ -9,7 +9,7 @@ module Repository
       protected
 
       def asset_path
-        File.join OpenWebslides.config.repository_path, @receiver.deck.canonical_name, 'assets'
+        File.join OpenWebslides.config.repository_path, @receiver.topic.canonical_name, 'assets'
       end
 
       def asset_file
@@ -19,8 +19,8 @@ module Repository
       ##
       # Execute an action (internal helper)
       #
-      def exec_deck(klass)
-        command = klass.new @receiver.deck
+      def exec_topic(klass)
+        command = klass.new @receiver.topic
         yield command if block_given?
 
         command.execute

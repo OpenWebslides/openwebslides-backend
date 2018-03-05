@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ##
-# Access grant to a deck (collaborators)
+# Access grant to a topic (collaborators)
 #
 class Grant < ApplicationRecord
   ##
@@ -10,7 +10,7 @@ class Grant < ApplicationRecord
   ##
   # Associations
   #
-  belongs_to :deck,
+  belongs_to :topic,
              :required => true
 
   belongs_to :user,
@@ -19,7 +19,7 @@ class Grant < ApplicationRecord
   ##
   # Validations
   #
-  validates_uniqueness_of :deck_id, :scope => :user_id
+  validates_uniqueness_of :topic_id, :scope => :user_id
 
   ##
   # Callbacks

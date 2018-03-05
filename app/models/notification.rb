@@ -7,7 +7,7 @@ class Notification < ApplicationRecord
   ##
   # Properties
   #
-  enum :event_type => %i[deck_created deck_updated]
+  enum :event_type => %i[topic_created topic_updated]
 
   ##
   # Associations
@@ -16,7 +16,7 @@ class Notification < ApplicationRecord
              :required => true,
              :inverse_of => :notifications
 
-  belongs_to :deck,
+  belongs_to :topic,
              :required => true,
              :inverse_of => :notifications
 
