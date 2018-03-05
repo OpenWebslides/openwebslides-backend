@@ -24,20 +24,6 @@ RSpec.describe Topic, :type => :model do
     it 'has a valid :status enum' do
       expect(%w[public_access protected_access private_access]).to include topic.state
     end
-
-    it 'has a canonical name' do
-      topic.send :generate_canonical_name
-      expect(topic.canonical_name).not_to be_nil
-    end
-
-    let(:user) { build :user, :email => 'foo@bar' }
-    it 'has a unique canonical name' do
-      topic = create :topic, :name => 'Foo Bar', :user => user
-      expect(topic.canonical_name).to eq 'foo-bar-foo-bar'
-
-      topic2 = create :topic, :name => 'Foo Bar', :user => user
-      expect(topic2.canonical_name).to eq 'foo-bar-foo-bar-2'
-    end
   end
 
   describe 'associations' do

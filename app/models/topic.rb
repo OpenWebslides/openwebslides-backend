@@ -14,9 +14,6 @@ class Topic < ApplicationRecord
   # Topic description
   property :description
 
-  # Unique name
-  property :canonical_name
-
   # Access level
   enum :state => %i[public_access protected_access private_access]
 
@@ -60,8 +57,6 @@ class Topic < ApplicationRecord
   ##
   # Callbacks
   #
-  before_save :generate_canonical_name
-
   ##
   # Methods
   #
@@ -71,23 +66,4 @@ class Topic < ApplicationRecord
   ##
   # Helpers and callback methods
   #
-
-  private
-
-  def generate_canonical_name
-    return if canonical_name?
-
-    self.canonical_name = Zaru.sanitize! "#{user.email.parameterize}-#{name.parameterize}"
-    return unless self.class.exists? :canonical_name => canonical_name
-
-    i = 1
-    loop do
-      i += 1
-      candidate = "#{canonical_name}-#{i}"
-      unless self.class.exists? :canonical_name => candidate
-        self.canonical_name = candidate
-        break
-      end
-    end
-  end
 end
