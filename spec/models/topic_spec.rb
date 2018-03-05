@@ -13,9 +13,6 @@ RSpec.describe Topic, :type => :model do
     it { is_expected.not_to allow_value(nil).for(:state) }
     it { is_expected.not_to allow_value('').for(:state) }
 
-    it { is_expected.not_to allow_value(nil).for(:template) }
-    it { is_expected.not_to allow_value('').for(:template) }
-
     it 'is invalid without attributes' do
       expect(subject).not_to be_valid
     end
@@ -31,19 +28,6 @@ RSpec.describe Topic, :type => :model do
     it 'has a canonical name' do
       topic.send :generate_canonical_name
       expect(topic.canonical_name).not_to be_nil
-    end
-
-    it 'has a default template' do
-      expect(topic.template).not_to be_nil
-      expect(topic.template).not_to be_empty
-    end
-
-    it 'has an overridable template' do
-      new_template = Faker::Lorem.words(2).join ' '
-
-      topic = build :topic, :template => new_template
-
-      expect(topic.template).to eq new_template
     end
 
     let(:user) { build :user, :email => 'foo@bar' }

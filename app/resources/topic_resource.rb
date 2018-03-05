@@ -10,7 +10,6 @@ class TopicResource < ApplicationResource
   attribute :name
   attribute :state
   attribute :description
-  attribute :template
 
   ##
   # Relationships

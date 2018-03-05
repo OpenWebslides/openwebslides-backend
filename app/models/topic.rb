@@ -17,9 +17,6 @@ class Topic < ApplicationRecord
   # Unique name
   property :canonical_name
 
-  # HTML template
-  property :template
-
   # Access level
   enum :state => %i[public_access protected_access private_access]
 
@@ -59,13 +56,11 @@ class Topic < ApplicationRecord
   #
   validates :name, :presence => true
   validates :state, :presence => true
-  validates :template, :presence => true
 
   ##
   # Callbacks
   #
   before_save :generate_canonical_name
-  after_initialize :set_default_template
 
   ##
   # Methods
@@ -94,9 +89,5 @@ class Topic < ApplicationRecord
         break
       end
     end
-  end
-
-  def set_default_template
-    self.template = OpenWebslides.config.default_template if new_record?
   end
 end

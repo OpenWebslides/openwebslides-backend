@@ -12,8 +12,7 @@ RSpec.describe 'Topic API', :type => :request do
     {
       :name => name,
       :state => %i[public_access protected_access private_access].sample,
-      :description => Faker::Lorem.words(20).join(' '),
-      :template => 'foo'
+      :description => Faker::Lorem.words(20).join(' ')
     }
   end
 
