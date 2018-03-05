@@ -33,7 +33,7 @@ module Auth
     end
 
     def find_or_create_user
-      @resource = User.find_by :email => email
+      @resource = User.find_by :email => email.downcase
 
       return if @resource
 
@@ -41,7 +41,7 @@ module Auth
       attrs = {
         :first_name => first_name,
         :last_name => last_name,
-        :email => email,
+        :email => email.downcase,
         :tos_accepted => true
       }
       @resource = User.new attrs
