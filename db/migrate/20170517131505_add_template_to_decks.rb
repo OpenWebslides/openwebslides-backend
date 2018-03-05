@@ -2,6 +2,6 @@
 
 class AddTemplateToDecks < ActiveRecord::Migration[5.0]
   def change
-    add_column :topics, :template, :string
+    add_column :decks, :template, :string
   end
 end
