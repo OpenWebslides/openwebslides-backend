@@ -18,16 +18,6 @@ OpenWebslides.configure do |config|
   config.repository_path = Rails.root.join 'data'
 
   ##
-  # Absolute path to template directory
-  #
-  config.template_path = Rails.root.join 'lib', 'assets', 'templates'
-
-  ##
-  # Default template
-  #
-  config.default_template = 'shower-ows'
-
-  ##
   # Temporary directory for uploads
   #
   config.tmpdir = Rails.root.join 'tmp', 'uploads'
