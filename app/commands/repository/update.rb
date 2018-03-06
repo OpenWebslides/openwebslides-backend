@@ -12,8 +12,8 @@ module Repository
       raise ArgumentError, 'No content specified' unless @content
 
       write_lock do
-        # Render HTML file
-        exec Filesystem::Render do |c|
+        # Write data file
+        exec Filesystem::Write do |c|
           c.content = @content
         end
 

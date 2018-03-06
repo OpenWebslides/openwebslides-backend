@@ -8,11 +8,11 @@ module Repository
     protected
 
     def repo_path
-      File.join OpenWebslides.config.repository_path, @receiver.canonical_name
+      File.join OpenWebslides.config.repository_path, @receiver.user.id, @receiver.id
     end
 
     def repo_file
-      File.join repo_path, 'index.html'
+      File.join repo_path, 'data.json'
     end
 
     def lock_path
@@ -41,13 +41,11 @@ module Repository
       file = File.join lock_path, "#{@receiver.id}.lock"
 
       File.open(file, File::RDWR | File::CREAT, 0o644) do |lock|
-        begin
-          lock.flock type
+        lock.flock type
 
-          block.call
-        ensure
-          lock.flock File::LOCK_UN
-        end
+        block.call
+      ensure
+        lock.flock File::LOCK_UN
       end
     end
   end

@@ -14,8 +14,8 @@ mock_command Repository::Git::Commit
 mock_command Repository::Git::Init
 
 mock_command Repository::Filesystem::Init
-mock_command(Repository::Filesystem::Read) { Nokogiri::HTML5 '' }
-mock_command Repository::Filesystem::Render
+mock_command(Repository::Filesystem::Read) { JSON.parse '{}' }
+mock_command Repository::Filesystem::Write
 mock_command Repository::Filesystem::Destroy
 
 mock_command Repository::Asset::Copy

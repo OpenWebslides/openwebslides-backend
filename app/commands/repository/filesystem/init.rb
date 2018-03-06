@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
 module Repository
   module Filesystem
     ##
@@ -9,13 +11,8 @@ module Repository
       def execute
         exec Filesystem::Create
 
-        # Populate local repo
-        #raise OpenWebslides::NoTemplateError, "No template found for #{template_path}" unless Dir.exist? template_path
-        #FileUtils.cp_r "#{template_path}/.", repo_path
-
-        # Delete unnecessary files
-        FileUtils.rm File.join repo_path, 'index.html.erb'
-        FileUtils.rm_r File.join(repo_path, '.git'), :secure => true
+        # Create initial files
+        FileUtils.touch repo_file
       end
     end
   end
