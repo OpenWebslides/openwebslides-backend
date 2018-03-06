@@ -2,8 +2,6 @@ language: ruby
 cache:
   bundler: true
 rvm:
-  - 2.3.4
-  - 2.4.1
   - 2.5.0
 before_script:
   - (git submodule init && git submodule update)

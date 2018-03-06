@@ -7,7 +7,7 @@
 Install the following software first:
 
 - RVM
-- Ruby 2.4.0
+- Ruby >= 2.5.0
 - Yarn
 - NodeJS 7.6.0
 
