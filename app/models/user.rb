@@ -99,10 +99,6 @@ class User < ApplicationRecord
     save!
   end
 
-  def create_email_identity
-    identities.build :provider => 'email', :uid => email
-  end
-
   ##
   # Overrides
   #
@@ -122,5 +118,11 @@ class User < ApplicationRecord
     return if tos_accepted?
 
     errors.add :tos_accepted, I18n.t('openwebslides.validations.user.tos_accepted')
+  end
+
+  private
+
+  def create_email_identity
+    identities.build :provider => 'email', :uid => email
   end
 end
