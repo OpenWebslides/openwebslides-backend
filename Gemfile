@@ -30,9 +30,6 @@ gem 'rugged'
 # JSON:API spec compliant resources
 gem 'jsonapi-utils'
 
-# HTML5 parser
-gem 'nokogumbo'
-
 # Asynchronous processing
 gem 'sidekiq'
 

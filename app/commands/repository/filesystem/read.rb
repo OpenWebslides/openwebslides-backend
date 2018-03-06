@@ -7,8 +7,7 @@ module Repository
     #
     class Read < RepoCommand
       def execute
-        doc = Nokogiri::HTML5 File.read(repo_file)
-        doc.at('body').children
+        JSON.parse File.read repo_file
       end
     end
   end
