@@ -5,11 +5,11 @@ module Repository
     ##
     # Asset command
     #
-    class AssetCommand < Command
+    class AssetCommand < RepoCommand
       protected
 
       def asset_path
-        File.join OpenWebslides.config.repository_path, @receiver.topic.canonical_name, 'assets'
+        File.join repo_path, 'assets'
       end
 
       def asset_file
