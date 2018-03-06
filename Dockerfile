@@ -1,5 +1,5 @@
-FROM ruby:2.4.1-slim
-MAINTAINER Rein Van Imschoot <rein.vanimschoot@ugent.be>
+FROM ruby:2.5.0-slim
+MAINTAINER Florian Dejonckheere <florian@floriandejonckheere.be>
 
 ##
 # Create user and group
@@ -22,11 +22,6 @@ RUN echo 'deb https://dl.yarnpkg.com/debian/ stable main' | tee /etc/apt/sources
 # Install packages
 RUN apt-get update && apt-get install -qq -y --no-install-recommends \
     build-essential nodejs libpq-dev libsqlite3-dev cmake pkg-config git yarn
-
-# Install JRE 8 from jessie-backports
-RUN echo 'deb http://ftp.debian.org/debian jessie-backports main' | tee /etc/apt/sources.list.d/backports.list
-RUN apt-get update && apt-get install -qq -y -t jessie-backports \
-    openjdk-8-jre-headless
 
 WORKDIR /app/
 ENV RAILS_ENV production
