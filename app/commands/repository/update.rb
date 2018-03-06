@@ -25,11 +25,6 @@ module Repository
 
         # Update timestamps
         @receiver.touch
-
-        return unless OpenWebslides.config.github.enabled
-
-        # Sync remote
-        exec Remote::Sync
       end
     end
   end

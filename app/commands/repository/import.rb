@@ -25,12 +25,6 @@ module Repository
         end
 
         exec Filesystem::Rebuild
-
-        return unless OpenWebslides.config.github.enabled
-
-        # Create and sync remote repository
-        exec Remote::Init
-        exec Remote::Sync
       end
     end
   end

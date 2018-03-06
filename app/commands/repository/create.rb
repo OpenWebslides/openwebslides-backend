@@ -11,23 +11,12 @@ module Repository
         exec Filesystem::Init
         exec Git::Init
 
-        # Render empty topic
-        exec Filesystem::Render do |c|
-          c.content = ''
-        end
-
         # Initial commit
         exec Git::Commit do |c|
           c.author = @receiver.user
           c.message = 'Initial commit'
           c.params = { :parents => [] }
         end
-
-        return unless OpenWebslides.config.github.enabled
-
-        # Create and sync remote repository
-        exec Remote::Init
-        exec Remote::Sync
       end
     end
   end

@@ -25,7 +25,6 @@ gem 'pundit'
 
 # Data store providers
 gem 'net-ssh'
-gem 'octokit'
 gem 'rugged'
 
 # JSON:API spec compliant resources

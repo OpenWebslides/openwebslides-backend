@@ -24,13 +24,11 @@ module OpenWebslides
     attr_accessor :repository_path,
                   :tmpdir,
                   :oauth2,
-                  :api,
-                  :github
+                  :api
 
     def initialize
       @oauth2 = OpenStruct.new
       @api = OpenStruct.new
-      @github = OpenStruct.new
     end
 
     ##
@@ -47,8 +45,6 @@ module OpenWebslides
       #
       raise 'api.token_lifetime' unless api.token_lifetime && api.token_lifetime.is_a?(ActiveSupport::Duration)
       raise 'api.asset_url_lifetime' unless api.token_lifetime && api.token_lifetime.is_a?(ActiveSupport::Duration)
-    rescue => e
-      raise OpenWebslides::ConfigurationError, "Invalid `#{e}`"
     end
   end
 end
