@@ -14,11 +14,11 @@ module Repository
         FileUtils.mkdir_p repo_path
 
         # Create empty data file
-        FileUtils.touch repo_file
+        File.write(repo_file, 'w') { |f| f.write '{}' }
 
         # Create asset directory
-        FileUtils.mkdir_p repo_path, 'assets'
-        FileUtils.touch repo_path, 'assets', '.keep'
+        FileUtils.mkdir_p File.join repo_path, 'assets'
+        FileUtils.touch File.join repo_path, 'assets', '.keep'
       end
     end
   end
