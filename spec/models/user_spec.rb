@@ -17,6 +17,13 @@ RSpec.describe User, :type => :model do
     it { is_expected.not_to allow_value('foo@').for(:email) }
     it { is_expected.not_to allow_value('@bar').for(:email) }
 
+    it { is_expected.not_to allow_value(nil).for(:locale) }
+    it { is_expected.not_to allow_value('').for(:locale) }
+    it { is_expected.not_to allow_value('foo').for(:locale) }
+    I18n.available_locales.map(&:to_s).each do |locale|
+      it { is_expected.to allow_value(locale).for(:locale) }
+    end
+
     it { is_expected.not_to allow_value(nil).for(:password) }
     it { is_expected.not_to allow_value('').for(:password) }
 
@@ -47,6 +54,10 @@ RSpec.describe User, :type => :model do
 
     it 'is not valid when terms are not accepted' do
       expect(build :user, :tos_accepted => false).not_to be_valid
+    end
+
+    it 'defaults to English locale' do
+      expect(user.locale).to eq 'en'
     end
 
     it 'rejects changes to email' do
@@ -98,5 +109,15 @@ RSpec.describe User, :type => :model do
     result = proc { User.find_by_token :id => user.id, :token_version => user.token_version }
 
     expect(result).to raise_error JSONAPI::Exceptions::UnconfirmedError
+  end
+
+  it 'sets a default locale' do
+    expect(user.locale).to eq 'en'
+  end
+
+  it 'overrides default locale' do
+    user = build :user, :locale => 'nl'
+
+    expect(user.locale).to eq 'nl'
   end
 end

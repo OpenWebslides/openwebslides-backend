@@ -10,6 +10,7 @@ class UserResource < ApplicationResource
   attribute :first_name
   attribute :last_name
   attribute :email
+  attribute :locale
   attribute :password
   attribute :tos_accepted
 
@@ -39,7 +40,7 @@ class UserResource < ApplicationResource
     if context[:current_user] == _model
       super - %i[password tos_accepted]
     else
-      super - %i[email password tos_accepted]
+      super - %i[email locale password tos_accepted]
     end
   end
 
@@ -52,6 +53,6 @@ class UserResource < ApplicationResource
   end
 
   def self.sortable_fields(context)
-    super(context) - %i[password tos_accepted]
+    super(context) - %i[locale password tos_accepted]
   end
 end

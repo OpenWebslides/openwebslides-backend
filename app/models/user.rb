@@ -14,6 +14,7 @@ class User < ApplicationRecord
   property :first_name
   property :last_name
   property :email
+  property :locale
   property :token_version
   property :tos_accepted
 
@@ -59,6 +60,10 @@ class User < ApplicationRecord
             :format => { :with => /\A[^@]+@[^@]+\z/ },
             :uniqueness => true
 
+  validates :locale,
+            :presence => true,
+            :inclusion => { :in => proc { I18n.available_locales.map(&:to_s) } }
+
   validates :token_version,
             :presence => true,
             :numericality => { :only_integer => true }
@@ -75,6 +80,7 @@ class User < ApplicationRecord
   # Callbacks
   #
   before_create :create_email_identity
+  after_initialize :set_default_locale
 
   ##
   # Methods
@@ -124,5 +130,9 @@ class User < ApplicationRecord
 
   def create_email_identity
     identities.build :provider => 'email', :uid => email
+  end
+
+  def set_default_locale
+    self.locale = 'en' if locale.blank?
   end
 end

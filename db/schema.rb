@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305104140) do
+ActiveRecord::Schema.define(version: 20180306122100) do
 
   create_table "annotations", force: :cascade do |t|
     t.string "type"
@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(version: 20180305104140) do
     t.datetime "updated_at", null: false
     t.integer "token_version", default: 1, null: false
     t.boolean "tos_accepted"
+    t.string "locale", default: "", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
