@@ -9,10 +9,16 @@ module Repository
     #
     class Init < RepoCommand
       def execute
-        exec Filesystem::Create
+        # Create initial directory
+        raise OpenWebslides::RepoExistsError if Dir.exist? repo_path
+        FileUtils.mkdir_p repo_path
 
-        # Create initial files
+        # Create empty data file
         FileUtils.touch repo_file
+
+        # Create asset directory
+        FileUtils.mkdir_p repo_path, 'assets'
+        FileUtils.touch repo_path, 'assets', '.keep'
       end
     end
   end
