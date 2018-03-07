@@ -52,6 +52,8 @@ Rails.application.routes.draw do
       jsonapi_links :conversations, :only => :show
 
       jsonapi_resources :assets, :only => :create
+
+      jsonapi_resource :content, :only => %i[show update]
     end
 
     ##

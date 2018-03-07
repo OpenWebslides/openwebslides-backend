@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
 module Repository
   module Filesystem
     ##
@@ -7,15 +9,16 @@ module Repository
     #
     class Init < RepoCommand
       def execute
-        exec Filesystem::Create
+        # Create initial directory
+        raise OpenWebslides::RepoExistsError if Dir.exist? repo_path
+        FileUtils.mkdir_p repo_path
 
-        # Populate local repo
-        #raise OpenWebslides::NoTemplateError, "No template found for #{template_path}" unless Dir.exist? template_path
-        #FileUtils.cp_r "#{template_path}/.", repo_path
+        # Create empty data file
+        File.write(repo_file, 'w') { |f| f.write '{}' }
 
-        # Delete unnecessary files
-        FileUtils.rm File.join repo_path, 'index.html.erb'
-        FileUtils.rm_r File.join(repo_path, '.git'), :secure => true
+        # Create asset directory
+        FileUtils.mkdir_p File.join repo_path, 'assets'
+        FileUtils.touch File.join repo_path, 'assets', '.keep'
       end
     end
   end

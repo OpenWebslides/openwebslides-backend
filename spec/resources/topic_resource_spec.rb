@@ -16,6 +16,7 @@ RSpec.describe TopicResource, :type => :resource do
   it { is_expected.to have_attribute :state }
 
   it { is_expected.to have_one :user }
+  it { is_expected.to have_one :content }
 
   it { is_expected.to have_many(:collaborators).with_class_name 'User' }
   it { is_expected.to have_many(:assets) }
@@ -23,12 +24,12 @@ RSpec.describe TopicResource, :type => :resource do
 
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id name state description user collaborators assets conversations]
+      expect(subject.fetchable_fields).to match_array %i[id name state description user content collaborators assets conversations]
     end
 
     it 'should omit empty fields' do
       subject { described_class.new nil_topic, context }
-      expect(subject.fetchable_fields).to match_array %i[id name state description user collaborators assets conversations]
+      expect(subject.fetchable_fields).to match_array %i[id name state description user content collaborators assets conversations]
     end
 
     it 'should have a valid set of creatable fields' do

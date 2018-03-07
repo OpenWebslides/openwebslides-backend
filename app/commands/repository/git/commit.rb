@@ -2,6 +2,9 @@
 
 module Repository
   module Git
+    ##
+    # Create a commit in repository
+    #
     class Commit < RepoCommand
       attr_accessor :author, :message, :params
 

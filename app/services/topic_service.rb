@@ -60,25 +60,4 @@ class TopicService < ApplicationService
     # Delete database
     @topic.destroy
   end
-
-  def import(repository)
-    if @topic.save
-      command = Repository::Import.new @topic
-
-      command.repository = repository
-
-      command.execute
-
-      Notification.create :user => @topic.user,
-                          :topic => @topic,
-                          :event_type => :topic_created
-
-      true
-    else
-      false
-    end
-  rescue => e
-    delete
-    raise e
-  end
 end
