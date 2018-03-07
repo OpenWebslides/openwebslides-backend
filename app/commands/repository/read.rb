@@ -7,10 +7,7 @@ module Repository
   class Read < RepoCommand
     def execute
       read_lock do
-        # Get repository contents
-        body = exec Filesystem::Read
-
-        body.to_html.strip
+        exec Filesystem::Read
       end
     end
   end

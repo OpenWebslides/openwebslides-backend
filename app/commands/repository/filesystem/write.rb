@@ -11,7 +11,7 @@ module Repository
       def execute
         raise OpenWebslides::ArgumentError, 'Content not specified' unless @content
 
-        File.write repo_file, JSON.pretty_generate(@content)
+        File.write repo_file, "#{JSON.pretty_generate(@content)}\n"
       end
     end
   end
