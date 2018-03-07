@@ -13,8 +13,6 @@ class TopicsController < ApplicationController
   after_action :verify_policy_scoped, :only => %i[index get_related_resources]
   after_action :verify_authorized_or_policy_scoped, :only => :show_relationship
 
-  skip_before_action :jsonapi_request_handling, :only => :update
-
   ##
   # Resource
   #
@@ -54,13 +52,7 @@ class TopicsController < ApplicationController
 
     authorize @topic
 
-    if request.accept == JSONAPI::TOPIC_MEDIA_TYPE
-      body = service.read
-
-      render :body => body, :content_type => 'text/html', :encoding => 'utf-8'
-    else
-      jsonapi_render :json => @topic
-    end
+    jsonapi_render :json => @topic
   end
 
   # PUT/PATCH /topics/:id
@@ -69,36 +61,11 @@ class TopicsController < ApplicationController
 
     authorize @topic
 
-    if request.content_type == JSONAPI::TOPIC_MEDIA_TYPE
-      update_content
-    else
-      update_model
-    end
-  end
-
-  # Update filesystem contents
-  def update_content
-    service.update :author => current_user, :content => request.body.read
-
-    head :no_content
-  end
-
-  # Update database model
-  def update_model
-    # TODO: helper to process requests based on media type
-    setup_request
-    return jsonapi_render_errors :json => @request unless @request.errors.blank?
-
-    if service.update resource_params
+    if topic.update resource_params
       jsonapi_render :json => @topic
     else
       jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
     end
-  rescue ArgumentError
-    # FIXME: Topic.new throws ArgumentError when :state is invalid
-    # See https://github.com/rails/rails/issues/13971#issuecomment-287030984
-    @topic.errors.add :state, 'is invalid'
-    jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
   end
 
   # DELETE /topics/:id
