@@ -15,6 +15,7 @@ class TopicResource < ApplicationResource
   # Relationships
   #
   has_one :user
+  has_one :content
   has_many :collaborators
   has_many :assets
   has_many :conversations
@@ -34,10 +35,10 @@ class TopicResource < ApplicationResource
   # Methods
   #
   def self.creatable_fields(context = {})
-    super(context) - %i[collaborators assets conversations]
+    super(context) - %i[content collaborators assets conversations]
   end
 
   def self.updatable_fields(context = {})
-    super(context) - %i[collaborators assets conversations]
+    super(context) - %i[content collaborators assets conversations]
   end
 end
