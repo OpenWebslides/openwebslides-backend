@@ -61,11 +61,15 @@ class TopicsController < ApplicationController
 
     authorize @topic
 
-    if topic.update resource_params
+    if @topic.update resource_params
       jsonapi_render :json => @topic
     else
       jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
     end
+  rescue ArgumentError
+    # Add error to catch invalid state
+    @topic.errors.add :state, 'is invalid'
+    jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
   end
 
   # DELETE /topics/:id

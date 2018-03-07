@@ -112,109 +112,72 @@ RSpec.describe 'Topic API', :type => :request do
   end
 
   describe 'GET /:id' do
-    context 'JSON' do
-      before do
-        add_accept_header
-      end
-
-      it 'rejects an invalid id' do
-        get topic_path(:id => 0), :headers => headers
-
-        expect(response.status).to eq 404
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-      end
-
-      it 'returns successful' do
-        get topic_path(:id => topic.id), :headers => headers
-
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-      end
+    before do
+      add_accept_header
     end
 
-    context 'HTML' do
-      before do
-        (@headers ||= {})['Accept'] = 'text/html'
-      end
+    it 'rejects an invalid id' do
+      get topic_path(:id => 0), :headers => headers
 
-      it 'rejects an invalid id' do
-        get topic_path(:id => 0), :headers => headers
+      expect(response.status).to eq 404
+      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+    end
 
-        expect(response.status).to eq 404
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-      end
+    it 'returns successful' do
+      get topic_path(:id => topic.id), :headers => headers
 
-      it 'returns successful' do
-        get topic_path(:id => topic.id), :headers => headers
-
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq 'text/html'
-      end
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
     end
   end
 
   describe 'PUT/PATCH /:id' do
-    context 'JSON' do
-      before do
-        add_content_type_header
-        add_accept_header
-        add_auth_header
-      end
-
-      it 'rejects id not equal to URL' do
-        patch topic_path(:id => topic.id), :params => update_body(999, :name => 'foo'), :headers => headers
-
-        expect(response.status).to eq 400
-        expect(jsonapi_error_code(response)).to eq JSONAPI::KEY_NOT_INCLUDED_IN_URL
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-      end
-
-      it 'rejects non-existant topics' do
-        patch topic_path(:id => 999), :params => update_body(999, :name => 'foo'), :headers => headers
-
-        expect(response.status).to eq 404
-        expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-      end
-
-      it 'rejects empty name' do
-        patch topic_path(:id => topic.id), :params => update_body(topic.id, :name => ''), :headers => headers
-
-        expect(response.status).to eq 422
-        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-      end
-
-      it 'rejects invalid state' do
-        patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes.merge(:state => 'foo')), :headers => headers
-
-        expect(response.status).to eq 422
-        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-      end
-
-      it 'updates name' do
-        expect(topic.name).not_to eq name
-        patch topic_path(:id => topic.id), :params => update_body(topic.id, :name => name), :headers => headers
-
-        topic.reload
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-        expect(topic.name).to eq name
-      end
+    before do
+      add_content_type_header
+      add_accept_header
+      add_auth_header
     end
 
-    context 'HTML' do
-      before do
-        add_auth_header
-        @headers['Content-Type'] = 'text/html'
-      end
+    it 'rejects id not equal to URL' do
+      patch topic_path(:id => topic.id), :params => update_body(999, :name => 'foo'), :headers => headers
 
-      it 'updates html' do
-        patch topic_path(:id => topic.id), :params => '<html></html>', :headers => headers
+      expect(response.status).to eq 400
+      expect(jsonapi_error_code(response)).to eq JSONAPI::KEY_NOT_INCLUDED_IN_URL
+      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+    end
 
-        expect(response.status).to eq 204
-      end
+    it 'rejects non-existant topics' do
+      patch topic_path(:id => 999), :params => update_body(999, :name => 'foo'), :headers => headers
+
+      expect(response.status).to eq 404
+      expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
+      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+    end
+
+    it 'rejects empty name' do
+      patch topic_path(:id => topic.id), :params => update_body(topic.id, :name => ''), :headers => headers
+
+      expect(response.status).to eq 422
+      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+    end
+
+    it 'rejects invalid state' do
+      patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes.merge(:state => 'foo')), :headers => headers
+
+      expect(response.status).to eq 422
+      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+    end
+
+    it 'updates name' do
+      expect(topic.name).not_to eq name
+      patch topic_path(:id => topic.id), :params => update_body(topic.id, :name => name), :headers => headers
+
+      topic.reload
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(topic.name).to eq name
     end
   end
 
