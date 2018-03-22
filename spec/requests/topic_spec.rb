@@ -3,14 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe 'Topic API', :type => :request do
-  let(:name) { Faker::Lorem.words(4).join(' ') }
+  let(:title) { Faker::Lorem.words(4).join(' ') }
 
   let(:user) { create :user, :confirmed }
   let(:topic) { create :topic, :user => user }
 
   let(:attributes) do
     {
-      :name => name,
+      :title => title,
       :state => %i[public_access protected_access private_access].sample,
       :description => Faker::Lorem.words(20).join(' ')
     }
@@ -67,16 +67,16 @@ RSpec.describe 'Topic API', :type => :request do
       add_auth_header
     end
 
-    it 'rejects empty name' do
-      post topics_path, :params => request_body(attributes.merge :name => ''), :headers => headers
+    it 'rejects empty title' do
+      post topics_path, :params => request_body(attributes.merge :title => ''), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
     end
 
-    it 'rejects no name' do
-      post topics_path, :params => request_body(attributes.except :name), :headers => headers
+    it 'rejects no title' do
+      post topics_path, :params => request_body(attributes.except :title), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
@@ -107,7 +107,7 @@ RSpec.describe 'Topic API', :type => :request do
 
       json = JSON.parse response.body
 
-      expect(json['data']['attributes']['name']).to eq attributes[:name]
+      expect(json['data']['attributes']['title']).to eq attributes[:title]
     end
   end
 
@@ -139,7 +139,7 @@ RSpec.describe 'Topic API', :type => :request do
     end
 
     it 'rejects id not equal to URL' do
-      patch topic_path(:id => topic.id), :params => update_body(999, :name => 'foo'), :headers => headers
+      patch topic_path(:id => topic.id), :params => update_body(999, :title => 'foo'), :headers => headers
 
       expect(response.status).to eq 400
       expect(jsonapi_error_code(response)).to eq JSONAPI::KEY_NOT_INCLUDED_IN_URL
@@ -147,15 +147,15 @@ RSpec.describe 'Topic API', :type => :request do
     end
 
     it 'rejects non-existant topics' do
-      patch topic_path(:id => 999), :params => update_body(999, :name => 'foo'), :headers => headers
+      patch topic_path(:id => 999), :params => update_body(999, :title => 'foo'), :headers => headers
 
       expect(response.status).to eq 404
       expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
     end
 
-    it 'rejects empty name' do
-      patch topic_path(:id => topic.id), :params => update_body(topic.id, :name => ''), :headers => headers
+    it 'rejects empty title' do
+      patch topic_path(:id => topic.id), :params => update_body(topic.id, :title => ''), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
@@ -170,14 +170,14 @@ RSpec.describe 'Topic API', :type => :request do
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
     end
 
-    it 'updates name' do
-      expect(topic.name).not_to eq name
-      patch topic_path(:id => topic.id), :params => update_body(topic.id, :name => name), :headers => headers
+    it 'updates title' do
+      expect(topic.title).not_to eq title
+      patch topic_path(:id => topic.id), :params => update_body(topic.id, :title => title), :headers => headers
 
       topic.reload
       expect(response.status).to eq 200
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-      expect(topic.name).to eq name
+      expect(topic.title).to eq title
     end
   end
 

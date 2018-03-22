@@ -7,8 +7,8 @@ RSpec.describe Topic, :type => :model do
   let(:user) { build :user }
 
   describe 'attributes' do
-    it { is_expected.not_to allow_value(nil).for(:name) }
-    it { is_expected.not_to allow_value('').for(:name) }
+    it { is_expected.not_to allow_value(nil).for(:title) }
+    it { is_expected.not_to allow_value('').for(:title) }
 
     it { is_expected.not_to allow_value(nil).for(:state) }
     it { is_expected.not_to allow_value('').for(:state) }

@@ -11,7 +11,7 @@ RSpec.describe NotificationResource, :type => :resource do
   it { is_expected.to have_primary_key :id }
 
   it { is_expected.to have_attribute :event_type }
-  it { is_expected.to have_attribute :topic_name }
+  it { is_expected.to have_attribute :topic_title }
   it { is_expected.to have_attribute :user_name }
 
   it { is_expected.to have_one(:user) }
@@ -19,7 +19,7 @@ RSpec.describe NotificationResource, :type => :resource do
 
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id event_type topic_name user_name topic user]
+      expect(subject.fetchable_fields).to match_array %i[id event_type topic_title user_name topic user]
     end
 
     it 'should have a valid set of sortable fields' do

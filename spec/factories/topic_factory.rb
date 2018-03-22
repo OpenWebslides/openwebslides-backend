@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :topic do
-    name { Faker::Lorem.words(4).join ' ' }
+    title { Faker::Lorem.words(4).join ' ' }
     description { Faker::Lorem.words(20).join ' ' }
     state :public_access
     user { build :user, :confirmed }
