@@ -9,7 +9,7 @@ class Topic < ApplicationRecord
   #
 
   # Topic title
-  property :name
+  property :title
 
   # Topic description
   property :description
@@ -51,7 +51,7 @@ class Topic < ApplicationRecord
   ##
   # Validations
   #
-  validates :name, :presence => true
+  validates :title, :presence => true
   validates :state, :presence => true
 
   ##

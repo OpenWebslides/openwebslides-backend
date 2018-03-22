@@ -7,7 +7,7 @@ class TopicResource < ApplicationResource
   ##
   # Attributes
   #
-  attribute :name
+  attribute :title
   attribute :state
   attribute :description
 
@@ -23,7 +23,7 @@ class TopicResource < ApplicationResource
   ##
   # Filters
   #
-  filter :name
+  filter :title
   filter :description
   filter :state,
          :verify => ->(values, _) { values & Topic.states.keys }

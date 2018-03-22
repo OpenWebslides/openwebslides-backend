@@ -11,7 +11,7 @@ class NotificationResource < ApplicationResource
   #
   attribute :event_type
   attribute :user_name
-  attribute :topic_name
+  attribute :topic_title
 
   ##
   # Relationships
@@ -48,8 +48,8 @@ class NotificationResource < ApplicationResource
     @model.user.name
   end
 
-  def topic_name
-    @model.topic.name
+  def topic_title
+    @model.topic.title
   end
 
   def meta(options)
