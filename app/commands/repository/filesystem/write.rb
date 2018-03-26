@@ -11,7 +11,7 @@ module Repository
       def execute
         raise OpenWebslides::ArgumentError, 'Content not specified' unless @content
 
-        File.write repo_file, "#{@content.to_yaml}\n"
+        File.write repo_file, "#{@content.sort.to_h.to_yaml}\n"
       end
     end
   end
