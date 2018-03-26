@@ -14,7 +14,7 @@ module Repository
         FileUtils.mkdir_p repo_path
 
         # Create empty data file
-        File.open(repo_file, 'w') { |f| f.write '{}' }
+        File.write repo_file, nil.to_yaml
 
         # Create asset directory
         FileUtils.mkdir_p File.join repo_path, 'assets'

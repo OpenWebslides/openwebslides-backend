@@ -12,7 +12,7 @@ module Repository
     end
 
     def repo_file
-      File.join repo_path, 'data.json'
+      File.join repo_path, 'data.yml'
     end
 
     def lock_path

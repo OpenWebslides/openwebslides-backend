@@ -7,7 +7,7 @@ module Repository
     #
     class Read < RepoCommand
       def execute
-        JSON.parse File.read repo_file
+        YAML.safe_load File.read repo_file
       end
     end
   end
