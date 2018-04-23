@@ -10,36 +10,19 @@ function _error_handler() {
   read -n 1
 }
 
-# Command line argument parser
-case "$1" in
-  "--production")
-    deploy_prod
-    ;;
-  "--dev")
-    deploy_dev
-    ;;
-  *)
-    echo "$0 --production | --dev"
-    exit 1
-esac
+[[ $1 == "--certificates" ]] && CERTS=1
 
-function update_frontend() {
-  # Update frontend module
-  git submodule init
-  git submodule update
-  (cd web && git pull)
-}
+# Update frontend module
+git submodule init
+git submodule update
+(cd web && git pull)
 
-function deploy_prod() {
-  update_frontend
+# Build app image
+docker build -t openwebslides/openwebslides:latest
 
-  docker build -t openwebslides/openwebslides:latest
+# Deploy containers
+if [[ ${CERTS} -eq 1 ]]; then
   docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-}
-
-function deploy_dev() {
-  update_frontend
-
-  docker build -t openwebslides/openwebslides:latest
+else
   docker-compose up -d
-}
+fi
