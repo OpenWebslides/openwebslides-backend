@@ -45,11 +45,6 @@ RUN cd /app/web && yarn install
 COPY . /app/
 
 ##
-# Install submodules
-#
-RUN git submodule init && git submodule update && rm -rf .git
-
-##
 # Build public assets
 #
 RUN cd /app/web && ./node_modules/.bin/webpack --config webpack.config.js
