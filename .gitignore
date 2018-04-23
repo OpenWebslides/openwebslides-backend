@@ -24,11 +24,6 @@
 # IDE files
 .idea
 
-# Webpack files
-node_modules
-/client/public
-/client/dist
-
 # Private files
 *.env
 config/*.pem

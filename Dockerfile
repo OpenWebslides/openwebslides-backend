@@ -10,7 +10,7 @@ RUN useradd openwebslides --create-home --home-dir /app/ --shell /bin/false
 # Install package dependencies
 #
 RUN apt-get update && apt-get install -qq -y --no-install-recommends \
-      curl
+      curl gnupg
 
 # Node
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
@@ -36,8 +36,8 @@ RUN bundle install --deployment --without development test
 ##
 # Install Node dependencies
 #
-COPY client/package.json client/yarn.lock /app/client/
-RUN cd /app/client && yarn install --production=false
+COPY web/package.json web/yarn.lock /app/web/
+RUN cd /app/web && yarn install
 
 ##
 # Add application
@@ -45,14 +45,9 @@ RUN cd /app/client && yarn install --production=false
 COPY . /app/
 
 ##
-# Install submodules
-#
-RUN git submodule init && git submodule update && rm -rf .git
-
-##
 # Build public assets
 #
-RUN cd /app/client && ./node_modules/.bin/webpack --config config/webpack.js
+RUN cd /app/web && ./node_modules/.bin/webpack --config webpack.config.js
 
 ##
 # Run application
