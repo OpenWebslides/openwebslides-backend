@@ -25,8 +25,8 @@ docker-compose.yml
 
 # Webpack files
 node_modules
-/client/public
-/client/dist
+/web/public
+/web/dist
 
 # Private files
 *.env
