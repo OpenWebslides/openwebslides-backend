@@ -25,6 +25,13 @@ $ git submodule init
 $ git submodule update
 ```
 
+To update the frontend module, use:
+
+```
+$ cd web
+$ git pull
+```
+
 And install all frontend dependencies:
 
 ```
