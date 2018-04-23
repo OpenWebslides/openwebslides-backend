@@ -10,7 +10,7 @@ RUN useradd openwebslides --create-home --home-dir /app/ --shell /bin/false
 # Install package dependencies
 #
 RUN apt-get update && apt-get install -qq -y --no-install-recommends \
-      curl
+      curl gnupg
 
 # Node
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
