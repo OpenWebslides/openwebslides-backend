@@ -1,6 +1,7 @@
 # Docker files
 Dockerfile
 docker-compose.yml
+docker-compose.prod.yml
 .dockerignore
 
  Ignore bundler config.
@@ -25,7 +26,6 @@ docker-compose.yml
 
 # Webpack files
 node_modules
-/web/public
 /web/dist
 
 # Private files
@@ -51,9 +51,5 @@ doc/
 # Local repositories
 data/*
 
-# Submodules
-lib/assets/
-
 # Volumes
-nginx.conf
-nginx-proxy.conf
+nginx/
