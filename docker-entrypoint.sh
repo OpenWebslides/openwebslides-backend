@@ -16,7 +16,7 @@ su - openwebslides
 bundle exec rake db:migrate
 
 # Override API URL on runtime
-erb /app/web/config/config.js.erb > /app/web/dist/config.js
+#erb /app/web/config/config.js.erb > /app/web/dist/config.js
 
 # Copy assets
 [[ ! -d /app/public/ ]] && mkdir -p /app/public/
