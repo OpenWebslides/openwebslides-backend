@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     ##
     # User API
     #
-    jsonapi_resources :users, :except => %i[create update] do
+    jsonapi_resources :users do
       # Topics relationship
       jsonapi_related_resources :topics
       jsonapi_links :topics, :only => :show
@@ -126,6 +126,8 @@ Rails.application.routes.draw do
     ##
     # Authentication API
     #
+    jsonapi_resource :confirmation, :only => :create do end
     jsonapi_resource :token, :only => %i[create destroy] do end
+    jsonapi_resource :password, :only => %i[create update] do end
   end
 end
