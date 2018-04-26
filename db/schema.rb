@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180322144303) do
+ActiveRecord::Schema.define(version: 2018_04_26_120902) do
 
   create_table "annotations", force: :cascade do |t|
     t.string "type"
@@ -78,7 +78,6 @@ ActiveRecord::Schema.define(version: 20180322144303) do
 
   create_table "topics", force: :cascade do |t|
     t.string "title"
-    t.string "canonical_name"
     t.integer "state", default: 0
     t.string "description"
     t.integer "user_id"
