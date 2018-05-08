@@ -29,7 +29,7 @@ class ContentController < ApplicationController
 
     authorize @topic
 
-    content = resource_params[:content].permit!.to_h
+    content = resource_params[:content].map { |p| p.permit!.to_h }
     service.update :author => current_user, :content => content
 
     head :no_content
