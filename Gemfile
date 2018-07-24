@@ -10,7 +10,7 @@ git_source(:github) do |repo_name|
 end
 
 # Semantic versioning
-gem 'semver'
+gem 'semverse'
 
 # State Machine
 gem 'state_machines'
