@@ -39,6 +39,9 @@ gem 'sidekiq'
 # Filename sanitization
 gem 'zaru'
 
+# Accept header parsing
+gem 'http-accept'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails'
 # Use Puma as the application server
