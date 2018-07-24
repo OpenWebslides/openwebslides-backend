@@ -39,8 +39,7 @@ module Auth
 
       # New user
       attrs = {
-        :first_name => first_name,
-        :last_name => last_name,
+        :name => name,
         :email => email.downcase,
         :tos_accepted => true
       }
@@ -74,12 +73,15 @@ module Auth
     end
 
     def sync_information
-      @resource.first_name ||= first_name
-      @resource.last_name ||= last_name
+      @resource.name = name
     end
 
     def email
       (auth_hash['info']['email'] || (auth_hash['extra'] && auth_hash['extra']['mail'])).downcase
+    end
+
+    def name
+      "#{first_name} #{last_name}".strip
     end
 
     def first_name

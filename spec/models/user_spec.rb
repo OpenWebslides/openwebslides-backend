@@ -7,8 +7,8 @@ RSpec.describe User, :type => :model do
   let(:confirmed_user) { create :user, :confirmed }
 
   describe 'attributes' do
-    it { is_expected.not_to allow_value(nil).for(:first_name) }
-    it { is_expected.not_to allow_value('').for(:first_name) }
+    it { is_expected.not_to allow_value(nil).for(:name) }
+    it { is_expected.not_to allow_value('').for(:name) }
 
     it { is_expected.not_to allow_value(nil).for(:email) }
     it { is_expected.not_to allow_value('').for(:email) }
@@ -81,12 +81,6 @@ RSpec.describe User, :type => :model do
 
       user.increment_token_version!
       expect(user.token_version).to eq token_version + 1
-    end
-
-    it 'returns a correct full name' do
-      expect(build(:user, :first_name => 'foo', :last_name => nil).name).to eq 'foo'
-      expect(build(:user, :first_name => 'foo', :last_name => '').name).to eq 'foo'
-      expect(build(:user, :first_name => 'foo', :last_name => 'bar').name).to eq 'foo bar'
     end
   end
 

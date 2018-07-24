@@ -11,8 +11,7 @@ class User < ApplicationRecord
   # Properties
   #
 
-  property :first_name
-  property :last_name
+  property :name
   property :email
   property :locale
   property :token_version
@@ -52,7 +51,7 @@ class User < ApplicationRecord
   ##
   # Validations
   #
-  validates :first_name,
+  validates :name,
             :presence => true
 
   validates :email,
@@ -86,10 +85,6 @@ class User < ApplicationRecord
     return nil unless user
     raise JSONAPI::Exceptions::UnconfirmedError unless user.confirmed?
     user
-  end
-
-  def name
-    last_name? ? "#{first_name} #{last_name}" : first_name
   end
 
   def increment_token_version

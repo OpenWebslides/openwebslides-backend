@@ -1,7 +1,7 @@
-<p>Hello <%= @topic.user.first_name %>!</p>
+<p>Hello <%= @topic.user.name %>!</p>
 
 <p>
-  <strong><%= "#{@user.first_name} #{@user.last_name}" %></strong> posted a <%= @conversation.conversation_type %> on the slide topic <strong><%= @topic.title %></strong>:
+  <strong><%= @user.name %></strong> posted a <%= @conversation.conversation_type %> on the slide topic <strong><%= @topic.title %></strong>:
 </p>
 
 <p>
