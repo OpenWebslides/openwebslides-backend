@@ -9,6 +9,9 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# Semantic versioning
+gem 'semver'
+
 # State Machine
 gem 'state_machines'
 gem 'state_machines-activerecord'
