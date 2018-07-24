@@ -10,8 +10,7 @@ RSpec.describe UserResource, :type => :resource do
 
   it { is_expected.to have_primary_key :id }
 
-  it { is_expected.to have_attribute :first_name }
-  it { is_expected.to have_attribute :last_name }
+  it { is_expected.to have_attribute :name }
   it { is_expected.not_to have_attribute :locale }
   it { is_expected.not_to have_attribute :email }
   it { is_expected.not_to have_attribute :tos_accepted }
@@ -22,40 +21,40 @@ RSpec.describe UserResource, :type => :resource do
   describe 'fields' do
     context 'for a guest' do
       it 'should have a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id first_name last_name topics collaborations]
+        expect(subject.fetchable_fields).to match_array %i[id name topics collaborations]
       end
     end
 
     context 'for a user' do
       let(:context) { { :current_user => build(:user) } }
       it 'should have a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id first_name last_name topics collaborations]
+        expect(subject.fetchable_fields).to match_array %i[id name topics collaborations]
       end
     end
 
     context 'for the same user' do
       let(:context) { { :current_user => user } }
       it 'should have a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id first_name last_name locale email topics collaborations]
+        expect(subject.fetchable_fields).to match_array %i[id name locale email topics collaborations]
       end
     end
 
     it 'should have a valid set of creatable fields' do
-      expect(described_class.creatable_fields).to match_array %i[first_name last_name email password tos_accepted]
+      expect(described_class.creatable_fields).to match_array %i[name email password tos_accepted]
     end
 
     it 'should have a valid set of updatable fields' do
-      expect(described_class.updatable_fields).to match_array %i[first_name last_name password topics collaborations conversions]
+      expect(described_class.updatable_fields).to match_array %i[name password topics collaborations conversions]
     end
 
     it 'should have a valid set of sortable fields' do
-      expect(described_class.sortable_fields context).to match_array %i[id first_name last_name email]
+      expect(described_class.sortable_fields context).to match_array %i[id name email]
     end
   end
 
   describe 'filters' do
     it 'should have a valid set of filters' do
-      expect(described_class.filters.keys).to match_array %i[id first_name last_name email]
+      expect(described_class.filters.keys).to match_array %i[id name email]
     end
   end
 end
