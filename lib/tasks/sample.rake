@@ -41,12 +41,9 @@ namespace :db do
         puts "Creating user #{i + 1}/#{user_count}"
 
         user = User.new :email => Faker::Internet.email,
-                        :first_name => Faker::Name.first_name,
+                        :name => Faker::Name.name,
                         :password => Faker::Internet.password,
                         :tos_accepted => true
-
-        # 90% of the users have a last name
-        user.last_name = Faker::Name.last_name if prob 0.9
 
         # 90% of the users are confirmed
         user.confirm if prob 0.9

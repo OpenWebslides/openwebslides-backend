@@ -5,14 +5,13 @@ require 'rails_helper'
 RSpec.describe 'User API', :type => :request do
   let(:user) { create :user, :confirmed }
 
-  let(:first_name) { Faker::Name.first_name }
-  let(:last_name) { Faker::Name.last_name }
+  let(:name) { Faker::Name.name }
   let(:password) { Faker::Internet.password 6 }
 
   let(:attributes) do
     {
       :email => Faker::Internet.email,
-      :firstName => first_name,
+      :name => name,
       :password => password,
       :tosAccepted => true
     }
@@ -86,7 +85,7 @@ RSpec.describe 'User API', :type => :request do
     end
 
     it 'rejects no first name' do
-      post users_path, :params => request_body(attributes.except :firstName), :headers => headers
+      post users_path, :params => request_body(attributes.except :name), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
@@ -102,7 +101,7 @@ RSpec.describe 'User API', :type => :request do
       json = JSON.parse response.body
 
       # Email is hidden for unauthenticated users
-      expect(json['data']['attributes']).to match 'firstName' => attributes[:firstName]
+      expect(json['data']['attributes']).to match 'name' => attributes[:name]
     end
   end
 
@@ -134,7 +133,7 @@ RSpec.describe 'User API', :type => :request do
     end
 
     it 'rejects id not equal to URL' do
-      patch user_path(:id => user.id), :params => update_body(999, :firstName => 'foo'), :headers => headers
+      patch user_path(:id => user.id), :params => update_body(999, :name => 'foo'), :headers => headers
 
       expect(response.status).to eq 400
       expect(jsonapi_error_code(response)).to eq JSONAPI::KEY_NOT_INCLUDED_IN_URL
@@ -142,7 +141,7 @@ RSpec.describe 'User API', :type => :request do
     end
 
     it 'rejects non-existant users' do
-      patch user_path(:id => 999), :params => update_body(999, :firstName => 'foo'), :headers => headers
+      patch user_path(:id => 999), :params => update_body(999, :name => 'foo'), :headers => headers
 
       expect(response.status).to eq 404
       expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
@@ -165,24 +164,14 @@ RSpec.describe 'User API', :type => :request do
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
     end
 
-    it 'updates firstName' do
-      expect(user.first_name).not_to eq first_name
-      patch user_path(:id => user.id), :params => update_body(user.id, :firstName => first_name), :headers => headers
+    it 'updates name' do
+      expect(user.name).not_to eq name
+      patch user_path(:id => user.id), :params => update_body(user.id, :name => name), :headers => headers
 
       user.reload
       expect(response.status).to eq 200
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-      expect(user.first_name).to eq first_name
-    end
-
-    it 'updates lastName' do
-      expect(user.last_name).not_to eq last_name
-      patch user_path(:id => user.id), :params => update_body(user.id, :lastName => last_name), :headers => headers
-
-      user.reload
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-      expect(user.last_name).to eq last_name
+      expect(user.name).to eq name
     end
 
     it 'updates password' do
