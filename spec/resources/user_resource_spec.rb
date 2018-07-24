@@ -40,11 +40,11 @@ RSpec.describe UserResource, :type => :resource do
     end
 
     it 'should have a valid set of creatable fields' do
-      expect(described_class.creatable_fields).to match_array %i[name email password tos_accepted]
+      expect(described_class.creatable_fields).to match_array %i[name email locale password tos_accepted]
     end
 
     it 'should have a valid set of updatable fields' do
-      expect(described_class.updatable_fields).to match_array %i[name password topics collaborations conversions]
+      expect(described_class.updatable_fields).to match_array %i[name locale password topics collaborations]
     end
 
     it 'should have a valid set of sortable fields' do

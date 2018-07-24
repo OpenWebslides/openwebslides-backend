@@ -43,7 +43,7 @@ class UserResource < ApplicationResource
   end
 
   def self.creatable_fields(context = {})
-    super(context) - %i[decks collaborations conversions]
+    super(context) - %i[topics collaborations]
   end
 
   def self.updatable_fields(context = {})
