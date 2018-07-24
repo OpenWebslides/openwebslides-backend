@@ -6,6 +6,7 @@ class ApplicationController < ActionController::API
   include Pundit
 
   include ErrorHandling
+  include Versioning
 
   protected
 
