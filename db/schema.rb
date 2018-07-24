@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_26_120902) do
+ActiveRecord::Schema.define(version: 2018_07_24_070926) do
 
   create_table "annotations", force: :cascade do |t|
     t.string "type"
@@ -87,8 +87,6 @@ ActiveRecord::Schema.define(version: 2018_04_26_120902) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "first_name", default: "", null: false
-    t.string "last_name"
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -106,6 +104,7 @@ ActiveRecord::Schema.define(version: 2018_04_26_120902) do
     t.integer "token_version", default: 1, null: false
     t.boolean "tos_accepted"
     t.string "locale", default: "", null: false
+    t.string "name", default: "", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

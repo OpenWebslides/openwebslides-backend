@@ -19,7 +19,7 @@ namespace :guest do
 
         user = User.new :email => email,
                         :password => password,
-                        :first_name => 'Guest',
+                        :name => 'Guest',
                         :tos_accepted => true
 
         user.skip_confirmation!

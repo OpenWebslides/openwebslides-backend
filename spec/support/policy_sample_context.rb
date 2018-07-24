@@ -3,10 +3,10 @@
 RSpec.shared_context 'policy_sample', :shared_context => :metadata do
   before :each do
     ActiveRecord::Base.transaction do
-      u1 = create :user, :confirmed, :first_name => 'user1'
-      u2 = create :user, :confirmed, :first_name => 'user2'
-      u3 = create :user, :confirmed, :first_name => 'user3'
-      u4 = create :user, :confirmed, :first_name => 'user4'
+      u1 = create :user, :confirmed, :name => 'user1'
+      u2 = create :user, :confirmed, :name => 'user2'
+      u3 = create :user, :confirmed, :name => 'user3'
+      u4 = create :user, :confirmed, :name => 'user4'
 
       # User 1
       u1d1 = create :topic, :with_assets, :with_conversations, :user => u1, :title => 'u1d1'

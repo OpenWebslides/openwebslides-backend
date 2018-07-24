@@ -7,8 +7,7 @@ class UserResource < ApplicationResource
   ##
   # Attributes
   #
-  attribute :first_name
-  attribute :last_name
+  attribute :name
   attribute :email
   attribute :locale
   attribute :password
@@ -26,8 +25,7 @@ class UserResource < ApplicationResource
   ##
   # Filters
   #
-  filter :first_name
-  filter :last_name
+  filter :name
   filter :email
 
   ##
@@ -45,7 +43,7 @@ class UserResource < ApplicationResource
   end
 
   def self.creatable_fields(context = {})
-    super(context) - %i[decks collaborations conversions]
+    super(context) - %i[topics collaborations]
   end
 
   def self.updatable_fields(context = {})
