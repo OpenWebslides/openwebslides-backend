@@ -9,6 +9,7 @@ class UserResource < ApplicationResource
   #
   attribute :name
   attribute :email
+  attribute :gravatar_hash
   attribute :locale
   attribute :password
   attribute :tos_accepted
@@ -43,14 +44,18 @@ class UserResource < ApplicationResource
   end
 
   def self.creatable_fields(context = {})
-    super(context) - %i[topics collaborations]
+    super(context) - %i[gravatar_hash topics collaborations]
   end
 
   def self.updatable_fields(context = {})
-    super(context) - %i[email tos_accepted]
+    super(context) - %i[gravatar_hash email tos_accepted]
   end
 
   def self.sortable_fields(context)
-    super(context) - %i[locale password tos_accepted]
+    super(context) - %i[gravatar_hash locale password tos_accepted]
+  end
+
+  def gravatar_hash
+    Digest::MD5.hexdigest(email).downcase
   end
 end

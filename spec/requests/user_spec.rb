@@ -101,7 +101,7 @@ RSpec.describe 'User API', :type => :request do
       json = JSON.parse response.body
 
       # Email is hidden for unauthenticated users
-      expect(json['data']['attributes']).to match 'name' => attributes[:name]
+      expect(json['data']['attributes']).to include 'name' => attributes[:name]
     end
   end
 
@@ -122,6 +122,10 @@ RSpec.describe 'User API', :type => :request do
 
       expect(response.status).to eq 200
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+
+      json = JSON.parse response.body
+
+      expect(json['data']['attributes']['gravatarHash']).to eq Digest::MD5.hexdigest(user.email)
     end
   end
 
