@@ -2,6 +2,8 @@ AllCops:
   Exclude:
     - db/schema.rb
     - node_modules/**/*
+    - web/**/*
+    - bin/*
 
 Documentation:
   Enabled: false
@@ -20,6 +22,12 @@ Metrics/MethodLength:
 
 Metrics/BlockLength:
   Enabled: false
+
+Naming/UncommunicativeMethodParamName:
+  # Allow parameters to be named '_' if they are not used
+  AllowedNames:
+    - _
+    - id
 
 Rails/HasAndBelongsToMany:
   Enabled: False
