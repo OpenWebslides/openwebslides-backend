@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   ##
   # OAuth2 endpoints
   #
-  namespace :auth, :constraints => { :format => :json } do
+  namespace :oauth, :constraints => { :format => :json } do
     get '/:provider/callback', :to => 'omniauth#callback'
   end
 
