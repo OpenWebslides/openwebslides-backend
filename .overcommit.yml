@@ -44,6 +44,8 @@ PreCommit:
     enabled: true
   ExecutePermissions:
     enabled: true
+    exclude:
+      - bin/*
   FixMe:
     enabled: true
   Fasterer:
