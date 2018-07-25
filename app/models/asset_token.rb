@@ -7,7 +7,7 @@ class AssetToken < JWT::Auth::Token
   attr_accessor :object
 
   def valid?
-    object && object.reload
+    object&.reload
     super && !object.nil?
   end
 
@@ -20,10 +20,10 @@ class AssetToken < JWT::Auth::Token
   end
 
   def self.from_token(token)
-    token = super
+    t = super token
 
-    token.object = Asset.find_by :id => @decoded_payload['obj'] if @decoded_payload['obj']
+    t.object = Asset.find_by :id => @decoded_payload['obj'] if @decoded_payload['obj']
 
-    token
+    t
   end
 end

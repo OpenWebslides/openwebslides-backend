@@ -9,5 +9,5 @@ class ApplicationRecord < ActiveRecord::Base
   ##
   # Dummy method to define a property
   #
-  def self.property(*_); end
+  def self.property(*args); end
 end

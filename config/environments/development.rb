@@ -63,5 +63,5 @@ Rails.application.configure do
     end
   end
 
-    config.active_record.sqlite3.represent_boolean_as_integer = true
+  config.active_record.sqlite3.represent_boolean_as_integer = true
 end
