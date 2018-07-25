@@ -23,7 +23,6 @@ RSpec.describe 'Token API', :type => :request do
   describe 'POST /' do
     before do
       add_content_type_header
-      add_accept_header
     end
 
     it 'rejects invalid credentials' do

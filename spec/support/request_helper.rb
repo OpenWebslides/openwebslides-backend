@@ -2,15 +2,13 @@
 
 module RequestHelper
   def headers
-    @headers
+    @headers ||= {
+      'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    }
   end
 
   def add_content_type_header
     (@headers ||= {}).merge! 'Content-Type' => 'application/vnd.api+json'
-  end
-
-  def add_accept_header
-    (@headers ||= {}).merge! 'Accept' => 'application/vnd.api+json'
   end
 
   def add_auth_header

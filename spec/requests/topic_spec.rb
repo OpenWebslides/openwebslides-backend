@@ -46,8 +46,6 @@ RSpec.describe 'Topic API', :type => :request do
   describe 'GET /' do
     before do
       create_list :topic, 3
-
-      add_accept_header
     end
 
     it 'returns successful' do
@@ -113,7 +111,6 @@ RSpec.describe 'Topic API', :type => :request do
 
   describe 'GET /:id' do
     before do
-      add_accept_header
     end
 
     it 'rejects an invalid id' do
@@ -134,7 +131,6 @@ RSpec.describe 'Topic API', :type => :request do
   describe 'PUT/PATCH /:id' do
     before do
       add_content_type_header
-      add_accept_header
       add_auth_header
     end
 

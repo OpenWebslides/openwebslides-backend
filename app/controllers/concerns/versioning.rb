@@ -23,5 +23,7 @@ module Versioning
     return true if request_versions.any? { |v| constraint.satisfies? v }
 
     raise JSONAPI::Exceptions::UnacceptableVersionError, request_versions.join(',')
+  rescue HTTP::Accept::ParseError
+    raise JSONAPI::Exceptions::UnacceptableVersionError, request.accept
   end
 end

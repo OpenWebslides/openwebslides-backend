@@ -19,7 +19,6 @@ RSpec.describe 'Content API', :type => :request do
 
   describe 'GET /' do
     before do
-      add_accept_header
     end
 
     it 'returns topic content' do
