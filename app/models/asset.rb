@@ -14,7 +14,8 @@ class Asset < ApplicationRecord
   ##
   # Associations
   #
-  belongs_to :topic, :required => true,
+  belongs_to :topic,
+             :required => true,
              :inverse_of => :assets
 
   ##

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Auth
+module Oauth
   class OmniauthController < ActionController::API
     include JWT::Auth::Authentication
 
@@ -14,7 +14,7 @@ module Auth
       @resource.save
 
       token = JWT::Auth::Token.from_user @resource
-      redirect_to "/oauth/omniauth?token=#{token.to_jwt}&id=#{token.subject.id}"
+      redirect_to "/auth/omniauth?token=#{token.to_jwt}&id=#{token.subject.id}"
     end
 
     protected

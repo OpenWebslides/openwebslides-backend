@@ -37,7 +37,7 @@ module BinaryUploadable
   def ensure_media_type
     return if JSONAPI::ALLOWED_BINARY_MEDIA_TYPES.include? request.content_type
 
-    raise JSONAPI::Exceptions::UnsupportedBinaryUploadMediaTypeError.new request.content_type
+    raise JSONAPI::Exceptions::UnsupportedBinaryUploadMediaTypeError, request.content_type
   end
 
   module ClassMethods
