@@ -6,6 +6,10 @@ RSpec.describe NotificationsController do
   let(:user) { create :user, :confirmed }
   let(:notification) { create :notification }
 
+  before :each do
+    allow(controller).to receive(:verify_accept_header_version).and_return true
+  end
+
   describe 'index' do
     context 'unauthenticated' do
       before { get :index }

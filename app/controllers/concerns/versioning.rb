@@ -12,7 +12,7 @@ module Versioning
 
   # Verify if the current API version can satisfy the API version in the request's Accept header
   def verify_accept_header_version
-    media_types = HTTP::Accept::MediaTypes.parse request.accept
+    media_types = HTTP::Accept::MediaTypes.parse accept_header
     constraint = Semverse::Constraint.new "~> #{OpenWebslides.config.api.version}"
 
     # Select media types of format 'application/vnd.openwebslides+json; version=...'
@@ -25,5 +25,11 @@ module Versioning
     raise JSONAPI::Exceptions::UnacceptableVersionError, request_versions.join(',')
   rescue HTTP::Accept::ParseError
     raise JSONAPI::Exceptions::UnacceptableVersionError, request.accept
+  end
+
+  private
+
+  def accept_header
+    request.accept || ''
   end
 end

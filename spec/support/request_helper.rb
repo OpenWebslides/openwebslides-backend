@@ -8,10 +8,10 @@ module RequestHelper
   end
 
   def add_content_type_header
-    (@headers ||= {}).merge! 'Content-Type' => 'application/vnd.api+json'
+    (@headers ||= headers).merge! 'Content-Type' => 'application/vnd.api+json'
   end
 
   def add_auth_header
-    (@headers ||= {}).merge! 'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
+    (@headers ||= headers).merge! 'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
   end
 end

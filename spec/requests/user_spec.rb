@@ -42,7 +42,7 @@ RSpec.describe 'User API', :type => :request do
     end
 
     it 'returns successful' do
-      get users_path
+      get users_path, :headers => headers
 
       expect(response.status).to eq 200
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE

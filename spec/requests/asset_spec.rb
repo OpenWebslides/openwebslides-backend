@@ -116,19 +116,19 @@ RSpec.describe 'Assets API', :type => :request do
     end
 
     it 'rejects no token' do
-      get asset_raw_path(:asset_id => asset.id)
+      get asset_raw_path(:asset_id => asset.id), :headers => headers
 
       expect(response.status).to eq 401
     end
 
     it 'rejects invalid token' do
-      get asset_raw_path :asset_id => asset.id, :token => 'foo'
+      get asset_raw_path(:asset_id => asset.id), :params => { :token => 'foo' }, :headers => headers
 
       expect(response.status).to eq 401
     end
 
     it 'returns successful' do
-      get asset_raw_path :asset_id => asset.id, :token => @token.to_jwt
+      get asset_raw_path(:asset_id => asset.id), :params => { :token => @token.to_jwt }, :headers => headers
 
       expect(response.status).to eq 200
     end
