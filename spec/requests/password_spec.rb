@@ -60,7 +60,6 @@ RSpec.describe 'Password API', :type => :request do
   describe 'PUT/PATCH /' do
     before do
       add_content_type_header
-      add_accept_header
     end
 
     it 'rejects invalid reset password tokens' do

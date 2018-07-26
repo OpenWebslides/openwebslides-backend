@@ -15,10 +15,10 @@ function _error_handler() {
 # Update frontend module
 git submodule init
 git submodule update
-(cd web && git pull)
+(cd web && git pull origin master)
 
 # Build app image
-docker build -t openwebslides/openwebslides:latest
+docker build -t openwebslides/openwebslides:latest .
 
 # Deploy containers
 if [[ ${CERTS} -eq 1 ]]; then

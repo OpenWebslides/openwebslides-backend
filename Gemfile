@@ -9,6 +9,9 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# Semantic versioning
+gem 'semverse'
+
 # State Machine
 gem 'state_machines'
 gem 'state_machines-activerecord'
@@ -35,6 +38,9 @@ gem 'sidekiq'
 
 # Filename sanitization
 gem 'zaru'
+
+# Accept header parsing
+gem 'http-accept'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails'

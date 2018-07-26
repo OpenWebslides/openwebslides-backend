@@ -187,7 +187,6 @@ RSpec.describe 'Comments API', :type => :request do
 
   describe 'GET /:id' do
     before do
-      add_accept_header
     end
 
     it 'rejects an invalid id' do
@@ -212,7 +211,6 @@ RSpec.describe 'Comments API', :type => :request do
   describe 'DELETE /:id' do
     before do
       add_auth_header
-      add_accept_header
     end
 
     it 'rejects an invalid id' do

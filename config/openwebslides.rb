@@ -65,4 +65,9 @@ OpenWebslides.configure do |config|
   # Signed asset URL lifetime
   #
   config.api.asset_url_lifetime = 5.hours
+
+  ##
+  # API version (semver)
+  #
+  config.api.version = Semverse::Version.new File.read Rails.root.join 'VERSION'
 end

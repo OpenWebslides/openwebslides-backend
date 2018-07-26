@@ -5,6 +5,10 @@ require 'rails_helper'
 RSpec.describe ConfirmationController do
   let(:user) { create :user, :confirmed }
 
+  before :each do
+    allow(controller).to receive(:verify_accept_header_version).and_return true
+  end
+
   describe 'create' do
     context 'unauthenticated' do
       before { post :create }

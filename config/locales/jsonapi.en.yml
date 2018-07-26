@@ -10,3 +10,6 @@ en:
       unconfirmed:
         title: "Account not confirmed"
         detail: "Your account has not been confirmed yet."
+      unacceptable_version:
+        title: "Unacceptable version"
+        detail: "The request cannot be fulfilled due to mismatching API version. The API version is '%{api_version}' This request specified '%{request_version}'."

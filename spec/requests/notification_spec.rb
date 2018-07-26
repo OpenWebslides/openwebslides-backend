@@ -7,7 +7,6 @@ RSpec.describe 'Notification API', :type => :request do
 
   describe 'GET /' do
     before do
-      add_accept_header
     end
 
     it 'returns a list of all notifications' do
@@ -33,7 +32,6 @@ RSpec.describe 'Notification API', :type => :request do
 
   describe 'GET /:id' do
     before do
-      add_accept_header
     end
 
     it 'rejects non-existant notifications' do
