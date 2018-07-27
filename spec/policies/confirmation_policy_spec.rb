@@ -6,4 +6,5 @@ RSpec.describe ConfirmationPolicy do
   subject { described_class.new nil, nil }
 
   it { is_expected.to permit_action :create }
+  it { is_expected.to permit_action :update }
 end
