@@ -10,6 +10,7 @@ class ConfirmationResource < ApplicationResource
   # Attributes
   #
   attribute :confirmation_token
+  attribute :email
 
   ##
   # Relationships
@@ -23,4 +24,12 @@ class ConfirmationResource < ApplicationResource
   ##
   # Methods
   #
+  def self.creatable_fields(_ = {})
+    # Creation only needs email
+    %i[email]
+  end
+
+  def self.updatable_fields(_ = {})
+    %i[confirmation_token]
+  end
 end

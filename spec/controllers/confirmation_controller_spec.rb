@@ -28,4 +28,24 @@ RSpec.describe ConfirmationController do
       it { is_expected.not_to return_token }
     end
   end
+
+  describe 'update' do
+    context 'unauthenticated' do
+      before { patch :update }
+
+      it { is_expected.not_to be_protected }
+      it { is_expected.not_to return_token }
+    end
+
+    context 'authenticated' do
+      before do
+        add_auth_header
+        @request.headers.merge! @headers
+        patch :update
+      end
+
+      it { is_expected.not_to be_protected }
+      it { is_expected.not_to return_token }
+    end
+  end
 end
