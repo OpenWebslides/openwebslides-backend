@@ -3,11 +3,24 @@
 require 'rails_helper'
 
 RSpec.describe 'Confirmation API', :type => :request do
-  let(:user) { create :user }
+  let(:unconfirmed_user) { create :user }
+  let(:user) { create :user, :confirmed }
 
-  def request_body(token)
+  def request_body(email)
     {
       :data => {
+        :type => 'confirmations',
+        :attributes => {
+          :email => email
+        }
+      }
+    }.to_json
+  end
+
+  def confirm_body(token)
+    {
+      :data => {
+        :id => '',
         :type => 'confirmations',
         :attributes => {
           :confirmationToken => token
@@ -16,26 +29,61 @@ RSpec.describe 'Confirmation API', :type => :request do
     }.to_json
   end
 
-  before do
-    add_content_type_header
+  describe 'POST /' do
+    before do
+      add_content_type_header
+    end
+
+    it 'accepts confirmed users' do
+      post confirmation_path, :params => request_body(user.email), :headers => headers
+
+      expect(response.status).to eq 204
+    end
+
+    it 'accepts invalid emails' do
+      post confirmation_path, :params => request_body('foo'), :headers => headers
+
+      expect(response.status).to eq 204
+    end
+
+    it 'requests a password reset token' do
+      post confirmation_path, :params => request_body(unconfirmed_user.email), :headers => headers
+
+      expect(response.status).to eq 204
+    end
   end
 
-  it 'rejects invalid confirmation tokens' do
-    post confirmation_path, :params => request_body('foo'), :headers => headers
+  describe 'PATCH /' do
+    before do
+      add_content_type_header
+    end
 
-    expect(response.status).to eq 422
-    expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-  end
+    it 'rejects invalid confirmation tokens' do
+      patch confirmation_path, :params => confirm_body('foo'), :headers => headers
 
-  it 'confirm a user' do
-    expect(user.confirmed?).not_to be true
+      expect(response.status).to eq 422
+      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+    end
 
-    post confirmation_path, :params => request_body(user.confirmation_token), :headers => headers
+    it 'rejects already confirmed users' do
+      expect(user).to be_confirmed
 
-    expect(response.status).to eq 201
-    expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      patch confirmation_path, :params => confirm_body(user.confirmation_token), :headers => headers
 
-    user.reload
-    expect(user.confirmed?).to be true
+      expect(response.status).to eq 422
+      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+    end
+
+    it 'confirms a user' do
+      expect(unconfirmed_user).not_to be_confirmed
+
+      patch confirmation_path, :params => confirm_body(unconfirmed_user.confirmation_token), :headers => headers
+
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+
+      unconfirmed_user.reload
+      expect(unconfirmed_user).to be_confirmed
+    end
   end
 end
