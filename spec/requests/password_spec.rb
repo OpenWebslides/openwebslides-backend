@@ -24,7 +24,6 @@ RSpec.describe 'Password API', :type => :request do
     {
       :data => {
         :type => 'passwords',
-        :id => '',
         :attributes => {
           :resetPasswordToken => token,
           :password => password

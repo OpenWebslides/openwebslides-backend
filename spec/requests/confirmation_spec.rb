@@ -20,7 +20,6 @@ RSpec.describe 'Confirmation API', :type => :request do
   def confirm_body(token)
     {
       :data => {
-        :id => '',
         :type => 'confirmations',
         :attributes => {
           :confirmationToken => token
