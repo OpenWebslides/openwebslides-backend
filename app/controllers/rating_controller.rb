@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class RatingController < ApplicationController
+  include AddDummyId
+
   # Authentication
   before_action :authenticate_user
   after_action :renew_token
@@ -8,7 +10,7 @@ class RatingController < ApplicationController
   # Authorization
   after_action :verify_authorized
 
-  prepend_before_action :add_dummy_id
+  prepend_before_action :add_dummy_destroy_id, :only => %i[destroy]
 
   ##
   # Resource
@@ -49,11 +51,6 @@ class RatingController < ApplicationController
 
   def annotation_resource
     ApplicationResource.resource_for @annotation.type
-  end
-
-  def add_dummy_id
-    # JSONAPI::Resources requires an :id attribute
-    params[:id] = 0
   end
 
   def rating_params

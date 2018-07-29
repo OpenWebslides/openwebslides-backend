@@ -3,12 +3,13 @@
 class ContentController < ApplicationController
   include Relationships
   include RelatedResources
+  include AddDummyId
 
   # Authentication
   before_action :authenticate_user, :only => %i[update]
   after_action :renew_token
 
-  prepend_before_action :add_dummy_id
+  prepend_before_action :add_dummy_update_id, :only => %i[update]
 
   ##
   # Resource
@@ -47,11 +48,5 @@ class ContentController < ApplicationController
 
   def service
     TopicService.new @topic
-  end
-
-  def add_dummy_id
-    # JSONAPI::Resources requires an :id attribute
-    params[:data] ||= {}
-    params[:data][:id] = 0
   end
 end

@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 class ConfirmationController < ApplicationController
+  include AddDummyId
+
   # Authorization
   after_action :verify_authorized
+
+  prepend_before_action :add_dummy_update_id, :only => :update
 
   # POST /confirmation
   def create
