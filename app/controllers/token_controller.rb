@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class TokenController < ApplicationController
+  include AddDummyId
+
   # Authentication
   before_action :authenticate_user, :only => :destroy
 
   # Authorization
   after_action :verify_authorized
 
-  prepend_before_action :add_dummy_id
+  prepend_before_action :add_dummy_destroy_id, :only => :destroy
 
   # POST /token
   def create
@@ -33,12 +35,5 @@ class TokenController < ApplicationController
     current_user.increment_token_version!
 
     head :no_content
-  end
-
-  protected
-
-  def add_dummy_id
-    # JSONAPI::Resources requires an :id attribute
-    params[:id] = 0
   end
 end
