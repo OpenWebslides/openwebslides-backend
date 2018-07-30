@@ -70,15 +70,7 @@ Rails.application.routes.draw do
     ##
     # Notifications API (immutable)
     #
-    jsonapi_resources :notifications, :only => %i[index show] do
-      # Topic relationship
-      jsonapi_related_resource :topic
-      jsonapi_link :topic, :only => :show
-
-      # User relationship
-      jsonapi_related_resource :user
-      jsonapi_link :user, :only => :show
-    end
+    jsonapi_resources :notifications, :only => %i[index] do end
 
     ##
     # Annotations API
