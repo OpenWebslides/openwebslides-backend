@@ -6,12 +6,14 @@ RSpec.describe 'Content API', :type => :request do
   let(:user) { create :user, :confirmed }
   let(:topic) { create :topic, :user => user }
 
-  let(:params) do
+  def content_body
     {
       :data => {
         :type => 'contents',
         :attributes => {
-          :my_attribute => 'my_value'
+          :content => {
+            :foo => 'bar'
+          }
         }
       }
     }.to_json
@@ -30,6 +32,19 @@ RSpec.describe 'Content API', :type => :request do
       attrs = JSON.parse(response.body)['data']['attributes']
 
       expect(attrs['content']).not_to be_nil
+    end
+  end
+
+  describe 'PUT/PATCH /' do
+    before do
+      add_content_type_header
+      add_auth_header
+    end
+
+    it 'updates topic content' do
+      patch topic_content_path(:topic_id => topic.id), :params => content_body, :headers => headers
+
+      expect(response.status).to eq 204
     end
   end
 end
