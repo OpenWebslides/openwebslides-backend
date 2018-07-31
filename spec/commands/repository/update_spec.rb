@@ -24,13 +24,13 @@ RSpec.describe Repository::Update do
     it 'raises ArgumentError when no author is specified' do
       subject.content = 'foobar'
 
-      expect(-> { subject.execute }).to raise_error ArgumentError
+      expect(-> { subject.execute }).to raise_error OpenWebslides::ArgumentError
     end
 
     it 'raises ArgumentError when no content is specified' do
       subject.author = user
 
-      expect(-> { subject.execute }).to raise_error ArgumentError
+      expect(-> { subject.execute }).to raise_error OpenWebslides::ArgumentError
     end
 
     it 'does not raise anything when author and content are specified' do

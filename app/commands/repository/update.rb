@@ -8,8 +8,8 @@ module Repository
     attr_accessor :author, :content, :message
 
     def execute
-      raise ArgumentError, 'No author specified' unless @author
-      raise ArgumentError, 'No content specified' unless @content
+      raise OpenWebslides::ArgumentError, 'No author specified' unless @author
+      raise OpenWebslides::ArgumentError, 'No content specified' unless @content
 
       write_lock do
         # Write data file
