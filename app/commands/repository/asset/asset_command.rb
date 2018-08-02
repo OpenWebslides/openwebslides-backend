@@ -9,7 +9,7 @@ module Repository
       protected
 
       def repo_path
-        File.join OpenWebslides.config.repository_path, @receiver.topic.user.id.to_s, @receiver.topic.id.to_s
+        File.join OpenWebslides.config.repository.path, @receiver.topic.user.id.to_s, @receiver.topic.id.to_s
       end
 
       def asset_path
