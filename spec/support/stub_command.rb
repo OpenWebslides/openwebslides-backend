@@ -35,6 +35,8 @@ class Stub
     stub = Stub.new stubbed_class
 
     Array(stubbed_methods).each { |m| stub.stub m }
+
+    stub
   end
 
   class Command

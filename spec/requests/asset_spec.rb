@@ -9,6 +9,11 @@ RSpec.describe 'Assets API', :type => :request do
 
   let(:asset_file) { Rails.root.join 'spec', 'support', 'asset.png' }
 
+  before do
+    Stub::Command.create Repository::Asset::UpdateFile, %i[author= file=]
+    Stub::Command.create Repository::Asset::Destroy, %i[author=]
+  end
+
   describe 'POST /' do
     before do
       add_auth_header
@@ -109,10 +114,11 @@ RSpec.describe 'Assets API', :type => :request do
       @token.subject = user
       @token.object = asset
 
-      # Stub out Repository::Asset::Find
-      mock_method Repository::Asset::Find, :execute do
-        Rails.root.join 'spec', 'support', 'asset.png'
-      end
+      stub = Stub::Command.create Repository::Asset::Find
+
+      # Stub Find#excute to return a real file path
+      allow(stub.stub_double).to receive(:execute)
+        .and_return asset_file
     end
 
     it 'rejects no token' do

@@ -9,10 +9,9 @@ RSpec.describe AssetResource, :type => :resource do
   before do
     create :user
 
-    # Stub out context[:current_user]
-    mock_method described_class, :context do
-      { :current_user => User.first }
-    end
+    # Stub AssetResource#context to return a dummy request context
+    allow(subject).to receive(:context)
+      .and_return(:current_user => User.first)
   end
 
   subject { described_class.new asset, context }

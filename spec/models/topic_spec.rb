@@ -6,6 +6,11 @@ RSpec.describe Topic, :type => :model do
   let(:topic) { build :topic, :with_assets }
   let(:user) { build :user }
 
+  before :each do
+    Stub::Command.create Repository::Create
+    Stub::Command.create Repository::Update, %i[content= author= message=]
+  end
+
   describe 'attributes' do
     it { is_expected.not_to allow_value(nil).for(:title) }
     it { is_expected.not_to allow_value('').for(:title) }

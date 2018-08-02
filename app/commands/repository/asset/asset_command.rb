@@ -8,6 +8,10 @@ module Repository
     class AssetCommand < RepoCommand
       protected
 
+      def repo_path
+        File.join OpenWebslides.config.repository_path, @receiver.topic.user.id.to_s, @receiver.topic.id.to_s
+      end
+
       def asset_path
         File.join repo_path, 'assets'
       end

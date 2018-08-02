@@ -11,12 +11,17 @@ RSpec.describe 'Content API', :type => :request do
       :data => {
         :type => 'contents',
         :attributes => {
-          :content => {
+          :content => [{
             :foo => 'bar'
-          }
+          }]
         }
       }
     }.to_json
+  end
+
+  before do
+    Stub::Command.create Repository::Read
+    Stub::Command.create Repository::Update, %i[content= author= message=]
   end
 
   describe 'GET /' do
@@ -28,10 +33,6 @@ RSpec.describe 'Content API', :type => :request do
 
       expect(response.status).to eq 200
       expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
-
-      attrs = JSON.parse(response.body)['data']['attributes']
-
-      expect(attrs['content']).not_to be_nil
     end
   end
 
