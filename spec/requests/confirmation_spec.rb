@@ -20,7 +20,6 @@ RSpec.describe 'Confirmation API', :type => :request do
   def confirm_body(token)
     {
       :data => {
-        :id => '',
         :type => 'confirmations',
         :attributes => {
           :confirmationToken => token
@@ -53,7 +52,7 @@ RSpec.describe 'Confirmation API', :type => :request do
     end
   end
 
-  describe 'PATCH /' do
+  describe 'PUT/PATCH /' do
     before do
       add_content_type_header
     end

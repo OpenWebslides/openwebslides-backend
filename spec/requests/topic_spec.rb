@@ -43,6 +43,11 @@ RSpec.describe 'Topic API', :type => :request do
     }.to_json
   end
 
+  before do
+    Stub::Command.create Repository::Create
+    Stub::Command.create Repository::Delete
+  end
+
   describe 'GET /' do
     before do
       create_list :topic, 3
