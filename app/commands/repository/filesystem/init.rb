@@ -7,14 +7,18 @@ module Repository
     ##
     # Create and populate repository directory
     #
-    class Init < RepoCommand
+    class Init < YAMLCommand
       def execute
         # Create initial directory
         raise OpenWebslides::RepoExistsError if Dir.exist? repo_path
         FileUtils.mkdir_p repo_path
 
-        # Create empty data file
-        File.write repo_file, nil.to_yaml
+        # Create empty index file
+        File.write index_file, nil.to_yaml
+
+        # Create content item directory
+        FileUtils.mkdir_p content_path
+        FileUtils.touch File.join content_path, '.keep'
 
         # Create asset directory
         FileUtils.mkdir_p File.join repo_path, 'assets'
