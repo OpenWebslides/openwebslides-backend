@@ -69,5 +69,5 @@ OpenWebslides.configure do |config|
   ##
   # API version (semver)
   #
-  config.api.version = Semverse::Version.new File.read Rails.root.join 'VERSION'
+  config.api.version = '3.0.0'
 end
