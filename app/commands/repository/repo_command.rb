@@ -11,10 +11,6 @@ module Repository
       File.join OpenWebslides.config.repository_path, @receiver.user.id.to_s, @receiver.id.to_s
     end
 
-    def repo_file
-      File.join repo_path, 'data.yml'
-    end
-
     def lock_path
       File.join Rails.root.join 'tmp', 'locks'
     end
