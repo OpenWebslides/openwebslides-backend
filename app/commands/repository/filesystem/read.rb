@@ -5,9 +5,12 @@ module Repository
     ##
     # Read contents of local repository
     #
-    class Read < RepoCommand
+    class Read < YAMLCommand
       def execute
-        YAML.safe_load File.read repo_file
+        validate_version
+
+        # Read all content item files into a list
+        Dir[File.join content_path, '*.yml'].map { |f| YAML.safe_load File.read f }
       end
     end
   end
