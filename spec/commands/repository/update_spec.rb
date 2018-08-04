@@ -24,13 +24,13 @@ RSpec.describe Repository::Update do
     it 'raises ArgumentError when no author is specified' do
       subject.content = 'foobar'
 
-      expect(-> { subject.execute }).to raise_error OpenWebslides::ArgumentError
+      expect { subject.execute }.to raise_error OpenWebslides::ArgumentError
     end
 
     it 'raises ArgumentError when no content is specified' do
       subject.author = user
 
-      expect(-> { subject.execute }).to raise_error OpenWebslides::ArgumentError
+      expect { subject.execute }.to raise_error OpenWebslides::ArgumentError
     end
 
     it 'does not raise anything when author and content are specified' do
@@ -41,7 +41,7 @@ RSpec.describe Repository::Update do
       allow_any_instance_of(Repository::Filesystem::Write).to receive :execute
       allow_any_instance_of(Repository::Git::Commit).to receive :execute
 
-      expect(-> { subject.execute }).not_to raise_error
+      expect { subject.execute }.not_to raise_error
     end
 
     it 'calls Filesystem::Init, Git::Init and Git::Commit with parameters' do

@@ -9,9 +9,9 @@ RSpec.describe ApplicationPolicy do
   let(:foo) { 'foo' }
 
   it 'should not permit anything' do
-    expect(-> { subject.index? }).to raise_error OpenWebslides::NotImplementedError
-    expect(-> { subject.create? }).to raise_error OpenWebslides::NotImplementedError
-    expect(-> { subject.update? }).to raise_error OpenWebslides::NotImplementedError
-    expect(-> { subject.destroy? }).to raise_error OpenWebslides::NotImplementedError
+    expect { subject.index? }.to raise_error OpenWebslides::NotImplementedError
+    expect { subject.create? }.to raise_error OpenWebslides::NotImplementedError
+    expect { subject.update? }.to raise_error OpenWebslides::NotImplementedError
+    expect { subject.destroy? }.to raise_error OpenWebslides::NotImplementedError
   end
 end

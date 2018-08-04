@@ -203,7 +203,7 @@ RSpec.describe 'User API', :type => :request do
       id = user.id
       delete user_path(:id => user.id), :params => user_path(:id => user.id), :headers => headers
 
-      expect(-> { User.find id }).to raise_error ActiveRecord::RecordNotFound
+      expect { User.find id }.to raise_error ActiveRecord::RecordNotFound
 
       expect(response.status).to eq 204
     end

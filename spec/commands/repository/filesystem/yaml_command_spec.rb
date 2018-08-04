@@ -32,7 +32,7 @@ RSpec.describe Repository::Filesystem::YAMLCommand do
       allow(File).to receive(:read)
         .and_return("version: #{OpenWebslides.config.repository.version}")
 
-      expect(-> { subject.send :validate_version }).not_to raise_error
+      expect { subject.send :validate_version }.not_to raise_error
     end
 
     it 'does not satisfy an incompatible version' do
@@ -42,7 +42,7 @@ RSpec.describe Repository::Filesystem::YAMLCommand do
       allow(File).to receive(:read)
         .and_return("version: #{incompatible_version}")
 
-      expect(-> { subject.send :validate_version }).to raise_error OpenWebslides::FormatError
+      expect { subject.send :validate_version }.to raise_error OpenWebslides::FormatError
     end
   end
 end

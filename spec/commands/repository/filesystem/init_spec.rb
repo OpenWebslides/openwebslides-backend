@@ -31,7 +31,7 @@ RSpec.describe Repository::Filesystem::Init do
       let(:directory) { '/tmp' }
 
       it 'raises a RepoExistsError' do
-        expect(-> { subject.execute }).to raise_error OpenWebslides::RepoExistsError
+        expect { subject.execute }.to raise_error OpenWebslides::RepoExistsError
       end
     end
 

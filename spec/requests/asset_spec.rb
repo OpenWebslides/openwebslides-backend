@@ -102,7 +102,7 @@ RSpec.describe 'Assets API', :type => :request do
       id = asset.id
       delete asset_path(:id => asset.id), :headers => headers
 
-      expect(-> { Asset.find id }).to raise_error ActiveRecord::RecordNotFound
+      expect { Asset.find id }.to raise_error ActiveRecord::RecordNotFound
 
       expect(response.status).to eq 204
     end

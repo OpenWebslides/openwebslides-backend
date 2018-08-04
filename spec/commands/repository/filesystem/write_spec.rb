@@ -24,7 +24,7 @@ RSpec.describe Repository::Filesystem::Write do
     end
 
     it 'raises an error when content is not specified' do
-      expect(-> { subject.execute }).to raise_error OpenWebslides::ArgumentError
+      expect { subject.execute }.to raise_error OpenWebslides::ArgumentError
     end
 
     it 'writes the data file'

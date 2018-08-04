@@ -31,7 +31,7 @@ RSpec.describe Repository::Filesystem::Destroy do
       let(:directory) { '/foo/bar' }
 
       it 'raises a RepoDoesNotExistError' do
-        expect(-> { subject.execute }).to raise_error OpenWebslides::RepoDoesNotExistError
+        expect { subject.execute }.to raise_error OpenWebslides::RepoDoesNotExistError
       end
     end
 

@@ -25,7 +25,7 @@ RSpec.describe VersioningController do
     let(:accept_header) { '' }
 
     it 'fails' do
-      expect(-> { subject.verify_accept_header_version }).to raise_error JSONAPI::Exceptions::UnacceptableVersionError
+      expect { subject.verify_accept_header_version }.to raise_error JSONAPI::Exceptions::UnacceptableVersionError
     end
   end
 
@@ -33,7 +33,7 @@ RSpec.describe VersioningController do
     let(:accept_header) { 'application/vnd.api+json' }
 
     it 'fails' do
-      expect(-> { subject.verify_accept_header_version }).to raise_error JSONAPI::Exceptions::UnacceptableVersionError
+      expect { subject.verify_accept_header_version }.to raise_error JSONAPI::Exceptions::UnacceptableVersionError
     end
   end
 
@@ -49,7 +49,7 @@ RSpec.describe VersioningController do
     let(:accept_header) { 'application/vnd.api+json, application/vnd.openwebslides+json; version=1.0.0' }
 
     it 'fails' do
-      expect(-> { subject.verify_accept_header_version }).to raise_error JSONAPI::Exceptions::UnacceptableVersionError
+      expect { subject.verify_accept_header_version }.to raise_error JSONAPI::Exceptions::UnacceptableVersionError
     end
   end
 
@@ -57,7 +57,7 @@ RSpec.describe VersioningController do
     let(:accept_header) { 'application/vnd.api+json, application/vnd.foobar+json; version=1.0.0' }
 
     it 'fails' do
-      expect(-> { subject.verify_accept_header_version }).to raise_error JSONAPI::Exceptions::UnacceptableVersionError
+      expect { subject.verify_accept_header_version }.to raise_error JSONAPI::Exceptions::UnacceptableVersionError
     end
   end
 end
