@@ -117,7 +117,44 @@ RSpec.describe 'Topic', :type => :request do
     end
   end
 
-  describe 'An owner can update the contents of a topic'
+  describe 'An owner can update the contents of a topic' do
+    let(:topic) { create :topic, :user => user }
+
+    before(:each) do
+      service = TopicService.new topic
+
+      # Make sure the topic repository is created
+      service.create
+    end
+
+    it 'returns without any errors' do
+      params = {
+        :data => {
+          :id => topic.id,
+          :type => 'contents',
+          :attributes => {
+            :content => content
+          }
+        }
+      }
+
+      headers = {
+        'Content-Type' => 'application/vnd.api+json',
+        'Accept' => 'application/vnd.api+json, application/vnd.openwebslides+json; version=3.0.0',
+        'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
+      }
+
+      patch "/api/topics/#{topic.id}/content", :params => params.to_json, :headers => headers
+
+      expect(response.status).to eq 204
+
+      get "/api/topics/#{topic.id}/content", :headers => headers
+
+      expect(response.status).to eq 200
+      data = JSON.parse(response.body)['data']['attributes']
+      expect(data['content']).to match_array content
+    end
+  end
 
   describe 'An owner can delete a topic'
 end
