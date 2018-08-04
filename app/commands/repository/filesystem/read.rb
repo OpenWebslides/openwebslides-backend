@@ -7,6 +7,8 @@ module Repository
     #
     class Read < YAMLCommand
       def execute
+        raise OpenWebslides::RepoDoesNotExistError unless Dir.exist? repo_path
+
         validate_version
 
         # Read all content item files into a list

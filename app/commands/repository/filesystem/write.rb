@@ -28,7 +28,7 @@ module Repository
         raise OpenWebslides::FormatError, 'No root content item found' unless root
 
         index_hash = {
-          'version' => VERSION,
+          'version' => OpenWebslides.config.repository.version,
           'root' => root['id']
         }
 

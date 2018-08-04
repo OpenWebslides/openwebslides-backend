@@ -14,10 +14,10 @@ module Repository
         FileUtils.mkdir_p repo_path
 
         # Create empty index file
-        File.write index_file, nil.to_yaml
+        File.write index_file, { :version => OpenWebslides.config.repository.version }.to_yaml
 
         # Create content item directory
-        FileUtils.mkdir_p content_path
+        FileUtils.mkdir_p File.join content_path
         FileUtils.touch File.join content_path, '.keep'
 
         # Create asset directory

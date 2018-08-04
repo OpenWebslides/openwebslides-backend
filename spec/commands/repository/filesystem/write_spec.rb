@@ -19,6 +19,7 @@ RSpec.describe Repository::Filesystem::Write do
   describe '#execute' do
     before do
       @file = Tempfile.new
+      @file.write({ 'version' => OpenWebslides.config.repository.version }.to_yaml)
       @file.close
     end
 
@@ -26,14 +27,6 @@ RSpec.describe Repository::Filesystem::Write do
       expect(-> { subject.execute }).to raise_error OpenWebslides::ArgumentError
     end
 
-    it 'writes the data file' do
-      # Mock repo_file
-      allow(subject).to receive(:repo_file).and_return @file.path
-
-      subject.content = { :foo => 'bar' }
-      subject.execute
-
-      expect(File.read @file.path).to eq "{\n  \"foo\": \"bar\"\n}\n"
-    end
+    it 'writes the data file'
   end
 end
