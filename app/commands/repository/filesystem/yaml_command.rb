@@ -13,7 +13,9 @@ module Repository
         File.join repo_path, 'content.yml'
       end
 
-      # Validate the data format version
+      ##
+      # Ensure the repository data format version is compatible
+      #
       def validate_version
         constraint = Semverse::Constraint.new "~> #{OpenWebslides.config.repository.version}"
 
@@ -26,6 +28,15 @@ module Repository
         raise "Cannot satisfy repository data format version #{repository_version}, server has #{VERSION}"
       rescue StandardError => e
         raise OpenWebslides::FormatError, e
+      end
+
+      ##
+      # Write repository index file containing version information and reference to root content item
+      #
+      def write_index(attrs = {})
+        index_hash = attrs.merge 'version' => OpenWebslides.config.repository.version
+
+        File.write index_file, index_hash.to_yaml
       end
     end
   end

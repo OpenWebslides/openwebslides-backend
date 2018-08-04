@@ -45,4 +45,21 @@ RSpec.describe Repository::Filesystem::YAMLCommand do
       expect { subject.send :validate_version }.to raise_error OpenWebslides::FormatError
     end
   end
+
+  describe '#write_version' do
+    it 'writes the data format version' do
+      expect(File).to receive(:write)
+        .with subject.send(:index_file), "---\nversion: #{OpenWebslides.config.repository.version}\n"
+
+      subject.send :write_index
+    end
+
+    it 'writes the data format version and other attributes' do
+      index_str = "---\nroot: foobar\nversion: #{OpenWebslides.config.repository.version}\n"
+      expect(File).to receive(:write)
+        .with subject.send(:index_file), index_str
+
+      subject.send :write_index, 'root' => 'foobar'
+    end
+  end
 end
