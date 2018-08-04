@@ -26,6 +26,30 @@ RSpec.describe 'Topic', :type => :request do
   let(:title) { Faker::Lorem.words(4).join(' ') }
   let(:description) { Faker::Lorem.words(20).join(' ') }
 
+  let(:content) do
+    root = {
+      'id' => 'qyrgv0bcd6',
+      'type' => 'contentItemTypes/ROOT',
+      'childItemIds' => ['ivks4jgtxr']
+    }
+    heading = {
+      'id' => 'ivks4jgtxr',
+      'type' => 'contentItemTypes/HEADING',
+      'text' => 'This is a heading',
+      'metadata' => { 'tags' => [], 'visibilityOverrides' => {} },
+      'subItemIds' => ['oswmjc09be']
+    }
+    paragraph = {
+      'id' => 'oswmjc09be',
+      'type' => 'contentItemTypes/PARAGRAPH',
+      'text' => 'This is a paragraph',
+      'metadata' => { 'tags' => [], 'visibilityOverrides' => {} },
+      'subItemIds' => []
+    }
+
+    [root, heading, paragraph]
+  end
+
   ##
   # Tests
   #
@@ -65,4 +89,35 @@ RSpec.describe 'Topic', :type => :request do
                                           'state' => 'private_access'
     end
   end
+
+  describe 'A user can retrieve the contents of a topic' do
+    let(:topic) { create :topic }
+
+    before :each do
+      service = TopicService.new topic
+
+      # Make sure the topic repository is created
+      service.create
+
+      # Populate the topic with some dummy content
+      service.update :author => user,
+                     :content => content
+    end
+
+    it 'returns without any errors' do
+      headers = {
+        'Accept' => 'application/vnd.api+json, application/vnd.openwebslides+json; version=3.0.0'
+      }
+
+      get "/api/topics/#{topic.id}/content", :headers => headers
+
+      expect(response.status).to eq 200
+      data = JSON.parse(response.body)['data']['attributes']
+      expect(data['content']).to match_array content
+    end
+  end
+
+  describe 'An owner can update the contents of a topic'
+
+  describe 'An owner can delete a topic'
 end
