@@ -11,29 +11,21 @@ module Repository
       def execute
         raise OpenWebslides::ArgumentError, 'Content not specified' unless @content
 
+        # Ensure repository data format version is compatible
         validate_version
-        write_index
+
+        # Write index file including root content item identifier
+        root = @content.find { |c| c['type'] == 'contentItemTypes/ROOT' }
+        write_index 'root' => root['id']
+
+        # Write content item files
         @content.each { |c| write_content_item c }
-        cleanup
+
+        # Delete orphaned content item files
+        cleanup_content
       end
 
       private
-
-      ##
-      # Write repository index file containing version information and reference to root content item
-      #
-      def write_index
-        root = @content.find { |c| c['type'] == 'contentItemTypes/ROOT' }
-
-        raise OpenWebslides::FormatError, 'No root content item found' unless root
-
-        index_hash = {
-          'version' => OpenWebslides.config.repository.version,
-          'root' => root['id']
-        }
-
-        File.write index_file, index_hash.to_yaml
-      end
 
       ##
       # Write a content item to the repository
@@ -49,7 +41,7 @@ module Repository
       ##
       # Delete orphan content items from the repository
       #
-      def cleanup
+      def cleanup_content
         # Identifiers in request
         content_item_ids = @content.map { |c| c['id'] }.sort
 
@@ -58,7 +50,7 @@ module Repository
 
         # Delete orphaned identifiers
         file_ids.each do |id|
-          File.rm File.join content_path, "#{id}.yml" unless content_item_ids.include? id
+          FileUtils.rm File.join content_path, "#{id}.yml" unless content_item_ids.include? id
         end
       end
     end
