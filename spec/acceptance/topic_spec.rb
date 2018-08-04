@@ -156,5 +156,30 @@ RSpec.describe 'Topic', :type => :request do
     end
   end
 
-  describe 'An owner can delete a topic'
+  describe 'An owner can delete a topic' do
+    let(:topic) { create :topic, :user => user }
+
+    before(:each) do
+      service = TopicService.new topic
+
+      # Make sure the topic repository is created
+      service.create
+    end
+
+    it 'returns without any errors' do
+      headers = {
+        'Content-Type' => 'application/vnd.api+json',
+        'Accept' => 'application/vnd.api+json, application/vnd.openwebslides+json; version=3.0.0',
+        'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
+      }
+
+      delete "/api/topics/#{topic.id}", :headers => headers
+
+      expect(response.status).to eq 204
+
+      get "/api/topics/#{topic.id}", :headers => headers
+
+      expect(response.status).to eq 404
+    end
+  end
 end
