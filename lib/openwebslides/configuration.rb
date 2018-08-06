@@ -21,12 +21,13 @@ module OpenWebslides
   # Platform configuration
   #
   class Configuration
-    attr_accessor :repository_path,
-                  :tmpdir,
+    attr_accessor :tmpdir,
+                  :repository,
                   :oauth2,
                   :api
 
     def initialize
+      @repository = OpenStruct.new
       @oauth2 = OpenStruct.new
       @api = OpenStruct.new
     end
@@ -38,13 +39,15 @@ module OpenWebslides
       ##
       # Global configuration
       #
-      raise 'repository_path' unless Dir.exist? repository_path
+      raise 'repository.path' unless Dir.exist? repository.path
+      raise 'repository.version' if Semverse::Version.new(repository.version).nil?
 
       ##
       # API configuration
       #
       raise 'api.token_lifetime' unless api.token_lifetime && api.token_lifetime.is_a?(ActiveSupport::Duration)
       raise 'api.asset_url_lifetime' unless api.token_lifetime && api.token_lifetime.is_a?(ActiveSupport::Duration)
+      raise 'repository.version' if Semverse::Version.new(api.version).nil?
     end
   end
 end

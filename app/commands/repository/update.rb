@@ -20,7 +20,7 @@ module Repository
         # Commit
         exec Git::Commit do |c|
           c.author = @author
-          c.message = @message || 'Update slidetopic'
+          c.message = @message || 'Update topic'
         end
 
         # Update timestamps

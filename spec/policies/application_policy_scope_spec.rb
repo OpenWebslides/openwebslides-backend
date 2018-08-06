@@ -9,7 +9,7 @@ RSpec.describe ApplicationPolicy::Scope do
     subject { described_class.new(user, Topic).resolve }
 
     it 'should raise an error' do
-      expect(-> { subject }).to raise_error OpenWebslides::NotImplementedError
+      expect { subject }.to raise_error OpenWebslides::NotImplementedError
     end
   end
 
@@ -17,7 +17,7 @@ RSpec.describe ApplicationPolicy::Scope do
     subject { described_class.new(user, User).resolve }
 
     it 'should raise an error' do
-      expect(-> { subject }).to raise_error OpenWebslides::NotImplementedError
+      expect { subject }.to raise_error OpenWebslides::NotImplementedError
     end
   end
 end

@@ -120,7 +120,7 @@ RSpec.describe 'Ratings API', :type => :request do
       it 'deletes a rating' do
         delete conversation_rating_path(:conversation_id => annotation.id), :headers => headers
 
-        expect(-> { @rating.reload }).to raise_error ActiveRecord::RecordNotFound
+        expect { @rating.reload }.to raise_error ActiveRecord::RecordNotFound
 
         expect(response.status).to eq 200
 
@@ -258,7 +258,7 @@ RSpec.describe 'Ratings API', :type => :request do
       it 'deletes a rating' do
         delete comment_rating_path(:comment_id => annotation.id), :headers => headers
 
-        expect(-> { @rating.reload }).to raise_error ActiveRecord::RecordNotFound
+        expect { @rating.reload }.to raise_error ActiveRecord::RecordNotFound
 
         expect(response.status).to eq 200
 

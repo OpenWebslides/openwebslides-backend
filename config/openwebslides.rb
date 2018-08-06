@@ -13,14 +13,23 @@ OpenWebslides.configure do |config|
   #########################################
 
   ##
-  # Absolute path to persistent repository storage
-  #
-  config.repository_path = Rails.root.join 'data'
-
-  ##
   # Temporary directory for uploads
   #
   config.tmpdir = Rails.root.join 'tmp', 'uploads'
+
+  #########################################
+  ##      Repository configuration       ##
+  #########################################
+
+  ##
+  # Absolute path to persistent repository storage
+  #
+  config.repository.path = Rails.root.join 'data'
+
+  ##
+  # Data format version (semver)
+  #
+  config.repository.version = '1.0.0'
 
   #########################################
   ##       Database configuration        ##
@@ -69,5 +78,5 @@ OpenWebslides.configure do |config|
   ##
   # API version (semver)
   #
-  config.api.version = Semverse::Version.new File.read Rails.root.join 'VERSION'
+  config.api.version = '3.0.0'
 end

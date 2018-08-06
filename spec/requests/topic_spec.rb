@@ -201,7 +201,7 @@ RSpec.describe 'Topic API', :type => :request do
       id = topic.id
       delete topic_path(:id => topic.id), :headers => headers
 
-      expect(-> { Topic.find id }).to raise_error ActiveRecord::RecordNotFound
+      expect { Topic.find id }.to raise_error ActiveRecord::RecordNotFound
 
       expect(response.status).to eq 204
     end

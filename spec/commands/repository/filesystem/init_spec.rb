@@ -16,25 +16,33 @@ RSpec.describe Repository::Filesystem::Init do
   let(:subject) { described_class.new topic }
 
   ##
+  # Stubs
+  #
+  before do
+    # Mock repo_path
+    allow(subject).to receive(:repo_path).and_return directory
+  end
+
+  ##
   # Tests
   #
   describe '#execute' do
-    it 'raises an error if the directory already exists' do
-      # Mock repo_path
-      allow(subject).to receive(:repo_path).and_return '/tmp'
+    describe 'repository already exists' do
+      let(:directory) { '/tmp' }
 
-      expect(-> { subject.execute }).to raise_error OpenWebslides::RepoExistsError
+      it 'raises a RepoExistsError' do
+        expect { subject.execute }.to raise_error OpenWebslides::RepoExistsError
+      end
     end
 
-    it 'creates the repository structure' do
-      # Mock repo_path and repo_file
-      allow(subject).to receive(:repo_path).and_return directory
-      allow(subject).to receive(:repo_file).and_return File.join directory, 'data.json'
+    describe 'new repository' do
+      it 'creates the repository structure' do
+        subject.execute
 
-      subject.execute
-
-      expect(File).to exist File.join directory, 'data.json'
-      expect(File).to exist File.join directory, 'assets', '.keep'
+        expect(File).to exist File.join directory, 'content.yml'
+        expect(File).to exist File.join directory, 'assets', '.keep'
+        expect(File).to exist File.join directory, 'content', '.keep'
+      end
     end
   end
 end

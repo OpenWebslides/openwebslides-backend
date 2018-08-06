@@ -8,11 +8,7 @@ module Repository
     protected
 
     def repo_path
-      File.join OpenWebslides.config.repository_path, @receiver.user.id.to_s, @receiver.id.to_s
-    end
-
-    def repo_file
-      File.join repo_path, 'data.json'
+      File.join OpenWebslides.config.repository.path, @receiver.user.id.to_s, @receiver.id.to_s
     end
 
     def lock_path

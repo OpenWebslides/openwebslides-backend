@@ -30,9 +30,7 @@ RSpec.describe Comment, :type => :model do
       comment = build :comment,
                       :conversation => conversation,
                       :topic => conversation.topic,
-                      :content_item_id => Faker::Number.number(2)
-
-      expect(comment.content_item_id).not_to eq comment.conversation.content_item_id
+                      :content_item_id => Integer(conversation.content_item_id) + 1
 
       expect(comment).not_to be_valid
     end
