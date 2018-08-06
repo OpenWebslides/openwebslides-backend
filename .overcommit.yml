@@ -42,10 +42,6 @@ PreCommit:
     enabled: true
   BundleCheck:
     enabled: true
-  ExecutePermissions:
-    enabled: true
-    exclude:
-      - bin/*
   FixMe:
     enabled: true
   Fasterer:
