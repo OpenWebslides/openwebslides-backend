@@ -11,6 +11,7 @@ rm -f /app/tmp/pids/server.pid
 
 # Run as regular user
 su - openwebslides
+cd /app/
 
 # Migrate relational data
 bundle exec rake db:migrate

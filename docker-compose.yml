@@ -101,6 +101,8 @@ volumes:
   # Redis volume
   redis:
 
+# Explicitly specify a subnet different to docker-compose's default,
+# because it interferes with the UGent eduroam subnet
 networks:
   default:
     ipam:
