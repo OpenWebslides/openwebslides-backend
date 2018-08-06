@@ -1,8 +1,0 @@
-version: '3'
-
-services:
-  nginx:
-    volumes:
-      - ${PWD}/nginx/sites-prod/:/etc/nginx/sites/
-      - ${PWD}/nginx/certificate.crt:/etc/nginx/certificate.crt
-      - ${PWD}/nginx/certificate.key:/etc/nginx/certificate.key
