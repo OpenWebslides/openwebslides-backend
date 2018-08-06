@@ -74,6 +74,8 @@ services:
     volumes:
       - public:/app/public/
       - ${PWD}/nginx/:/etc/nginx/
+      - certs:/etc/letsencrypt/:ro
+      - certs-data:/data/letsencrypt/
       - uploads:/app/tmp/uploads/
     ports:
       - "0.0.0.0:80:80"
@@ -99,6 +101,10 @@ volumes:
 
   # Redis volume
   redis:
+
+  # Certificate data volumes
+  certs:
+  certs-data:
 
 # Explicitly specify a subnet different to docker-compose's default,
 # because it interferes with the UGent eduroam subnet

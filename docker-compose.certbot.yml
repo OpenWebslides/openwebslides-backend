@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  ##
+  # Let's Encrypt certificate tool container
+  #
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certs:/etc/letsencrypt/
+      - certs-data:/data/letsencrypt/
