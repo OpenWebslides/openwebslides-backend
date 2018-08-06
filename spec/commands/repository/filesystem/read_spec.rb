@@ -4,24 +4,50 @@ require 'rails_helper'
 
 RSpec.describe Repository::Filesystem::Read do
   ##
+  # Configuration
+  #
+  before :each do
+    OpenWebslides.configure do |config|
+      ##
+      # Absolute path to persistent repository storage
+      #
+      config.repository.path = Dir.mktmpdir
+    end
+  end
+
+  ##
   # Test variables
   #
   let(:topic) { create :topic }
 
-  let(:directory) { File.join Dir.mktmpdir('temp'), 'repository' }
+  let(:content) do
+    root = {
+      'id' => 'qyrgv0bcd6',
+      'type' => 'contentItemTypes/ROOT',
+      'childItemIds' => ['ivks4jgtxr']
+    }
+    heading = {
+      'id' => 'ivks4jgtxr',
+      'type' => 'contentItemTypes/HEADING',
+      'text' => 'This is a heading',
+      'metadata' => { 'tags' => [], 'visibilityOverrides' => {} },
+      'subItemIds' => ['oswmjc09be']
+    }
+    paragraph = {
+      'id' => 'oswmjc09be',
+      'type' => 'contentItemTypes/PARAGRAPH',
+      'text' => 'This is a paragraph',
+      'metadata' => { 'tags' => [], 'visibilityOverrides' => {} },
+      'subItemIds' => []
+    }
+
+    [root, heading, paragraph]
+  end
 
   ##
   # Test subject
   #
   let(:subject) { described_class.new topic }
-
-  ##
-  # Stubs
-  #
-  before do
-    # Mock repo_path
-    allow(subject).to receive(:repo_path).and_return directory
-  end
 
   ##
   # Tests
@@ -57,7 +83,7 @@ RSpec.describe Repository::Filesystem::Read do
       it 'reads the data files' do
         result = subject.execute
 
-        expect(result).not_to be_nil # TODO
+        expect(result).to eq [{ 'id' => 'j0vcu0y7vk', 'foo' => 'bar' }]
       end
     end
   end
