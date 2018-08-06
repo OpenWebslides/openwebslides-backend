@@ -63,4 +63,11 @@ RSpec.describe Topic, :type => :model do
       expect(Notification.last.topic).to eq d
     end
   end
+
+  describe 'methods' do
+    it 'overrides inclusion methods for content' do
+      expect(topic).to respond_to :content
+      expect(topic).to respond_to :content_id
+    end
+  end
 end

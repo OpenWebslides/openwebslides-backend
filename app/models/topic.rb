@@ -63,6 +63,14 @@ class Topic < ApplicationRecord
   ##
   # Overrides
   #
+
+  # Override `content_id` and `content` to allow inclusion of abstract resource
+  def content_id
+    id
+  end
+
+  def content; end
+
   ##
   # Helpers and callback methods
   #
