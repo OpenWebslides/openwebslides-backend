@@ -56,7 +56,7 @@ RSpec.describe 'Conversations API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects no title' do
@@ -64,7 +64,7 @@ RSpec.describe 'Conversations API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects no text' do
@@ -72,7 +72,7 @@ RSpec.describe 'Conversations API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects no content_item_id' do
@@ -80,14 +80,14 @@ RSpec.describe 'Conversations API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'creates a conversation' do
       post conversations_path, :params => request_body(attributes), :headers => headers
 
       expect(response.status).to eq 201
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       attr = JSON.parse(response.body)['data']['attributes']
 
@@ -106,7 +106,7 @@ RSpec.describe 'Conversations API', :type => :request do
       patch conversation_path(:id => conversation.id), :params => update_body(conversation.id, :text => 'foo'), :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       attr = JSON.parse(response.body)['data']['attributes']
 
@@ -117,7 +117,7 @@ RSpec.describe 'Conversations API', :type => :request do
       patch conversation_path(:id => conversation.id), :params => update_body(conversation.id, :title => 'foo'), :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       attr = JSON.parse(response.body)['data']['attributes']
 
@@ -130,7 +130,7 @@ RSpec.describe 'Conversations API', :type => :request do
       patch conversation_path(:id => conversation.id), :params => update_body(conversation.id, :secret => true), :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       attr = JSON.parse(response.body)['data']['attributes']
 
@@ -144,7 +144,7 @@ RSpec.describe 'Conversations API', :type => :request do
       patch conversation_path(:id => conversation.id), :params => update_body(conversation.id, :secret => false), :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       attr = JSON.parse(response.body)['data']['attributes']
 
@@ -177,14 +177,14 @@ RSpec.describe 'Conversations API', :type => :request do
       get conversation_path(:id => 0), :headers => headers
 
       expect(response.status).to eq 404
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'returns successful' do
       get conversation_path(:id => conversation.id), :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       json = JSON.parse response.body
 
@@ -205,7 +205,7 @@ RSpec.describe 'Conversations API', :type => :request do
       expect(conversation).not_to be_destroyed
 
       expect(response.status).to eq 404
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'returns successful' do

@@ -2,62 +2,75 @@
 
 require 'rails_helper'
 
-class VersioningController < ApplicationController
-  attr_accessor :accept
+# It is never a good idea to write dependent tests. However, writing a dummy
+# VersioningController specifically for this test would imply creating a dummy
+# route, resource and policy as well. To keep things simple UsersController is the test subject
+RSpec.describe UsersController do
+  describe 'request Accept header' do
+    before :each do
+      request.headers['Accept'] = accept_header
+    end
 
-  def initialize(accept)
-    @accept = accept
-  end
+    describe 'no header' do
+      let(:accept_header) { '' }
 
-  def self.before_action; end
+      it 'returns a 406' do
+        get :index
 
-  def request
-    OpenStruct.new :accept => @accept
-  end
+        expect(response.status).to eq 406
+      end
+    end
 
-  include Versioning
-end
+    describe 'no version in header' do
+      let(:accept_header) { 'application/vnd.api+json' }
 
-RSpec.describe VersioningController do
-  let(:subject) { described_class.new accept_header }
+      it 'fails' do
+        get :index
 
-  describe 'no header' do
-    let(:accept_header) { '' }
+        expect(response.status).to eq 406
+      end
+    end
 
-    it 'fails' do
-      expect { subject.verify_accept_header_version }.to raise_error JSONAPI::Exceptions::UnacceptableVersionError
+    describe 'exact version' do
+      let(:accept_header) { "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}" }
+
+      it 'succeeds' do
+        get :index
+
+        expect(response.status).to eq 200
+      end
+    end
+
+    describe 'incompatible version' do
+      let(:accept_header) { 'application/vnd.api+json, application/vnd.openwebslides+json; version=1.0.0' }
+
+      it 'fails' do
+        get :index
+
+        expect(response.status).to eq 406
+      end
+    end
+
+    describe 'invalid mime type' do
+      let(:accept_header) { 'application/vnd.api+json, application/vnd.foobar+json; version=1.0.0' }
+
+      it 'fails' do
+        get :index
+
+        expect(response.status).to eq 406
+      end
     end
   end
 
-  describe 'no version in header' do
-    let(:accept_header) { 'application/vnd.api+json' }
-
-    it 'fails' do
-      expect { subject.verify_accept_header_version }.to raise_error JSONAPI::Exceptions::UnacceptableVersionError
+  describe 'response Content-Type header' do
+    before :each do
+      request.headers['Accept'] = "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
-  end
 
-  describe 'exact version' do
-    let(:accept_header) { "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}" }
+    it 'returns a valid Content-Type header' do
+      get :index
 
-    it 'succeeds' do
-      expect(subject.verify_accept_header_version).to be true
-    end
-  end
-
-  describe 'incompatible version' do
-    let(:accept_header) { 'application/vnd.api+json, application/vnd.openwebslides+json; version=1.0.0' }
-
-    it 'fails' do
-      expect { subject.verify_accept_header_version }.to raise_error JSONAPI::Exceptions::UnacceptableVersionError
-    end
-  end
-
-  describe 'invalid mime type' do
-    let(:accept_header) { 'application/vnd.api+json, application/vnd.foobar+json; version=1.0.0' }
-
-    it 'fails' do
-      expect { subject.verify_accept_header_version }.to raise_error JSONAPI::Exceptions::UnacceptableVersionError
+      expect(response.headers['Content-Type']).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
   end
 end

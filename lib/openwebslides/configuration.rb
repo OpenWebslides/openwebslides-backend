@@ -3,6 +3,8 @@
 require 'ostruct'
 
 module OpenWebslides
+  MEDIA_TYPE = 'application/vnd.openwebslides+json'
+
   class << self
     attr_accessor :config
 

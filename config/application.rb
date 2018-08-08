@@ -18,6 +18,9 @@ require 'action_view/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Eager load monkey patches
+Dir[File.join __dir__, '..', 'lib', '**', '*.rb'].each { |f| require f }
+
 ##
 # The Open Webslides platform
 #

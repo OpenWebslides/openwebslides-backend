@@ -57,7 +57,7 @@ RSpec.describe 'Topic API', :type => :request do
       get topics_path, :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       json = JSON.parse response.body
       expect(json['data'].count).to eq 3
@@ -75,7 +75,7 @@ RSpec.describe 'Topic API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects no title' do
@@ -83,7 +83,7 @@ RSpec.describe 'Topic API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects empty state' do
@@ -91,7 +91,7 @@ RSpec.describe 'Topic API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects invalid state' do
@@ -99,14 +99,14 @@ RSpec.describe 'Topic API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq [JSONAPI::VALIDATION_ERROR, JSONAPI::VALIDATION_ERROR]
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'returns successful' do
       post topics_path, :params => request_body(attributes), :headers => headers
 
       expect(response.status).to eq 201
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       json = JSON.parse response.body
 
@@ -122,14 +122,14 @@ RSpec.describe 'Topic API', :type => :request do
       get topic_path(:id => 0), :headers => headers
 
       expect(response.status).to eq 404
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'returns successful' do
       get topic_path(:id => topic.id), :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
   end
 
@@ -144,7 +144,7 @@ RSpec.describe 'Topic API', :type => :request do
 
       expect(response.status).to eq 400
       expect(jsonapi_error_code(response)).to eq JSONAPI::KEY_NOT_INCLUDED_IN_URL
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects non-existant topics' do
@@ -152,7 +152,7 @@ RSpec.describe 'Topic API', :type => :request do
 
       expect(response.status).to eq 404
       expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects empty title' do
@@ -160,7 +160,7 @@ RSpec.describe 'Topic API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects invalid state' do
@@ -168,7 +168,7 @@ RSpec.describe 'Topic API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'updates title' do
@@ -177,7 +177,7 @@ RSpec.describe 'Topic API', :type => :request do
 
       topic.reload
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
       expect(topic.title).to eq title
     end
   end
@@ -194,7 +194,7 @@ RSpec.describe 'Topic API', :type => :request do
       expect(topic).not_to be_destroyed
 
       expect(response.status).to eq 404
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'deletes a topic' do
