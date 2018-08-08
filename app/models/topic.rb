@@ -21,7 +21,6 @@ class Topic < ApplicationRecord
   # Associations
   #
   belongs_to :user,
-             :required => true,
              :inverse_of => :topics
 
   has_many :grants,

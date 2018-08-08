@@ -13,11 +13,9 @@ class Notification < ApplicationRecord
   # Associations
   #
   belongs_to :user,
-             :required => true,
              :inverse_of => :notifications
 
   belongs_to :topic,
-             :required => true,
              :inverse_of => :notifications
 
   ##

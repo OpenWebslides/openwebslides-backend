@@ -10,16 +10,14 @@ class Grant < ApplicationRecord
   ##
   # Associations
   #
-  belongs_to :topic,
-             :required => true
-
-  belongs_to :user,
-             :required => true
+  belongs_to :topic
+  belongs_to :user
 
   ##
   # Validations
   #
-  validates_uniqueness_of :topic_id, :scope => :user_id
+  validates_uniqueness_of :topic_id,
+                          :scope => :user_id
 
   ##
   # Callbacks
