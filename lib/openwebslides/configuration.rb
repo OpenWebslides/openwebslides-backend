@@ -39,14 +39,19 @@ module OpenWebslides
       ##
       # Global configuration
       #
+      raise 'tmpdir' unless Dir.exist? tmpdir
+
+      ##
+      # Repository configuration
+      #
       raise 'repository.path' unless Dir.exist? repository.path
       raise 'repository.version' if Semverse::Version.new(repository.version).nil?
 
       ##
       # API configuration
       #
-      raise 'api.token_lifetime' unless api.token_lifetime && api.token_lifetime.is_a?(ActiveSupport::Duration)
-      raise 'api.asset_url_lifetime' unless api.token_lifetime && api.token_lifetime.is_a?(ActiveSupport::Duration)
+      raise 'api.token_lifetime' unless api.token_lifetime&.is_a?(ActiveSupport::Duration)
+      raise 'api.asset_url_lifetime' unless api.token_lifetime&.is_a?(ActiveSupport::Duration)
       raise 'repository.version' if Semverse::Version.new(api.version).nil?
     end
   end
