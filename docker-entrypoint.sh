@@ -17,7 +17,7 @@ cd /app/
 bundle exec rake db:migrate
 
 # Override API_URL on runtime
-erb /app/web/app/lib/api/api.js.erb > /app/web/dist/config.js
+erb /app/web/app/config/api.js.erb > /app/web/dist/config.js
 
 # Copy assets
 [[ ! -d /app/public/ ]] && mkdir -p /app/public/
