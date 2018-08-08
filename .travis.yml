@@ -6,6 +6,7 @@ rvm:
 before_script:
   - (git submodule init && git submodule update)
   - mkdir data
+  - mkdir -p tmp/uploads
   - bundle exec rails db:create
   - bundle exec rails db:migrate
 script:
