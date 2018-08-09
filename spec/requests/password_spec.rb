@@ -71,7 +71,7 @@ RSpec.describe 'Password API', :type => :request do
       patch password_path, :params => reset_body('foo', new_password), :headers => headers
 
       expect(response.status).to eq 422
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'resets a password' do

@@ -32,7 +32,7 @@ RSpec.describe 'Flags API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -40,7 +40,7 @@ RSpec.describe 'Flags API', :type => :request do
         post conversation_flag_path(:conversation_id => annotation.id), :params => params, :headers => headers
 
         expect(response.status).to eq 200
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
         attrs = JSON.parse(response.body)['data']['attributes']
 
@@ -69,7 +69,7 @@ RSpec.describe 'Flags API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -77,7 +77,7 @@ RSpec.describe 'Flags API', :type => :request do
         post comment_flag_path(:comment_id => annotation.id), :params => params, :headers => headers
 
         expect(response.status).to eq 200
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
         attrs = JSON.parse(response.body)['data']['attributes']
 

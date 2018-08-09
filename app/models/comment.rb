@@ -13,13 +13,13 @@ class Comment < Annotation
   # Associations
   #
   belongs_to :conversation,
-             :required => true,
              :inverse_of => :comments
 
   ##
   # Validations
   #
-  validates :text, :presence => true
+  validates :text,
+            :presence => true
 
   validate :conversation_scope
   validate :conversation_unlocked

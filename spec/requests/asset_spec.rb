@@ -27,14 +27,14 @@ RSpec.describe 'Assets API', :type => :request do
       post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers.except('Content-Disposition')
 
       expect(response.status).to eq 400
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects filename already taken' do
       post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers.merge('Content-Disposition' => "attachment; filename=\"#{asset.filename}\"")
 
       expect(response.status).to eq 422
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
     end
 
@@ -42,14 +42,14 @@ RSpec.describe 'Assets API', :type => :request do
       post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers.merge('Content-Type' => 'application/octet-stream')
 
       expect(response.status).to eq 415
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'returns successful' do
       post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers
 
       expect(response.status).to eq 201
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       attributes = (JSON.parse response.body)['data']['attributes']
       expect(attributes['filename']).to eq 'asset.png'
@@ -65,14 +65,14 @@ RSpec.describe 'Assets API', :type => :request do
       get asset_path(:id => 0), :headers => headers
 
       expect(response.status).to eq 404
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'returns successful' do
       get asset_path(:id => asset.id), :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'has a raw link' do
@@ -95,7 +95,7 @@ RSpec.describe 'Assets API', :type => :request do
       expect(asset).not_to be_destroyed
 
       expect(response.status).to eq 404
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'deletes an asset' do

@@ -34,7 +34,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -46,7 +46,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -58,7 +58,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -66,7 +66,7 @@ RSpec.describe 'Ratings API', :type => :request do
         post conversation_rating_path(:conversation_id => annotation.id), :params => params, :headers => headers
 
         expect(response.status).to eq 200
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
         attrs = JSON.parse(response.body)['data']['attributes']
 
@@ -89,7 +89,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -101,7 +101,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -113,7 +113,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 404
           expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -148,7 +148,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -160,7 +160,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -172,7 +172,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -184,7 +184,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -196,7 +196,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -204,7 +204,7 @@ RSpec.describe 'Ratings API', :type => :request do
         post comment_rating_path(:comment_id => annotation.id), :params => params, :headers => headers
 
         expect(response.status).to eq 200
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
         attrs = JSON.parse(response.body)['data']['attributes']
 
@@ -227,7 +227,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -239,7 +239,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 422
           expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 
@@ -251,7 +251,7 @@ RSpec.describe 'Ratings API', :type => :request do
 
           expect(response.status).to eq 404
           expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
-          expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+          expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
         end
       end
 

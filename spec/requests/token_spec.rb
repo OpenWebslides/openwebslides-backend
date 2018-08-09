@@ -29,14 +29,14 @@ RSpec.describe 'Token API', :type => :request do
       post token_path, :params => request_body(user.email, 'foo'), :headers => headers
 
       expect(response.status).to eq 401
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'returns a valid token' do
       post token_path, :params => request_body(user.email, password), :headers => headers
 
       expect(response.status).to eq 201
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
       expect(response.headers['Authorization']).to start_with 'Bearer'
 
       token = JWT::Auth::Token.from_token response.headers['Authorization'].scan(/Bearer (.*)$/).flatten.last
@@ -53,7 +53,7 @@ RSpec.describe 'Token API', :type => :request do
       delete token_path, :headers => headers.except!('Authorization')
 
       expect(response.status).to eq 401
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'invalidates all tokens' do

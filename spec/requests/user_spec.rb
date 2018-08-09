@@ -45,7 +45,7 @@ RSpec.describe 'User API', :type => :request do
       get users_path, :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       json = JSON.parse response.body
       expect(json['data'].count).to eq 3
@@ -62,7 +62,7 @@ RSpec.describe 'User API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects TOS not accepted' do
@@ -70,7 +70,7 @@ RSpec.describe 'User API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects empty passwords' do
@@ -78,7 +78,7 @@ RSpec.describe 'User API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects no first name' do
@@ -86,14 +86,14 @@ RSpec.describe 'User API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'returns successful' do
       post users_path, :params => request_body(attributes), :headers => headers
 
       expect(response.status).to eq 201
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       json = JSON.parse response.body
 
@@ -110,14 +110,14 @@ RSpec.describe 'User API', :type => :request do
       get user_path(:id => 0), :headers => headers
 
       expect(response.status).to eq 404
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'returns successful' do
       get user_path(:id => user.id), :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       json = JSON.parse response.body
 
@@ -136,7 +136,7 @@ RSpec.describe 'User API', :type => :request do
 
       expect(response.status).to eq 400
       expect(jsonapi_error_code(response)).to eq JSONAPI::KEY_NOT_INCLUDED_IN_URL
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects non-existant users' do
@@ -144,7 +144,7 @@ RSpec.describe 'User API', :type => :request do
 
       expect(response.status).to eq 404
       expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects email changes' do
@@ -152,7 +152,7 @@ RSpec.describe 'User API', :type => :request do
 
       expect(response.status).to eq 400
       expect(jsonapi_error_code(response)).to eq JSONAPI::PARAM_NOT_ALLOWED
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects empty passwords' do
@@ -160,7 +160,7 @@ RSpec.describe 'User API', :type => :request do
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'updates name' do
@@ -169,7 +169,7 @@ RSpec.describe 'User API', :type => :request do
 
       user.reload
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
       expect(user.name).to eq name
     end
 
@@ -179,7 +179,7 @@ RSpec.describe 'User API', :type => :request do
 
       user.reload
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
       expect(user.valid_password? password).to be true
     end
   end
@@ -196,7 +196,7 @@ RSpec.describe 'User API', :type => :request do
       expect(user).not_to be_destroyed
 
       expect(response.status).to eq 404
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'deletes a user' do
@@ -221,7 +221,7 @@ RSpec.describe 'User API', :type => :request do
         get user_relationships_topics_path(:user_id => user.id), :headers => headers
 
         expect(response.status).to eq 200
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
         json = JSON.parse response.body
         expect(json['data'].count).to eq Topic.where(:user => user).count
@@ -240,7 +240,7 @@ RSpec.describe 'User API', :type => :request do
         get user_topics_path(:user_id => user.id), :headers => headers
 
         expect(response.status).to eq 200
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
         json = JSON.parse response.body
         expect(json['data'].count).to eq user.topics.count
@@ -266,7 +266,7 @@ RSpec.describe 'User API', :type => :request do
         get user_relationships_collaborations_path(:user_id => user.id), :headers => headers
 
         expect(response.status).to eq 200
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
         json = JSON.parse response.body
         expect(json['data'].count).to eq 1
@@ -285,7 +285,7 @@ RSpec.describe 'User API', :type => :request do
         get user_collaborations_path(:user_id => user.id), :headers => headers
 
         expect(response.status).to eq 200
-        expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
         json = JSON.parse response.body
         expect(json['data'].count).to eq user.collaborations.count

@@ -61,7 +61,7 @@ RSpec.describe 'Confirmation API', :type => :request do
       patch confirmation_path, :params => confirm_body('foo'), :headers => headers
 
       expect(response.status).to eq 422
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'rejects already confirmed users' do
@@ -70,7 +70,7 @@ RSpec.describe 'Confirmation API', :type => :request do
       patch confirmation_path, :params => confirm_body(user.confirmation_token), :headers => headers
 
       expect(response.status).to eq 422
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
     it 'confirms a user' do
@@ -79,7 +79,7 @@ RSpec.describe 'Confirmation API', :type => :request do
       patch confirmation_path, :params => confirm_body(unconfirmed_user.confirmation_token), :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       unconfirmed_user.reload
       expect(unconfirmed_user).to be_confirmed

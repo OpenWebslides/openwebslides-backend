@@ -14,7 +14,7 @@ RSpec.describe 'Notification API', :type => :request do
       get notifications_path, :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       json = JSON.parse response.body
       expect(json).to include 'data'

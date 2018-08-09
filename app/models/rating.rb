@@ -11,11 +11,9 @@ class Rating < ApplicationRecord
   # Associations
   #
   belongs_to :annotation,
-             :required => true,
              :inverse_of => :ratings
 
   belongs_to :user,
-             :required => true,
              :inverse_of => :ratings
 
   ##

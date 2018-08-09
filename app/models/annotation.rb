@@ -14,11 +14,9 @@ class Annotation < ApplicationRecord
   # Associations
   #
   belongs_to :user,
-             :required => true,
              :inverse_of => :annotations
 
   belongs_to :topic,
-             :required => true,
              :inverse_of => :annotations
 
   has_many :ratings,

@@ -32,7 +32,7 @@ RSpec.describe 'Content API', :type => :request do
       get topic_content_path(:topic_id => topic.id), :headers => headers
 
       expect(response.status).to eq 200
-      expect(response.content_type).to eq JSONAPI::MEDIA_TYPE
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
   end
 
