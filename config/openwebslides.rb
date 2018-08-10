@@ -44,12 +44,6 @@ OpenWebslides.configure do |config|
   #########################################
 
   ##
-  # GitHub OAuth2 credentials
-  #
-  config.oauth2.github_id = ENV['OWS_GITHUB_ID']
-  config.oauth2.github_secret = ENV['OWS_GITHUB_SECRET']
-
-  ##
   # Google OAuth2 credentials
   #
   config.oauth2.google_id = ENV['OWS_GOOGLE_ID']

@@ -9,4 +9,13 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :cas,
            :host => 'login.ugent.be'
+
+  provider :google_oauth2,
+           OpenWebslides.config.oauth2.google_id,
+           OpenWebslides.config.oauth2.google_secret
+
+  provider :facebook,
+           OpenWebslides.config.oauth2.facebook_id,
+           OpenWebslides.config.oauth2.facebook_secret,
+           :scope => 'email'
 end
