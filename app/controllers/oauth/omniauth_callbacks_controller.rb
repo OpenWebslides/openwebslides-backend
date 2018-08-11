@@ -6,21 +6,35 @@ module Oauth
     skip_after_action :add_content_type_header_version
 
     ##
-    # OAuth passthru
+    # OmniAuth passthru
     #
     def passthru
       super
     end
 
     ##
-    # OAuth failure route
+    # OmniAuth failure route
     #
     def failure
       redirect_to root_path :oauth_error => failure_message
     end
 
     ##
-    # OAuth2 callback
+    # OmniAuth provider callback routes
+    def facebook
+      callback
+    end
+
+    def google_oauth2
+      callback
+    end
+
+    def cas
+      callback
+    end
+
+    ##
+    # OmniAuth callback
     #
     def callback
       retrieve_identity
