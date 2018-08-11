@@ -2,9 +2,6 @@
 
 module Oauth
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
-    skip_before_action :verify_accept_header_version
-    skip_after_action :add_content_type_header_version
-
     ##
     # OmniAuth passthru
     #

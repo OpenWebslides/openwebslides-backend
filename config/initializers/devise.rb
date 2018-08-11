@@ -262,6 +262,9 @@ Devise.setup do |config|
                   OpenWebslides.config.oauth2.facebook_secret,
                   :scope => 'email'
 
+  # Don't inherit from ApplicationController to prevent JSON API code sneaking in
+  config.parent_controller = 'ActionController::API'
+
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
