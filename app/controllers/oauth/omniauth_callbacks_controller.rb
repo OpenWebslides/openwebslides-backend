@@ -1,8 +1,23 @@
 # frozen_string_literal: true
 
 module Oauth
-  class OmniauthController < ActionController::API
-    include JWT::Auth::Authentication
+  class OmniauthCallbacksController < Devise::OmniauthCallbacksController
+    skip_before_action :verify_accept_header_version
+    skip_after_action :add_content_type_header_version
+
+    ##
+    # OAuth passthru
+    #
+    def passthru
+      super
+    end
+
+    ##
+    # OAuth failure route
+    #
+    def failure
+      redirect_to root_path :oauth_error => failure_message
+    end
 
     ##
     # OAuth2 callback
@@ -31,6 +46,8 @@ module Oauth
 
       Rails.logger.info "Authenticated user #{@resource.email} with provider #{@identity.provider}"
     end
+
+    private
 
     def find_or_create_user
       @resource = User.find_by :email => email.downcase

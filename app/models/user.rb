@@ -4,7 +4,7 @@
 # A user account
 #
 class User < ApplicationRecord
-  devise :database_authenticatable, :confirmable, :recoverable, :trackable, :validatable
+  devise :database_authenticatable, :confirmable, :recoverable, :trackable, :validatable, :omniauthable
   include JWT::Auth::Authenticatable
 
   ##

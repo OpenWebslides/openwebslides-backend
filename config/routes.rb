@@ -1,16 +1,17 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :users, :only => []
-
+  ##
+  # Root
+  #
   root :to => proc { [404, {}, []] }
 
   ##
   # OAuth2 endpoints
   #
-  namespace :oauth, :constraints => { :format => :json } do
-    get '/:provider/callback', :to => 'omniauth#callback'
-  end
+  devise_for :users,
+             :only => %i[omniauth_callbacks],
+             :controllers => { :omniauth_callbacks => 'oauth/omniauth_callbacks' }
 
   ##
   # API endpoints
