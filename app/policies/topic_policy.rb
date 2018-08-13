@@ -64,10 +64,10 @@ class TopicPolicy < ApplicationPolicy
   end
 
   ##
-  # Relationship: notifications
+  # Relationship: feed items
   #
-  def show_notifications?
-    # Users can only show notifications if the topic is showable
+  def show_feed_items?
+    # Users can only show feed items if the topic is showable
     # Policy scope separately in the controller
     show?
   end

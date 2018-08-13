@@ -27,7 +27,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_user
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
-        expect(subject).to permit_action :show_notifications
+        expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -43,7 +43,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :show_user
         expect(subject).to forbid_action :show_collaborators
         expect(subject).to forbid_action :show_assets
-        expect(subject).to forbid_action :show_notifications
+        expect(subject).to forbid_action :show_feed_items
         expect(subject).to forbid_action :show_conversations
         expect(subject).to forbid_action :show_annotations
       end
@@ -59,7 +59,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :show_user
         expect(subject).to forbid_action :show_collaborators
         expect(subject).to forbid_action :show_assets
-        expect(subject).to forbid_action :show_notifications
+        expect(subject).to forbid_action :show_feed_items
         expect(subject).to forbid_action :show_conversations
         expect(subject).to forbid_action :show_annotations
       end
@@ -86,7 +86,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_user
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
-        expect(subject).to permit_action :show_notifications
+        expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -102,7 +102,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_user
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
-        expect(subject).to permit_action :show_notifications
+        expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -118,7 +118,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :show_user
         expect(subject).to forbid_action :show_collaborators
         expect(subject).to forbid_action :show_assets
-        expect(subject).to forbid_action :show_notifications
+        expect(subject).to forbid_action :show_feed_items
         expect(subject).to forbid_action :show_conversations
         expect(subject).to forbid_action :show_annotations
       end
@@ -146,7 +146,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_user
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
-        expect(subject).to permit_action :show_notifications
+        expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -163,7 +163,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_user
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
-        expect(subject).to permit_action :show_notifications
+        expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -180,7 +180,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_user
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
-        expect(subject).to permit_action :show_notifications
+        expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -208,7 +208,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_user
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
-        expect(subject).to permit_action :show_notifications
+        expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -225,7 +225,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_user
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
-        expect(subject).to permit_action :show_notifications
+        expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end
@@ -242,7 +242,7 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_user
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
-        expect(subject).to permit_action :show_notifications
+        expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
       end

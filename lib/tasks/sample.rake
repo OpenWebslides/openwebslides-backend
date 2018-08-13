@@ -96,29 +96,29 @@ namespace :db do
         editors = [deck.owner] + deck.collaborators
 
         ##
-        # Notifications
+        # Feed items
         #
 
-        notification_count = RANDOM.rand 100
+        feed_item_count = RANDOM.rand 100
 
-        puts "Creating #{notification_count + 1} events for deck #{i + 1}/#{decks.size}"
+        puts "Creating #{feed_item_count + 1} events for deck #{i + 1}/#{decks.size}"
 
         creation_time = RANDOM.rand(1.year)
 
         # Deck created
-        Notification.create! :event_type => :deck_created,
-                             :user => deck.owner,
-                             :deck => deck,
-                             :created_at => creation_time.seconds.ago,
-                             :updated_at => creation_time.seconds.ago
+        FeedItem.create! :event_type => :deck_created,
+                         :user => deck.owner,
+                         :deck => deck,
+                         :created_at => creation_time.seconds.ago,
+                         :updated_at => creation_time.seconds.ago
 
         # Deck updated
-        notification_count.times do
-          Notification.create! :event_type => :deck_updated,
-                               :user => editors.sample,
-                               :deck => deck,
-                               :created_at => RANDOM.rand(creation_time).seconds.ago,
-                               :updated_at => RANDOM.rand(creation_time).seconds.ago
+        feed_item_count.times do
+          FeedItem.create! :event_type => :deck_updated,
+                           :user => editors.sample,
+                           :deck => deck,
+                           :created_at => RANDOM.rand(creation_time).seconds.ago,
+                           :updated_at => RANDOM.rand(creation_time).seconds.ago
         end
 
         ##

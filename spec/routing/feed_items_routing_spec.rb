@@ -2,19 +2,19 @@
 
 require 'rails_helper'
 
-RSpec.describe 'notifications routing', :type => :routing do
-  it 'routes notifications endpoint' do
-    route = '/api/notifications'
+RSpec.describe '@feed_items routing', :type => :routing do
+  it 'routes @feed_items endpoint' do
+    route = '/api/feed-items'
 
-    expect(:get => route).to route_to 'notifications#index'
+    expect(:get => route).to route_to 'feed_items#index'
     expect(:patch => route).not_to be_routable
     expect(:put => route).not_to be_routable
     expect(:post => route).not_to be_routable
     expect(:delete => route).not_to be_routable
   end
 
-  it 'routes notification endpoint' do
-    route = '/api/notifications/foo'
+  it 'routes feed_item endpoint' do
+    route = '/api/feed-items/foo'
 
     expect(:get => route).not_to be_routable
     expect(:patch => route).not_to be_routable

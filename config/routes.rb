@@ -69,9 +69,9 @@ Rails.application.routes.draw do
     end
 
     ##
-    # Notifications API (immutable)
+    # Recent Activity (feed) API (immutable)
     #
-    jsonapi_resources :notifications, :only => %i[index] do end
+    jsonapi_resources :feed_items, :only => %i[index] do end
 
     ##
     # Annotations API

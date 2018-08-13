@@ -2,11 +2,11 @@
 
 require 'rails_helper'
 
-RSpec.describe NotificationResource, :type => :resource do
-  let(:notification) { create :notification }
+RSpec.describe FeedItemResource, :type => :resource do
+  let(:feed_item) { create :feed_item }
   let(:context) { {} }
 
-  subject { described_class.new notification, context }
+  subject { described_class.new feed_item, context }
 
   it { is_expected.to have_primary_key :id }
 

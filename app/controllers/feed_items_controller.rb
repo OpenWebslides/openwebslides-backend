@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class NotificationsController < ApplicationController
+class FeedItemsController < ApplicationController
   # Authentication
   after_action :renew_token
 
@@ -12,10 +12,10 @@ class NotificationsController < ApplicationController
   # Resource
   #
 
-  # GET /notifications
+  # GET /feed_items
   def index
-    @notifications = policy_scope Notification
+    @feed_items = policy_scope FeedItem
 
-    jsonapi_render :json => @notifications
+    jsonapi_render :json => @feed_items
   end
 end

@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe NotificationPolicy do
+RSpec.describe FeedItemPolicy do
   subject { described_class.new user, record }
 
-  let(:record) { build :notification, :topic => topic }
+  let(:record) { build :feed_item, :topic => topic }
 
   context 'public topics' do
     let(:topic) { create :topic, :state => 'public_access' }

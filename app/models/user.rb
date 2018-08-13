@@ -36,7 +36,7 @@ class User < ApplicationRecord
            :source => :topic,
            :inverse_of => :collaborators
 
-  has_many :notifications,
+  has_many :feed_items,
            :dependent => :destroy,
            :inverse_of => :user
 
