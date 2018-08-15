@@ -22,6 +22,8 @@ gem 'jwt'
 gem 'jwt-auth'
 gem 'omniauth'
 gem 'omniauth-cas'
+gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
 
 # Authorization
 gem 'pundit'
