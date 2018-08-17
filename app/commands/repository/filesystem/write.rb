@@ -14,8 +14,14 @@ module Repository
         # Ensure repository data format version is compatible
         validate_version
 
-        # Write index file including root content item identifier
+        # Find root content item
         root = @content.find { |c| c['type'] == 'contentItemTypes/ROOT' }
+        raise OpenWebslides::FormatError, 'No root content item found' unless root
+
+        # Ensure root content item is the same as the database version
+        validate_root_content_item_id root
+
+        # Write index file including root content item identifier
         write_index 'root' => root['id']
 
         # Write content item files
@@ -26,6 +32,15 @@ module Repository
       end
 
       private
+
+      ##
+      # Validate the root content item id to be equal to the database root content item id
+      #
+      def validate_root_content_item_id(root)
+        return if root['id'] == @receiver.root_content_item_id
+
+        raise OpenWebslides::FormatError, 'Root content item ID must be the same as previously stored'
+      end
 
       ##
       # Write a content item to the repository

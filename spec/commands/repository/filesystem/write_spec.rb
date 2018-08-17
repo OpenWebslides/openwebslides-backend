@@ -18,7 +18,7 @@ RSpec.describe Repository::Filesystem::Write do
   ##
   # Test variables
   #
-  let(:topic) { create :topic }
+  let(:topic) { create :topic, :root_content_item_id => 'qyrgv0bcd6' }
 
   let(:content) do
     root = {
@@ -42,6 +42,14 @@ RSpec.describe Repository::Filesystem::Write do
     }
 
     [root, heading, paragraph]
+  end
+
+  let(:root_content_item) do
+    {
+      'id' => Faker::Lorem.words(3).join(''),
+      'type' => 'contentItemTypes/ROOT',
+      'childItemIds' => []
+    }
   end
 
   ##
@@ -78,6 +86,16 @@ RSpec.describe Repository::Filesystem::Write do
 
       content_item_ids = Dir[File.join subject.send(:content_path), '*.yml'].map { |f| File.basename f, '.yml' }
       expect(content_item_ids).to match_array %w[qyrgv0bcd6 ivks4jgtxr oswmjc09be]
+    end
+  end
+
+  describe '#validate_root_content_item_id' do
+    it 'raises an error when root content item id does not match the database' do
+      expect { subject.send :validate_root_content_item_id, root_content_item }.to raise_error OpenWebslides::FormatError
+    end
+
+    it 'returns when root content item id matches the database' do
+      expect { subject.send :validate_root_content_item_id, content.first }.not_to raise_error
     end
   end
 

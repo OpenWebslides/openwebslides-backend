@@ -28,7 +28,7 @@ RSpec.describe 'Topic', :type => :request do
 
   let(:content) do
     root = {
-      'id' => 'qyrgv0bcd6',
+      'id' => topic.root_content_item_id,
       'type' => 'contentItemTypes/ROOT',
       'childItemIds' => ['ivks4jgtxr']
     }
@@ -93,7 +93,7 @@ RSpec.describe 'Topic', :type => :request do
   end
 
   describe 'A user can retrieve the contents of a topic' do
-    let(:topic) { create :topic }
+    let(:topic) { create :topic, :root_content_item_id => 'qyrgv0bcd6' }
 
     before :each do
       service = TopicService.new topic
