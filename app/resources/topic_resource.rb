@@ -10,6 +10,7 @@ class TopicResource < ApplicationResource
   attribute :title
   attribute :state
   attribute :description
+  attribute :root_content_item_id
 
   ##
   # Relationships
@@ -39,6 +40,10 @@ class TopicResource < ApplicationResource
   end
 
   def self.updatable_fields(context = {})
-    super(context) - %i[content collaborators assets conversations]
+    super(context) - %i[root_content_item_id content collaborators assets conversations]
+  end
+
+  def self.sortable_fields(context)
+    super(context) - %i[root_content_item_id]
   end
 end

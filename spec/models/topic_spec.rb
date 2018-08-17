@@ -18,6 +18,9 @@ RSpec.describe Topic, :type => :model do
     it { is_expected.not_to allow_value(nil).for(:state) }
     it { is_expected.not_to allow_value('').for(:state) }
 
+    it { is_expected.not_to allow_value(nil).for(:root_content_item_id) }
+    it { is_expected.not_to allow_value('').for(:root_content_item_id) }
+
     it 'is invalid without attributes' do
       expect(subject).not_to be_valid
     end

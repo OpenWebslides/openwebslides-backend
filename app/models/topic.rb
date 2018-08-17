@@ -17,6 +17,9 @@ class Topic < ApplicationRecord
   # Access level
   enum :state => %i[public_access protected_access private_access]
 
+  # Root content item identifier
+  property :root_content_item_id
+
   ##
   # Associations
   #
@@ -50,8 +53,14 @@ class Topic < ApplicationRecord
   ##
   # Validations
   #
-  validates :title, :presence => true
-  validates :state, :presence => true
+  validates :title,
+            :presence => true
+
+  validates :state,
+            :presence => true
+
+  validates :root_content_item_id,
+            :presence => true
 
   ##
   # Callbacks
