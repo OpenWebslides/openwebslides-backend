@@ -72,5 +72,5 @@ OpenWebslides.configure do |config|
   ##
   # API version (semver)
   #
-  config.api.version = '3.0.0'
+  config.api.version = '4.0.0'
 end
