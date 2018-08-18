@@ -16,10 +16,10 @@ module Repository
 
         # Find root content item
         root = @content.find { |c| c['type'] == 'contentItemTypes/ROOT' }
-        raise OpenWebslides::FormatError, 'No root content item found' unless root
+        raise OpenWebslides::NoRootContentItemError unless root
 
         # Ensure root content item is the same as the database version
-        validate_root_content_item_id root
+        raise OpenWebslides::InvalidRootContentItemError unless root['id'] == @receiver.root_content_item_id
 
         # Write index file including root content item identifier
         write_index 'root' => root['id']
@@ -34,19 +34,10 @@ module Repository
       private
 
       ##
-      # Validate the root content item id to be equal to the database root content item id
-      #
-      def validate_root_content_item_id(root)
-        return if root['id'] == @receiver.root_content_item_id
-
-        raise OpenWebslides::FormatError, 'Root content item ID must be the same as previously stored'
-      end
-
-      ##
       # Write a content item to the repository
       #
       def write_content_item(content_item)
-        raise OpenWebslides::FormatError, 'No valid identifier found' unless content_item['id']
+        raise OpenWebslides::FormatError unless content_item['id']
 
         file_path = File.join content_path, "#{content_item['id']}.yml"
 

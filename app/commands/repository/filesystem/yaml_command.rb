@@ -20,14 +20,9 @@ module Repository
         constraint = Semverse::Constraint.new "~> #{OpenWebslides.config.repository.version}"
 
         yaml = YAML.safe_load File.read index_file
-        raise 'Version string not found' unless yaml&.key? 'version'
 
         repository_version = yaml['version']
-        return if constraint.satisfies? repository_version
-
-        raise "Cannot satisfy repository data format version #{repository_version}, server has #{VERSION}"
-      rescue StandardError => e
-        raise OpenWebslides::FormatError, e
+        raise OpenWebslides::IncompatibleVersionError unless constraint.satisfies? repository_version
       end
 
       ##
