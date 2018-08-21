@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe '@feed_items routing', :type => :routing do
   it 'routes @feed_items endpoint' do
-    route = '/api/feed-items'
+    route = '/api/feedItems'
 
     expect(:get => route).to route_to 'feed_items#index'
     expect(:patch => route).not_to be_routable
@@ -14,7 +14,7 @@ RSpec.describe '@feed_items routing', :type => :routing do
   end
 
   it 'routes feed_item endpoint' do
-    route = '/api/feed-items/foo'
+    route = '/api/feedItems/foo'
 
     expect(:get => route).not_to be_routable
     expect(:patch => route).not_to be_routable
