@@ -77,7 +77,7 @@ RSpec.describe 'Topic', :type => :request do
 
       headers = {
         'Content-Type' => 'application/vnd.api+json',
-        'Accept' => 'application/vnd.api+json, application/vnd.openwebslides+json; version=3.0.0',
+        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
         'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
       }
 
@@ -108,7 +108,7 @@ RSpec.describe 'Topic', :type => :request do
 
     it 'returns without any errors' do
       headers = {
-        'Accept' => 'application/vnd.api+json, application/vnd.openwebslides+json; version=3.0.0'
+        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
       }
 
       get "/api/topics/#{topic.id}/content", :headers => headers
@@ -142,7 +142,7 @@ RSpec.describe 'Topic', :type => :request do
 
       headers = {
         'Content-Type' => 'application/vnd.api+json',
-        'Accept' => 'application/vnd.api+json, application/vnd.openwebslides+json; version=3.0.0',
+        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
         'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
       }
 
@@ -171,7 +171,7 @@ RSpec.describe 'Topic', :type => :request do
     it 'returns without any errors' do
       headers = {
         'Content-Type' => 'application/vnd.api+json',
-        'Accept' => 'application/vnd.api+json, application/vnd.openwebslides+json; version=3.0.0',
+        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
         'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
       }
 
