@@ -28,7 +28,7 @@ RSpec.describe 'Topic', :type => :request do
 
   let(:content) do
     root = {
-      'id' => 'qyrgv0bcd6',
+      'id' => topic.root_content_item_id,
       'type' => 'contentItemTypes/ROOT',
       'childItemIds' => ['ivks4jgtxr']
     }
@@ -61,7 +61,8 @@ RSpec.describe 'Topic', :type => :request do
           :attributes => {
             :title => title,
             :description => description,
-            :state => 'private_access'
+            :state => 'private_access',
+            :rootContentItemId => 'ivks4jgtxr'
           },
           :relationships => {
             :user => {
@@ -76,7 +77,7 @@ RSpec.describe 'Topic', :type => :request do
 
       headers = {
         'Content-Type' => 'application/vnd.api+json',
-        'Accept' => 'application/vnd.api+json, application/vnd.openwebslides+json; version=3.0.0',
+        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
         'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
       }
 
@@ -86,12 +87,13 @@ RSpec.describe 'Topic', :type => :request do
       data = JSON.parse(response.body)['data']
       expect(data['attributes']).to match 'title' => title,
                                           'description' => description,
-                                          'state' => 'private_access'
+                                          'state' => 'private_access',
+                                          'rootContentItemId' => 'ivks4jgtxr'
     end
   end
 
   describe 'A user can retrieve the contents of a topic' do
-    let(:topic) { create :topic }
+    let(:topic) { create :topic, :root_content_item_id => 'qyrgv0bcd6' }
 
     before :each do
       service = TopicService.new topic
@@ -106,7 +108,7 @@ RSpec.describe 'Topic', :type => :request do
 
     it 'returns without any errors' do
       headers = {
-        'Accept' => 'application/vnd.api+json, application/vnd.openwebslides+json; version=3.0.0'
+        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
       }
 
       get "/api/topics/#{topic.id}/content", :headers => headers
@@ -140,7 +142,7 @@ RSpec.describe 'Topic', :type => :request do
 
       headers = {
         'Content-Type' => 'application/vnd.api+json',
-        'Accept' => 'application/vnd.api+json, application/vnd.openwebslides+json; version=3.0.0',
+        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
         'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
       }
 
@@ -169,7 +171,7 @@ RSpec.describe 'Topic', :type => :request do
     it 'returns without any errors' do
       headers = {
         'Content-Type' => 'application/vnd.api+json',
-        'Accept' => 'application/vnd.api+json, application/vnd.openwebslides+json; version=3.0.0',
+        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
         'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
       }
 

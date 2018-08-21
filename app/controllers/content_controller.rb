@@ -34,8 +34,8 @@ class ContentController < ApplicationController
     service.update :author => current_user, :content => content
 
     head :no_content
-  rescue JSON::ParserError
-    jsonapi_render_bad_request
+  rescue OpenWebslides::FormatError => e
+    raise JSONAPI::Exceptions::FormatError, e.error_type
   end
 
   ##

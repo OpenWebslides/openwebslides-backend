@@ -12,7 +12,8 @@ RSpec.describe 'Topic API', :type => :request do
     {
       :title => title,
       :state => %i[public_access protected_access private_access].sample,
-      :description => Faker::Lorem.words(20).join(' ')
+      :description => Faker::Lorem.words(20).join(' '),
+      :rootContentItemId => Faker::Lorem.words(3).join('')
     }
   end
 
@@ -164,10 +165,18 @@ RSpec.describe 'Topic API', :type => :request do
     end
 
     it 'rejects invalid state' do
-      patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes.merge(:state => 'foo')), :headers => headers
+      patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes.except(:rootContentItemId).merge(:state => 'foo')), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    end
+
+    it 'rejects rootContentItemId changes' do
+      patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes), :headers => headers
+
+      expect(response.status).to eq 400
+      expect(jsonapi_error_code(response)).to eq JSONAPI::PARAM_NOT_ALLOWED
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 

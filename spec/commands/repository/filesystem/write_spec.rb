@@ -18,7 +18,8 @@ RSpec.describe Repository::Filesystem::Write do
   ##
   # Test variables
   #
-  let(:topic) { create :topic }
+  let(:topic) { create :topic, :root_content_item_id => 'qyrgv0bcd6' }
+  let(:other_topic) { create :topic }
 
   let(:content) do
     root = {
@@ -44,6 +45,14 @@ RSpec.describe Repository::Filesystem::Write do
     [root, heading, paragraph]
   end
 
+  let(:root_content_item) do
+    {
+      'id' => Faker::Lorem.words(3).join(''),
+      'type' => 'contentItemTypes/ROOT',
+      'childItemIds' => []
+    }
+  end
+
   ##
   # Test subject
   #
@@ -62,6 +71,18 @@ RSpec.describe Repository::Filesystem::Write do
 
     it 'raises an error when content is not specified' do
       expect { subject.execute }.to raise_error OpenWebslides::ArgumentError
+    end
+
+    it 'raises an error when root content item is not present' do
+      subject.content = content.drop 1
+
+      expect { subject.execute }.to raise_error OpenWebslides::NoRootContentItemError
+    end
+
+    it 'raises an error when root content item id does not match the database' do
+      subject.content = [root_content_item]
+
+      expect { subject.execute }.to raise_error OpenWebslides::InvalidRootContentItemError
     end
 
     it 'writes the index file' do
