@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 ##
-# A notification for the social feed
+# An item in the Recent Activity feed
 #
-class Notification < ApplicationRecord
+class FeedItem < ApplicationRecord
   ##
   # Properties
   #
@@ -13,10 +13,10 @@ class Notification < ApplicationRecord
   # Associations
   #
   belongs_to :user,
-             :inverse_of => :notifications
+             :inverse_of => :feed_items
 
   belongs_to :topic,
-             :inverse_of => :notifications
+             :inverse_of => :feed_items
 
   ##
   # Validations

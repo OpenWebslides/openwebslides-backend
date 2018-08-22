@@ -39,7 +39,7 @@ class Topic < ApplicationRecord
            :dependent => :destroy,
            :inverse_of => :topic
 
-  has_many :notifications,
+  has_many :feed_items,
            :dependent => :destroy,
            :inverse_of => :topic
 

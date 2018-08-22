@@ -4,4 +4,5 @@ JSONAPI.configure do |config|
   config.exception_class_whitelist = [Pundit::NotAuthorizedError, JWT::Auth::UnauthorizedError]
   config.default_paginator = :offset
   config.json_key_format = :camelized_key
+  config.route_format = :camelized_route
 end

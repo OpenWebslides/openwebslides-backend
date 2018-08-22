@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 ##
-# Notification feed resource
+# Recent Activity feed resource
 #
-class NotificationResource < ApplicationResource
+class FeedItemResource < ApplicationResource
   immutable
 
   ##
@@ -28,7 +28,7 @@ class NotificationResource < ApplicationResource
   filter :user
   filter :topic
   filter :event_type,
-         :verify => ->(values, _) { values.map(&:downcase) & Notification.event_types.keys }
+         :verify => ->(values, _) { values.map(&:downcase) & FeedItem.event_types.keys }
 
   ##
   # Callbacks

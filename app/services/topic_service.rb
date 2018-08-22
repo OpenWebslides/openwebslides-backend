@@ -10,9 +10,9 @@ class TopicService < ApplicationService
   def create
     if @topic.save
       Repository::Create.new(@topic).execute
-      Notification.create :user => @topic.user,
-                          :topic => @topic,
-                          :event_type => :topic_created
+      FeedItem.create :user => @topic.user,
+                      :topic => @topic,
+                      :event_type => :topic_created
 
       true
     else
@@ -45,10 +45,10 @@ class TopicService < ApplicationService
 
     command.execute
 
-    # Generate notification
-    Notification.create :user => params[:author],
-                        :topic => @topic,
-                        :event_type => :topic_updated
+    # Generate feed item
+    FeedItem.create :user => params[:author],
+                    :topic => @topic,
+                    :event_type => :topic_updated
 
     true
   end

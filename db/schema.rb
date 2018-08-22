@@ -38,6 +38,16 @@ ActiveRecord::Schema.define(version: 2018_08_17_072930) do
     t.index ["topic_id"], name: "index_assets_on_topic_id"
   end
 
+  create_table "feed_items", force: :cascade do |t|
+    t.integer "event_type"
+    t.integer "user_id"
+    t.integer "topic_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_feed_items_on_topic_id"
+    t.index ["user_id"], name: "index_feed_items_on_user_id"
+  end
+
   create_table "grants", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "topic_id", null: false
@@ -55,16 +65,6 @@ ActiveRecord::Schema.define(version: 2018_08_17_072930) do
     t.datetime "updated_at", null: false
     t.index ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
-  end
-
-  create_table "notifications", force: :cascade do |t|
-    t.integer "event_type"
-    t.integer "user_id"
-    t.integer "topic_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["topic_id"], name: "index_notifications_on_topic_id"
-    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "ratings", force: :cascade do |t|

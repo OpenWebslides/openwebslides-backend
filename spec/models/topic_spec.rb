@@ -39,31 +39,31 @@ RSpec.describe Topic, :type => :model do
     it { is_expected.to have_many(:grants).dependent(:destroy) }
     it { is_expected.to have_many(:collaborators).through(:grants).inverse_of(:collaborations) }
     it { is_expected.to have_many(:assets).dependent(:destroy).inverse_of(:topic) }
-    it { is_expected.to have_many(:notifications).dependent(:destroy).inverse_of(:topic) }
+    it { is_expected.to have_many(:feed_items).dependent(:destroy).inverse_of(:topic) }
     it { is_expected.to have_many(:annotations).dependent(:destroy).inverse_of(:topic) }
     it { is_expected.to have_many(:conversations).inverse_of(:topic) }
 
-    it 'generates a notification on create' do
-      count = Notification.count
+    it 'generates a feed_item on create' do
+      count = FeedItem.count
 
       d = build :topic
       TopicService.new(d).create
 
-      expect(Notification.count).to eq count + 1
-      expect(Notification.last.event_type).to eq 'topic_created'
-      expect(Notification.last.topic).to eq d
+      expect(FeedItem.count).to eq count + 1
+      expect(FeedItem.last.event_type).to eq 'topic_created'
+      expect(FeedItem.last.topic).to eq d
     end
 
-    it 'generates a notification on update' do
+    it 'generates a feed_item on update' do
       d = create :topic
 
-      count = Notification.count
+      count = FeedItem.count
 
       TopicService.new(d).update :author => user, :content => 'foo'
 
-      expect(Notification.count).to eq count + 1
-      expect(Notification.last.event_type).to eq 'topic_updated'
-      expect(Notification.last.topic).to eq d
+      expect(FeedItem.count).to eq count + 1
+      expect(FeedItem.last.event_type).to eq 'topic_updated'
+      expect(FeedItem.last.topic).to eq d
     end
   end
 

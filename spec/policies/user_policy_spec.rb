@@ -18,7 +18,7 @@ RSpec.describe UserPolicy do
 
     it { is_expected.to permit_action :show_topics }
     it { is_expected.to permit_action :show_collaborations }
-    it { is_expected.to permit_action :show_notifications }
+    it { is_expected.to permit_action :show_feed_items }
     it { is_expected.to permit_action :show_annotations }
   end
 
@@ -33,7 +33,7 @@ RSpec.describe UserPolicy do
 
     it { is_expected.to permit_action :show_topics }
     it { is_expected.to permit_action :show_collaborations }
-    it { is_expected.to permit_action :show_notifications }
+    it { is_expected.to permit_action :show_feed_items }
     it { is_expected.to permit_action :show_annotations }
   end
 
@@ -47,7 +47,7 @@ RSpec.describe UserPolicy do
 
     it { is_expected.to permit_action :show_topics }
     it { is_expected.to permit_action :show_collaborations }
-    it { is_expected.to permit_action :show_notifications }
+    it { is_expected.to permit_action :show_feed_items }
     it { is_expected.to permit_action :show_annotations }
   end
 end
