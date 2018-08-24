@@ -3,11 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe ConversationResource, :type => :resource do
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:resource) { described_class.new conversation, context }
+
+  ##
+  # Test variables
+  #
   let(:conversation) { create :conversation }
   let(:context) { {} }
 
-  subject { described_class.new conversation, context }
-
+  ##
+  # Tests
+  #
   it { is_expected.to have_primary_key :id }
 
   it { is_expected.to have_attribute :content_item_id }

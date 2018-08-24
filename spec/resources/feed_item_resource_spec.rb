@@ -3,11 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe FeedItemResource, :type => :resource do
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:resource) { described_class.new feed_item, context }
+
+  ##
+  # Test variables
+  #
   let(:feed_item) { create :feed_item }
   let(:context) { {} }
 
-  subject { described_class.new feed_item, context }
-
+  ##
+  # Tests
+  #
   it { is_expected.to have_primary_key :id }
 
   it { is_expected.to be_immutable }
@@ -42,7 +57,7 @@ RSpec.describe FeedItemResource, :type => :resource do
     end
 
     describe 'event_type#verify' do
-      subject { described_class.filters[:event_type][:verify] }
+      subject(:resource) { described_class.filters[:event_type][:verify] }
 
       it 'filters the right event types' do
         expect(subject.call %w[topic_created foobar topic_updated topic_forked TOPIC_CREATED TOPIC_UPDATED TOPIC_FORKED FOO FOOBAR]).to match_array %w[topic_created topic_updated topic_forked]
