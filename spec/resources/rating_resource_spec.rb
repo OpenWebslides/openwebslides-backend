@@ -3,11 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe RatingResource, :type => :resource do
-  subject { described_class.new rating, context }
-
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Test variables
+  #
   let(:rating) { create :rating }
   let(:context) { {} }
 
+  ##
+  # Subject
+  #
+  subject { described_class.new rating, context }
+
+  ##
+  # Tests
+  #
   it { is_expected.to have_primary_key :id }
 
   it { is_expected.to have_one :annotation }

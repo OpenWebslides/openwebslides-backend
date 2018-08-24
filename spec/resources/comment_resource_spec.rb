@@ -3,11 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe CommentResource, :type => :resource do
-  subject { described_class.new comment, context }
-
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Test variables
+  #
   let(:comment) { create :comment }
   let(:context) { {} }
 
+  ##
+  # Subject
+  #
+  subject { described_class.new comment, context }
+
+  ##
+  # Tests
+  #
   it { is_expected.to have_primary_key :id }
 
   it { is_expected.to have_attribute :content_item_id }

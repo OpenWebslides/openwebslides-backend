@@ -3,13 +3,28 @@
 require 'rails_helper'
 
 RSpec.describe TopicResource, :type => :resource do
-  subject { described_class.new topic, context }
-
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Test variables
+  #
   let(:topic) { create :topic }
   let(:context) { {} }
 
   let(:nil_topic) { create :topic, :description => nil }
 
+  ##
+  # Subject
+  #
+  subject { described_class.new topic, context }
+
+  ##
+  # Tests
+  #
   it { is_expected.to have_primary_key :id }
 
   it { is_expected.to have_attribute :title }

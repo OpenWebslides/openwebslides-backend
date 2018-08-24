@@ -18,10 +18,6 @@ RSpec.describe UserResource, :type => :resource do
   let(:context) { {} }
 
   ##
-  # Subject
-  #
-
-  ##
   # Tests
   #
   it { is_expected.to have_primary_key :id }

@@ -3,11 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe AssetResource, :type => :resource do
-  subject { described_class.new asset, context }
-
-  let(:asset) { create :asset, :with_topic }
-  let(:context) { {} }
-
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
   before do
     create :user
 
@@ -16,6 +17,20 @@ RSpec.describe AssetResource, :type => :resource do
       .and_return(:current_user => User.first)
   end
 
+  ##
+  # Test variables
+  #
+  subject { described_class.new asset, context }
+
+  let(:asset) { create :asset, :with_topic }
+  let(:context) { {} }
+
+  ##
+  # Subject
+  #
+  ##
+  # Tests
+  #
   it { is_expected.to have_primary_key :id }
 
   it { is_expected.to be_immutable }

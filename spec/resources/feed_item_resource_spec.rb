@@ -3,11 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe FeedItemResource, :type => :resource do
-  subject { described_class.new feed_item, context }
-
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Test variables
+  #
   let(:feed_item) { create :feed_item }
   let(:context) { {} }
 
+  ##
+  # Subject
+  #
+  subject { described_class.new feed_item, context }
+
+  ##
+  # Tests
+  #
   it { is_expected.to have_primary_key :id }
 
   it { is_expected.to be_immutable }

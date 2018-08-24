@@ -3,11 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe AnnotationResource, :type => :resource do
-  subject { described_class.new annotation, context }
-
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Test variables
+  #
   let(:annotation) { create :annotation }
   let(:context) { {} }
 
+  ##
+  # Subject
+  #
+  subject { described_class.new annotation, context }
+
+  ##
+  # Tests
+  #
   it { is_expected.to have_primary_key :id }
 
   it { is_expected.to have_attribute :content_item_id }
