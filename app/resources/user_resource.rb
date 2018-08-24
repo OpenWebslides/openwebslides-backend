@@ -35,7 +35,7 @@ class UserResource < ApplicationResource
   # Callbacks
   #
   ##
-  # Methods
+  # Overrides
   #
   def fetchable_fields
     if context[:current_user] == _model
@@ -57,6 +57,9 @@ class UserResource < ApplicationResource
     super(context) - %i[gravatar_hash locale password tos_accepted alert_emails alerts]
   end
 
+  ##
+  # Methods
+  #
   def gravatar_hash
     Digest::MD5.hexdigest(email).downcase
   end
