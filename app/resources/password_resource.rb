@@ -23,14 +23,25 @@ class PasswordResource < ApplicationResource
   # Callbacks
   #
   ##
-  # Methods
+  # Overrides
   #
-  def self.creatable_fields(_ = {})
-    # Creation only needs email
-    %i[email]
+  def self.fields
+    super - %i[id email password reset_password_token]
   end
 
-  def self.updatable_fields(_ = {})
-    %i[reset_password_token password]
+  def self.creatable_fields(context = {})
+    super(context) - %i[password reset_password_token]
   end
+
+  def self.updatable_fields(context = {})
+    super(context) - %i[email]
+  end
+
+  def self.sortable_fields(context = {})
+    super(context) - %i[id email password reset_password_token]
+  end
+
+  ##
+  # Methods
+  #
 end

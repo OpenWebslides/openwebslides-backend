@@ -22,14 +22,25 @@ class ConfirmationResource < ApplicationResource
   # Callbacks
   #
   ##
-  # Methods
+  # Overrides
   #
-  def self.creatable_fields(_ = {})
-    # Creation only needs email
-    %i[email]
+  def self.fields
+    super - %i[id confirmation_token email]
   end
 
-  def self.updatable_fields(_ = {})
-    %i[confirmation_token]
+  def self.creatable_fields(context = {})
+    super(context) - %i[confirmation_token]
   end
+
+  def self.updatable_fields(context = {})
+    super(context) - %i[email]
+  end
+
+  def self.sortable_fields(context = {})
+    super(context) - %i[id email confirmation_token]
+  end
+
+  ##
+  # Methods
+  #
 end
