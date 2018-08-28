@@ -2,7 +2,7 @@
 
 module OpenWebslides
   ##
-  # Base error class
+  # Base error class, root of the Open Webslides error hierarchy
   #
   class Error < StandardError; end
 end

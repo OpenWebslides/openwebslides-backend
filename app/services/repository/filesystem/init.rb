@@ -8,7 +8,7 @@ module Repository
     class Init < ApplicationService
       def call(repo)
         # Create initial directory
-        raise OpenWebslides::RepoExistsError if Dir.exist? repo.path
+        raise OpenWebslides::Repo::RepoExistsError if Dir.exist? repo.path
 
         FileUtils.mkdir_p repo.path
 

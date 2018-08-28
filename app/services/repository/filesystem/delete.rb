@@ -7,7 +7,7 @@ module Repository
     #
     class Delete < ApplicationService
       def call(repo)
-        raise OpenWebslides::RepoDoesNotExistError unless Dir.exist? repo.path
+        raise OpenWebslides::Repo::RepoDoesNotExistError unless Dir.exist? repo.path
 
         FileUtils.rm_r repo.path, :secure => true
       end

@@ -25,7 +25,7 @@ RSpec.describe Repository::Filesystem::Fork do
   #
   context 'when the upstream repository does not exist' do
     it 'raises a RepoDoesNotExistError' do
-      expect { subject.call repo, fork }.to raise_error OpenWebslides::RepoDoesNotExistError
+      expect { subject.call repo, fork }.to raise_error OpenWebslides::Repo::RepoDoesNotExistError
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe Repository::Filesystem::Fork do
     before { Repository::Create.call fork.topic }
 
     it 'raises a RepoExistsError' do
-      expect { subject.call repo, fork }.to raise_error OpenWebslides::RepoExistsError
+      expect { subject.call repo, fork }.to raise_error OpenWebslides::Repo::RepoExistsError
     end
   end
 

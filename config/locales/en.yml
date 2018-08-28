@@ -61,3 +61,14 @@ en:
           subject: "Copy created of %{title}"
     topics:
       forked: "Personal copy of %{title}"
+  activerecord:
+    errors:
+      models:
+        topic:
+          attributes:
+            content:
+              content_error: "Content error"
+              incompatible_version: "Incompatible repository data version"
+              invalid_content_item: "Content item is invalid"
+              invalid_root_content_item: "Root content item must match topic root content item"
+              no_root_content_item: "No root content item"

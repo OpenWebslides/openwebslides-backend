@@ -13,15 +13,3 @@ en:
       unacceptable_version:
         title: "Unacceptable version"
         detail: "The request cannot be fulfilled due to mismatching API version. The API version is '%{api_version}'. This request specified '%{request_version}'."
-      format:
-        title: "Invalid data format"
-        detail: "The data in the content structure must be valid."
-      invalid_root_content_item:
-        title: "Invalid root content item"
-        detail: "The identifier of the root content item must match the root content item of the topic."
-      no_root_content_item:
-        title: "No root content item"
-        detail: "The root content item was not found in the content structure."
-      incompatible_version:
-        title: "Invalid data format version"
-        detail: "The request cannot be fulfilled due to an incompatible repository data format version."
