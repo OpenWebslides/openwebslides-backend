@@ -13,7 +13,7 @@ module Repository
 
         # Initial commit
         exec Git::Commit do |c|
-          c.author = @receiver.user
+          c.author = receiver.user
           c.message = 'Initial commit'
           c.params = { :parents => [] }
         end

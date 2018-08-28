@@ -9,19 +9,19 @@ module Repository
       attr_accessor :author
 
       def execute
-        raise OpenWebslides::ArgumentError, 'No author specified' unless @author
+        raise OpenWebslides::ArgumentError, 'No author specified' unless author
 
         File.delete asset_file
 
         # Commit
         exec_topic Git::Commit do |c|
-          c.author = @author
-          c.message = "Delete #{@receiver.filename}"
+          c.author = author
+          c.message = "Delete #{receiver.filename}"
         end
 
         # Update timestamps
-        @receiver.touch
-        @receiver.topic.touch
+        receiver.touch
+        receiver.topic.touch
       end
     end
   end

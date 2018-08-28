@@ -19,18 +19,18 @@ module Repository
         commit_tree = index.write_tree repo
         index.write
 
-        commit_author = { :email => @author.email, :name => @author.name, :time => Time.now }
+        commit_author = { :email => author.email, :name => author.name, :time => Time.now }
 
         commit_options = {
           :author => commit_author,
           :committer => commit_author,
-          :message => @message,
+          :message => message,
           :parents => repo.empty? ? [] : [repo.head.target],
           :tree => commit_tree,
           :update_ref => 'HEAD'
         }
 
-        commit_options.merge! @params if @params
+        commit_options.merge! params if params
 
         Rugged::Commit.create repo, commit_options
       end

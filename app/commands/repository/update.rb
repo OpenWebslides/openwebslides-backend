@@ -8,24 +8,24 @@ module Repository
     attr_accessor :author, :content, :message
 
     def execute
-      raise OpenWebslides::ArgumentError, 'No author specified' unless @author
-      raise OpenWebslides::ArgumentError, 'No content specified' unless @content
+      raise OpenWebslides::ArgumentError, 'No author specified' unless author
+      raise OpenWebslides::ArgumentError, 'No content specified' unless content
       raise OpenWebslides::ArgumentError, 'No message specified' unless message
 
       write_lock do
         # Write data file
         exec Filesystem::Write do |c|
-          c.content = @content
+          c.content = content
         end
 
         # Commit
         exec Git::Commit do |c|
-          c.author = @author
-          c.message = @message
+          c.author = author
+          c.message = message
         end
 
         # Update timestamps
-        @receiver.touch
+        receiver.touch
       end
     end
   end
