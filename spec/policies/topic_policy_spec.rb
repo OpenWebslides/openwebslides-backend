@@ -177,7 +177,7 @@ RSpec.describe TopicPolicy do
 
       it 'permits update' do
         expect(subject).to permit_action :show
-        expect(subject).to permit_action :update
+        expect(subject).to forbid_action :update
         expect(subject).to forbid_action :destroy
         expect(subject).to permit_action :fork
 
@@ -200,7 +200,7 @@ RSpec.describe TopicPolicy do
 
       it 'does not permit anything' do
         expect(subject).to permit_action :show
-        expect(subject).to permit_action :update
+        expect(subject).to forbid_action :update
         expect(subject).to forbid_action :destroy
         expect(subject).to permit_action :fork
 
@@ -223,7 +223,7 @@ RSpec.describe TopicPolicy do
 
       it 'does not permit anything' do
         expect(subject).to permit_action :show
-        expect(subject).to permit_action :update
+        expect(subject).to forbid_action :update
         expect(subject).to forbid_action :destroy
         expect(subject).to permit_action :fork
 

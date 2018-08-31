@@ -10,10 +10,7 @@ class TopicPolicy < ApplicationPolicy
   end
 
   def create?
-    return false if @user.nil?
-
-    # Users can create a topic but only for itself
-    @record.user == @user
+    update?
   end
 
   def show?
@@ -35,15 +32,12 @@ class TopicPolicy < ApplicationPolicy
   def update?
     return false if @user.nil?
 
-    # Owner and collaborators can update topic
-    @record.user == @user || @record.collaborators.include?(@user)
+    # Owner can update topic
+    @record.user == @user
   end
 
   def destroy?
-    return false if @user.nil?
-
-    # Owner can destroy topic
-    @record.user == @user
+    update?
   end
 
   def fork?
