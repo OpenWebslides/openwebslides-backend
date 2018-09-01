@@ -4,17 +4,16 @@
 # Topic content
 #
 class ContentResource < ApplicationResource
-  abstract
-
   ##
   # Attributes
   #
-  attribute :content
-  attribute :message
+  attribute :content_items
 
   ##
   # Relationships
   #
+  has_one :topic
+
   ##
   # Filters
   #
@@ -24,25 +23,25 @@ class ContentResource < ApplicationResource
   ##
   # Overrides
   #
-  def self.fields
-    super - %i[id message]
-  end
-
   def self.creatable_fields(context = {})
-    super(context) - %i[content message]
+    super(context) - %i[content_items topic]
   end
 
   def self.updatable_fields(context = {})
-    super(context)
+    super(context) - %i[content_items topic]
   end
 
   def self.sortable_fields(context = {})
-    super(context) - %i[id content message]
+    super(context) - %i[id content_items topic]
   end
 
   ##
   # Methods
   #
+  def id
+    topic.id
+  end
+
   def content
     Repository::Read.call @model
   end

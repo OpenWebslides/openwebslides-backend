@@ -9,6 +9,10 @@ RSpec.describe ContentResource, :type => :resource do
   ##
   # Stubs and mocks
   #
+  before do
+    Stub::Command.create Repository::Read
+  end
+
   ##
   # Subject
   #
@@ -27,10 +31,29 @@ RSpec.describe ContentResource, :type => :resource do
     expect(described_class.abstract).to be true
   end
 
+  ##
+  # Test variables
+  #
+  let(:content) { build :content }
+  let(:context) { {} }
+
+  ##
+  # Subject
+  #
+  subject { described_class.new content, context }
+
+  ##
+  # Tests
+  #
+  it { is_expected.to have_primary_key :id }
+
+  it { is_expected.to have_attribute :content_items }
+
+  it { is_expected.to have_one :topic }
+
   describe 'fields' do
     it 'has a valid set of fetchable fields' do
-      # Use Resource.fields instead of Resource#fetchable_fields for abstract resources
-      expect(described_class.fields).to match_array %i[content]
+      expect(subject.fetchable_fields).to match_array %i[id content_items topic]
     end
 
     it 'has a valid set of creatable fields' do
@@ -38,11 +61,11 @@ RSpec.describe ContentResource, :type => :resource do
     end
 
     it 'has a valid set of updatable fields' do
-      expect(described_class.updatable_fields).to match_array %i[content message]
+      expect(described_class.updatable_fields).to be_empty
     end
 
     it 'has a valid set of sortable fields' do
-      expect(described_class.sortable_fields).to match_array %i[]
+      expect(described_class.sortable_fields).to be_empty
     end
   end
 

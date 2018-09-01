@@ -5,12 +5,12 @@ FactoryBot.define do
     ##
     # Attributes
     #
-    content { random_content }
+    content_items { random_content }
 
     ##
     # Associations
     #
-    topic { build :topic }
+    topic { create :topic }
 
     ##
     # Traits
