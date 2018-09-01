@@ -16,6 +16,14 @@ class ContentPolicy < ApplicationPolicy
     @record.topic.user == @user || @record.topic.collaborators.include?(@user)
   end
 
+  ##
+  # Relationship: topic
+  #
+  def show_topic?
+    # Users can show an asset but only for showable topics
+    topic_policy.show?
+  end
+
   def topic_policy
     @topic_policy ||= Pundit.policy! @user, @record.topic
   end
