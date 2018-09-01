@@ -13,7 +13,7 @@ module Topics
       Notifications::UpdateTopic.call topic, user
 
       topic
-    rescue OpenWebslides::FormatError => e
+    rescue OpenWebslides::Content::ContentError => e
       topic.errors.add :content, e.error_type
       topic
     end
