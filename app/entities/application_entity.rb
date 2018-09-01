@@ -22,6 +22,15 @@ class ApplicationEntity
   # Methods
   #
 
+  # Constructor
+  def initialize(attributes = [])
+    attributes.each do |key, value|
+      raise ActiveModel::UnknownAttributeError.new self, key unless respond_to? "#{key}="
+
+      public_send "#{key}=", value
+    end
+  end
+
   # Define a property
   def self.property(property_sym, *_args)
     attr_accessor property_sym
