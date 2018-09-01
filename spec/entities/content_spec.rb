@@ -9,6 +9,10 @@ RSpec.describe Content, :type => :model do
   ##
   # Stubs and mocks
   #
+  before do
+    Stub::Command.create Repository::Read
+  end
+
   ##
   # Test variables
   #
