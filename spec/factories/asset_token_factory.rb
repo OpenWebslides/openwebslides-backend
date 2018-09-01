@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :asset_token do
+  factory :asset_token, :class => Asset::Token do
     trait :with_subject do
       subject { build :user }
     end
