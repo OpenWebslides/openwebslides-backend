@@ -54,7 +54,7 @@ RSpec.describe Repository::Update do
       expect { subject.execute }.not_to raise_error
     end
 
-    it 'calls Filesystem::Init, Git::Init and Git::Commit with parameters' do
+    it 'calls Filesystem::Write and Git::Commit with parameters' do
       expect(Repository::Filesystem::Write).to receive(:new)
         .with(topic)
         .and_return fs_write_command
