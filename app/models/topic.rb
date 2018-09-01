@@ -9,13 +9,13 @@ class Topic < ApplicationRecord
   #
 
   # Topic title
-  property :title
+  attribute :title
 
   # Topic description
-  property :description
+  attribute :description
 
   # Root content item identifier
-  property :root_content_item_id
+  attribute :root_content_item_id
 
   ##
   # Associations

@@ -7,8 +7,8 @@ class Alert < ApplicationRecord
   ##
   # Properties
   #
-  property :read
-  property :count
+  attribute :read
+  attribute :count
 
   enum :alert_type => {
     :topic_updated => 0,
