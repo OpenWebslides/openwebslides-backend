@@ -38,6 +38,9 @@ gem 'jsonapi-utils'
 # Asynchronous processing
 gem 'sidekiq'
 
+# Document conversion
+gem 'openwebslides-converter'
+
 # Filename sanitization
 gem 'zaru'
 
