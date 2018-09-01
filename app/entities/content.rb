@@ -26,11 +26,15 @@ class Content < ApplicationEntity
   ##
   # Methods
   #
+  def self.find(id)
+    Topic.find(id).content
+  end
+
   ##
   # Overrides
   #
-  def content
-    TopicService.new(topic).read
+  def content_items
+    @content_items ||= TopicService.new(topic).read
   end
 
   ##

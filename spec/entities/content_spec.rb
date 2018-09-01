@@ -41,4 +41,12 @@ RSpec.describe Content, :type => :model do
       expect(build :content, :topic => nil).not_to be_valid
     end
   end
+
+  describe 'methods' do
+    describe '.find' do
+      it 'returns a content' do
+        expect(described_class.find subject.topic.id).to be_a Content
+      end
+    end
+  end
 end
