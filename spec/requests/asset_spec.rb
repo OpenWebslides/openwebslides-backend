@@ -109,7 +109,7 @@ RSpec.describe 'Assets API', :type => :request do
 
   describe 'GET /:id/raw' do
     before do
-      @token = AssetToken.new
+      @token = Asset::Token.new
       @token.subject = user
       @token.object = asset
 
