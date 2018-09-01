@@ -14,6 +14,9 @@ class Content < ApplicationEntity
   #
   belongs_to :topic
 
+  # TODO: /contents/1/relationships/topic renders error
+  # TODO: /topics/1/relationships/content renders error
+
   ##
   # Validations
   #
