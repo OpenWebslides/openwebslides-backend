@@ -106,8 +106,11 @@ Rails.application.routes.draw do
       # Nested resource: Content
       jsonapi_resource :content, :only => %i[show update]
 
-      # Fork
+      # Nested resource: Fork
       jsonapi_resource :fork, :only => %i[create] do end
+
+      # Nested resource: Commits
+      jsonapi_resources :commits, :only => %i[create]
     end
 
     ##
