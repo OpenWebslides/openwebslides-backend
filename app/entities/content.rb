@@ -7,7 +7,7 @@ class Content < ApplicationEntity
   ##
   # Properties
   #
-  attribute :content
+  attribute :content_items
 
   ##
   # Associations
@@ -17,7 +17,7 @@ class Content < ApplicationEntity
   ##
   # Validations
   #
-  validates :content,
+  validates :content_items,
             :presence => true
 
   ##
@@ -29,6 +29,10 @@ class Content < ApplicationEntity
   ##
   # Overrides
   #
+  def content
+    TopicService.new(topic).read
+  end
+
   ##
   # Helpers and callback methods
   #

@@ -24,8 +24,8 @@ RSpec.describe Content, :type => :model do
   # Tests
   #
   describe 'attributes' do
-    it { is_expected.not_to allow_value(nil).for(:content) }
-    it { is_expected.not_to allow_value('').for(:content) }
+    it { is_expected.not_to allow_value(nil).for(:content_items) }
+    it { is_expected.not_to allow_value('').for(:content_items) }
 
     it 'is invalid without attributes' do
       expect(described_class.new).not_to be_valid
