@@ -9,16 +9,16 @@ class Topic < ApplicationRecord
   #
 
   # Topic title
-  property :title
+  attribute :title
 
   # Topic description
-  property :description
+  attribute :description
 
   # Access level
   enum :state => %i[public_access protected_access private_access]
 
   # Root content item identifier
-  property :root_content_item_id
+  attribute :root_content_item_id
 
   ##
   # Associations

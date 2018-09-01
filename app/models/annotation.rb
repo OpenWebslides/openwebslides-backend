@@ -7,8 +7,8 @@ class Annotation < ApplicationRecord
   ##
   # Properties
   #
-  property :content_item_id
-  property :state
+  attribute :content_item_id
+  attribute :state
 
   ##
   # Associations
