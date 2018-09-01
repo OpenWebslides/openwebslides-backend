@@ -143,6 +143,14 @@ class TopicPolicy < ApplicationPolicy
   end
 
   ##
+  # Relationships: content
+  #
+  def show_content?
+    # Users can show content relationship if the topic is showable
+    show?
+  end
+
+  ##
   # Scope
   #
   class Scope < Scope

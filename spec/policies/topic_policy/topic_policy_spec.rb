@@ -46,6 +46,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
+      it { is_expected.to permit_action :show_content }
     end
 
     context 'when the user is just a user' do
@@ -69,6 +70,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
+      it { is_expected.to permit_action :show_content }
     end
 
     context 'when the user is a collaborator' do
@@ -92,6 +94,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
+      it { is_expected.to permit_action :show_content }
     end
 
     context 'when the user is an owner' do
@@ -115,6 +118,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
+      it { is_expected.to permit_action :show_content }
     end
   end
 
@@ -142,6 +146,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to forbid_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
+      it { is_expected.to forbid_action :show_content }
     end
 
     context 'when the user is just a user' do
@@ -165,6 +170,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
+      it { is_expected.to permit_action :show_content }
     end
 
     context 'when the user is a collaborator' do
@@ -188,6 +194,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
+      it { is_expected.to permit_action :show_content }
     end
 
     context 'when the user is an owner' do
@@ -211,6 +218,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
+      it { is_expected.to permit_action :show_content }
     end
   end
 
@@ -238,6 +246,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to forbid_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
+      it { is_expected.to forbid_action :show_content }
     end
 
     context 'when the user is just a user' do
@@ -261,6 +270,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to forbid_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
+      it { is_expected.to forbid_action :show_content }
     end
 
     context 'when the user is a collaborator' do
@@ -284,6 +294,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
+      it { is_expected.to permit_action :show_content }
     end
 
     context 'when the user is an owner' do
@@ -307,6 +318,7 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
+      it { is_expected.to permit_action :show_content }
     end
   end
 end
