@@ -188,14 +188,11 @@ RSpec.describe Topic, :type => :model do
   end
 
   describe 'methods' do
-    describe '#content_id' do
-      it { is_expected.to respond_to :content_id }
-      it { is_expected.to have_attributes :content_id => topic.id }
-    end
-
     describe '#content' do
-      it { is_expected.to respond_to :content }
-      it { is_expected.to have_attributes :content => nil }
+      it 'returns a content' do
+        expect(subject.content).to be_a Content
+        expect(subject.content.topic).to eq subject
+      end
     end
 
     describe '#pull_request' do
