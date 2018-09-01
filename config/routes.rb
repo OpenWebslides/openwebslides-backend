@@ -100,11 +100,12 @@ Rails.application.routes.draw do
       jsonapi_related_resources :outgoing_pull_requests
       jsonapi_links :outgoing_pull_requests, :only => :show
 
+      # Relationship: Contents
+      jsonapi_related_resource :content
+      jsonapi_links :content, :only => :show
+
       # Nested resource: Assets
       jsonapi_resources :assets, :only => :create
-
-      # Nested resource: Content
-      jsonapi_resource :content, :only => %i[show update]
 
       # Nested resource: Fork
       jsonapi_resource :fork, :only => %i[create] do end
@@ -128,6 +129,15 @@ Rails.application.routes.draw do
       # Target relationship
       jsonapi_related_resource :target
       jsonapi_link :target, :only => :show
+    end
+
+    ##
+    # Content API
+    #
+    jsonapi_resources :contents, :only => :show do
+      # Topic relationship
+      jsonapi_related_resource :topic
+      jsonapi_link :topic, :only => :show
     end
 
     ##
