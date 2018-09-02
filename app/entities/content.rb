@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 ##
-# Topic content structure
+# Topic content structure - server->client DTO
+#
+# This entity is used when fetching the content structure of a topic
 #
 class Content < ApplicationEntity
   ##
