@@ -76,4 +76,32 @@ class TopicService < ApplicationService
     # Delete database
     @topic.destroy
   end
+
+  ##
+  # Duplicate (fork) a topic in the database and the filesystem
+  #
+  # WARNING: @topic contains the _original_ topic in this context
+  #
+  def fork(params)
+    # Duplicate topic
+    fork = @topic.dup
+
+    # Set new attributes: author and upstream topic
+    fork.user = params[:author]
+    fork.upstream = @topic
+
+    # Persist to database
+    if fork.save
+      # Fork repository in filesystem
+      command = Repository::Fork.new @topic
+
+      command.fork = fork
+
+      command.execute
+
+      fork
+    else
+      false
+    end
+  end
 end
