@@ -36,6 +36,9 @@ RSpec.describe Topic, :type => :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of(:topics) }
+    it { is_expected.to belong_to(:upstream).inverse_of(:forks) }
+
+    it { is_expected.to have_many(:forks).inverse_of(:upstream) }
     it { is_expected.to have_many(:grants).dependent(:destroy) }
     it { is_expected.to have_many(:collaborators).through(:grants).inverse_of(:collaborations) }
     it { is_expected.to have_many(:assets).dependent(:destroy).inverse_of(:topic) }
@@ -64,6 +67,26 @@ RSpec.describe Topic, :type => :model do
       expect(FeedItem.count).to eq count + 1
       expect(FeedItem.last.event_type).to eq 'topic_updated'
       expect(FeedItem.last.topic).to eq d
+    end
+
+    describe 'upstream and forks' do
+      let(:upstream) { create :topic }
+      let(:topic) { create :topic, :upstream => upstream }
+      let(:topic2) { create :topic, :upstream => upstream }
+
+      it 'has an upstream' do
+        expect(topic.upstream).to eq upstream
+        expect(topic2.upstream).to eq upstream
+
+        expect(upstream.upstream).to be_nil
+      end
+
+      it 'has forks' do
+        expect(topic.forks).to be_empty
+        expect(topic2.forks).to be_empty
+
+        expect(upstream.forks).to include topic, topic2
+      end
     end
   end
 

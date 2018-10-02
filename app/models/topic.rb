@@ -26,6 +26,16 @@ class Topic < ApplicationRecord
   belongs_to :user,
              :inverse_of => :topics
 
+  belongs_to :upstream,
+             :optional => true,
+             :class_name => 'Topic',
+             :inverse_of => :forks
+
+  has_many :forks,
+           :class_name => 'Topic',
+           :foreign_key => :upstream_id,
+           :inverse_of => :upstream
+
   has_many :grants,
            :dependent => :destroy
 
