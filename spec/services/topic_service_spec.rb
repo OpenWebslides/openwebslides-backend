@@ -30,33 +30,36 @@ RSpec.describe TopicService do
     describe 'upstream is a fork' do
       subject { described_class.new fork }
 
-      it 'returns fork with errors' do
-        fork = subject.fork :author => user
+      it 'returns false' do
+        new_fork = topic.dup
+        result = subject.fork :author => user, :fork => new_fork
 
-        expect(fork).not_to be_nil
-        expect(fork).to be_a Topic
-        expect(fork).not_to be_persisted
-        expect(fork).not_to be_valid
-        expect(fork.errors).not_to be_empty
+        expect(result).to be false
+
+        expect(new_fork).not_to be_persisted
+        expect(new_fork).not_to be_valid
+        expect(new_fork.errors).not_to be_empty
       end
     end
 
     it 'returns fork' do
+      new_fork = topic.dup
+
       expect(Repository::Fork).to receive(:new)
         .with(topic)
         .and_return fork_command
       expect(fork_command).to receive(:fork=)
       expect(fork_command).to receive :execute
 
-      fork = subject.fork :author => user
+      result = subject.fork :author => user, :fork => new_fork
 
-      expect(fork).not_to be_nil
-      expect(fork).to be_a Topic
-      expect(fork).to be_persisted
-      expect(fork).to be_valid
+      expect(result).to be true
 
-      expect(fork.upstream).to eq topic
-      expect(fork.user).to eq user
+      expect(new_fork).to be_persisted
+      expect(new_fork).to be_valid
+
+      expect(new_fork.upstream).to eq topic
+      expect(new_fork.user).to eq user
     end
   end
 end

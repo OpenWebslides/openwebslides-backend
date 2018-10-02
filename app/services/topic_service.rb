@@ -83,8 +83,7 @@ class TopicService < ApplicationService
   # WARNING: @topic contains the _original_ topic in this context
   #
   def fork(params)
-    # Duplicate topic
-    fork = @topic.dup
+    fork = params[:fork]
 
     # Set new attributes: author and upstream topic
     fork.user = params[:author]
@@ -98,9 +97,10 @@ class TopicService < ApplicationService
       command.fork = fork
 
       command.execute
-    end
 
-    # Return fork, with or without errors
-    fork
+      true
+    else
+      false
+    end
   end
 end
