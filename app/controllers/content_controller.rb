@@ -3,7 +3,7 @@
 class ContentController < ApplicationController
   include Relationships
   include RelatedResources
-  include AddDummyId
+  include AddDummyData
 
   # Authentication
   before_action :authenticate_user, :only => %i[update]

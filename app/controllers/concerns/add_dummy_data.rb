@@ -1,6 +1,6 @@
 # frozen-string-literal: true
 
-module AddDummyId
+module AddDummyData
   extend ActiveSupport::Concern
 
   # Add a dummy `id` attribute to the params, because JSONAPI::Resources does not officially

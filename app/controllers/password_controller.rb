@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PasswordController < ApplicationController
-  include AddDummyId
+  include AddDummyData
 
   # Authorization
   after_action :verify_authorized
