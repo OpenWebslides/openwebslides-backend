@@ -55,6 +55,24 @@ class TopicPolicy < ApplicationPolicy
   end
 
   ##
+  # Relationship: upstream
+  #
+  def show_upstream?
+    # Users can only show upstream if the topic is showable
+    # Authorize the topic separately in the controller
+    show?
+  end
+
+  ##
+  # Relationship: forks
+  #
+  def show_forks?
+    # Users can only show forks if the topic is showable
+    # Policy scope separately in the controller
+    show?
+  end
+
+  ##
   # Relationship: collaborators
   #
   def show_collaborators?

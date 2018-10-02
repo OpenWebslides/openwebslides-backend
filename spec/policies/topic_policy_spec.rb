@@ -25,6 +25,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :destroy
 
         expect(subject).to permit_action :show_user
+        expect(subject).to permit_action :show_upstream
+        expect(subject).to permit_action :show_forks
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_feed_items
@@ -41,6 +43,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :destroy
 
         expect(subject).to forbid_action :show_user
+        expect(subject).to forbid_action :show_upstream
+        expect(subject).to forbid_action :show_forks
         expect(subject).to forbid_action :show_collaborators
         expect(subject).to forbid_action :show_assets
         expect(subject).to forbid_action :show_feed_items
@@ -57,6 +61,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :destroy
 
         expect(subject).to forbid_action :show_user
+        expect(subject).to forbid_action :show_upstream
+        expect(subject).to forbid_action :show_forks
         expect(subject).to forbid_action :show_collaborators
         expect(subject).to forbid_action :show_assets
         expect(subject).to forbid_action :show_feed_items
@@ -84,6 +90,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :destroy
 
         expect(subject).to permit_action :show_user
+        expect(subject).to permit_action :show_upstream
+        expect(subject).to permit_action :show_forks
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_feed_items
@@ -100,6 +108,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :destroy
 
         expect(subject).to permit_action :show_user
+        expect(subject).to permit_action :show_upstream
+        expect(subject).to permit_action :show_forks
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_feed_items
@@ -116,6 +126,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :destroy
 
         expect(subject).to forbid_action :show_user
+        expect(subject).to forbid_action :show_upstream
+        expect(subject).to forbid_action :show_forks
         expect(subject).to forbid_action :show_collaborators
         expect(subject).to forbid_action :show_assets
         expect(subject).to forbid_action :show_feed_items
@@ -144,6 +156,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :destroy
 
         expect(subject).to permit_action :show_user
+        expect(subject).to permit_action :show_upstream
+        expect(subject).to permit_action :show_forks
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_feed_items
@@ -161,6 +175,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :destroy
 
         expect(subject).to permit_action :show_user
+        expect(subject).to permit_action :show_upstream
+        expect(subject).to permit_action :show_forks
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_feed_items
@@ -178,6 +194,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :destroy
 
         expect(subject).to permit_action :show_user
+        expect(subject).to permit_action :show_upstream
+        expect(subject).to permit_action :show_forks
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_feed_items
@@ -206,6 +224,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :destroy
 
         expect(subject).to permit_action :show_user
+        expect(subject).to permit_action :show_upstream
+        expect(subject).to permit_action :show_forks
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_feed_items
@@ -223,6 +243,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :destroy
 
         expect(subject).to permit_action :show_user
+        expect(subject).to permit_action :show_upstream
+        expect(subject).to permit_action :show_forks
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_feed_items
@@ -240,6 +262,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :destroy
 
         expect(subject).to permit_action :show_user
+        expect(subject).to permit_action :show_upstream
+        expect(subject).to permit_action :show_forks
         expect(subject).to permit_action :show_collaborators
         expect(subject).to permit_action :show_assets
         expect(subject).to permit_action :show_feed_items
