@@ -3,14 +3,31 @@
 require 'rails_helper'
 
 RSpec.describe Topic, :type => :model do
+  ##
+  # Configuration
+  #
+  ##
+  # Test variables
+  #
   let(:topic) { build :topic, :with_assets }
   let(:user) { build :user }
 
+  ##
+  # Test subject
+  #
+  subject { topic }
+
+  ##
+  # Stubs
+  #
   before :each do
     Stub::Command.create Repository::Create
     Stub::Command.create Repository::Update, %i[content= author= message=]
   end
 
+  ##
+  # Tests
+  #
   describe 'attributes' do
     it { is_expected.not_to allow_value(nil).for(:title) }
     it { is_expected.not_to allow_value('').for(:title) }
@@ -22,15 +39,13 @@ RSpec.describe Topic, :type => :model do
     it { is_expected.not_to allow_value('').for(:root_content_item_id) }
 
     it 'is invalid without attributes' do
-      expect(subject).not_to be_valid
+      expect(described_class.new).not_to be_valid
     end
 
-    it 'is valid with attributes' do
-      expect(topic).to be_valid
-    end
+    it { is_expected.to be_valid }
 
     it 'has a valid :status enum' do
-      expect(%w[public_access protected_access private_access]).to include topic.state
+      expect(%w[public_access protected_access private_access]).to include subject.state
     end
   end
 
