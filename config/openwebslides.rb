@@ -75,5 +75,5 @@ OpenWebslides.configure do |config|
   # All requests with a version >= MAJOR.0 and < MAJOR.(MINOR + 1) will be processed
   # For example, if the API version is 3.2.3, requests with version 3.0 up to < 3.3 will be processed
   #
-  config.api.version = '4.0.0'
+  config.api.version = '4.1.0'
 end
