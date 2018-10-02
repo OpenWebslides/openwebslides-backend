@@ -18,6 +18,8 @@ class TopicResource < ApplicationResource
   has_one :user
   has_one :upstream
   has_one :content
+
+  has_many :forks
   has_many :collaborators
   has_many :assets
   has_many :conversations
@@ -37,11 +39,11 @@ class TopicResource < ApplicationResource
   # Methods
   #
   def self.creatable_fields(context = {})
-    super(context) - %i[upstream content collaborators assets conversations]
+    super(context) - %i[upstream content forks collaborators assets conversations]
   end
 
   def self.updatable_fields(context = {})
-    super(context) - %i[upstream root_content_item_id content collaborators assets conversations]
+    super(context) - %i[upstream root_content_item_id content forks collaborators assets conversations]
   end
 
   def self.sortable_fields(context)
