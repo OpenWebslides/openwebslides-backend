@@ -98,10 +98,9 @@ class TopicService < ApplicationService
       command.fork = fork
 
       command.execute
-
-      fork
-    else
-      false
     end
+
+    # Return fork, with or without errors
+    fork
   end
 end

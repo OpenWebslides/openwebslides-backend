@@ -10,6 +10,7 @@ RSpec.describe TopicService do
   # Test variables
   #
   let(:topic) { create :topic }
+  let(:fork) { create :topic, :upstream => topic }
   let(:user) { create :user }
 
   let(:fork_command) { double 'Repository::Fork' }
@@ -25,8 +26,22 @@ RSpec.describe TopicService do
   ##
   # Tests
   #
-  describe 'fork' do
-    it 'forks the topic' do
+  describe '#fork' do
+    describe 'upstream is a fork' do
+      subject { described_class.new fork }
+
+      it 'returns fork with errors' do
+        fork = subject.fork :author => user
+
+        expect(fork).not_to be_nil
+        expect(fork).to be_a Topic
+        expect(fork).not_to be_persisted
+        expect(fork).not_to be_valid
+        expect(fork.errors).not_to be_empty
+      end
+    end
+
+    it 'returns fork' do
       expect(Repository::Fork).to receive(:new)
         .with(topic)
         .and_return fork_command
