@@ -102,6 +102,12 @@ RSpec.describe Topic, :type => :model do
 
         expect(upstream.forks).to include topic, topic2
       end
+
+      describe 'cannot be a fork of a fork' do
+        let(:topic) { build :topic, :upstream => topic2 }
+
+        it { is_expected.not_to be_valid }
+      end
     end
   end
 

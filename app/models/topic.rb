@@ -72,6 +72,8 @@ class Topic < ApplicationRecord
   validates :root_content_item_id,
             :presence => true
 
+  validate :upstream_cannot_be_fork
+
   ##
   # Callbacks
   #
@@ -92,4 +94,7 @@ class Topic < ApplicationRecord
   ##
   # Helpers and callback methods
   #
+  def upstream_cannot_be_fork
+    errors.add :upstream, 'cannot be a fork' if upstream&.upstream
+  end
 end
