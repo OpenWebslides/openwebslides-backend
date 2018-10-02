@@ -40,6 +40,14 @@ Rails.application.routes.draw do
       jsonapi_related_resource :user
       jsonapi_link :user, :only => :show
 
+      # Upstream relationship
+      jsonapi_related_resource :upstream
+      jsonapi_link :upstream, :only => :show
+
+      # Forks relationship
+      jsonapi_related_resources :forks
+      jsonapi_links :forks, :only => :show
+
       # Collaborators relationship
       jsonapi_related_resources :collaborators
       jsonapi_links :collaborators, :only => :show
