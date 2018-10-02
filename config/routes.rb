@@ -63,6 +63,9 @@ Rails.application.routes.draw do
       jsonapi_resources :assets, :only => :create
 
       jsonapi_resource :content, :only => %i[show update]
+
+      # Fork
+      jsonapi_resource :fork, :only => %i[create] do end
     end
 
     ##
