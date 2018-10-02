@@ -45,6 +45,13 @@ class TopicPolicy < ApplicationPolicy
     @record.user == @user
   end
 
+  def fork?
+    return false if @user.nil?
+
+    # User can only fork if the topic is showable
+    show?
+  end
+
   ##
   # Relationship: user
   #
