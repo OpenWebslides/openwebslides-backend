@@ -9,8 +9,11 @@ RSpec.describe Topic, :type => :model do
   ##
   # Test variables
   #
-  let(:topic) { build :topic, :with_assets }
-  let(:user) { build :user }
+  let(:topic) { create :topic, :with_assets }
+  let(:user) { create :user }
+
+  let(:upstream) { create :topic, :forks => create_list(:topic, 3) }
+  let(:downstream) { create :topic, :upstream => upstream }
 
   ##
   # Test subject
@@ -84,29 +87,101 @@ RSpec.describe Topic, :type => :model do
       expect(FeedItem.last.topic).to eq d
     end
 
+    context 'not a fork' do
+      describe 'upstream' do
+        it 'is empty' do
+          expect(upstream.upstream).to be_nil
+          expect(upstream).to be_valid
+        end
+
+        it 'must be empty' do
+          upstream.upstream = topic
+          expect(upstream).not_to be_valid
+        end
+      end
+
+      describe 'forks' do
+        it 'is non-empty' do
+          expect(upstream.forks).not_to be_empty
+          expect(upstream).to be_valid
+        end
+
+        it 'can be empty' do
+          upstream.forks.clear
+          expect(upstream).to be_valid
+        end
+      end
+    end
+
+    context 'a fork' do
+      describe 'upstream' do
+        it 'is not empty' do
+          expect(downstream.upstream).not_to be_nil
+          expect(downstream).to be_valid
+        end
+
+        it 'can be empty' do
+          downstream.upstream = nil
+          expect(downstream).to be_valid
+        end
+      end
+
+      describe 'forks' do
+        it 'is empty' do
+          expect(downstream.forks).to be_empty
+          expect(downstream).to be_valid
+        end
+
+        it 'must be empty' do
+          downstream.forks << topic
+          expect(downstream).not_to be_valid
+        end
+      end
+
+      it 'cannot be a fork of another fork' do
+        expect(build :topic, :upstream => downstream).not_to be_valid
+      end
+    end
+
     describe 'upstream and forks' do
-      let(:upstream) { create :topic }
-      let(:topic) { create :topic, :upstream => upstream }
-      let(:topic2) { create :topic, :upstream => upstream }
+      it 'is valid when no upstream and no forks' do
+        subject.upstream = nil
+        subject.forks.clear
 
-      it 'has an upstream' do
-        expect(topic.upstream).to eq upstream
-        expect(topic2.upstream).to eq upstream
+        expect(subject.upstream).to be_nil
+        expect(subject.forks).to be_empty
 
-        expect(upstream.upstream).to be_nil
+        expect(subject).to be_valid
       end
 
-      it 'has forks' do
-        expect(topic.forks).to be_empty
-        expect(topic2.forks).to be_empty
+      it 'is valid when upstream and no forks' do
+        subject.upstream = build :topic
+        subject.forks.clear
 
-        expect(upstream.forks).to include topic, topic2
+        expect(subject.upstream).not_to be_nil
+        expect(subject.forks).to be_empty
+
+        expect(subject).to be_valid
       end
 
-      describe 'cannot be a fork of a fork' do
-        let(:topic) { build :topic, :upstream => topic2 }
+      it 'is valid when no upstream and forks' do
+        subject.upstream = nil
+        subject.forks = build_list :topic, 3
 
-        it { is_expected.not_to be_valid }
+        expect(subject.upstream).to be_nil
+        expect(subject.forks).not_to be_empty
+
+        expect(subject).to be_valid
+      end
+
+      it 'is invalid when upstream and forks' do
+        subject.upstream = build :topic
+        subject.forks << build(:topic)
+
+        expect(subject.upstream).not_to be_nil
+        expect(subject.forks).not_to be_empty
+
+        expect(subject).not_to be_valid
       end
     end
   end
