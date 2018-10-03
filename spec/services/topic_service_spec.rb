@@ -14,6 +14,7 @@ RSpec.describe TopicService do
   let(:user) { create :user }
 
   let(:fork_command) { double 'Repository::Fork' }
+  let(:feed_item_class) { double 'FeedItem' }
 
   ##
   # Subject
@@ -50,6 +51,10 @@ RSpec.describe TopicService do
         .and_return fork_command
       expect(fork_command).to receive(:fork=)
       expect(fork_command).to receive :execute
+
+      expect(FeedItem).to receive(:create)
+        .with(hash_including(:user => user, :topic => topic, :event_type => :topic_forked))
+        .and_return feed_item_class
 
       result = subject.fork :author => user, :fork => new_fork
 

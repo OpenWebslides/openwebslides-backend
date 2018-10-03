@@ -98,6 +98,11 @@ class TopicService < ApplicationService
 
       command.execute
 
+      # Generate feed item
+      FeedItem.create :user => params[:author],
+                      :topic => @topic,
+                      :event_type => :topic_forked
+
       true
     else
       false
