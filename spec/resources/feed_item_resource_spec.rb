@@ -38,5 +38,13 @@ RSpec.describe FeedItemResource, :type => :resource do
     it 'should have a valid set of filters' do
       expect(described_class.filters.keys).to match_array %i[id event_type topic user]
     end
+
+    describe 'event_type#verify' do
+      subject { described_class.filters[:event_type][:verify] }
+
+      it 'filters the right event types' do
+        expect(subject.call %w[topic_created foobar topic_updated topic_forked TOPIC_CREATED TOPIC_UPDATED TOPIC_FORKED FOO FOOBAR]).to match_array %w[topic_created topic_updated topic_forked]
+      end
+    end
   end
 end

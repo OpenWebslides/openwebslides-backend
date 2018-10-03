@@ -28,7 +28,7 @@ class FeedItemResource < ApplicationResource
   filter :user
   filter :topic
   filter :event_type,
-         :verify => ->(values, _) { values.map(&:downcase) & FeedItem.event_types.keys }
+         :verify => ->(values, _ = nil) { values.map(&:downcase) & FeedItem.event_types.keys }
 
   ##
   # Callbacks
