@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RatingController < ApplicationController
-  include AddDummyId
+  include AddDummyData
 
   # Authentication
   before_action :authenticate_user

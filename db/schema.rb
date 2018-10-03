@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_17_072930) do
+ActiveRecord::Schema.define(version: 2018_10_02_080305) do
 
   create_table "annotations", force: :cascade do |t|
     t.string "type"
@@ -84,6 +84,8 @@ ActiveRecord::Schema.define(version: 2018_08_17_072930) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "root_content_item_id"
+    t.integer "upstream_id"
+    t.index ["upstream_id"], name: "index_topics_on_upstream_id"
     t.index ["user_id"], name: "index_topics_on_user_id"
   end
 

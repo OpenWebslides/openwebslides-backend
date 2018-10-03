@@ -36,6 +36,32 @@ RSpec.describe 'topics routing', :type => :routing do
     expect(:delete => route).not_to be_routable
   end
 
+  it 'routes topic upstream relationship endpoint' do
+    route = '/api/topics/foo/relationships/upstream'
+    params = { :topic_id => 'foo', :relationship => 'upstream' }
+
+    expect(:get => '/api/topics/foo/upstream').to route_to 'topics#get_related_resource', params.merge(:source => 'topics')
+
+    expect(:get => route).to route_to 'topics#show_relationship', params
+    expect(:patch => route).not_to be_routable
+    expect(:put => route).not_to be_routable
+    expect(:post => route).not_to be_routable
+    expect(:delete => route).not_to be_routable
+  end
+
+  it 'routes topic forks relationship endpoint' do
+    route = '/api/topics/foo/relationships/forks'
+    params = { :topic_id => 'foo', :relationship => 'forks' }
+
+    expect(:get => '/api/topics/foo/forks').to route_to 'topics#get_related_resources', params.merge(:source => 'topics')
+
+    expect(:get => route).to route_to 'topics#show_relationship', params
+    expect(:patch => route).not_to be_routable
+    expect(:put => route).not_to be_routable
+    expect(:post => route).not_to be_routable
+    expect(:delete => route).not_to be_routable
+  end
+
   it 'routes topic collaborators relationship endpoint' do
     route = '/api/topics/foo/relationships/collaborators'
     params = { :topic_id => 'foo', :relationship => 'collaborators' }

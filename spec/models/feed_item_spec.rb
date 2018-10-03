@@ -4,8 +4,9 @@ require 'rails_helper'
 
 RSpec.describe FeedItem, :type => :model do
   describe 'attributes' do
-    it { is_expected.not_to allow_value(nil).for(:event_type) }
-    it { is_expected.not_to allow_value('').for(:event_type) }
+    it { is_expected.not_to allow_value(nil).for :event_type }
+    it { is_expected.not_to allow_value('').for :event_type }
+    it { is_expected.to allow_values(:topic_created, :topic_updated, :topic_forked).for :event_type }
 
     it 'is invalid without attributes' do
       expect(FeedItem.new).not_to be_valid
@@ -17,7 +18,7 @@ RSpec.describe FeedItem, :type => :model do
     end
 
     it 'has a valid :event_type enum' do
-      expect(%w[topic_created topic_updated]).to eq FeedItem.event_types.keys
+      expect(%w[topic_created topic_updated topic_forked]).to eq FeedItem.event_types.keys
     end
   end
 

@@ -116,9 +116,6 @@ RSpec.describe 'Topic API', :type => :request do
   end
 
   describe 'GET /:id' do
-    before do
-    end
-
     it 'rejects an invalid id' do
       get topic_path(:id => 0), :headers => headers
 
@@ -131,6 +128,56 @@ RSpec.describe 'Topic API', :type => :request do
 
       expect(response.status).to eq 200
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    end
+
+    describe 'upstream' do
+      let(:fork) { create :topic, :upstream => topic }
+
+      # Explicitly call fork to create the object
+      before { fork }
+
+      it 'downstream has an upstream' do
+        get topic_path(:id => fork.id), :params => { :include => 'upstream' }, :headers => headers
+
+        expect(response.status).to eq 200
+
+        json = JSON.parse response.body
+        expect(json['data']['relationships']['upstream']['data']['id']).to eq topic.id.to_s
+      end
+
+      it 'upstream has no upstream' do
+        get topic_path(:id => topic.id), :params => { :include => 'upstream' }, :headers => headers
+
+        expect(response.status).to eq 200
+
+        json = JSON.parse response.body
+        expect(json['data']['relationships']['upstream']['data']).to be_nil
+      end
+    end
+
+    describe 'forks' do
+      let(:fork) { create :topic, :upstream => topic }
+
+      # Explicitly call fork to create the object
+      before { fork }
+
+      it 'upstream has a fork' do
+        get topic_path(:id => topic.id), :params => { :include => 'forks' }, :headers => headers
+
+        expect(response.status).to eq 200
+
+        json = JSON.parse response.body
+        expect(json['data']['relationships']['forks']['data'].count).to eq 1
+      end
+
+      it 'downstream has no forks' do
+        get topic_path(:id => fork.id), :params => { :include => 'forks' }, :headers => headers
+
+        expect(response.status).to eq 200
+
+        json = JSON.parse response.body
+        expect(json['data']['relationships']['forks']['data'].count).to eq 0
+      end
     end
   end
 

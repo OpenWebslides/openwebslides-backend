@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TokenController < ApplicationController
-  include AddDummyId
+  include AddDummyData
 
   # Authentication
   before_action :authenticate_user, :only => :destroy

@@ -26,6 +26,16 @@ class Topic < ApplicationRecord
   belongs_to :user,
              :inverse_of => :topics
 
+  belongs_to :upstream,
+             :optional => true,
+             :class_name => 'Topic',
+             :inverse_of => :forks
+
+  has_many :forks,
+           :class_name => 'Topic',
+           :foreign_key => :upstream_id,
+           :inverse_of => :upstream
+
   has_many :grants,
            :dependent => :destroy
 
@@ -62,6 +72,10 @@ class Topic < ApplicationRecord
   validates :root_content_item_id,
             :presence => true
 
+  validate :upstream_cannot_be_fork
+
+  validate :upstream_xor_forks
+
   ##
   # Callbacks
   #
@@ -82,4 +96,16 @@ class Topic < ApplicationRecord
   ##
   # Helpers and callback methods
   #
+  def upstream_cannot_be_fork
+    # If upstream is set, it cannot reference a topic that is a fork too (where upstream is non-empty)
+    errors.add :upstream, 'cannot be a fork' if upstream&.upstream
+  end
+
+  def upstream_xor_forks
+    # Either `forks` or `upstream` can be set
+    return unless upstream && forks.any?
+
+    errors.add :upstream, 'cannot be non-empty when forks are specified'
+    errors.add :forks, 'cannot be non-empty when upstream is specified'
+  end
 end

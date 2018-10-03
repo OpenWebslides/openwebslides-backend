@@ -7,8 +7,8 @@ module Repository
   class RepoCommand < Command
     protected
 
-    def repo_path
-      File.join OpenWebslides.config.repository.path, @receiver.user.id.to_s, @receiver.id.to_s
+    def repo_path(receiver = @receiver)
+      File.join OpenWebslides.config.repository.path, receiver.user.id.to_s, receiver.id.to_s
     end
 
     def lock_path
