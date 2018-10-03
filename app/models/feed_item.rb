@@ -7,7 +7,7 @@ class FeedItem < ApplicationRecord
   ##
   # Properties
   #
-  enum :event_type => %i[topic_created topic_updated]
+  enum :event_type => %i[topic_created topic_updated topic_forked]
 
   ##
   # Associations
