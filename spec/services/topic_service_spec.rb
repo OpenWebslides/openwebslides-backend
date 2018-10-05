@@ -65,6 +65,7 @@ RSpec.describe TopicService do
 
       expect(new_fork.upstream).to eq topic
       expect(new_fork.user).to eq user
+      expect(new_fork.title).to eq I18n.t('openwebslides.topics.forked', :title => topic.title)
     end
   end
 end
