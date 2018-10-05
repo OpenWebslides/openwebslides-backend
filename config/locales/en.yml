@@ -37,3 +37,5 @@ en:
       comment:
         create:
           subject: "Comment added"
+    topics:
+      forked: "Personal copy of %{title}"

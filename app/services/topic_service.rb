@@ -85,9 +85,10 @@ class TopicService < ApplicationService
   def fork(params)
     fork = params[:fork]
 
-    # Set new attributes: author and upstream topic
+    # Set new attributes: author, upstream topic and prepend title
     fork.user = params[:author]
     fork.upstream = @topic
+    fork.title = I18n.t('openwebslides.topics.forked', :title => @topic.title)
 
     # Persist to database
     if fork.save
