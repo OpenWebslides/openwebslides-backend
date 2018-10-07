@@ -7,7 +7,7 @@ RSpec.describe FeedItemPolicy::Scope do
 
   let(:owner) { create :user }
 
-  before :each do
+  before do
     d1 = create :topic
     d2 = create :topic, :user => owner
     d3 = create :topic, :state => :protected_access

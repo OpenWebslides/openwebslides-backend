@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe PasswordController do
   let(:user) { create :user, :confirmed }
 
-  before :each do
+  before do
     allow(controller).to receive(:verify_accept_header_version).and_return true
   end
 

@@ -9,6 +9,8 @@ RSpec.describe Topic, :type => :model do
   ##
   # Test variables
   #
+  subject { topic }
+
   let(:topic) { create :topic, :with_assets }
   let(:user) { create :user }
 
@@ -18,12 +20,11 @@ RSpec.describe Topic, :type => :model do
   ##
   # Test subject
   #
-  subject { topic }
 
   ##
   # Stubs
   #
-  before :each do
+  before do
     Stub::Command.create Repository::Create
     Stub::Command.create Repository::Update, %i[content= author= message=]
     Stub::Command.create Repository::Fork, %i[author= fork=]

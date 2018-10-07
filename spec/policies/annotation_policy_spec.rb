@@ -38,6 +38,7 @@ RSpec.describe AnnotationPolicy do
 
     context 'for a collaborator' do
       before { annotation.user = user }
+
       let(:user) { topic.collaborators.first }
 
       it { is_expected.to permit_action :create }
@@ -65,6 +66,7 @@ RSpec.describe AnnotationPolicy do
 
     context 'for a topic user' do
       before { annotation.user = user }
+
       let(:user) { topic.user }
 
       it { is_expected.to permit_action :create }
@@ -109,6 +111,7 @@ RSpec.describe AnnotationPolicy do
 
     context 'for a collaborator' do
       before { annotation.user = user }
+
       let(:user) { topic.collaborators.first }
 
       it { is_expected.to permit_action :create }
@@ -136,6 +139,7 @@ RSpec.describe AnnotationPolicy do
 
     context 'for a topic user' do
       before { annotation.user = user }
+
       let(:user) { topic.user }
 
       it { is_expected.to permit_action :create }
@@ -180,6 +184,7 @@ RSpec.describe AnnotationPolicy do
 
     context 'for a collaborator' do
       before { annotation.user = user }
+
       let(:user) { topic.collaborators.first }
 
       it { is_expected.to permit_action :create }
@@ -194,6 +199,7 @@ RSpec.describe AnnotationPolicy do
 
     context 'for a user' do
       before { topic.collaborators << annotation.user }
+
       let(:user) { annotation.user }
 
       it { is_expected.to permit_action :create }
@@ -208,6 +214,7 @@ RSpec.describe AnnotationPolicy do
 
     context 'for a topic user' do
       before { annotation.user = user }
+
       let(:user) { topic.user }
 
       it { is_expected.to permit_action :create }

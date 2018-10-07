@@ -10,7 +10,7 @@ RSpec.describe AssetPolicy::Scope do
   context 'for a guest' do
     let(:user) { nil }
 
-    it 'should show assets of all public topics' do
+    it 'shows assets of all public topics' do
       expect(subject.count).to eq 12
     end
   end
@@ -18,7 +18,7 @@ RSpec.describe AssetPolicy::Scope do
   context 'for user 1' do
     let(:user) { User.find_by :name => 'user1' }
 
-    it 'should show assets of public, protected, owned and collaborated topics' do
+    it 'shows assets of public, protected, owned and collaborated topics' do
       expect(subject.count).to eq 36
     end
   end
@@ -26,7 +26,7 @@ RSpec.describe AssetPolicy::Scope do
   context 'for user 2' do
     let(:user) { User.find_by :name => 'user2' }
 
-    it 'should show assets of public, protected, owned and collaborated topics' do
+    it 'shows assets of public, protected, owned and collaborated topics' do
       expect(subject.count).to eq 36
     end
   end
@@ -34,7 +34,7 @@ RSpec.describe AssetPolicy::Scope do
   context 'for user 3' do
     let(:user) { User.find_by :name => 'user3' }
 
-    it 'should show assets of public, protected, owned and collaborated topics' do
+    it 'shows assets of public, protected, owned and collaborated topics' do
       expect(subject.count).to eq 36
     end
   end
@@ -42,7 +42,7 @@ RSpec.describe AssetPolicy::Scope do
   context 'for user 4' do
     let(:user) { User.find_by :name => 'user4' }
 
-    it 'should show assets of public, protected, owned and collaborated topics' do
+    it 'shows assets of public, protected, owned and collaborated topics' do
       expect(subject.count).to eq 27
     end
   end

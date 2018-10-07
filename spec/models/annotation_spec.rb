@@ -74,11 +74,13 @@ RSpec.describe Annotation, :type => :model do
 
       context 'flagged' do
         before { subject.flag }
+
         it { is_expected.to be_locked }
       end
 
       context 'hidden' do
         before { subject.hide }
+
         it { is_expected.to be_locked }
       end
     end

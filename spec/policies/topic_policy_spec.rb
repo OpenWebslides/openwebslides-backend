@@ -13,13 +13,14 @@ RSpec.describe TopicPolicy do
     it { is_expected.to permit_action :index }
     it { is_expected.to forbid_action :create }
 
-    it 'should not permit :create for another user' do
+    it 'does not permit :create for another user' do
       expect(described_class.new(build(:user), topic)).to forbid_action :create
     end
 
     context 'for public topics' do
       let(:topic) { build :topic, :state => :public_access }
-      it 'should permit only read' do
+
+      it 'permits only read' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
         expect(subject).to forbid_action :destroy
@@ -40,7 +41,8 @@ RSpec.describe TopicPolicy do
 
     context 'for protected topics' do
       let(:topic) { build :topic, :state => :protected_access }
-      it 'should not permit anything' do
+
+      it 'does not permit anything' do
         expect(subject).to forbid_action :show
         expect(subject).to forbid_action :update
         expect(subject).to forbid_action :destroy
@@ -61,7 +63,8 @@ RSpec.describe TopicPolicy do
 
     context 'for private topics' do
       let(:topic) { build :topic, :state => :private_access }
-      it 'should not permit anything' do
+
+      it 'does not permit anything' do
         expect(subject).to forbid_action :show
         expect(subject).to forbid_action :update
         expect(subject).to forbid_action :destroy
@@ -87,13 +90,14 @@ RSpec.describe TopicPolicy do
     it { is_expected.to permit_action :index }
     it { is_expected.to permit_action :create }
 
-    it 'should not permit :create for another user' do
+    it 'does not permit :create for another user' do
       expect(described_class.new(build(:user), topic)).to forbid_action :create
     end
 
     context 'for public topics' do
       let(:topic) { build :topic, :state => :public_access }
-      it 'should permit only read' do
+
+      it 'permits only read' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
         expect(subject).to forbid_action :destroy
@@ -114,7 +118,8 @@ RSpec.describe TopicPolicy do
 
     context 'for protected topics' do
       let(:topic) { build :topic, :state => :protected_access }
-      it 'should permit only read' do
+
+      it 'permits only read' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
         expect(subject).to forbid_action :destroy
@@ -135,7 +140,8 @@ RSpec.describe TopicPolicy do
 
     context 'for private topics' do
       let(:topic) { build :topic, :state => :private_access }
-      it 'should not permit anything' do
+
+      it 'does not permit anything' do
         expect(subject).to forbid_action :show
         expect(subject).to forbid_action :update
         expect(subject).to forbid_action :destroy
@@ -161,14 +167,15 @@ RSpec.describe TopicPolicy do
     it { is_expected.to permit_action :index }
     it { is_expected.to permit_action :create }
 
-    it 'should not permit :create for another user' do
+    it 'does not permit :create for another user' do
       expect(described_class.new(build(:user), topic)).to forbid_action :create
     end
 
     context 'for public topics' do
       let(:topic) { build :topic, :with_collaborators, :state => :public_access }
       let(:user) { topic.collaborators.first }
-      it 'should permit update' do
+
+      it 'permits update' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
         expect(subject).to forbid_action :destroy
@@ -190,7 +197,8 @@ RSpec.describe TopicPolicy do
     context 'for protected topics' do
       let(:topic) { build :topic, :with_collaborators, :state => :protected_access }
       let(:user) { topic.collaborators.first }
-      it 'should not permit anything' do
+
+      it 'does not permit anything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
         expect(subject).to forbid_action :destroy
@@ -212,7 +220,8 @@ RSpec.describe TopicPolicy do
     context 'for private topics' do
       let(:topic) { build :topic, :with_collaborators, :state => :private_access }
       let(:user) { topic.collaborators.first }
-      it 'should not permit anything' do
+
+      it 'does not permit anything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
         expect(subject).to forbid_action :destroy
@@ -238,14 +247,15 @@ RSpec.describe TopicPolicy do
     it { is_expected.to permit_action :index }
     it { is_expected.to permit_action :create }
 
-    it 'should not permit :create for another user' do
+    it 'does not permit :create for another user' do
       expect(described_class.new(build(:user), topic)).to forbid_action :create
     end
 
     context 'for public topics' do
       let(:topic) { build :topic, :state => :public_access }
       let(:user) { topic.user }
-      it 'should permit everything' do
+
+      it 'permits everything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
         expect(subject).to permit_action :destroy
@@ -267,7 +277,8 @@ RSpec.describe TopicPolicy do
     context 'for protected topics' do
       let(:topic) { build :topic, :state => :protected_access }
       let(:user) { topic.user }
-      it 'should permit everything' do
+
+      it 'permits everything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
         expect(subject).to permit_action :destroy
@@ -289,7 +300,8 @@ RSpec.describe TopicPolicy do
     context 'for private topics' do
       let(:topic) { build :topic, :state => :private_access }
       let(:user) { topic.user }
-      it 'should permit everything' do
+
+      it 'permits everything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
         expect(subject).to permit_action :destroy

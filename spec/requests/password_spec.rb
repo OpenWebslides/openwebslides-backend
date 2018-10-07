@@ -62,7 +62,7 @@ RSpec.describe 'Password API', :type => :request do
     end
 
     it 'rejects invalid reset password tokens' do
-      expect(user.valid_password? password).to eql true
+      expect(user.valid_password? password).to be true
       user.send_reset_password_instructions
 
       new_password = Faker::Internet.password 6
@@ -75,7 +75,7 @@ RSpec.describe 'Password API', :type => :request do
     end
 
     it 'resets a password' do
-      expect(user.valid_password? password).to eql true
+      expect(user.valid_password? password).to be true
       token = user.send_reset_password_instructions
 
       expect(password).not_to eql new_password
@@ -85,11 +85,11 @@ RSpec.describe 'Password API', :type => :request do
       expect(response.status).to eq 200
 
       user.reload
-      expect(user.valid_password? new_password).to eql true
+      expect(user.valid_password? new_password).to be true
     end
 
     it 'resets a password for unconfirmed users' do
-      expect(unconfirmed_user.valid_password? password).to eql true
+      expect(unconfirmed_user.valid_password? password).to be true
       expect(unconfirmed_user).not_to be_confirmed
       token = unconfirmed_user.send_reset_password_instructions
 
@@ -100,7 +100,7 @@ RSpec.describe 'Password API', :type => :request do
       expect(response.status).to eq 200
 
       unconfirmed_user.reload
-      expect(unconfirmed_user.valid_password? new_password).to eql true
+      expect(unconfirmed_user.valid_password? new_password).to be true
       expect(unconfirmed_user).not_to be_confirmed
     end
   end

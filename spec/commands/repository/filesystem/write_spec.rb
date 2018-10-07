@@ -6,7 +6,7 @@ RSpec.describe Repository::Filesystem::Write do
   ##
   # Configuration
   #
-  before :each do
+  before do
     OpenWebslides.configure do |config|
       ##
       # Absolute path to persistent repository storage
@@ -117,7 +117,7 @@ RSpec.describe Repository::Filesystem::Write do
   end
 
   describe '#cleanup_content' do
-    before :each do
+    before do
       subject.content = content
     end
 

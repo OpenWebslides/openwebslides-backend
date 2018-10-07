@@ -13,7 +13,7 @@ RSpec.describe AssetPolicy do
     context 'for a guest' do
       let(:user) { nil }
 
-      it 'should not permit :create for another user' do
+      it 'does not permit :create for another user' do
         expect(described_class.new(build(:user), asset)).to forbid_action :create
       end
 
@@ -28,7 +28,7 @@ RSpec.describe AssetPolicy do
     context 'for a user' do
       let(:user) { build :user }
 
-      it 'should not permit :create for another user' do
+      it 'does not permit :create for another user' do
         expect(described_class.new(build(:user), asset)).to forbid_action :create
       end
 
@@ -43,7 +43,7 @@ RSpec.describe AssetPolicy do
     context 'for a collaborator' do
       let(:user) { topic.collaborators.first }
 
-      it 'should not permit :create for another user' do
+      it 'does not permit :create for another user' do
         expect(described_class.new(build(:user), asset)).to forbid_action :create
       end
 
@@ -58,7 +58,7 @@ RSpec.describe AssetPolicy do
     context 'for a user' do
       let(:user) { topic.user }
 
-      it 'should not permit :create for another user' do
+      it 'does not permit :create for another user' do
         expect(described_class.new(build(:user), asset)).to forbid_action :create
       end
 
@@ -77,7 +77,7 @@ RSpec.describe AssetPolicy do
     context 'for a guest' do
       let(:user) { nil }
 
-      it 'should not permit :create for another user' do
+      it 'does not permit :create for another user' do
         expect(described_class.new(build(:user), asset)).to forbid_action :create
       end
 
@@ -92,7 +92,7 @@ RSpec.describe AssetPolicy do
     context 'for a user' do
       let(:user) { build :user }
 
-      it 'should not permit :create for another user' do
+      it 'does not permit :create for another user' do
         expect(described_class.new(build(:user), asset)).to forbid_action :create
       end
 
@@ -107,7 +107,7 @@ RSpec.describe AssetPolicy do
     context 'for a collaborator' do
       let(:user) { topic.collaborators.first }
 
-      it 'should not permit :create for another user' do
+      it 'does not permit :create for another user' do
         expect(described_class.new(build(:user), asset)).to forbid_action :create
       end
 
@@ -122,7 +122,7 @@ RSpec.describe AssetPolicy do
     context 'for a user' do
       let(:user) { topic.user }
 
-      it 'should not permit :create for another user' do
+      it 'does not permit :create for another user' do
         expect(described_class.new(build(:user), asset)).to forbid_action :create
       end
 

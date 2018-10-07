@@ -5,7 +5,7 @@ FactoryBot.define do
     title { Faker::Lorem.words(4).join ' ' }
     description { Faker::Lorem.words(20).join ' ' }
     root_content_item_id { Faker::Lorem.words(3).join '' }
-    state :public_access
+    state { :public_access }
     user { build :user, :confirmed }
 
     trait :with_collaborators do

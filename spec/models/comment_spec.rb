@@ -81,11 +81,13 @@ RSpec.describe Comment, :type => :model do
 
       context 'flagged' do
         before { subject.conversation.flag }
+
         it { is_expected.to be_locked }
       end
 
       context 'hidden' do
         before { subject.conversation.hide }
+
         it { is_expected.to be_locked }
       end
     end

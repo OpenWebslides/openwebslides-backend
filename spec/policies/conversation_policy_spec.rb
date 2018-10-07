@@ -98,6 +98,7 @@ RSpec.describe ConversationPolicy do
 
     context 'for a user' do
       before { topic.collaborators << conversation.user }
+
       let(:user) { conversation.user }
 
       it { is_expected.to permit_action :show_comments }

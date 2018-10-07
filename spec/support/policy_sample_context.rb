@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_context 'policy_sample', :shared_context => :metadata do
-  before :each do
+  before do
     ActiveRecord::Base.transaction do
       u1 = create :user, :confirmed, :name => 'user1'
       u2 = create :user, :confirmed, :name => 'user2'

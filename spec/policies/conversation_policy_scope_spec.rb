@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ConversationPolicy::Scope do
   subject { described_class.new(user, Conversation).resolve }
 
-  it 'should inherit AnnotationPolicy' do
+  it 'inherits AnnotationPolicy' do
     expect(described_class).to be < AnnotationPolicy::Scope
   end
 
@@ -14,7 +14,7 @@ RSpec.describe ConversationPolicy::Scope do
   context 'for a guest' do
     let(:user) { nil }
 
-    it 'should show annotations of all public topics' do
+    it 'shows annotations of all public topics' do
       expect(subject.count).to eq 12
     end
   end
@@ -22,7 +22,7 @@ RSpec.describe ConversationPolicy::Scope do
   context 'for user 1' do
     let(:user) { User.find_by :name => 'user1' }
 
-    it 'should show annotations of public, protected, owned and collaborated topics' do
+    it 'shows annotations of public, protected, owned and collaborated topics' do
       expect(subject.count).to eq 36
     end
   end
@@ -30,7 +30,7 @@ RSpec.describe ConversationPolicy::Scope do
   context 'for user 2' do
     let(:user) { User.find_by :name => 'user2' }
 
-    it 'should show annotations of public, protected, owned and collaborated topics' do
+    it 'shows annotations of public, protected, owned and collaborated topics' do
       expect(subject.count).to eq 36
     end
   end
@@ -38,7 +38,7 @@ RSpec.describe ConversationPolicy::Scope do
   context 'for user 3' do
     let(:user) { User.find_by :name => 'user3' }
 
-    it 'should show annotations of public, protected, owned and collaborated topics' do
+    it 'shows annotations of public, protected, owned and collaborated topics' do
       expect(subject.count).to eq 36
     end
   end
@@ -46,7 +46,7 @@ RSpec.describe ConversationPolicy::Scope do
   context 'for user 4' do
     let(:user) { User.find_by :name => 'user4' }
 
-    it 'should show annotations of public, protected, owned and collaborated topics' do
+    it 'shows annotations of public, protected, owned and collaborated topics' do
       expect(subject.count).to eq 27
     end
   end

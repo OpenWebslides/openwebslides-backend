@@ -23,7 +23,7 @@ RSpec.describe ContentResource, :type => :resource do
   ##
   # Tests
   #
-  it 'should be abstract' do
+  it 'is abstract' do
     expect(described_class.abstract).to be true
   end
 

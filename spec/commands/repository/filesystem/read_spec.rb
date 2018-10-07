@@ -6,7 +6,7 @@ RSpec.describe Repository::Filesystem::Read do
   ##
   # Configuration
   #
-  before :each do
+  before do
     OpenWebslides.configure do |config|
       ##
       # Absolute path to persistent repository storage

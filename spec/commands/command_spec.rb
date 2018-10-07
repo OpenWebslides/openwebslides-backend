@@ -9,7 +9,7 @@ RSpec.describe Command do
   ##
   # Test subject
   #
-  let(:subject) { Command.new 'foo' }
+  let(:subject) { described_class.new 'foo' }
 
   ##
   # Tests
