@@ -68,6 +68,7 @@ group :development, :test do
 
   # Enforce code style using Rubocop
   gem 'rubocop', :require => false
+  gem 'rubocop-rspec', :require => false
 
   # Check for vulnerable versions of gems
   gem 'bundler-audit', :require => false
