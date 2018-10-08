@@ -7,7 +7,7 @@ RSpec.describe UserPolicy do
 
   let(:record) { build :user }
 
-  context 'for a guest' do
+  context 'when the user is a guest' do
     let(:user) { nil }
 
     it { is_expected.to permit_action :index }
@@ -23,7 +23,7 @@ RSpec.describe UserPolicy do
     it { is_expected.to forbid_action :show_alerts }
   end
 
-  context 'for a user' do
+  context 'when the user is a user' do
     let(:user) { build :user }
 
     it { is_expected.to permit_action :index }
@@ -39,7 +39,7 @@ RSpec.describe UserPolicy do
     it { is_expected.to forbid_action :show_alerts }
   end
 
-  context 'for the same user' do
+  context 'when the user is the same' do
     let(:user) { record }
 
     it { is_expected.to permit_action :index }

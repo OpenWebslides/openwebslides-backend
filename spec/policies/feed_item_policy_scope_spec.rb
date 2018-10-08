@@ -21,19 +21,19 @@ RSpec.describe FeedItemPolicy::Scope do
     create :feed_item, :topic => d5, :user => d5.user
   end
 
-  context 'for a guest' do
+  context 'when the user is a guest' do
     let(:user) { nil }
 
     it { is_expected.to eq 2 }
   end
 
-  context 'for a user' do
+  context 'when the user is a user' do
     let(:user) { create :user }
 
     it { is_expected.to eq 3 }
   end
 
-  context 'for an owner' do
+  context 'when the user is an owner' do
     let(:user) { owner }
 
     it { is_expected.to eq 4 }

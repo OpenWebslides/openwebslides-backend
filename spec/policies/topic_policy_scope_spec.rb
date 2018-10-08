@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe TopicPolicy::Scope do
-  context 'all topics' do
+  context 'when resolving all topics' do
     subject { described_class.new(user, Topic).resolve }
 
     include_context 'policy_sample'
 
-    context 'for a guest' do
+    context 'when the user is a guest' do
       let(:user) { nil }
 
       it 'shows all public topics' do
@@ -16,7 +16,7 @@ RSpec.describe TopicPolicy::Scope do
       end
     end
 
-    context 'for user 1' do
+    context 'when the user is user 1' do
       let(:user) { User.find_by :name => 'user1' }
 
       it 'shows public, protected, owned and collaborated topics' do
@@ -24,7 +24,7 @@ RSpec.describe TopicPolicy::Scope do
       end
     end
 
-    context 'for user 2' do
+    context 'when the user is user 2' do
       let(:user) { User.find_by :name => 'user2' }
 
       it 'shows public, protected, owned and collaborated topics' do
@@ -32,7 +32,7 @@ RSpec.describe TopicPolicy::Scope do
       end
     end
 
-    context 'for user 3' do
+    context 'when the user is user 3' do
       let(:user) { User.find_by :name => 'user3' }
 
       it 'shows public, protected, owned and collaborated topics' do
@@ -40,7 +40,7 @@ RSpec.describe TopicPolicy::Scope do
       end
     end
 
-    context 'for user 4' do
+    context 'when the user is user 4' do
       let(:user) { User.find_by :name => 'user4' }
 
       it 'shows public, protected, owned and collaborated topics' do
@@ -49,12 +49,12 @@ RSpec.describe TopicPolicy::Scope do
     end
   end
 
-  context 'a users topics' do
+  context 'when resolving a users topics' do
     subject { described_class.new(user, User.find_by(:name => 'user1').topics).resolve }
 
     include_context 'policy_sample'
 
-    context 'for a guest' do
+    context 'when the user is a guest' do
       let(:user) { nil }
 
       it 'shows all public topics' do
@@ -62,7 +62,7 @@ RSpec.describe TopicPolicy::Scope do
       end
     end
 
-    context 'for user 1' do
+    context 'when the user is user 1' do
       let(:user) { User.find_by :name => 'user1' }
 
       it 'shows public, protected, owned and collaborated topics' do
@@ -70,7 +70,7 @@ RSpec.describe TopicPolicy::Scope do
       end
     end
 
-    context 'for user 2' do
+    context 'when the user is user 2' do
       let(:user) { User.find_by :name => 'user2' }
 
       it 'shows public, protected and collaborated topics' do
@@ -78,7 +78,7 @@ RSpec.describe TopicPolicy::Scope do
       end
     end
 
-    context 'for user 3' do
+    context 'when the user is user 3' do
       let(:user) { User.find_by :name => 'user3' }
 
       it 'shows public, protected and collaborated topics' do
@@ -86,7 +86,7 @@ RSpec.describe TopicPolicy::Scope do
       end
     end
 
-    context 'for user 4' do
+    context 'when the user is user 4' do
       let(:user) { User.find_by :name => 'user4' }
 
       it 'shows public, protected and collaborated topics' do
