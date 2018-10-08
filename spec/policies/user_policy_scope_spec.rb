@@ -7,7 +7,7 @@ RSpec.describe UserPolicy::Scope do
 
   include_context 'policy_sample'
 
-  context 'for everyone' do
+  context 'when resolving all users' do
     let(:user) { nil }
 
     it { is_expected.to eq User.all }

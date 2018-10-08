@@ -7,10 +7,10 @@ RSpec.describe FeedItemPolicy do
 
   let(:record) { build :feed_item, :topic => topic }
 
-  context 'public topics' do
+  context 'when the topic is public' do
     let(:topic) { create :topic, :access => :public }
 
-    context 'for a guest' do
+    context 'when the user is a guest' do
       let(:user) { nil }
 
       it { is_expected.to permit_action :index }
@@ -20,7 +20,7 @@ RSpec.describe FeedItemPolicy do
       it { is_expected.to permit_action :show_topic }
     end
 
-    context 'for a user' do
+    context 'when the user is a user' do
       let(:user) { build :user }
 
       it { is_expected.to permit_action :index }
@@ -31,10 +31,10 @@ RSpec.describe FeedItemPolicy do
     end
   end
 
-  context 'protected topics' do
+  context 'when the topic is protected' do
     let(:topic) { create :topic, :access => :protected }
 
-    context 'for a guest' do
+    context 'when the user is a guest' do
       let(:user) { nil }
 
       it { is_expected.to permit_action :index }
@@ -44,7 +44,7 @@ RSpec.describe FeedItemPolicy do
       it { is_expected.to forbid_action :show_topic }
     end
 
-    context 'for a user' do
+    context 'when the user is a user' do
       let(:user) { build :user }
 
       it { is_expected.to permit_action :index }
@@ -55,10 +55,10 @@ RSpec.describe FeedItemPolicy do
     end
   end
 
-  context 'private topics' do
+  context 'when the topic is private' do
     let(:topic) { create :topic, :access => :private }
 
-    context 'for a guest' do
+    context 'when the user is a guest' do
       let(:user) { nil }
 
       it { is_expected.to permit_action :index }
@@ -68,7 +68,7 @@ RSpec.describe FeedItemPolicy do
       it { is_expected.to forbid_action :show_topic }
     end
 
-    context 'for a user' do
+    context 'when the user is a user' do
       let(:user) { build :user }
 
       it { is_expected.to permit_action :index }
@@ -78,7 +78,7 @@ RSpec.describe FeedItemPolicy do
       it { is_expected.to forbid_action :show_topic }
     end
 
-    context 'for a user' do
+    context 'when the user is a user' do
       let(:user) { topic.user }
 
       it { is_expected.to permit_action :index }

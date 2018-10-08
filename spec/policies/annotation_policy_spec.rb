@@ -7,10 +7,10 @@ RSpec.describe AnnotationPolicy do
 
   let(:annotation) { build :annotation, :topic => topic }
 
-  context 'for public topics' do
+  context 'when a topic is public' do
     let(:topic) { build :topic, :with_collaborators, :access => :public }
 
-    context 'for a guest' do
+    context 'when the user is a guest' do
       let(:user) { nil }
 
       it { is_expected.to forbid_action :create }
@@ -23,7 +23,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for another user' do
+    context 'when the user is just a user' do
       let(:user) { build :user }
 
       it { is_expected.to forbid_action :create }
@@ -36,7 +36,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for a collaborator' do
+    context 'when the user is a collaborator' do
       before { annotation.user = user }
       let(:user) { topic.collaborators.first }
 
@@ -50,7 +50,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for a user' do
+    context 'when the user is a user' do
       let(:user) { annotation.user }
 
       it { is_expected.to permit_action :create }
@@ -63,7 +63,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for a topic user' do
+    context 'when the user is a topic user' do
       before { annotation.user = user }
       let(:user) { topic.user }
 
@@ -78,10 +78,10 @@ RSpec.describe AnnotationPolicy do
     end
   end
 
-  context 'for protected topics' do
+  context 'when a topic is protected' do
     let(:topic) { build :topic, :with_collaborators, :access => :protected }
 
-    context 'for a guest' do
+    context 'when the user is a guest' do
       let(:user) { nil }
 
       it { is_expected.to forbid_action :create }
@@ -94,7 +94,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for another user' do
+    context 'when the user is just a user' do
       let(:user) { build :user }
 
       it { is_expected.to forbid_action :create }
@@ -107,7 +107,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for a collaborator' do
+    context 'when the user is a collaborator' do
       before { annotation.user = user }
       let(:user) { topic.collaborators.first }
 
@@ -121,7 +121,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for a user' do
+    context 'when the user is a user' do
       let(:user) { annotation.user }
 
       it { is_expected.to permit_action :create }
@@ -134,7 +134,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for a topic user' do
+    context 'when the user is a topic user' do
       before { annotation.user = user }
       let(:user) { topic.user }
 
@@ -149,10 +149,10 @@ RSpec.describe AnnotationPolicy do
     end
   end
 
-  context 'for private topics' do
+  context 'when a topic is private' do
     let(:topic) { build :topic, :with_collaborators, :access => :private }
 
-    context 'for a guest' do
+    context 'when the user is a guest' do
       let(:user) { nil }
 
       it { is_expected.to forbid_action :create }
@@ -165,7 +165,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for another user' do
+    context 'when the user is just a user' do
       let(:user) { build :user }
 
       it { is_expected.to forbid_action :create }
@@ -178,7 +178,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for a collaborator' do
+    context 'when the user is a collaborator' do
       before { annotation.user = user }
       let(:user) { topic.collaborators.first }
 
@@ -192,7 +192,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for a user' do
+    context 'when the user is a user' do
       before { topic.collaborators << annotation.user }
       let(:user) { annotation.user }
 
@@ -206,7 +206,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'for a topic user' do
+    context 'when the user is a topic user' do
       before { annotation.user = user }
       let(:user) { topic.user }
 

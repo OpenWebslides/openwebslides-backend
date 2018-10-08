@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ApplicationPolicy::Scope do
   let(:user) { create :user }
 
-  context 'all topics' do
+  context 'when resolving all topics' do
     subject { described_class.new(user, Topic).resolve }
 
     it 'should raise an error' do
@@ -13,7 +13,7 @@ RSpec.describe ApplicationPolicy::Scope do
     end
   end
 
-  context 'all users' do
+  context 'when resolving all users' do
     subject { described_class.new(user, User).resolve }
 
     it 'should raise an error' do
