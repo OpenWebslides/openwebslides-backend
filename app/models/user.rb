@@ -71,7 +71,11 @@ class User < ApplicationRecord
             :presence => true,
             :numericality => { :only_integer => true }
 
-  validate :readonly_email, :on => :update
+  validates :tos_accepted,
+            :presence => true
+
+  validate :readonly_email,
+           :on => :update
 
   validate :accepted_terms
 
@@ -87,15 +91,19 @@ class User < ApplicationRecord
   def self.find_by_token(params)
     user = find_by params
     return nil unless user
+
+    # TODO: raise another error and move this to the controller or something
     raise JSONAPI::Exceptions::UnconfirmedError unless user.confirmed?
 
     user
   end
 
+  # TODO: deprecate in favor of #increment(:token_version)
   def increment_token_version
     self.token_version += 1
   end
 
+  # TODO: deprecate in favor of #increment(:token_version)
   def increment_token_version!
     increment_token_version
     save!

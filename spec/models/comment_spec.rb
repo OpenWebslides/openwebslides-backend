@@ -3,90 +3,70 @@
 require 'rails_helper'
 
 RSpec.describe Comment, :type => :model do
-  let(:subject) { create :comment }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Test variables
+  #
+  subject(:comment) { build :comment }
+
+  let(:topic) { build :topic }
+
+  ##
+  # Tests
+  #
+  it { is_expected.to be_valid }
 
   describe 'attributes' do
-    it { is_expected.not_to allow_value(nil).for(:text) }
-    it { is_expected.not_to allow_value('').for(:text) }
+    it { is_expected.to validate_presence_of :text }
   end
 
   describe 'associations' do
-    it { is_expected.to belong_to(:conversation).inverse_of(:comments) }
-  end
+    it { is_expected.to belong_to(:conversation).inverse_of :comments }
 
-  describe 'scope' do
-    let(:conversation) { create :conversation }
+    context 'when the parent conversation topic is not the same' do
+      before { comment.conversation.topic = topic }
 
-    it 'topic must be equal to its parent conversation' do
-      comment = build :comment,
-                      :conversation => conversation,
-                      :topic => create(:topic),
-                      :content_item_id => conversation.content_item_id
-
-      expect(comment).not_to be_valid
+      it { is_expected.not_to be_valid }
     end
 
-    it 'content_item_id must be equal to its parent conversation' do
-      comment = build :comment,
-                      :conversation => conversation,
-                      :topic => conversation.topic,
-                      :content_item_id => Integer(conversation.content_item_id) + 1
+    context 'when the parent conversation content_item_id is not the same' do
+      before { comment.conversation.content_item_id = 'foobar' }
 
-      expect(comment).not_to be_valid
+      it { is_expected.not_to be_valid }
     end
 
-    it 'is equal to its parent conversation' do
-      comment = build :comment,
-                      :conversation => conversation,
-                      :topic => conversation.topic,
-                      :content_item_id => conversation.content_item_id
+    context 'when the parent conversation is hidden' do
+      before { comment.conversation.hide }
 
-      expect(comment).to be_valid
+      it { is_expected.not_to be_valid }
     end
 
-    context 'hidden parent conversation' do
-      before { conversation.hide }
+    context 'when the parent conversation is flagged' do
+      before { comment.conversation.flag }
 
-      it 'is not valid' do
-        comment = build :comment,
-                        :conversation => conversation,
-                        :topic => conversation.topic,
-                        :content_item_id => conversation.content_item_id
-
-        expect(comment).not_to be_valid
-      end
-    end
-
-    context 'flagged parent conversation' do
-      before { conversation.flag }
-
-      it 'is not valid' do
-        comment = build :comment,
-                        :conversation => conversation,
-                        :topic => conversation.topic,
-                        :content_item_id => conversation.content_item_id
-
-        expect(comment).not_to be_valid
-      end
+      it { is_expected.not_to be_valid }
     end
   end
 
   describe 'methods' do
-    describe 'locked?' do
-      let(:subject) { create :comment }
-
-      context 'unlocked' do
+    describe '#locked?' do
+      context 'when the parent conversation is unlocked' do
         it { is_expected.not_to be_locked }
       end
 
-      context 'flagged' do
-        before { subject.conversation.flag }
+      context 'when the parent conversation is flagged' do
+        before { comment.conversation.flag }
 
         it { is_expected.to be_locked }
       end
 
-      context 'hidden' do
-        before { subject.conversation.hide }
+      context 'when the parent conversation is hidden' do
+        before { comment.conversation.hide }
 
         it { is_expected.to be_locked }
       end

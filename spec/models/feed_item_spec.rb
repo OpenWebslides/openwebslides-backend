@@ -3,23 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe FeedItem, :type => :model do
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Test variables
+  #
+  subject(:feed_item) { build :feed_item }
+
+  ##
+  # Tests
+  #
+  it { is_expected.to be_valid }
+
   describe 'attributes' do
-    it { is_expected.not_to allow_value(nil).for :event_type }
-    it { is_expected.not_to allow_value('').for :event_type }
-    it { is_expected.to allow_values(:topic_created, :topic_updated, :topic_forked).for :event_type }
+    it { is_expected.to validate_presence_of :event_type }
 
-    it 'is invalid without attributes' do
-      expect(FeedItem.new).not_to be_valid
-    end
-
-    it 'is valid with attributes' do
-      feed_item = build :feed_item
-      expect(feed_item).to be_valid
-    end
-
-    it 'has a valid :event_type enum' do
-      expect(%w[topic_created topic_updated topic_forked]).to eq FeedItem.event_types.keys
-    end
+    it { is_expected.to define_enum_for(:event_type).with %i[topic_created topic_updated topic_forked] }
   end
 
   describe 'associations' do

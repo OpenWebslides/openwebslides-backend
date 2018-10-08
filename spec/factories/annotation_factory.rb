@@ -20,9 +20,4 @@ FactoryBot.define do
       end
     end
   end
-
-  factory :rating do
-    annotation { build :annotation }
-    user { build :user }
-  end
 end

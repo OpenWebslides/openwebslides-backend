@@ -4,9 +4,6 @@ FactoryBot.define do
   factory :identity do
     uid { Faker::Internet.email }
     provider { Faker::Lorem.words 1 }
-
-    trait :with_user do
-      user { build :user }
-    end
+    user { build :user }
   end
 end
