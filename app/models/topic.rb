@@ -159,7 +159,7 @@ class Topic < ApplicationRecord
 
     # Add error in case of (public and upstream is protected/private),
     # or (public/protected and upstream is private)
-    return unless (public? && !upstream.public?) || !private? && upstream.private?
+    return unless (public? && !upstream.public?) || (!private? && upstream.private?)
 
     errors.add :access, I18n.t('openwebslides.validations.topic.more_permissive_upstream')
   end

@@ -3,122 +3,110 @@
 require 'rails_helper'
 
 RSpec.describe User, :type => :model do
-  let(:user) { create :user }
-  let(:confirmed_user) { create :user, :confirmed }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:user) { create :user, :confirmed }
+
+  ##
+  # Test variables
+  #
+  ##
+  # Tests
+  #
+  it { is_expected.to be_valid }
 
   describe 'attributes' do
-    it { is_expected.not_to allow_value(nil).for(:name) }
-    it { is_expected.not_to allow_value('').for(:name) }
+    it { is_expected.to validate_presence_of :name }
+    it { is_expected.to validate_presence_of :email }
+    it { is_expected.not_to allow_values('foo', 'foo@bar@baz', 'foo@', '@bar').for :email }
+    it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+    it { is_expected.to validate_presence_of :locale }
+    it { is_expected.not_to allow_value('foo').for :locale }
+    it { is_expected.to allow_values('en', 'nl').for :locale }
+    it { is_expected.to validate_inclusion_of(:locale).in_array I18n.available_locales.map(&:to_s) }
+    it { is_expected.to have_attributes :locale => 'en' }
 
-    it { is_expected.not_to allow_value(nil).for(:email) }
-    it { is_expected.not_to allow_value('').for(:email) }
-    it { is_expected.not_to allow_value('foo').for(:email) }
-    it { is_expected.not_to allow_value('foo@bar@baz').for(:email) }
-    it { is_expected.not_to allow_value('foo@').for(:email) }
-    it { is_expected.not_to allow_value('@bar').for(:email) }
+    it { is_expected.to validate_presence_of :password }
+    it { is_expected.not_to allow_value('abc12').for :password }
+    it { is_expected.to allow_value('abc123').for :password }
 
-    it { is_expected.not_to allow_value(nil).for(:locale) }
-    it { is_expected.not_to allow_value('').for(:locale) }
-    it { is_expected.not_to allow_value('foo').for(:locale) }
-    I18n.available_locales.map(&:to_s).each do |locale|
-      it { is_expected.to allow_value(locale).for(:locale) }
-    end
+    it { is_expected.to validate_presence_of :token_version }
+    it { is_expected.to validate_numericality_of(:token_version).only_integer }
 
-    it { is_expected.not_to allow_value(nil).for(:password) }
-    it { is_expected.not_to allow_value('').for(:password) }
+    it { is_expected.to validate_presence_of :tos_accepted }
+    it { is_expected.not_to allow_values(false, 'false').for :tos_accepted }
+    it { is_expected.to allow_values(true, 'foo').for :tos_accepted }
 
-    it { is_expected.not_to allow_value(nil).for(:token_version) }
-    it { is_expected.not_to allow_value('').for(:token_version) }
-    it { is_expected.not_to allow_value('foo').for(:token_version) }
-    it { is_expected.to allow_value(0).for(:token_version) }
+    it { is_expected.to allow_values(false).for :alert_emails }
 
-    it { is_expected.not_to allow_value(nil).for(:tos_accepted) }
-    it { is_expected.not_to allow_value('').for(:tos_accepted) }
-    it { is_expected.not_to allow_value(false).for(:tos_accepted) }
-    it { is_expected.to allow_value(true).for(:tos_accepted) }
-    it { is_expected.to allow_value('foo').for(:tos_accepted) }
-    it { is_expected.not_to allow_value('false').for(:tos_accepted) }
+    context 'when the terms are not accepted' do
+      subject { build :user, :tos_accepted => false }
 
-    it { is_expected.not_to allow_value(nil).for(:password) }
-    it { is_expected.not_to allow_value('').for(:password) }
-    it { is_expected.not_to allow_value('abc12').for(:password) }
-    it { is_expected.to allow_value('abc123').for(:password) }
-
-    it { is_expected.to allow_value(nil).for(:alert_emails) }
-    it { is_expected.to allow_value('').for(:alert_emails) }
-    it { is_expected.to allow_value(false).for(:alert_emails) }
-    it { is_expected.to allow_value(true).for(:alert_emails) }
-    it { is_expected.to allow_value('foo').for(:alert_emails) }
-    it { is_expected.to allow_value('false').for(:alert_emails) }
-
-    it 'is invalid without attributes' do
-      expect(User.new).not_to be_valid
-    end
-
-    it 'is valid with valid attributes' do
-      expect(build :user).to be_valid
-    end
-
-    it 'is not valid when terms are not accepted' do
-      expect(build :user, :tos_accepted => false).not_to be_valid
-    end
-
-    it 'defaults to English locale' do
-      expect(user.locale).to eq 'en'
+      it { is_expected.not_to be_valid }
     end
 
     it 'rejects changes to email' do
-      # The readonly_email callback only triggers on :update, so the record has to be persisted
-      expect(user).to be_valid
-
-      user.email = 'bar@foo'
-      expect(user).not_to be_valid
-      user.destroy
+      expect { user.update! :email => 'bar@foo' }.to raise_error ActiveRecord::RecordInvalid
     end
 
     it 'invalidates tokens on password change' do
       token_version = user.token_version
 
       user.update :password => 'abcd1234'
-      expect(user.token_version).to eq token_version + 1
+      expect(user.token_version).not_to eq token_version
     end
 
-    it 'increments token version' do
-      token_version = user.token_version
+    it 'defaults to the English locale' do
+      expect(User.new.locale).to eq 'en'
+    end
 
-      user.increment_token_version!
-      expect(user.token_version).to eq token_version + 1
+    it 'defaults to true for alert_emails' do
+      expect(User.new.alert_emails).to be true
     end
   end
 
   describe 'associations' do
-    it { is_expected.to have_many(:identities).dependent(:destroy) }
-    it { is_expected.to have_many(:topics).dependent(:destroy).inverse_of(:user) }
-    it { is_expected.to have_many(:grants).dependent(:destroy) }
-    it { is_expected.to have_many(:collaborations).through(:grants).inverse_of(:collaborators) }
-    it { is_expected.to have_many(:feed_items).dependent(:destroy).inverse_of(:user) }
-    it { is_expected.to have_many(:annotations).dependent(:destroy).inverse_of(:user) }
-    it { is_expected.to have_many(:ratings).dependent(:destroy).inverse_of(:user) }
+    it { is_expected.to have_many(:identities).dependent :destroy }
+    it { is_expected.to have_many(:topics).inverse_of(:user).dependent :destroy }
+    it { is_expected.to have_many(:grants).dependent :destroy }
+    it { is_expected.to have_many(:collaborations).class_name('Topic').through(:grants).source(:topic).inverse_of :collaborators }
+    it { is_expected.to have_many(:feed_items).inverse_of(:user).dependent :destroy }
+    it { is_expected.to have_many(:annotations).inverse_of(:user).dependent :destroy }
+    it { is_expected.to have_many(:ratings).inverse_of(:user).dependent :destroy }
+
+    it 'has an email identity after creating' do
+      expect(user.identities.first&.provider).to eq 'email'
+    end
   end
 
-  it 'finds confirmed users by token' do
-    result = User.find_by_token :id => confirmed_user.id, :token_version => confirmed_user.token_version
-    expect(result).to eq confirmed_user
-  end
+  describe 'methods' do
+    describe '.find_by_token' do
+      context 'when there are no users' do
+        it 'returns nil' do
+          expect(User.find_by_token :id => 'foo').to eq nil
+        end
+      end
 
-  it 'does not find unconfirmed users by token' do
-    result = proc { User.find_by_token :id => user.id, :token_version => user.token_version }
+      context 'when the user is unconfirmed' do
+        subject(:user) { create :user }
 
-    expect(result).to raise_error JSONAPI::Exceptions::UnconfirmedError
-  end
+        it 'raises an UnconfirmedError' do
+          expect { User.find_by_token :id => user.id }.to raise_error JSONAPI::Exceptions::UnconfirmedError
+        end
+      end
 
-  it 'sets a default locale' do
-    expect(user.locale).to eq 'en'
-  end
-
-  it 'overrides default locale' do
-    user = build :user, :locale => 'nl'
-
-    expect(user.locale).to eq 'nl'
+      context 'when the user is confirmed' do
+        it 'returns the user' do
+          expect(User.find_by_token :id => user.id).to eq user
+        end
+      end
+    end
   end
 end

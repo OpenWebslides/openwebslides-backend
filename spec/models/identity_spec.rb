@@ -3,22 +3,29 @@
 require 'rails_helper'
 
 RSpec.describe Identity, :type => :model do
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:identity) { build :identity }
+
+  ##
+  # Test variables
+  #
+  ##
+  # Tests
+  #
+  it { is_expected.to be_valid }
+
   describe 'attributes' do
-    it { is_expected.not_to allow_value(nil).for(:uid) }
-    it { is_expected.not_to allow_value('').for(:uid) }
-
-    it { is_expected.not_to allow_value(nil).for(:provider) }
-    it { is_expected.not_to allow_value('').for(:provider) }
-
-    it 'is valid with attributes' do
-      expect(build :identity, :with_user).to be_valid
-    end
-
-    it 'is invalid without attributes' do
-      expect(Identity.new).not_to be_valid
-      expect(Identity.new :uid => 'foo').not_to be_valid
-      expect(Identity.new :provider => 'foo').not_to be_valid
-    end
+    it { is_expected.to validate_presence_of :uid }
+    it { is_expected.to validate_presence_of :provider }
+    it { is_expected.to validate_uniqueness_of(:uid).scoped_to :provider }
   end
 
   describe 'associations' do

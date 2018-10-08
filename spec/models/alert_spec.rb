@@ -10,10 +10,13 @@ RSpec.describe Alert, :type => :model do
   # Stubs and mocks
   #
   ##
-  # Test variables
+  # Subject
   #
   subject(:alert) { build :alert }
 
+  ##
+  # Test variables
+  #
   ##
   # Tests
   #

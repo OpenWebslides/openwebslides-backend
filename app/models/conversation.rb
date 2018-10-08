@@ -22,10 +22,14 @@ class Conversation < Annotation
   ##
   # Validations
   #
-  validates :title, :presence => true
-  validates :text, :presence => true
+  validates :title,
+            :presence => true
 
-  validates :conversation_type, :presence => true
+  validates :text,
+            :presence => true
+
+  validates :conversation_type,
+            :presence => true
 
   ##
   # Callbacks

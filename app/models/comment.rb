@@ -5,6 +5,15 @@
 #
 class Comment < Annotation
   ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Test variables
+  #
+  ##
   # Properties
   #
   attribute :text
@@ -31,7 +40,7 @@ class Comment < Annotation
   # Methods
   #
   def locked?
-    super || conversation.locked?
+    super || conversation&.locked?
   end
 
   ##
@@ -45,7 +54,7 @@ class Comment < Annotation
   # Validate whether the record has the same topic and content_item_id as its parent conversation
   #
   def conversation_scope
-    return if conversation && topic == conversation.topic && content_item_id == conversation.content_item_id
+    return if topic == conversation&.topic && content_item_id == conversation&.content_item_id
 
     errors.add :base, 'topic and content_item_id must be equal to the parent conversation'
   end
@@ -54,7 +63,7 @@ class Comment < Annotation
   # Validate whether the record's parent conversation is not hidden or flagged
   #
   def conversation_unlocked
-    return unless conversation.hidden? || conversation.flagged?
+    return unless conversation&.hidden? || conversation&.flagged?
 
     errors.add :base, 'parent conversation cannot be hidden or flagged'
   end
