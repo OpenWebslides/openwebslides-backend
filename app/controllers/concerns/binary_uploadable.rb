@@ -19,6 +19,7 @@ module BinaryUploadable
 
     # Extract filename
     raise JSONAPI::Exceptions::BadRequest, 'Invalid filename' unless request.headers['Content-Disposition']
+
     match = request.headers['Content-Disposition'].match(/filename ?= ?(?<filename>[^;]*);?/)
     @uploaded_filename = Zaru.sanitize! match['filename']
 

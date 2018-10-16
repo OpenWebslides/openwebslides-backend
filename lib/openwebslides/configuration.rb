@@ -38,20 +38,32 @@ module OpenWebslides
     # Verify runtime configuration
     #
     def verify!
-      ##
-      # Global configuration
-      #
-      raise 'tmpdir' unless Dir.exist? tmpdir
+      verify_global!
+      verify_repository!
+      verify_api!
+    end
 
-      ##
-      # Repository configuration
-      #
+    private
+
+    ##
+    # Verify global configuration
+    #
+    def verify_global!
+      raise 'tmpdir' unless Dir.exist? tmpdir
+    end
+
+    ##
+    # Verify repository configuration
+    #
+    def verify_repository!
       raise 'repository.path' unless Dir.exist? repository.path
       raise 'repository.version' if Semverse::Version.new(repository.version).nil?
+    end
 
-      ##
-      # API configuration
-      #
+    ##
+    # Verify API configuration
+    #
+    def verify_api!
       raise 'api.token_lifetime' unless api.token_lifetime&.is_a?(ActiveSupport::Duration)
       raise 'api.asset_url_lifetime' unless api.token_lifetime&.is_a?(ActiveSupport::Duration)
       raise 'repository.version' if Semverse::Version.new(api.version).nil?

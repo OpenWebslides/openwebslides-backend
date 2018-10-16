@@ -59,7 +59,7 @@ RSpec.describe Repository::Filesystem::Copy do
       upstream_content_file = File.join subject.send(:repo_path), 'content.yml'
       downstream_content_file = File.join subject.send(:repo_path, fork), 'content.yml'
 
-      expect(File.exists? downstream_content_file).to be true
+      expect(File.exist? downstream_content_file).to be true
       expect(FileUtils.compare_file upstream_content_file, downstream_content_file).to be true
     end
   end

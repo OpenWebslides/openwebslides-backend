@@ -35,6 +35,7 @@ class AssetResource < ApplicationResource
 
   def custom_links(options)
     return unless context[:current_user]
+
     token = AssetToken.new
     token.subject = context[:current_user]
     token.object = @model
