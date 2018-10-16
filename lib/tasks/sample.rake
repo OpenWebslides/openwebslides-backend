@@ -156,6 +156,7 @@ namespace :db do
 
             # 20% of the conversations have a non-zero rating
             next unless prob 0.2
+
             RANDOM.rand(editors.count).times do
               user = editors.sample
               next if cm.ratings.where(:user => user).any?

@@ -84,6 +84,7 @@ class User < ApplicationRecord
     user = find_by params
     return nil unless user
     raise JSONAPI::Exceptions::UnconfirmedError unless user.confirmed?
+
     user
   end
 

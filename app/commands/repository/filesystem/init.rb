@@ -11,6 +11,7 @@ module Repository
       def execute
         # Create initial directory
         raise OpenWebslides::RepoExistsError if Dir.exist? repo_path
+
         FileUtils.mkdir_p repo_path
 
         # Create empty index file

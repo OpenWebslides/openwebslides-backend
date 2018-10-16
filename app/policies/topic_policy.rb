@@ -26,6 +26,7 @@ class TopicPolicy < ApplicationPolicy
       !@user.nil?
     elsif @record.private_access?
       return false if @user.nil?
+
       # Owner and collaborators can read private topic
       @record.user == @user || @record.collaborators.include?(@user)
     end

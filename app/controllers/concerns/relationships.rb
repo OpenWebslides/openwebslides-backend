@@ -14,13 +14,16 @@ module Relationships
     # Authorize MODEL#show_RELATIONSHIP? (e.g. UserPolicy#show_collaborations?)
     authorize_relationship @resource
 
+    # Find association on model
+    association = ([params[:relationship]] & model_klass.reflections.keys)&.first
+
     if model_klass.reflect_on_association(params[:relationship]).macro == :has_many
       # Policy scope RELATIONSHIP_CLASS
       # Authorize RELATIONSHIP_CLASS#show_INVERSE_RELATIONSHIP? (e.g. TopicPolicy#show_collaborators?)
-      policy_scope(@resource.send params[:relationship]).each { |resource| authorize_inverse_relationship resource }
+      policy_scope(@resource.send association).each { |resource| authorize_inverse_relationship resource }
     else
       # Authorize RELATIONSHIP_CLASS#show_INVERSE_RELATIONSHIP? (e.g. TopicPolicy#show_collaborators?)
-      authorize_inverse_relationship @resource.send params[:relationship]
+      authorize_inverse_relationship @resource.send association
     end
 
     super
