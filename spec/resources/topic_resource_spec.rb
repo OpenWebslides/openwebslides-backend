@@ -12,6 +12,8 @@ RSpec.describe TopicResource, :type => :resource do
   ##
   # Test variables
   #
+  subject { described_class.new topic, context }
+
   let(:topic) { create :topic }
   let(:context) { {} }
 
@@ -20,7 +22,6 @@ RSpec.describe TopicResource, :type => :resource do
   ##
   # Subject
   #
-  subject { described_class.new topic, context }
 
   ##
   # Tests

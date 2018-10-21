@@ -23,6 +23,7 @@ RSpec.describe FlagResource, :type => :resource do
       expect(described_class.creatable_fields).to be_empty
     end
   end
+
   it 'is abstract' do
     expect(described_class.abstract).to be true
   end

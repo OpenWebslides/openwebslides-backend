@@ -12,13 +12,14 @@ RSpec.describe FeedItemResource, :type => :resource do
   ##
   # Test variables
   #
+  subject { described_class.new feed_item, context }
+
   let(:feed_item) { create :feed_item }
   let(:context) { {} }
 
   ##
   # Subject
   #
-  subject { described_class.new feed_item, context }
 
   ##
   # Tests

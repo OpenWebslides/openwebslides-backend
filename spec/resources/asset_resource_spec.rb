@@ -9,6 +9,8 @@ RSpec.describe AssetResource, :type => :resource do
   ##
   # Stubs and mocks
   #
+  subject { described_class.new asset, context }
+
   before do
     create :user
 
@@ -20,7 +22,6 @@ RSpec.describe AssetResource, :type => :resource do
   ##
   # Test variables
   #
-  subject { described_class.new asset, context }
 
   let(:asset) { create :asset, :with_topic }
   let(:context) { {} }

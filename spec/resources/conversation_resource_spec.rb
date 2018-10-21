@@ -12,13 +12,14 @@ RSpec.describe ConversationResource, :type => :resource do
   ##
   # Test variables
   #
+  subject { described_class.new conversation, context }
+
   let(:conversation) { create :conversation }
   let(:context) { {} }
 
   ##
   # Subject
   #
-  subject { described_class.new conversation, context }
 
   ##
   # Tests

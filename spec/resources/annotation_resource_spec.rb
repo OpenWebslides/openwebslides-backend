@@ -12,13 +12,14 @@ RSpec.describe AnnotationResource, :type => :resource do
   ##
   # Test variables
   #
+  subject { described_class.new annotation, context }
+
   let(:annotation) { create :annotation }
   let(:context) { {} }
 
   ##
   # Subject
   #
-  subject { described_class.new annotation, context }
 
   ##
   # Tests

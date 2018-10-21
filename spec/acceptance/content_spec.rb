@@ -7,7 +7,7 @@ RSpec.describe 'Content', :type => :request do
   ##
   # Configuration
   #
-  before :each do
+  before do
     OpenWebslides.configure do |config|
       ##
       # Absolute path to persistent repository storage
@@ -53,7 +53,7 @@ RSpec.describe 'Content', :type => :request do
     describe 'can retrieve the contents of a topic' do
       let(:topic) { create :topic, :root_content_item_id => 'qyrgv0bcd6' }
 
-      before :each do
+      before do
         service = TopicService.new topic
 
         # Make sure the topic repository is created
@@ -83,7 +83,7 @@ RSpec.describe 'Content', :type => :request do
     describe 'can update the contents of a topic' do
       let(:topic) { create :topic, :user => user }
 
-      before(:each) do
+      before do
         service = TopicService.new topic
 
         # Make sure the topic repository is created

@@ -12,13 +12,14 @@ RSpec.describe CommentResource, :type => :resource do
   ##
   # Test variables
   #
+  subject { described_class.new comment, context }
+
   let(:comment) { create :comment }
   let(:context) { {} }
 
   ##
   # Subject
   #
-  subject { described_class.new comment, context }
 
   ##
   # Tests

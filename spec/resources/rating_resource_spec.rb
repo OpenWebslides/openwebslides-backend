@@ -12,13 +12,14 @@ RSpec.describe RatingResource, :type => :resource do
   ##
   # Test variables
   #
+  subject { described_class.new rating, context }
+
   let(:rating) { create :rating }
   let(:context) { {} }
 
   ##
   # Subject
   #
-  subject { described_class.new rating, context }
 
   ##
   # Tests
