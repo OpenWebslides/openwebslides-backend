@@ -74,13 +74,13 @@ RSpec.describe Repository::Filesystem::Write do
     it 'raises an error when root content item is not present' do
       subject.content = content.drop 1
 
-      expect { subject.execute }.to raise_error OpenWebslides::NoRootContentItemError
+      expect { subject.execute }.to raise_error OpenWebslides::Content::NoRootContentItemError
     end
 
     it 'raises an error when root content item id does not match the database' do
       subject.content = [root_content_item]
 
-      expect { subject.execute }.to raise_error OpenWebslides::InvalidRootContentItemError
+      expect { subject.execute }.to raise_error OpenWebslides::Content::InvalidRootContentItemError
     end
 
     it 'writes the index file' do
@@ -102,7 +102,7 @@ RSpec.describe Repository::Filesystem::Write do
 
   describe '#write_content_item' do
     it 'raises an error when no id is present' do
-      expect { subject.send :write_content_item, content.first.without('id') }.to raise_error OpenWebslides::FormatError
+      expect { subject.send :write_content_item, content.first.without('id') }.to raise_error OpenWebslides::Content::ContentError
     end
 
     it 'writes the content item file' do

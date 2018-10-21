@@ -57,7 +57,7 @@ RSpec.describe Repository::Filesystem::Read do
       let(:directory) { '/foo/bar' }
 
       it 'raises a RepoDoesNotExistError' do
-        expect { subject.execute }.to raise_error OpenWebslides::RepoDoesNotExistError
+        expect { subject.execute }.to raise_error OpenWebslides::Repo::RepoDoesNotExistError
       end
     end
 
