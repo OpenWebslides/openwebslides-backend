@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_02_080305) do
+ActiveRecord::Schema.define(version: 2018_11_07_203146) do
+
+  create_table "alerts", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "type"
+    t.integer "count"
+    t.integer "topic_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_alerts_on_topic_id"
+    t.index ["user_id"], name: "index_alerts_on_user_id"
+  end
 
   create_table "annotations", force: :cascade do |t|
     t.string "type"
