@@ -34,11 +34,12 @@ RSpec.describe UserResource, :type => :resource do
 
   it { is_expected.to have_many(:topics).with_class_name 'Topic' }
   it { is_expected.to have_many(:collaborations).with_class_name 'Topic' }
+  it { is_expected.to have_many(:alerts).with_class_name 'Alert' }
 
   describe 'fields' do
     context 'for a guest' do
       it 'has a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id name gravatar_hash topics collaborations]
+        expect(subject.fetchable_fields).to match_array %i[id name gravatar_hash topics collaborations alerts]
       end
     end
 
@@ -46,7 +47,7 @@ RSpec.describe UserResource, :type => :resource do
       let(:context) { { :current_user => build(:user) } }
 
       it 'has a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id name gravatar_hash topics collaborations]
+        expect(subject.fetchable_fields).to match_array %i[id name gravatar_hash topics collaborations alerts]
       end
     end
 
@@ -54,7 +55,7 @@ RSpec.describe UserResource, :type => :resource do
       let(:context) { { :current_user => user } }
 
       it 'has a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id name locale email gravatar_hash topics collaborations]
+        expect(subject.fetchable_fields).to match_array %i[id name locale email gravatar_hash topics collaborations alerts]
       end
     end
 
