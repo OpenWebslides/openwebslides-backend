@@ -16,6 +16,16 @@ class AlertsController < ApplicationController
   ##
   # Resource
   #
+
+  # GET /topics/:id
+  def show
+    @alert = Alert.find params[:id]
+
+    authorize @alert
+
+    jsonapi_render :json => @alert
+  end
+
   ##
   # Relationships
   #

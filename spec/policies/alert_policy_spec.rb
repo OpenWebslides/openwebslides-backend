@@ -11,17 +11,23 @@ RSpec.describe AlertPolicy do
     let(:user) { nil }
 
     it { is_expected.to forbid_action :show }
+
+    it { is_expected.to forbid_action :show_user }
   end
 
   context 'when the user is a user' do
     let(:user) { build :user }
 
     it { is_expected.to forbid_action :show }
+
+    it { is_expected.to forbid_action :show_user }
   end
 
   context 'when the user is the same' do
     let(:user) { record.user }
 
     it { is_expected.to permit_action :show }
+
+    it { is_expected.to permit_action :show_user }
   end
 end

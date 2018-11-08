@@ -15,7 +15,7 @@ class AlertPolicy < ApplicationPolicy
   # Relationship: user
   #
   def show_user?
-    # Users can only show user if the topic is showable
+    # Users can only show user if the alert is showable
     # Authorize the user separately in the controller
     show?
   end

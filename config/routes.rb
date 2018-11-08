@@ -20,6 +20,19 @@ Rails.application.routes.draw do
     root :to => proc { [404, {}, []] }
 
     ##
+    # Alerts API
+    #
+    jsonapi_resources :alerts, :only => %i[show] do
+      # User relationship
+      jsonapi_related_resource :user
+      jsonapi_link :user, :only => :show
+
+      # Topic relationship
+      jsonapi_related_resource :topic
+      jsonapi_link :topic, :only => :show
+    end
+
+    ##
     # User API
     #
     jsonapi_resources :users do
