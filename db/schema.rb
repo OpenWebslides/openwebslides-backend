@@ -14,11 +14,12 @@ ActiveRecord::Schema.define(version: 2018_11_07_203146) do
 
   create_table "alerts", force: :cascade do |t|
     t.integer "user_id"
+    t.boolean "read", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "type"
     t.integer "count"
     t.integer "topic_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["topic_id"], name: "index_alerts_on_topic_id"
     t.index ["user_id"], name: "index_alerts_on_user_id"
   end

@@ -22,13 +22,15 @@ RSpec.describe AlertResource, :type => :resource do
   #
   it { is_expected.to have_primary_key :id }
 
+  it { is_expected.to have_attribute :read }
+
   it { is_expected.to be_immutable }
 
   it { is_expected.to have_one :user }
 
   describe 'fields' do
     it 'has a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id user]
+      expect(subject.fetchable_fields).to match_array %i[id user read]
     end
 
     it 'has a valid set of sortable fields' do

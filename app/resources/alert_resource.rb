@@ -9,6 +9,8 @@ class AlertResource < ApplicationResource
   ##
   # Attributes
   #
+  attribute :read
+
   ##
   # Relationships
   #

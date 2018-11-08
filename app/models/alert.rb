@@ -7,6 +7,8 @@ class Alert < ApplicationRecord
   ##
   # Properties
   #
+  property :read
+
   ##
   # Associations
   #

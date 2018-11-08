@@ -7,6 +7,7 @@ class AddAlerts < ActiveRecord::Migration[5.2]
       # Common columns
       #
       t.references :user, :foreign_key => true
+      t.boolean :read, :null => false, :default => false
 
       t.timestamps
 
