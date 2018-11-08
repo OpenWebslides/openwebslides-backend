@@ -3,32 +3,36 @@
 ##
 # An alert requiring the user's attention
 #
-class Alert < ApplicationRecord
+class UpdateAlert < Alert
   ##
   # Properties
   #
-  property :read
+  property :count
 
   ##
   # Associations
   #
-  belongs_to :user,
-             :inverse_of => :alerts
+  belongs_to :topic
 
   ##
   # Validations
   #
+  validates :count,
+            :presence => true,
+            :numericality => { :only_integer => true }
   ##
   # Callbacks
   #
   ##
   # Methods
   #
-  def alert_type; end
-
   ##
   # Overrides
   #
+  def alert_type
+    :topic_updated
+  end
+
   ##
   # Helpers and callback methods
   #

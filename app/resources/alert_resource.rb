@@ -10,11 +10,16 @@ class AlertResource < ApplicationResource
   # Attributes
   #
   attribute :read
+  attribute :alert_type
+
+  # UpdateAlert attributes
+  attribute :count
 
   ##
   # Relationships
   #
   has_one :user
+  has_one :topic
 
   ##
   # Filters

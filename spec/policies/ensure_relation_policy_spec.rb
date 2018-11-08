@@ -13,7 +13,8 @@ require 'rails_helper'
 #
 MODEL_BLACKLIST = [
   Identity,
-  Grant
+  Grant,
+  UpdateAlert
 ].freeze
 
 ##

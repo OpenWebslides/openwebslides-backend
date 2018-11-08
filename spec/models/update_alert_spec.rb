@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Alert, :type => :model do
+RSpec.describe UpdateAlert, :type => :model do
   ##
   # Configuration
   #
@@ -12,7 +12,7 @@ RSpec.describe Alert, :type => :model do
   ##
   # Test variables
   #
-  subject(:alert) { create :alert }
+  subject(:alert) { create :update_alert }
 
   ##
   # Tests
@@ -20,7 +20,8 @@ RSpec.describe Alert, :type => :model do
   it { is_expected.to be_valid }
 
   describe 'attributes' do
-    it { is_expected.to allow_values(false, 'false', true, 'true').for :read }
+    it { is_expected.to validate_presence_of :count }
+    it { is_expected.to validate_numericality_of(:count).only_integer }
   end
 
   describe 'associations' do
@@ -29,7 +30,9 @@ RSpec.describe Alert, :type => :model do
 
   describe 'methods' do
     describe '#alert_type' do
-      it { is_expected.to respond_to :alert_type }
+      it 'is a topic updated alert' do
+        expect(subject.alert_type).to eq :topic_updated
+      end
     end
   end
 end
