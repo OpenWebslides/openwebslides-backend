@@ -18,6 +18,8 @@ RSpec.describe AssetResource, :type => :resource do
 
   it { is_expected.to have_primary_key :id }
 
+  it { is_expected.to be_immutable }
+
   it { is_expected.to have_attribute :filename }
 
   it { is_expected.to have_one :topic }
