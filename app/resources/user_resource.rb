@@ -22,6 +22,7 @@ class UserResource < ApplicationResource
   #
   has_many :topics
   has_many :collaborations
+  has_many :alerts
 
   ##
   # Filters
@@ -44,15 +45,15 @@ class UserResource < ApplicationResource
   end
 
   def self.creatable_fields(context = {})
-    super(context) - %i[gravatar_hash topics collaborations]
+    super(context) - %i[gravatar_hash topics collaborations alerts]
   end
 
   def self.updatable_fields(context = {})
-    super(context) - %i[gravatar_hash email tos_accepted]
+    super(context) - %i[gravatar_hash email tos_accepted alerts]
   end
 
   def self.sortable_fields(context)
-    super(context) - %i[gravatar_hash locale password tos_accepted]
+    super(context) - %i[gravatar_hash locale password tos_accepted alerts]
   end
 
   def gravatar_hash

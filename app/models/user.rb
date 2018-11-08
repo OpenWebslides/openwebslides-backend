@@ -48,6 +48,10 @@ class User < ApplicationRecord
            :dependent => :destroy,
            :inverse_of => :user
 
+  has_many :alerts,
+           :dependent => :destroy,
+           :inverse_of => :user
+
   ##
   # Validations
   #

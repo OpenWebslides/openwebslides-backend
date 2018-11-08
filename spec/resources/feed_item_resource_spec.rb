@@ -10,6 +10,8 @@ RSpec.describe FeedItemResource, :type => :resource do
 
   it { is_expected.to have_primary_key :id }
 
+  it { is_expected.to be_immutable }
+
   it { is_expected.to have_attribute :event_type }
   it { is_expected.to have_attribute :topic_title }
   it { is_expected.to have_attribute :user_name }
