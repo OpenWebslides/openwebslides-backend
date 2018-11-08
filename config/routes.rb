@@ -30,6 +30,10 @@ Rails.application.routes.draw do
       # Collaborations relationship
       jsonapi_related_resources :collaborations
       jsonapi_links :collaborations, :only => :show
+
+      # Alerts relationship
+      jsonapi_related_resources :alerts
+      jsonapi_links :alerts, :only => :show
     end
 
     ##
