@@ -66,6 +66,15 @@ class UserPolicy < ApplicationPolicy
   end
 
   ##
+  # Relationship: alerts
+  #
+  def show_alerts?
+    # Users can show alerts relationship if the user is updatable
+    # Policy scope the alerts separately in the controller
+    update?
+  end
+
+  ##
   # Scope
   #
   class Scope < Scope
