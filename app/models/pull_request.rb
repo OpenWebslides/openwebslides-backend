@@ -9,10 +9,10 @@ class PullRequest < ApplicationRecord
   #
 
   # Message from the user who submitted the pull request
-  property :message
+  attribute :message
 
   # Message from the user who accepted/rejected the pull request
-  property :feedback
+  attribute :feedback
 
   ##
   # Associations
