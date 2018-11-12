@@ -64,6 +64,8 @@ RSpec.describe Topic, :type => :model do
     it { is_expected.to have_many(:feed_items).dependent(:destroy).inverse_of(:topic) }
     it { is_expected.to have_many(:annotations).dependent(:destroy).inverse_of(:topic) }
     it { is_expected.to have_many(:conversations).inverse_of(:topic) }
+    it { is_expected.to have_many(:incoming_pull_requests).class_name('PullRequest').dependent(:destroy).inverse_of(:target) }
+    it { is_expected.to have_many(:outgoing_pull_requests).class_name('PullRequest').dependent(:destroy).inverse_of(:source) }
 
     ## TODO: move this to topic acceptance spec
     it 'generates a feed_item on create' do

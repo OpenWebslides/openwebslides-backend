@@ -60,6 +60,18 @@ class Topic < ApplicationRecord
   has_many :conversations,
            :inverse_of => :topic
 
+  has_many :incoming_pull_requests,
+           :class_name => 'PullRequest',
+           :foreign_key => :target_id,
+           :dependent => :destroy,
+           :inverse_of => :target
+
+  has_many :outgoing_pull_requests,
+           :class_name => 'PullRequest',
+           :foreign_key => :source_id,
+           :dependent => :destroy,
+           :inverse_of => :source
+
   ##
   # Validations
   #
