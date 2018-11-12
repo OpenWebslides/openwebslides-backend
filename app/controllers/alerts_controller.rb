@@ -17,7 +17,7 @@ class AlertsController < ApplicationController
   # Resource
   #
 
-  # GET /topics/:id
+  # GET /alerts/:id
   def show
     @alert = Alert.find params[:id]
 
