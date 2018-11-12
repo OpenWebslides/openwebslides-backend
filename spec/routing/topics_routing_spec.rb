@@ -100,4 +100,30 @@ RSpec.describe 'topics routing', :type => :routing do
     expect(:post => route).not_to be_routable
     expect(:delete => route).not_to be_routable
   end
+
+  it 'routes topic incoming pull requests relationship endpoint' do
+    route = '/api/topics/foo/relationships/incomingPullRequests'
+    params = { :topic_id => 'foo', :relationship => 'incomingPullRequests' }
+
+    expect(:get => '/api/topics/foo/incomingPullRequests').to route_to 'pull_requests#get_related_resources', params.merge(:source => 'topics')
+
+    expect(:get => route).to route_to 'topics#show_relationship', params
+    expect(:patch => route).not_to be_routable
+    expect(:put => route).not_to be_routable
+    expect(:post => route).not_to be_routable
+    expect(:delete => route).not_to be_routable
+  end
+
+  it 'routes topic outgoing pull requests relationship endpoint' do
+    route = '/api/topics/foo/relationships/outgoingPullRequests'
+    params = { :topic_id => 'foo', :relationship => 'outgoingPullRequests' }
+
+    expect(:get => '/api/topics/foo/outgoingPullRequests').to route_to 'pull_requests#get_related_resources', params.merge(:source => 'topics')
+
+    expect(:get => route).to route_to 'topics#show_relationship', params
+    expect(:patch => route).not_to be_routable
+    expect(:put => route).not_to be_routable
+    expect(:post => route).not_to be_routable
+    expect(:delete => route).not_to be_routable
+  end
 end

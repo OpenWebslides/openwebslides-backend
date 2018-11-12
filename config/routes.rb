@@ -77,12 +77,37 @@ Rails.application.routes.draw do
       jsonapi_related_resources :conversations
       jsonapi_links :conversations, :only => :show
 
+      # Incoming pull requests relationship
+      jsonapi_related_resources :incoming_pull_requests
+      jsonapi_links :incoming_pull_requests, :only => :show
+
+      # Outgoing pull requests relationship
+      jsonapi_related_resources :outgoing_pull_requests
+      jsonapi_links :outgoing_pull_requests, :only => :show
+
       jsonapi_resources :assets, :only => :create
 
       jsonapi_resource :content, :only => %i[show update]
 
       # Fork
       jsonapi_resource :fork, :only => %i[create] do end
+    end
+
+    ##
+    # Pull Requests API
+    #
+    jsonapi_resources :pull_requests, :only => %i[show] do
+      # User relationship
+      jsonapi_related_resource :user
+      jsonapi_link :user, :only => :show
+
+      # Source relationship
+      jsonapi_related_resource :source
+      jsonapi_link :source, :only => :show
+
+      # Target relationship
+      jsonapi_related_resource :target
+      jsonapi_link :target, :only => :show
     end
 
     ##
