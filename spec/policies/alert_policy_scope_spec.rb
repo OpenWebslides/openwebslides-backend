@@ -20,7 +20,7 @@ RSpec.describe AlertPolicy::Scope do
   end
 
   context 'when the user is a user' do
-    let(:user) { nil }
+    let(:user) { create :user }
 
     it { is_expected.to eq 0 }
   end
