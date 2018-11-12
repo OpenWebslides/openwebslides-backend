@@ -31,6 +31,7 @@ en:
         accepted_terms: "must be true"
       pull_request:
         target_is_upstream_source: "must have target as upstream"
+        source_has_one_open_pr: "can only have on open pull request"
     annotations:
       hidden: "[deleted]"
     mailer:

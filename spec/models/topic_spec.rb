@@ -209,5 +209,31 @@ RSpec.describe Topic, :type => :model do
       expect(topic).to respond_to :content
       expect(topic).to respond_to :content_id
     end
+
+    describe '#pull_request' do
+      let(:open_pr) { create :pull_request, :source => downstream, :target => upstream }
+
+      before do
+        create(:pull_request, :source => downstream, :target => upstream).reject
+        create(:pull_request, :source => downstream, :target => upstream).accept
+      end
+
+      context 'when there is an open pull request' do
+        it 'returns the only open outgoing pull request' do
+          # Reload objects to refetch associations
+          open_pr.reload
+          downstream.reload
+
+          expect(downstream.pull_request).to eq open_pr
+        end
+      end
+
+      context 'when this is no open pull request' do
+        it 'returns nil' do
+          # Don't reload objects
+          expect(downstream.pull_request).to be_nil
+        end
+      end
+    end
   end
 end
