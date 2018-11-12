@@ -54,6 +54,8 @@ class PullRequest < ApplicationRecord
   validates :message,
             :presence => true
 
+  validate :target_is_upstream_source
+
   ##
   # Callbacks
   #
@@ -70,4 +72,9 @@ class PullRequest < ApplicationRecord
   ##
   # Helpers and callback methods
   #
+  def target_is_upstream_source
+    return if source.upstream == target
+
+    errors.add :source, I18n.t('openwebslides.validations.pull_request.target_is_upstream_source')
+  end
 end

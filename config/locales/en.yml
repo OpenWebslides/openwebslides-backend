@@ -29,6 +29,8 @@ en:
       user:
         readonly_email: "cannot be changed"
         accepted_terms: "must be true"
+      pull_request:
+        target_is_upstream_source: "must have target as upstream"
     annotations:
       hidden: "[deleted]"
     mailer:

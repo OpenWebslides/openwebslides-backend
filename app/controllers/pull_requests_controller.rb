@@ -30,6 +30,8 @@ class PullRequestsController < ApplicationController
   def create
     @pull_request = PullRequest.new pull_request_params
 
+    # TODO: validate if the source topic is up to date with the target topic
+
     authorize @pull_request
 
     if @pull_request.save
