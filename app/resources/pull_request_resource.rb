@@ -45,4 +45,9 @@ class PullRequestResource < ApplicationResource
       options[:serializer].key_formatter.format(:created_at) => DateValueFormatter.format(_model.created_at)
     }
   end
+
+  # Override state to show the state name instead of the identifier
+  def state
+    _model.state_name.to_s
+  end
 end

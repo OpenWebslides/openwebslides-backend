@@ -60,4 +60,30 @@ RSpec.describe PullRequestResource, :type => :resource do
         .to match_array %w[open accepted rejected]
     end
   end
+
+  describe 'methods' do
+    describe '#state' do
+      context 'when the pull request is open' do
+        it 'returns the state name' do
+          expect(subject.state).to eq 'open'
+        end
+      end
+
+      context 'when the pull request is accepted' do
+        before { pull_request.accept }
+
+        it 'returns the state name' do
+          expect(subject.state).to eq 'accepted'
+        end
+      end
+
+      context 'when the pull request is rejected' do
+        before { pull_request.reject }
+
+        it 'returns the state name' do
+          expect(subject.state).to eq 'rejected'
+        end
+      end
+    end
+  end
 end
