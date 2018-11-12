@@ -24,15 +24,6 @@ class Annotation < ApplicationRecord
            :inverse_of => :annotation
 
   ##
-  # Validations
-  #
-  validates :content_item_id,
-            :presence => true
-
-  validates :state,
-            :presence => true
-
-  ##
   # State
   #
   state_machine :initial => :created do
@@ -73,6 +64,15 @@ class Annotation < ApplicationRecord
       transition :secret => :created
     end
   end
+
+  ##
+  # Validations
+  #
+  validates :content_item_id,
+            :presence => true
+
+  validates :state,
+            :presence => true
 
   ##
   # Callbacks
