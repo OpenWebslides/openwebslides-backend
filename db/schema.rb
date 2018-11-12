@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_07_203146) do
+ActiveRecord::Schema.define(version: 2018_11_12_113733) do
 
   create_table "alerts", force: :cascade do |t|
     t.integer "user_id"
@@ -77,6 +77,20 @@ ActiveRecord::Schema.define(version: 2018_11_07_203146) do
     t.datetime "updated_at", null: false
     t.index ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true
     t.index ["user_id"], name: "index_identities_on_user_id"
+  end
+
+  create_table "pull_requests", force: :cascade do |t|
+    t.string "message", default: "", null: false
+    t.string "feedback"
+    t.integer "state"
+    t.integer "user_id"
+    t.integer "source_id"
+    t.integer "target_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["source_id"], name: "index_pull_requests_on_source_id"
+    t.index ["target_id"], name: "index_pull_requests_on_target_id"
+    t.index ["user_id"], name: "index_pull_requests_on_user_id"
   end
 
   create_table "ratings", force: :cascade do |t|
