@@ -103,7 +103,7 @@ RSpec.describe 'topics routing', :type => :routing do
 
   it 'routes topic incoming pull requests relationship endpoint' do
     route = '/api/topics/foo/relationships/incomingPullRequests'
-    params = { :topic_id => 'foo', :relationship => 'incomingPullRequests' }
+    params = { :topic_id => 'foo', :relationship => 'incoming_pull_requests' }
 
     expect(:get => '/api/topics/foo/incomingPullRequests').to route_to 'pull_requests#get_related_resources', params.merge(:source => 'topics')
 
@@ -116,7 +116,7 @@ RSpec.describe 'topics routing', :type => :routing do
 
   it 'routes topic outgoing pull requests relationship endpoint' do
     route = '/api/topics/foo/relationships/outgoingPullRequests'
-    params = { :topic_id => 'foo', :relationship => 'outgoingPullRequests' }
+    params = { :topic_id => 'foo', :relationship => 'outgoing_pull_requests' }
 
     expect(:get => '/api/topics/foo/outgoingPullRequests').to route_to 'pull_requests#get_related_resources', params.merge(:source => 'topics')
 

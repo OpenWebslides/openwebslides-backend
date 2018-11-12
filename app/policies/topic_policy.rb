@@ -126,6 +126,24 @@ class TopicPolicy < ApplicationPolicy
   end
 
   ##
+  # Relationships: incoming_pull_requests
+  #
+  def show_incoming_pull_requests?
+    # Users can show incoming pull requests relationship if the topic is updatable
+    # Policy scope the pull requests separately in the controller
+    update?
+  end
+
+  ##
+  # Relationships: outgoing_pull_requests
+  #
+  def show_outgoing_pull_requests?
+    # Users can show outgoing pull requests relationship if the topic is updatable
+    # Policy scope the pull requests separately in the controller
+    update?
+  end
+
+  ##
   # Scope
   #
   class Scope < Scope
