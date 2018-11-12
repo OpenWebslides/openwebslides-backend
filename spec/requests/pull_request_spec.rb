@@ -1,0 +1,81 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+RSpec.describe 'Pull Request API', :type => :request do
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Test variables
+  #
+  let(:pull_request) { create :pull_request }
+
+  let(:user) { create :user, :confirmed }
+
+  before do
+    pull_request.source.collaborators << user
+    pull_request.target.collaborators << user
+  end
+
+  ##
+  # Tests
+  #
+  describe 'GET /:id' do
+    before do
+      add_content_type_header
+      add_auth_header
+    end
+
+    it 'rejects an invalid id' do
+      get pull_request_path(:id => 0), :headers => headers
+
+      expect(response.status).to eq 404
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    end
+
+    it 'returns successful' do
+      get pull_request_path(:id => pull_request.id), :headers => headers
+
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    end
+  end
+
+  describe 'GET /incomingPullRequests' do
+    before do
+      add_content_type_header
+      add_auth_header
+    end
+
+    it 'returns successful' do
+      get topic_incomingPullRequests_path(:topic_id => pull_request.target.id), :headers => headers
+
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+      json = JSON.parse response.body
+      expect(json['data'].count).to eq 1
+    end
+  end
+
+  describe 'GET /outgoingPullRequests' do
+    before do
+      add_content_type_header
+      add_auth_header
+    end
+
+    it 'returns successful' do
+      get topic_outgoingPullRequests_path(:topic_id => pull_request.source.id), :headers => headers
+
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+      json = JSON.parse response.body
+      expect(json['data'].count).to eq 1
+    end
+  end
+end
