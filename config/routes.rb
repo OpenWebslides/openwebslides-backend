@@ -96,7 +96,7 @@ Rails.application.routes.draw do
     ##
     # Pull Requests API
     #
-    jsonapi_resources :pull_requests, :only => %i[show] do
+    jsonapi_resources :pull_requests, :only => %i[create show] do
       # User relationship
       jsonapi_related_resource :user
       jsonapi_link :user, :only => :show

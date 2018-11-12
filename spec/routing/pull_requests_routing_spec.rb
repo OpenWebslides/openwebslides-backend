@@ -3,6 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe 'pull requests routing', :type => :routing do
+  it 'routes pull requests endpoint' do
+    route = '/api/pullRequests'
+
+    expect(:get => route).not_to be_routable
+    expect(:patch => route).not_to be_routable
+    expect(:put => route).not_to be_routable
+    expect(:post => route).to route_to 'pull_requests#create'
+    expect(:delete => route).not_to be_routable
+  end
+
   it 'routes pull request endpoint' do
     route = '/api/pullRequests/foo'
 
