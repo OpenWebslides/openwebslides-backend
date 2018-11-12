@@ -27,7 +27,8 @@ en:
         detail: "Repository exists"
     validations:
       user:
-        tos_accepted: "must be true"
+        readonly_email: "cannot be changed"
+        accepted_terms: "must be true"
     annotations:
       hidden: "[deleted]"
     mailer:
