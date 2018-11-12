@@ -4,6 +4,16 @@ class PullRequestPolicy < ApplicationPolicy
   ##
   # Resource
   #
+  def create?
+    return false if @user.nil?
+
+    # Users can create a pull request but only for itself
+    return false unless @record.user == @user
+
+    # Users can show if the source is updatable
+    source_policy.update?
+  end
+
   def show?
     return false if @user.nil?
 

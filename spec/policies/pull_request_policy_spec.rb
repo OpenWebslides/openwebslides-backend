@@ -11,6 +11,7 @@ RSpec.describe PullRequestPolicy do
     let(:user) { nil }
 
     it { is_expected.to forbid_action :show }
+    it { is_expected.to forbid_action :create }
 
     it { is_expected.to forbid_action :show_user }
     it { is_expected.to forbid_action :show_source }
@@ -21,6 +22,7 @@ RSpec.describe PullRequestPolicy do
     let(:user) { build :user }
 
     it { is_expected.to forbid_action :show }
+    it { is_expected.to forbid_action :create }
 
     it { is_expected.to forbid_action :show_user }
     it { is_expected.to forbid_action :show_source }
@@ -30,6 +32,7 @@ RSpec.describe PullRequestPolicy do
       before { record.source.collaborators << user }
 
       it { is_expected.to permit_action :show }
+      it { is_expected.to forbid_action :create }
 
       it { is_expected.to permit_action :show_user }
       it { is_expected.to permit_action :show_source }
@@ -37,9 +40,10 @@ RSpec.describe PullRequestPolicy do
     end
 
     context 'when the target is updatable' do
-      before { record.source.collaborators << user }
+      before { record.target.collaborators << user }
 
       it { is_expected.to permit_action :show }
+      it { is_expected.to forbid_action :create }
 
       it { is_expected.to permit_action :show_user }
       it { is_expected.to permit_action :show_source }
@@ -51,6 +55,7 @@ RSpec.describe PullRequestPolicy do
     let(:user) { record.user }
 
     it { is_expected.to forbid_action :show }
+    it { is_expected.to forbid_action :create }
 
     it { is_expected.to forbid_action :show_user }
     it { is_expected.to forbid_action :show_source }
@@ -60,6 +65,7 @@ RSpec.describe PullRequestPolicy do
       before { record.source.collaborators << user }
 
       it { is_expected.to permit_action :show }
+      it { is_expected.to permit_action :create }
 
       it { is_expected.to permit_action :show_user }
       it { is_expected.to permit_action :show_source }
@@ -67,9 +73,10 @@ RSpec.describe PullRequestPolicy do
     end
 
     context 'when the target is updatable' do
-      before { record.source.collaborators << user }
+      before { record.target.collaborators << user }
 
       it { is_expected.to permit_action :show }
+      it { is_expected.to forbid_action :create }
 
       it { is_expected.to permit_action :show_user }
       it { is_expected.to permit_action :show_source }
