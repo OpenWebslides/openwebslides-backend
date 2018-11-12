@@ -10,8 +10,8 @@ class PullRequestPolicy < ApplicationPolicy
     # Users can create a pull request but only for itself
     return false unless @record.user == @user
 
-    # Users can show if the source is updatable
-    source_policy.update?
+    # Users can show if the source is updatable and the target is showable
+    source_policy.update? && target_policy.show?
   end
 
   def show?

@@ -65,11 +65,20 @@ RSpec.describe PullRequestPolicy do
       before { record.source.collaborators << user }
 
       it { is_expected.to permit_action :show }
-      it { is_expected.to permit_action :create }
 
       it { is_expected.to permit_action :show_user }
       it { is_expected.to permit_action :show_source }
       it { is_expected.to permit_action :show_target }
+
+      context 'when the target is showable' do
+        it { is_expected.to permit_action :create }
+      end
+
+      context 'when the target is not showable' do
+        before { record.target.update :state => :private_access }
+
+        it { is_expected.to forbid_action :create }
+      end
     end
 
     context 'when the target is updatable' do
