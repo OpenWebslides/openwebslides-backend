@@ -26,9 +26,30 @@ class PullRequestsController < ApplicationController
     jsonapi_render :json => @pull_request
   end
 
+  # POST /pullRequests
+  def create
+    @pull_request = PullRequest.new pull_request_params
+
+    authorize @pull_request
+
+    if @pull_request.save
+      jsonapi_render :json => @pull_request, :status => :created
+    else
+      jsonapi_render_errors :json => @pull_request, :status => :unprocessable_entity
+    end
+  end
+
   ##
   # Relationships
   #
   # Relationships and related resource actions are implemented in the respective concerns
   #
+
+  protected
+
+  def pull_request_params
+    resource_params.merge :user_id => relationship_params[:user],
+                          :source_id => relationship_params[:source],
+                          :target_id => relationship_params[:target]
+  end
 end

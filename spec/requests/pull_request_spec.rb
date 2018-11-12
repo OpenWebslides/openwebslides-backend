@@ -22,8 +22,72 @@ RSpec.describe 'Pull Request API', :type => :request do
   end
 
   ##
+  # Request
+  #
+  let(:attributes) do
+    {
+      :message => Faker::Lorem.words(20).join(' ')
+    }
+  end
+
+  def request_body(attributes)
+    {
+      :data => {
+        :type => 'pullRequests',
+        :attributes => attributes,
+        :relationships => {
+          :user => {
+            :data => {
+              :id => user.id,
+              :type => 'users'
+            }
+          },
+          :source => {
+            :data => {
+              :id => pull_request.source.id,
+              :type => 'topics'
+            }
+          },
+          :target => {
+            :data => {
+              :id => pull_request.target.id,
+              :type => 'topics'
+            }
+          }
+        }
+      }
+    }.to_json
+  end
+
+  ##
   # Tests
   #
+  describe 'POST /' do
+    before do
+      add_content_type_header
+      add_auth_header
+    end
+
+    it 'rejects empty message' do
+      post pull_requests_path, :params => request_body(attributes.merge :message => ''), :headers => headers
+
+      expect(response.status).to eq 422
+      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    end
+
+    it 'returns successful' do
+      post pull_requests_path, :params => request_body(attributes), :headers => headers
+
+      expect(response.status).to eq 201
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+      json = JSON.parse response.body
+
+      expect(json['data']['attributes']['message']).to eq attributes[:message]
+    end
+  end
+
   describe 'GET /:id' do
     before do
       add_content_type_header
