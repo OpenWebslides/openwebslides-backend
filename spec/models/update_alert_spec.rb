@@ -22,17 +22,15 @@ RSpec.describe UpdateAlert, :type => :model do
   describe 'attributes' do
     it { is_expected.to validate_presence_of :count }
     it { is_expected.to validate_numericality_of(:count).only_integer }
+
+    context 'when the alert type is not topic_updated' do
+      before { alert.alert_type = :pr_submitted }
+
+      it { is_expected.not_to be_valid }
+    end
   end
 
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of :alerts }
-  end
-
-  describe 'methods' do
-    describe '#alert_type' do
-      it 'is a topic updated alert' do
-        expect(subject.alert_type).to eq :topic_updated
-      end
-    end
   end
 end

@@ -20,6 +20,9 @@ class UpdateAlert < Alert
   validates :count,
             :presence => true,
             :numericality => { :only_integer => true }
+
+  validate :alert_type_is_updated
+
   ##
   # Callbacks
   #
@@ -29,11 +32,10 @@ class UpdateAlert < Alert
   ##
   # Overrides
   #
-  def alert_type
-    :topic_updated
-  end
-
   ##
   # Helpers and callback methods
   #
+  def alert_type_is_updated
+    errors.add :alert_type unless alert_type == 'topic_updated'
+  end
 end

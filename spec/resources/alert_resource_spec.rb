@@ -31,7 +31,7 @@ RSpec.describe AlertResource, :type => :resource do
 
   describe 'fields' do
     it 'has a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id read user topic]
+      expect(subject.fetchable_fields).to match_array %i[id alert_type read user topic]
     end
 
     it 'has a valid set of sortable fields' do

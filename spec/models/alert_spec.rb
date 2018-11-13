@@ -26,10 +26,4 @@ RSpec.describe Alert, :type => :model do
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of :alerts }
   end
-
-  describe 'methods' do
-    describe '#alert_type' do
-      it { is_expected.to respond_to :alert_type }
-    end
-  end
 end

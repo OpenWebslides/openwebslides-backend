@@ -9,6 +9,10 @@ class Alert < ApplicationRecord
   #
   property :read
 
+  enum :alert_type => {
+    :topic_updated => 0
+  }
+
   ##
   # Associations
   #
@@ -24,8 +28,6 @@ class Alert < ApplicationRecord
   ##
   # Methods
   #
-  def alert_type; end
-
   ##
   # Overrides
   #
