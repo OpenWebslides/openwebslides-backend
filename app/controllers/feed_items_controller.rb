@@ -12,7 +12,7 @@ class FeedItemsController < ApplicationController
   # Resource
   #
 
-  # GET /feed_items
+  # GET /feedItems
   def index
     @feed_items = policy_scope FeedItem
 

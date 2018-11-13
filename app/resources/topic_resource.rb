@@ -23,6 +23,8 @@ class TopicResource < ApplicationResource
   has_many :collaborators
   has_many :assets
   has_many :conversations
+  has_many :incoming_pull_requests
+  has_many :outgoing_pull_requests
 
   ##
   # Filters
@@ -39,11 +41,17 @@ class TopicResource < ApplicationResource
   # Methods
   #
   def self.creatable_fields(context = {})
-    super(context) - %i[upstream content forks collaborators assets conversations]
+    super(context) - %i[
+      upstream content forks collaborators assets conversations
+      incoming_pull_requests outgoing_pull_requests
+    ]
   end
 
   def self.updatable_fields(context = {})
-    super(context) - %i[upstream root_content_item_id content forks collaborators assets conversations]
+    super(context) - %i[
+      upstream root_content_item_id content forks collaborators assets conversations
+      incoming_pull_requests outgoing_pull_requests
+    ]
   end
 
   def self.sortable_fields(context)

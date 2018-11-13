@@ -3,17 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'alerts routing', :type => :routing do
-  it 'routes alerts endpoint' do
-    route = '/api/users/foo/alerts'
-    params = { :user_id => 'foo', :relationship => 'alerts', :source => 'users' }
-
-    expect(:get => route).to route_to 'alerts#get_related_resources', params
-    expect(:post => route).not_to be_routable
-    expect(:patch => route).not_to be_routable
-    expect(:put => route).not_to be_routable
-    expect(:delete => route).not_to be_routable
-  end
-
   it 'routes alert endpoint' do
     route = '/api/alerts/foo'
 

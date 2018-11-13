@@ -33,6 +33,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
+        expect(subject).to forbid_action :show_incoming_pull_requests
+        expect(subject).to forbid_action :show_outgoing_pull_requests
       end
     end
 
@@ -52,6 +54,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :show_feed_items
         expect(subject).to forbid_action :show_conversations
         expect(subject).to forbid_action :show_annotations
+        expect(subject).to forbid_action :show_incoming_pull_requests
+        expect(subject).to forbid_action :show_outgoing_pull_requests
       end
     end
 
@@ -71,6 +75,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :show_feed_items
         expect(subject).to forbid_action :show_conversations
         expect(subject).to forbid_action :show_annotations
+        expect(subject).to forbid_action :show_incoming_pull_requests
+        expect(subject).to forbid_action :show_outgoing_pull_requests
       end
     end
   end
@@ -101,6 +107,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
+        expect(subject).to forbid_action :show_incoming_pull_requests
+        expect(subject).to forbid_action :show_outgoing_pull_requests
       end
     end
 
@@ -120,6 +128,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
+        expect(subject).to forbid_action :show_incoming_pull_requests
+        expect(subject).to forbid_action :show_outgoing_pull_requests
       end
     end
 
@@ -139,6 +149,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to forbid_action :show_feed_items
         expect(subject).to forbid_action :show_conversations
         expect(subject).to forbid_action :show_annotations
+        expect(subject).to forbid_action :show_incoming_pull_requests
+        expect(subject).to forbid_action :show_outgoing_pull_requests
       end
     end
   end
@@ -170,6 +182,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
+        expect(subject).to permit_action :show_incoming_pull_requests
+        expect(subject).to permit_action :show_outgoing_pull_requests
       end
     end
 
@@ -190,6 +204,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
+        expect(subject).to permit_action :show_incoming_pull_requests
+        expect(subject).to permit_action :show_outgoing_pull_requests
       end
     end
 
@@ -210,6 +226,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
+        expect(subject).to permit_action :show_incoming_pull_requests
+        expect(subject).to permit_action :show_outgoing_pull_requests
       end
     end
   end
@@ -241,6 +259,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
+        expect(subject).to permit_action :show_incoming_pull_requests
+        expect(subject).to permit_action :show_outgoing_pull_requests
       end
     end
 
@@ -261,6 +281,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
+        expect(subject).to permit_action :show_incoming_pull_requests
+        expect(subject).to permit_action :show_outgoing_pull_requests
       end
     end
 
@@ -281,6 +303,8 @@ RSpec.describe TopicPolicy do
         expect(subject).to permit_action :show_feed_items
         expect(subject).to permit_action :show_conversations
         expect(subject).to permit_action :show_annotations
+        expect(subject).to permit_action :show_incoming_pull_requests
+        expect(subject).to permit_action :show_outgoing_pull_requests
       end
     end
   end

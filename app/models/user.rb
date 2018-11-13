@@ -113,13 +113,13 @@ class User < ApplicationRecord
   # Helpers and callback methods
   #
   def readonly_email
-    errors.add :email, 'cannot be changed' if email_changed?
+    errors.add :email, I18n.t('openwebslides.validations.user.readonly_email') if email_changed?
   end
 
   def accepted_terms
     return if tos_accepted?
 
-    errors.add :tos_accepted, I18n.t('openwebslides.validations.user.tos_accepted')
+    errors.add :tos_accepted, I18n.t('openwebslides.validations.user.accepted_terms')
   end
 
   private
