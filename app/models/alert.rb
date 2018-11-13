@@ -10,7 +10,10 @@ class Alert < ApplicationRecord
   property :read
 
   enum :alert_type => {
-    :topic_updated => 0
+    :topic_updated => 0,
+    :pr_submitted => 1,
+    :pr_approved => 2,
+    :pr_rejected => 3
   }
 
   ##
