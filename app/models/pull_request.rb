@@ -56,6 +56,8 @@ class PullRequest < ApplicationRecord
 
   validate :target_is_upstream_source
 
+  validate :source_has_one_open_pr
+
   ##
   # Callbacks
   #
@@ -76,5 +78,11 @@ class PullRequest < ApplicationRecord
     return if source.upstream == target
 
     errors.add :source, I18n.t('openwebslides.validations.pull_request.target_is_upstream_source')
+  end
+
+  def source_has_one_open_pr
+    return unless source.outgoing_pull_requests.any?(&:open?)
+
+    errors.add :source, I18n.t('openwebslides.validations.pull_request.source_has_one_open_pr')
   end
 end

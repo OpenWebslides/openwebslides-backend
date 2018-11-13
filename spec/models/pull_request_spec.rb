@@ -29,6 +29,28 @@ RSpec.describe PullRequest, :type => :model do
     it { is_expected.to belong_to(:user) }
     it { is_expected.to belong_to(:source).class_name('Topic').inverse_of(:outgoing_pull_requests) }
     it { is_expected.to belong_to(:target).class_name('Topic').inverse_of(:incoming_pull_requests) }
+
+    context 'when source does not have an upstream' do
+      let(:subject) { build :pull_request, :source => build(:topic) }
+
+      it { is_expected.not_to be_valid }
+    end
+
+    context 'when source has an upstream not equal to the target' do
+      let(:subject) { build :pull_request, :source => build(:topic, :upstream => create(:topic)) }
+
+      it { is_expected.not_to be_valid }
+    end
+
+    context 'when source already has an open pull request' do
+      let(:pull_request) { create :pull_request }
+      let(:subject) { build :pull_request, :source => pull_request.source, :target => pull_request.target }
+
+      # Reload source topic to refetch associations
+      before { pull_request.source.reload }
+
+      it { is_expected.not_to be_valid }
+    end
   end
 
   describe 'state machine' do

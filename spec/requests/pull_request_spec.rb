@@ -14,11 +14,16 @@ RSpec.describe 'Pull Request API', :type => :request do
   #
   let(:pull_request) { create :pull_request }
 
+  let(:source) { create :topic, :upstream => target }
+  let(:target) { create :topic }
+
   let(:user) { create :user, :confirmed }
 
   before do
     pull_request.source.collaborators << user
     pull_request.target.collaborators << user
+
+    source.collaborators << user
   end
 
   ##
@@ -44,13 +49,13 @@ RSpec.describe 'Pull Request API', :type => :request do
           },
           :source => {
             :data => {
-              :id => pull_request.source.id,
+              :id => source.id,
               :type => 'topics'
             }
           },
           :target => {
             :data => {
-              :id => pull_request.target.id,
+              :id => target.id,
               :type => 'topics'
             }
           }
@@ -77,7 +82,7 @@ RSpec.describe 'Pull Request API', :type => :request do
     end
 
     context 'when the source does not have an upstream' do
-      before { pull_request.source.update :upstream => nil }
+      let(:source) { create :topic }
 
       it 'rejects' do
         post pull_requests_path, :params => request_body(attributes), :headers => headers
@@ -89,7 +94,19 @@ RSpec.describe 'Pull Request API', :type => :request do
     end
 
     context 'when the source has an upstream not equal to the target' do
-      before { pull_request.source.update :upstream => create(:topic) }
+      let(:source) { create :topic, :upstream => create(:topic) }
+
+      it 'rejects' do
+        post pull_requests_path, :params => request_body(attributes), :headers => headers
+
+        expect(response.status).to eq 422
+        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      end
+    end
+
+    context 'when the source already has an open pull request' do
+      before { create :pull_request, :source => source, :target => target }
 
       it 'rejects' do
         post pull_requests_path, :params => request_body(attributes), :headers => headers
