@@ -33,6 +33,6 @@ class PullRequestAlert < Alert
   # Helpers and callback methods
   #
   def alert_type_is_pr
-    errors.add :alert_type unless %w[pr_submitted pr_approved pr_rejected].include? alert_type
+    errors.add :alert_type unless %w[pr_submitted pr_accepted pr_rejected].include? alert_type
   end
 end

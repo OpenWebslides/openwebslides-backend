@@ -21,6 +21,7 @@ RSpec.describe Alert, :type => :model do
 
   describe 'attributes' do
     it { is_expected.to allow_values(false, 'false', true, 'true').for :read }
+    it { is_expected.to define_enum_for(:alert_type).with %i[topic_updated pr_submitted pr_accepted pr_rejected] }
   end
 
   describe 'associations' do

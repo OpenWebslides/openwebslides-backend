@@ -12,7 +12,7 @@ class Alert < ApplicationRecord
   enum :alert_type => {
     :topic_updated => 0,
     :pr_submitted => 1,
-    :pr_approved => 2,
+    :pr_accepted => 2,
     :pr_rejected => 3
   }
 
