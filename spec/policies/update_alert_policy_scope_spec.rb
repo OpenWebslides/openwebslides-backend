@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AlertPolicy::Scope do
+RSpec.describe UpdateAlertPolicy::Scope do
   subject { described_class.new(user, Alert).resolve.count }
 
   let(:user1) { create :user }
