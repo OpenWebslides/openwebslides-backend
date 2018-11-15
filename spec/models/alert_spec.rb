@@ -42,6 +42,12 @@ RSpec.describe Alert, :type => :model do
         it { is_expected.to be_valid }
         it { is_expected.not_to validate_presence_of :count }
         it { is_expected.not_to validate_numericality_of(:count).only_integer }
+
+        context 'when count is non-nil' do
+          before { alert.count = 1 }
+
+          it { is_expected.not_to be_valid }
+        end
       end
     end
   end
@@ -58,6 +64,24 @@ RSpec.describe Alert, :type => :model do
       it { is_expected.to validate_presence_of :topic }
       it { is_expected.not_to validate_presence_of :pull_request }
       it { is_expected.not_to validate_presence_of :subject }
+
+      context 'when topic is non-nil' do
+        before { alert.topic = build(:topic) }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'when pull_request is non-nil' do
+        before { alert.pull_request = build(:pull_request) }
+
+        it { is_expected.not_to be_valid }
+      end
+
+      context 'when subject is non-nil' do
+        before { alert.subject = build(:user) }
+
+        it { is_expected.not_to be_valid }
+      end
     end
 
     %i[pr_submitted pr_accepted pr_rejected].each do |alert_type|
@@ -67,6 +91,24 @@ RSpec.describe Alert, :type => :model do
         it { is_expected.not_to validate_presence_of :topic }
         it { is_expected.to validate_presence_of :pull_request }
         it { is_expected.to validate_presence_of :subject }
+
+        context 'when topic is non-nil' do
+          before { alert.topic = build(:topic) }
+
+          it { is_expected.not_to be_valid }
+        end
+
+        context 'when pull_request is non-nil' do
+          before { alert.pull_request = build(:pull_request) }
+
+          it { is_expected.to be_valid }
+        end
+
+        context 'when subject is non-nil' do
+          before { alert.subject = build(:user) }
+
+          it { is_expected.to be_valid }
+        end
       end
     end
   end

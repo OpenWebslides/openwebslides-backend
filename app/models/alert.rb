@@ -41,17 +41,13 @@ class Alert < ApplicationRecord
             :numericality => { :only_integer => true },
             :if => :topic_updated?
 
-  validates :topic,
-            :presence => true,
-            :if => :topic_updated?
+  # Validate presence and absence of fields when alert_type == :topic_updated
+  validate :update_type_fields,
+           :if => :topic_updated?
 
-  validates :subject,
-            :presence => true,
-            :unless => :topic_updated?
-
-  validates :pull_request,
-            :presence => true,
-            :unless => :topic_updated?
+  # Validate presence and absence of fields when alert_type == :pr_*
+  validate :pull_request_type_fields,
+           :unless => :topic_updated?
 
   ##
   # Callbacks
@@ -65,4 +61,22 @@ class Alert < ApplicationRecord
   ##
   # Helpers and callback methods
   #
+  def update_type_fields
+    # Topic must be present
+    errors.add :topic, :blank unless topic
+
+    # Subject and pull request must be blank
+    errors.add :subject, :present if subject
+    errors.add :pull_request, :present if pull_request
+  end
+
+  def pull_request_type_fields
+    # Subject and pull request must be present
+    errors.add :subject, :blank unless subject
+    errors.add :pull_request, :blank unless pull_request
+
+    # Topic and count must be blank
+    errors.add :topic, :present if topic
+    errors.add :count, :present if count?
+  end
 end
