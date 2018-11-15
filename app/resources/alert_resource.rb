@@ -11,21 +11,14 @@ class AlertResource < ApplicationResource
   #
   attribute :read
   attribute :alert_type
-
-  # UpdateAlert attributes
   attribute :count
 
   ##
   # Relationships
   #
   has_one :user
-
-  # UpdateAlert relationships
   has_one :topic
-
-  # PullRequestAlert relationships
   has_one :pull_request
-
   has_one :subject,
           :class_name => 'User'
 

@@ -6,6 +6,7 @@ FactoryBot.define do
 
     factory :update_alert do
       alert_type { :topic_updated }
+      count { Faker::Number.number 1 }
 
       topic { build :topic }
     end
