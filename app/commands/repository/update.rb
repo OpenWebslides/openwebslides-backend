@@ -10,6 +10,7 @@ module Repository
     def execute
       raise OpenWebslides::ArgumentError, 'No author specified' unless @author
       raise OpenWebslides::ArgumentError, 'No content specified' unless @content
+      raise OpenWebslides::ArgumentError, 'No message specified' unless message
 
       write_lock do
         # Write data file
@@ -20,7 +21,7 @@ module Repository
         # Commit
         exec Git::Commit do |c|
           c.author = @author
-          c.message = @message || 'Update topic'
+          c.message = @message
         end
 
         # Update timestamps

@@ -54,7 +54,7 @@ class TopicService < ApplicationService
 
     command.content = params[:content]
     command.author = params[:author]
-    command.message = params[:message] if params[:message]
+    command.message = params[:message]
 
     command.execute
 
@@ -64,6 +64,9 @@ class TopicService < ApplicationService
                     :event_type => :topic_updated
 
     true
+  rescue OpenWebslides::FormatError => e
+    @topic.errors.add :content, e.error_type
+    false
   end
 
   ##
