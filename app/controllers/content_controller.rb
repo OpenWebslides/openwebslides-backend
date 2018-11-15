@@ -31,11 +31,17 @@ class ContentController < ApplicationController
     authorize @topic
 
     content = resource_params[:content].map { |p| p.permit!.to_hash }
-    service.update :author => current_user, :content => content
+    params = {
+      :author => current_user,
+      :content => content,
+      :message => resource_params[:message]
+    }
 
-    head :no_content
-  rescue OpenWebslides::FormatError => e
-    raise JSONAPI::Exceptions::FormatError, e.error_type
+    if service.update params
+      head :no_content
+    else
+      jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
+    end
   end
 
   ##

@@ -103,7 +103,8 @@ RSpec.describe 'Topic', :type => :request do
 
       # Populate the topic with some dummy content
       service.update :author => user,
-                     :content => content
+                     :content => content,
+                     :message => 'Update content'
     end
 
     it 'returns without any errors' do
@@ -135,7 +136,8 @@ RSpec.describe 'Topic', :type => :request do
           :id => topic.id,
           :type => 'contents',
           :attributes => {
-            :content => content
+            :content => content,
+            :message => 'Update content'
           }
         }
       }

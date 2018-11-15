@@ -11,6 +11,7 @@ RSpec.describe 'Content API', :type => :request do
       :data => {
         :type => 'contents',
         :attributes => {
+          :message => 'Update topic content',
           :content => [{
             :foo => 'bar'
           }]

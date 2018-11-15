@@ -10,6 +10,7 @@ class ContentResource < ApplicationResource
   # Attributes
   #
   attribute :content
+  attribute :message
 
   ##
   # Relationships
@@ -20,6 +21,25 @@ class ContentResource < ApplicationResource
   ##
   # Callbacks
   #
+  ##
+  # Overrides
+  #
+  def self.fields
+    super - %i[id message]
+  end
+
+  def self.creatable_fields(context = {})
+    super(context) - %i[content message]
+  end
+
+  def self.updatable_fields(context = {})
+    super(context)
+  end
+
+  def self.sortable_fields(context = {})
+    super(context) - %i[id content message]
+  end
+
   ##
   # Methods
   #

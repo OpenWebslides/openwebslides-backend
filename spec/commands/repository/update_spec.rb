@@ -23,19 +23,29 @@ RSpec.describe Repository::Update do
   describe '#execute' do
     it 'raises ArgumentError when no author is specified' do
       subject.content = 'foobar'
+      subject.message = 'foobar'
 
       expect { subject.execute }.to raise_error OpenWebslides::ArgumentError
     end
 
     it 'raises ArgumentError when no content is specified' do
       subject.author = user
+      subject.message = 'foobar'
 
       expect { subject.execute }.to raise_error OpenWebslides::ArgumentError
     end
 
-    it 'does not raise anything when author and content are specified' do
+    it 'raises ArgumentError when no message is specified' do
+      subject.content = 'foobar'
+      subject.author = user
+
+      expect { subject.execute }.to raise_error OpenWebslides::ArgumentError
+    end
+
+    it 'does not raise anything when author, content and message are specified' do
       subject.author = user
       subject.content = 'foobar'
+      subject.message = 'foobar'
 
       # Stub execute methods
       allow_any_instance_of(Repository::Filesystem::Write).to receive :execute
@@ -55,11 +65,12 @@ RSpec.describe Repository::Update do
         .with(topic)
         .and_return git_commit_command
       expect(git_commit_command).to receive :execute
-      expect(git_commit_command).to receive :author=
-      expect(git_commit_command).to receive :message=
+      expect(git_commit_command).to receive(:author=).with user
+      expect(git_commit_command).to receive(:message=).with 'message'
 
       subject.author = user
       subject.content = 'content'
+      subject.message = 'message'
       subject.execute
     end
   end
