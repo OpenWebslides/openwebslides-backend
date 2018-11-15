@@ -13,6 +13,9 @@ RSpec.describe AlertPolicy do
     it { is_expected.to forbid_action :show }
 
     it { is_expected.to forbid_action :show_user }
+    it { is_expected.to forbid_action :show_topic }
+    it { is_expected.to forbid_action :show_subject }
+    it { is_expected.to forbid_action :show_pull_request }
   end
 
   context 'when the user is a user' do
@@ -21,6 +24,9 @@ RSpec.describe AlertPolicy do
     it { is_expected.to forbid_action :show }
 
     it { is_expected.to forbid_action :show_user }
+    it { is_expected.to forbid_action :show_topic }
+    it { is_expected.to forbid_action :show_subject }
+    it { is_expected.to forbid_action :show_pull_request }
   end
 
   context 'when the user is the same' do
@@ -29,5 +35,8 @@ RSpec.describe AlertPolicy do
     it { is_expected.to permit_action :show }
 
     it { is_expected.to permit_action :show_user }
+    it { is_expected.to permit_action :show_topic }
+    it { is_expected.to permit_action :show_subject }
+    it { is_expected.to permit_action :show_pull_request }
   end
 end
