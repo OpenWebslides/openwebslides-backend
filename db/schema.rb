@@ -10,16 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_12_113733) do
+ActiveRecord::Schema.define(version: 2018_11_15_171914) do
 
   create_table "alerts", force: :cascade do |t|
     t.integer "user_id"
     t.boolean "read", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "type"
     t.integer "count"
     t.integer "topic_id"
+    t.integer "alert_type", default: 0, null: false
+    t.integer "pull_request_id"
+    t.integer "subject_id"
+    t.index ["pull_request_id"], name: "index_alerts_on_pull_request_id"
+    t.index ["subject_id"], name: "index_alerts_on_subject_id"
     t.index ["topic_id"], name: "index_alerts_on_topic_id"
     t.index ["user_id"], name: "index_alerts_on_user_id"
   end

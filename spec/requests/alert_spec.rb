@@ -12,9 +12,16 @@ RSpec.describe 'Alerts API', :type => :request do
   ##
   # Test variables
   #
-  let(:alert) { create :alert, :user => user }
+  let(:alert) { create :update_alert, :user => user }
 
   let(:user) { create :user, :confirmed }
+  let(:topic) { create :topic, :user => user }
+
+  def params
+    {
+      :include => 'user,topic,pullRequest,subject'
+    }
+  end
 
   ##
   # Tests
@@ -32,11 +39,81 @@ RSpec.describe 'Alerts API', :type => :request do
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
-    it 'returns successful' do
-      get alert_path(:id => alert.id), :headers => headers
+    context 'when the alert_type is `topic_updated`' do
+      let(:alert) { create :update_alert, :user => user, :alert_type => :topic_updated, :topic => topic }
 
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it 'returns successful' do
+        get alert_path(:id => alert.id), :params => params, :headers => headers
+
+        expect(response.status).to eq 200
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+        json = JSON.parse(response.body)['data']
+
+        expect(json['attributes']['alertType']).to eq 'topic_updated'
+        expect(json['attributes']['count']).to eq alert.count
+        expect(json['relationships']['user']['data']['id']).to eq user.id.to_s
+        expect(json['relationships']['topic']['data']['id']).to eq topic.id.to_s
+        expect(json['relationships']['subject']['data']).to be_nil
+        expect(json['relationships']['pullRequest']['data']).to be_nil
+      end
+    end
+
+    context 'when the alert_type is `pr_submitted`' do
+      let(:alert) { create :pull_request_alert, :user => user, :alert_type => :pr_submitted }
+
+      it 'returns successful' do
+        get alert_path(:id => alert.id), :params => params, :headers => headers
+
+        expect(response.status).to eq 200
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+        json = JSON.parse(response.body)['data']
+
+        expect(json['attributes']['alertType']).to eq 'pr_submitted'
+        expect(json['relationships']['user']['data']['id']).to eq alert.user.id.to_s
+        expect(json['relationships']['topic']['data']).to be_nil
+        expect(json['relationships']['subject']['data']['id']).to eq alert.subject.id.to_s
+        expect(json['relationships']['pullRequest']['data']['id']).to eq alert.pull_request.id.to_s
+      end
+    end
+
+    context 'when the alert_type is `pr_accepted`' do
+      let(:alert) { create :pull_request_alert, :user => user, :alert_type => :pr_accepted }
+
+      it 'returns successful' do
+        get alert_path(:id => alert.id), :params => params, :headers => headers
+
+        expect(response.status).to eq 200
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+        json = JSON.parse(response.body)['data']
+
+        expect(json['attributes']['alertType']).to eq 'pr_accepted'
+        expect(json['relationships']['user']['data']['id']).to eq alert.user.id.to_s
+        expect(json['relationships']['topic']['data']).to be_nil
+        expect(json['relationships']['subject']['data']['id']).to eq alert.subject.id.to_s
+        expect(json['relationships']['pullRequest']['data']['id']).to eq alert.pull_request.id.to_s
+      end
+    end
+
+    context 'when the alert_type is `pr_rejected`' do
+      let(:alert) { create :pull_request_alert, :user => user, :alert_type => :pr_rejected }
+
+      it 'returns successful' do
+        get alert_path(:id => alert.id), :params => params, :headers => headers
+
+        expect(response.status).to eq 200
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+        json = JSON.parse(response.body)['data']
+
+        expect(json['attributes']['alertType']).to eq 'pr_rejected'
+        expect(json['relationships']['user']['data']['id']).to eq alert.user.id.to_s
+        expect(json['relationships']['topic']['data']).to be_nil
+        expect(json['relationships']['subject']['data']['id']).to eq alert.subject.id.to_s
+        expect(json['relationships']['pullRequest']['data']['id']).to eq alert.pull_request.id.to_s
+      end
     end
   end
 
@@ -45,17 +122,25 @@ RSpec.describe 'Alerts API', :type => :request do
       add_content_type_header
       add_auth_header
 
-      create_list :alert, 3, :user => user
+      create :update_alert, :user => user, :alert_type => :topic_updated
+      create :pull_request_alert, :user => user, :alert_type => :pr_submitted
+      create :pull_request_alert, :user => user, :alert_type => :pr_accepted
+      create :pull_request_alert, :user => user, :alert_type => :pr_rejected
     end
 
     it 'returns successful' do
-      get user_alerts_path(:user_id => user.id), :headers => headers
+      get user_alerts_path(:user_id => user.id), :params => params, :headers => headers
 
       expect(response.status).to eq 200
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       json = JSON.parse response.body
-      expect(json['data'].count).to eq 3
+      expect(json['data'].count).to eq 4
+
+      expect(json['data'][0]['attributes']['alertType']).to eq 'topic_updated'
+      expect(json['data'][1]['attributes']['alertType']).to eq 'pr_submitted'
+      expect(json['data'][2]['attributes']['alertType']).to eq 'pr_accepted'
+      expect(json['data'][3]['attributes']['alertType']).to eq 'pr_rejected'
     end
   end
 end

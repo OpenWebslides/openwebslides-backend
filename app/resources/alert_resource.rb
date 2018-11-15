@@ -11,8 +11,6 @@ class AlertResource < ApplicationResource
   #
   attribute :read
   attribute :alert_type
-
-  # UpdateAlert attributes
   attribute :count
 
   ##
@@ -20,6 +18,9 @@ class AlertResource < ApplicationResource
   #
   has_one :user
   has_one :topic
+  has_one :pull_request
+  has_one :subject,
+          :class_name => 'User'
 
   ##
   # Filters

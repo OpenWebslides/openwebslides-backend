@@ -30,6 +30,14 @@ Rails.application.routes.draw do
       # Topic relationship
       jsonapi_related_resource :topic
       jsonapi_link :topic, :only => :show
+
+      # Pull request relationship
+      jsonapi_related_resource :pull_request
+      jsonapi_link :pull_request, :only => :show
+
+      # Subject relationship
+      jsonapi_related_resource :subject
+      jsonapi_link :subject, :only => :show
     end
 
     ##

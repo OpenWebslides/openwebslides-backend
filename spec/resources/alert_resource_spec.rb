@@ -14,7 +14,7 @@ RSpec.describe AlertResource, :type => :resource do
   #
   let(:subject) { described_class.new alert, context }
 
-  let(:alert) { create :alert }
+  let(:alert) { create :update_alert }
   let(:context) { {} }
 
   ##
@@ -28,10 +28,24 @@ RSpec.describe AlertResource, :type => :resource do
 
   it { is_expected.to have_one :user }
   it { is_expected.to have_one :topic }
+  it { is_expected.to have_one :pull_request }
+  it { is_expected.to have_one(:subject).with_class_name('User') }
 
   describe 'fields' do
-    it 'has a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id read user topic]
+    context 'when the alert is an UpdateAlert' do
+      let(:alert) { create :update_alert }
+
+      it 'has a valid set of fetchable fields' do
+        expect(subject.fetchable_fields).to match_array %i[id alert_type count read user topic pull_request subject]
+      end
+    end
+
+    context 'when the alert is a PullRequestAlert' do
+      let(:alert) { create :pull_request_alert }
+
+      it 'has a valid set of fetchable fields' do
+        expect(subject.fetchable_fields).to match_array %i[id alert_type read user topic pull_request subject]
+      end
     end
 
     it 'has a valid set of sortable fields' do

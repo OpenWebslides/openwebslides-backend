@@ -9,8 +9,8 @@ RSpec.describe AlertPolicy::Scope do
   let(:user2) { create :user }
 
   before :each do
-    create_list :alert, 3, :user => user1
-    create_list :alert, 5, :user => user2
+    create_list :update_alert, 3, :user => user1
+    create_list :update_alert, 5, :user => user2
   end
 
   context 'when the user is a guest' do
