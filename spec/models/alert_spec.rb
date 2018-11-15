@@ -22,31 +22,27 @@ RSpec.describe Alert, :type => :model do
     it { is_expected.to define_enum_for(:alert_type).with %i[topic_updated pr_submitted pr_accepted pr_rejected] }
 
     context 'when alert_type is `topic_updated`' do
-      subject(:alert) { build :alert, :alert_type => :topic_updated }
+      subject(:alert) { build :update_alert, :alert_type => :topic_updated }
 
+      it { is_expected.to be_valid }
       it { is_expected.to validate_presence_of :count }
       it { is_expected.to validate_numericality_of(:count).only_integer }
+
+      context 'when count is non-nil' do
+        before { alert.count = 1 }
+
+        it { is_expected.to be_valid }
+      end
     end
 
-    context 'when alert_type is `pr_submitted`' do
-      subject(:alert) { build :alert, :alert_type => :pr_submitted }
+    %i[pr_submitted pr_accepted pr_rejected].each do |alert_type|
+      context "when alert_type is `#{alert_type}`" do
+        subject(:alert) { build :pull_request_alert, :alert_type => alert_type }
 
-      it { is_expected.not_to validate_presence_of :count }
-      it { is_expected.not_to validate_numericality_of(:count).only_integer }
-    end
-
-    context 'when alert_type is `pr_accepted`' do
-      subject(:alert) { build :alert, :alert_type => :pr_accepted }
-
-      it { is_expected.not_to validate_presence_of :count }
-      it { is_expected.not_to validate_numericality_of(:count).only_integer }
-    end
-
-    context 'when alert_type is `pr_rejected`' do
-      subject(:alert) { build :alert, :alert_type => :pr_rejected }
-
-      it { is_expected.not_to validate_presence_of :count }
-      it { is_expected.not_to validate_numericality_of(:count).only_integer }
+        it { is_expected.to be_valid }
+        it { is_expected.not_to validate_presence_of :count }
+        it { is_expected.not_to validate_numericality_of(:count).only_integer }
+      end
     end
   end
 
@@ -57,35 +53,21 @@ RSpec.describe Alert, :type => :model do
     it { is_expected.to belong_to(:subject).class_name('User') }
 
     context 'when alert_type is `topic_updated`' do
-      subject(:alert) { build :alert, :alert_type => :topic_updated }
+      subject(:alert) { build :update_alert, :alert_type => :topic_updated }
 
       it { is_expected.to validate_presence_of :topic }
       it { is_expected.not_to validate_presence_of :pull_request }
       it { is_expected.not_to validate_presence_of :subject }
     end
 
-    context 'when alert_type is `pr_submitted`' do
-      subject(:alert) { build :alert, :alert_type => :pr_submitted }
+    %i[pr_submitted pr_accepted pr_rejected].each do |alert_type|
+      context "when alert_type is `#{alert_type}`" do
+        subject(:alert) { build :pull_request_alert, :alert_type => alert_type }
 
-      it { is_expected.not_to validate_presence_of :topic }
-      it { is_expected.to validate_presence_of :pull_request }
-      it { is_expected.to validate_presence_of :subject }
-    end
-
-    context 'when alert_type is `pr_accepted`' do
-      subject(:alert) { build :alert, :alert_type => :pr_accepted }
-
-      it { is_expected.not_to validate_presence_of :topic }
-      it { is_expected.to validate_presence_of :pull_request }
-      it { is_expected.to validate_presence_of :subject }
-    end
-
-    context 'when alert_type is `pr_rejected`' do
-      subject(:alert) { build :alert, :alert_type => :pr_rejected }
-
-      it { is_expected.not_to validate_presence_of :topic }
-      it { is_expected.to validate_presence_of :pull_request }
-      it { is_expected.to validate_presence_of :subject }
+        it { is_expected.not_to validate_presence_of :topic }
+        it { is_expected.to validate_presence_of :pull_request }
+        it { is_expected.to validate_presence_of :subject }
+      end
     end
   end
 end
