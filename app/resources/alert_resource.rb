@@ -19,7 +19,15 @@ class AlertResource < ApplicationResource
   # Relationships
   #
   has_one :user
+
+  # UpdateAlert relationships
   has_one :topic
+
+  # PullRequestAlert relationships
+  has_one :pull_request
+
+  has_one :subject,
+          :class_name => 'User'
 
   ##
   # Filters
