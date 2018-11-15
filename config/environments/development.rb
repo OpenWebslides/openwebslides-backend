@@ -64,4 +64,7 @@ Rails.application.configure do
   end
 
   config.active_record.sqlite3.represent_boolean_as_integer = true
+
+  # Allow specifying a user instead of an authentication token
+  config.middleware.use UserAuthentication
 end
