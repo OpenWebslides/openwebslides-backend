@@ -21,6 +21,14 @@ RSpec.describe Alert, :type => :model do
     it { is_expected.to allow_values(false, 'false', true, 'true').for :read }
     it { is_expected.to define_enum_for(:alert_type).with %i[topic_updated pr_submitted pr_accepted pr_rejected] }
 
+    describe 'read must be true on update' do
+      subject(:alert) { create :update_alert, :alert_type => :topic_updated }
+
+      it 'is invalid' do
+        expect { alert.update! :read => false }.to raise_error ActiveRecord::RecordInvalid
+      end
+    end
+
     context 'when alert_type is `topic_updated`' do
       subject(:alert) { build :update_alert, :alert_type => :topic_updated }
 

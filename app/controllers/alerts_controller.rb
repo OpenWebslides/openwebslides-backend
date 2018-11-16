@@ -26,6 +26,19 @@ class AlertsController < ApplicationController
     jsonapi_render :json => @alert
   end
 
+  # PUT/PATCH /alerts/:id
+  def update
+    @alert = Alert.find params[:id]
+
+    authorize @alert
+
+    if @alert.update resource_params
+      jsonapi_render :json => @alert
+    else
+      jsonapi_render_errors :json => @alert, :status => :unprocessable_entity
+    end
+  end
+
   ##
   # Relationships
   #

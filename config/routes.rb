@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     ##
     # Alerts API
     #
-    jsonapi_resources :alerts, :only => %i[show] do
+    jsonapi_resources :alerts, :only => %i[show update] do
       # User relationship
       jsonapi_related_resource :user
       jsonapi_link :user, :only => :show

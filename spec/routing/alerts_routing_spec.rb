@@ -7,8 +7,8 @@ RSpec.describe 'alerts routing', :type => :routing do
     route = '/api/alerts/foo'
 
     expect(:get => route).to route_to 'alerts#show', :id => 'foo'
-    expect(:patch => route).not_to be_routable
-    expect(:put => route).not_to be_routable
+    expect(:patch => route).to route_to 'alerts#update', :id => 'foo'
+    expect(:put => route).to route_to 'alerts#update', :id => 'foo'
     expect(:post => route).not_to be_routable
     expect(:delete => route).not_to be_routable
   end

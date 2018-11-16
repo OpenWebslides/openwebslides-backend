@@ -23,6 +23,16 @@ RSpec.describe 'Alerts API', :type => :request do
     }
   end
 
+  def update_body(id, attributes)
+    {
+      :data => {
+        :type => 'alerts',
+        :id => id,
+        :attributes => attributes
+      }
+    }.to_json
+  end
+
   ##
   # Tests
   #
@@ -141,6 +151,71 @@ RSpec.describe 'Alerts API', :type => :request do
       expect(json['data'][1]['attributes']['alertType']).to eq 'pr_submitted'
       expect(json['data'][2]['attributes']['alertType']).to eq 'pr_accepted'
       expect(json['data'][3]['attributes']['alertType']).to eq 'pr_rejected'
+    end
+  end
+
+  describe 'PUT/PATCH /alerts/:id' do
+    before do
+      add_content_type_header
+      add_auth_header
+    end
+
+    it 'rejects non-existant alerts' do
+      patch alert_path(:id => 999), :params => update_body(999, :read => true), :headers => headers
+
+      expect(response.status).to eq 404
+      expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    end
+
+    context 'when the alert is not read' do
+      let(:alert) { create :update_alert, :user => user, :read => false }
+
+      it 'rejects requests with read set to false' do
+        patch alert_path(:id => alert.id), :params => update_body(alert.id, :read => false), :headers => headers
+
+        expect(response.status).to eq 422
+        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+        alert.reload
+        expect(alert.read).to be false
+      end
+
+      it 'sets read to true' do
+        patch alert_path(:id => alert.id), :params => update_body(alert.id, :read => true), :headers => headers
+
+        expect(response.status).to eq 200
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+        alert.reload
+        expect(alert.read).to be true
+      end
+    end
+
+    context 'when the alert is already read' do
+      let(:alert) { create :update_alert, :user => user, :read => true }
+
+      it 'rejects requests with read set to false' do
+        patch alert_path(:id => alert.id), :params => update_body(alert.id, :read => false), :headers => headers
+
+        expect(response.status).to eq 422
+        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+        alert.reload
+        expect(alert.read).to be true
+      end
+
+      it 'sets read to true' do
+        patch alert_path(:id => alert.id), :params => update_body(alert.id, :read => true), :headers => headers
+
+        expect(response.status).to eq 200
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+        alert.reload
+        expect(alert.read).to be true
+      end
     end
   end
 end
