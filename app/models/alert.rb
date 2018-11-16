@@ -52,6 +52,9 @@ class Alert < ApplicationRecord
   validate :topic_equals_target,
            :unless => :topic_updated?
 
+  validate :update_read_is_true,
+           :on => :update
+
   ##
   # Callbacks
   #
@@ -87,5 +90,9 @@ class Alert < ApplicationRecord
     return if topic == pull_request&.target
 
     errors.add :topic, I18n.t('openwebslides.validations.alert.topic_equals_target')
+  end
+
+  def update_read_is_true
+    errors.add :read, I18n.t('openwebslides.validations.alert.update_read_is_true') unless read
   end
 end
