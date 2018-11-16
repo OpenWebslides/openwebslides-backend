@@ -18,5 +18,12 @@ FactoryBot.define do
       topic { pull_request.target }
       subject { build :user }
     end
+
+    factory :forked_alert do
+      alert_type { :topic_forked }
+
+      topic { build :topic }
+      subject { build :user }
+    end
   end
 end

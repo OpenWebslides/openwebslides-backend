@@ -14,7 +14,8 @@ class Alert < ApplicationRecord
     :topic_updated => 0,
     :pr_submitted => 1,
     :pr_accepted => 2,
-    :pr_rejected => 3
+    :pr_rejected => 3,
+    :topic_forked => 4
   }
 
   ##
@@ -41,19 +42,24 @@ class Alert < ApplicationRecord
             :numericality => { :only_integer => true },
             :if => :topic_updated?
 
+  validate :update_read_is_true,
+           :on => :update
+
   # Validate presence and absence of fields when alert_type == :topic_updated
   validate :update_type_fields,
            :if => :topic_updated?
 
   # Validate presence and absence of fields when alert_type == :pr_*
   validate :pull_request_type_fields,
-           :unless => :topic_updated?
+           :if => :pull_request_type?
 
+  # Validate topic equals pull request target
   validate :topic_equals_target,
-           :unless => :topic_updated?
+           :if => :pull_request_type?
 
-  validate :update_read_is_true,
-           :on => :update
+  # Validate presence and absence of fields when alert_type == :topic_forked
+  validate :forked_type_fields,
+           :if => :forked_type?
 
   ##
   # Callbacks
@@ -61,6 +67,18 @@ class Alert < ApplicationRecord
   ##
   # Methods
   #
+  def update_type?
+    topic_updated?
+  end
+
+  def pull_request_type?
+    pr_submitted? || pr_accepted? || pr_rejected?
+  end
+
+  def forked_type?
+    topic_forked?
+  end
+
   ##
   # Overrides
   #
@@ -84,6 +102,16 @@ class Alert < ApplicationRecord
 
     # Count must be blank
     errors.add :count, :present if count?
+  end
+
+  def forked_type_fields
+    # Topic and subject must be present
+    errors.add :topic, :blank unless topic
+    errors.add :subject, :blank unless subject
+
+    # Count and pull request must be blank
+    errors.add :count, :present if count?
+    errors.add :pull_request if pull_request
   end
 
   def topic_equals_target
