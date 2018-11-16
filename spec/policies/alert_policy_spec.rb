@@ -11,6 +11,7 @@ RSpec.describe AlertPolicy do
     let(:user) { nil }
 
     it { is_expected.to forbid_action :show }
+    it { is_expected.to forbid_action :update }
 
     it { is_expected.to forbid_action :show_user }
     it { is_expected.to forbid_action :show_topic }
@@ -22,6 +23,7 @@ RSpec.describe AlertPolicy do
     let(:user) { build :user }
 
     it { is_expected.to forbid_action :show }
+    it { is_expected.to forbid_action :update }
 
     it { is_expected.to forbid_action :show_user }
     it { is_expected.to forbid_action :show_topic }
@@ -33,6 +35,7 @@ RSpec.describe AlertPolicy do
     let(:user) { record.user }
 
     it { is_expected.to permit_action :show }
+    it { is_expected.to permit_action :update }
 
     it { is_expected.to permit_action :show_user }
     it { is_expected.to permit_action :show_topic }

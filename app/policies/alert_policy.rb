@@ -11,6 +11,11 @@ class AlertPolicy < ApplicationPolicy
     @record.user == @user
   end
 
+  def update?
+    # Only owner can update alert
+    show?
+  end
+
   ##
   # Relationship: user
   #
