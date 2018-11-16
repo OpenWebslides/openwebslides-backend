@@ -71,12 +71,12 @@ class Alert < ApplicationRecord
   end
 
   def pull_request_type_fields
-    # Subject and pull request must be present
+    # Topic, subject and pull request must be present
+    errors.add :topic, :blank unless topic
     errors.add :subject, :blank unless subject
     errors.add :pull_request, :blank unless pull_request
 
-    # Topic and count must be blank
-    errors.add :topic, :present if topic
+    # Count must be blank
     errors.add :count, :present if count?
   end
 end

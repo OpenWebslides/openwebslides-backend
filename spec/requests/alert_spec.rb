@@ -72,7 +72,7 @@ RSpec.describe 'Alerts API', :type => :request do
 
         expect(json['attributes']['alertType']).to eq 'pr_submitted'
         expect(json['relationships']['user']['data']['id']).to eq alert.user.id.to_s
-        expect(json['relationships']['topic']['data']).to be_nil
+        expect(json['relationships']['topic']['data']['id']).to eq alert.topic.id.to_s
         expect(json['relationships']['subject']['data']['id']).to eq alert.subject.id.to_s
         expect(json['relationships']['pullRequest']['data']['id']).to eq alert.pull_request.id.to_s
       end
@@ -91,7 +91,7 @@ RSpec.describe 'Alerts API', :type => :request do
 
         expect(json['attributes']['alertType']).to eq 'pr_accepted'
         expect(json['relationships']['user']['data']['id']).to eq alert.user.id.to_s
-        expect(json['relationships']['topic']['data']).to be_nil
+        expect(json['relationships']['topic']['data']['id']).to eq alert.topic.id.to_s
         expect(json['relationships']['subject']['data']['id']).to eq alert.subject.id.to_s
         expect(json['relationships']['pullRequest']['data']['id']).to eq alert.pull_request.id.to_s
       end
@@ -110,7 +110,7 @@ RSpec.describe 'Alerts API', :type => :request do
 
         expect(json['attributes']['alertType']).to eq 'pr_rejected'
         expect(json['relationships']['user']['data']['id']).to eq alert.user.id.to_s
-        expect(json['relationships']['topic']['data']).to be_nil
+        expect(json['relationships']['topic']['data']['id']).to eq alert.topic.id.to_s
         expect(json['relationships']['subject']['data']['id']).to eq alert.subject.id.to_s
         expect(json['relationships']['pullRequest']['data']['id']).to eq alert.pull_request.id.to_s
       end
