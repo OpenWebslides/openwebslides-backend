@@ -48,6 +48,10 @@ RSpec.describe AlertResource, :type => :resource do
       end
     end
 
+    it 'should have a valid set of updatable fields' do
+      expect(described_class.updatable_fields).to match_array %i[read]
+    end
+
     it 'has a valid set of sortable fields' do
       expect(described_class.sortable_fields context).to match_array %i[created_at]
     end

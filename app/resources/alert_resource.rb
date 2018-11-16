@@ -4,8 +4,6 @@
 # Alert resource
 #
 class AlertResource < ApplicationResource
-  immutable
-
   ##
   # Attributes
   #
@@ -31,6 +29,10 @@ class AlertResource < ApplicationResource
   ##
   # Methods
   #
+  def self.updatable_fields(context = {})
+    super(context) - %i[alert_type count pull_request user topic subject]
+  end
+
   def self.sortable_fields(_)
     %i[created_at]
   end
