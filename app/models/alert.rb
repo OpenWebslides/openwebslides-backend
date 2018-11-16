@@ -49,6 +49,9 @@ class Alert < ApplicationRecord
   validate :pull_request_type_fields,
            :unless => :topic_updated?
 
+  validate :topic_equals_target,
+           :unless => :topic_updated?
+
   ##
   # Callbacks
   #
@@ -78,5 +81,11 @@ class Alert < ApplicationRecord
 
     # Count must be blank
     errors.add :count, :present if count?
+  end
+
+  def topic_equals_target
+    return if topic == pull_request&.target
+
+    errors.add :topic, I18n.t('openwebslides.validations.alert.topic_equals_target')
   end
 end
