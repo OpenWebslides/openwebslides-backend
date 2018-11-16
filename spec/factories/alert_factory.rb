@@ -15,6 +15,7 @@ FactoryBot.define do
       alert_type { %i[pr_submitted pr_accepted pr_rejected].sample }
 
       pull_request { build :pull_request }
+      topic { pull_request.target }
       subject { build :user }
     end
   end

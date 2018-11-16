@@ -32,6 +32,8 @@ en:
       pull_request:
         target_is_upstream_source: "must have target as upstream"
         source_has_one_open_pr: "can only have on open pull request"
+      alert:
+        topic_equals_target: "must equal pull request target topic"
     annotations:
       hidden: "[deleted]"
     mailer:

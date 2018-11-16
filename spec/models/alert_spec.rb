@@ -88,18 +88,27 @@ RSpec.describe Alert, :type => :model do
       context "when alert_type is `#{alert_type}`" do
         subject(:alert) { build :pull_request_alert, :alert_type => alert_type }
 
-        it { is_expected.not_to validate_presence_of :topic }
+        it { is_expected.to validate_presence_of :topic }
         it { is_expected.to validate_presence_of :pull_request }
         it { is_expected.to validate_presence_of :subject }
 
         context 'when topic is non-nil' do
+          before { alert.topic = alert.pull_request.target }
+
+          it { is_expected.to be_valid }
+        end
+
+        context 'when topic is not equal to pull request target' do
           before { alert.topic = build(:topic) }
 
           it { is_expected.not_to be_valid }
         end
 
         context 'when pull_request is non-nil' do
-          before { alert.pull_request = build(:pull_request) }
+          before do
+            alert.pull_request = build(:pull_request)
+            alert.topic = alert.pull_request.target
+          end
 
           it { is_expected.to be_valid }
         end
