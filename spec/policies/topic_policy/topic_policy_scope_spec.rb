@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe TopicPolicy::Scope do
   context 'when resolving all topics' do
-    subject { described_class.new(user, Topic).resolve }
+    subject(:scope) { described_class.new(user, Topic).resolve }
 
     include_context 'policy_sample'
 
@@ -12,7 +12,7 @@ RSpec.describe TopicPolicy::Scope do
       let(:user) { nil }
 
       it 'shows all public topics' do
-        expect(subject.pluck :title).to match_array %w[u1d1 u2d1 u3d1 u4d1]
+        expect(scope.pluck :title).to match_array %w[u1d1 u2d1 u3d1 u4d1]
       end
     end
 
@@ -20,7 +20,7 @@ RSpec.describe TopicPolicy::Scope do
       let(:user) { User.find_by :name => 'user1' }
 
       it 'shows public, protected, owned and collaborated topics' do
-        expect(subject.pluck :title).to match_array %w[u1d1 u1d2 u1d3 u1d4 u2d1 u2d2 u2d4 u3d1 u3d2 u3d4 u4d1 u4d2]
+        expect(scope.pluck :title).to match_array %w[u1d1 u1d2 u1d3 u1d4 u2d1 u2d2 u2d4 u3d1 u3d2 u3d4 u4d1 u4d2]
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe TopicPolicy::Scope do
       let(:user) { User.find_by :name => 'user2' }
 
       it 'shows public, protected, owned and collaborated topics' do
-        expect(subject.pluck :title).to match_array %w[u1d1 u1d2 u1d4 u2d1 u2d2 u2d3 u2d4 u3d1 u3d2 u3d4 u4d1 u4d2]
+        expect(scope.pluck :title).to match_array %w[u1d1 u1d2 u1d4 u2d1 u2d2 u2d3 u2d4 u3d1 u3d2 u3d4 u4d1 u4d2]
       end
     end
 
@@ -36,7 +36,7 @@ RSpec.describe TopicPolicy::Scope do
       let(:user) { User.find_by :name => 'user3' }
 
       it 'shows public, protected, owned and collaborated topics' do
-        expect(subject.pluck :title).to match_array %w[u1d1 u1d2 u1d4 u2d1 u2d2 u2d4 u3d1 u3d2 u3d3 u3d4 u4d1 u4d2]
+        expect(scope.pluck :title).to match_array %w[u1d1 u1d2 u1d4 u2d1 u2d2 u2d4 u3d1 u3d2 u3d3 u3d4 u4d1 u4d2]
       end
     end
 
@@ -44,13 +44,13 @@ RSpec.describe TopicPolicy::Scope do
       let(:user) { User.find_by :name => 'user4' }
 
       it 'shows public, protected, owned and collaborated topics' do
-        expect(subject.pluck :title).to match_array %w[u1d1 u1d2 u2d1 u2d2 u3d1 u3d2 u4d1 u4d2 u4d3]
+        expect(scope.pluck :title).to match_array %w[u1d1 u1d2 u2d1 u2d2 u3d1 u3d2 u4d1 u4d2 u4d3]
       end
     end
   end
 
   context 'when resolving a users topics' do
-    subject { described_class.new(user, User.find_by(:name => 'user1').topics).resolve }
+    subject(:scope) { described_class.new(user, User.find_by(:name => 'user1').topics).resolve }
 
     include_context 'policy_sample'
 
@@ -58,7 +58,7 @@ RSpec.describe TopicPolicy::Scope do
       let(:user) { nil }
 
       it 'shows all public topics' do
-        expect(subject.pluck :title).to match_array %w[u1d1]
+        expect(scope.pluck :title).to match_array %w[u1d1]
       end
     end
 
@@ -66,7 +66,7 @@ RSpec.describe TopicPolicy::Scope do
       let(:user) { User.find_by :name => 'user1' }
 
       it 'shows public, protected, owned and collaborated topics' do
-        expect(subject.pluck :title).to match_array %w[u1d1 u1d2 u1d3 u1d4]
+        expect(scope.pluck :title).to match_array %w[u1d1 u1d2 u1d3 u1d4]
       end
     end
 
@@ -74,7 +74,7 @@ RSpec.describe TopicPolicy::Scope do
       let(:user) { User.find_by :name => 'user2' }
 
       it 'shows public, protected and collaborated topics' do
-        expect(subject.pluck :title).to match_array %w[u1d1 u1d2 u1d4]
+        expect(scope.pluck :title).to match_array %w[u1d1 u1d2 u1d4]
       end
     end
 
@@ -82,7 +82,7 @@ RSpec.describe TopicPolicy::Scope do
       let(:user) { User.find_by :name => 'user3' }
 
       it 'shows public, protected and collaborated topics' do
-        expect(subject.pluck :title).to match_array %w[u1d1 u1d2 u1d4]
+        expect(scope.pluck :title).to match_array %w[u1d1 u1d2 u1d4]
       end
     end
 
@@ -90,7 +90,7 @@ RSpec.describe TopicPolicy::Scope do
       let(:user) { User.find_by :name => 'user4' }
 
       it 'shows public, protected and collaborated topics' do
-        expect(subject.pluck :title).to match_array %w[u1d1 u1d2]
+        expect(scope.pluck :title).to match_array %w[u1d1 u1d2]
       end
     end
   end

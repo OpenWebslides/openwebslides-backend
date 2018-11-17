@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe PullRequestPolicy::Scope do
-  subject { described_class.new(user, PullRequest).resolve.count }
+  subject(:scope) { described_class.new(user, PullRequest).resolve.count }
 
   let(:pr_user) { create :user, :confirmed }
 

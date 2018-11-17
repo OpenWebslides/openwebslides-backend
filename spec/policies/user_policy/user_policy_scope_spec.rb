@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe UserPolicy::Scope do
-  subject { described_class.new(user, User).resolve }
+  subject(:scope) { described_class.new(user, User).resolve }
 
   include_context 'policy_sample'
 

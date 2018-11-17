@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe FeedItemPolicy::Scope do
-  subject { described_class.new(user, FeedItem).resolve.count }
+  subject(:scope) { described_class.new(user, FeedItem).resolve.count }
 
   let(:owner) { create :user }
 
