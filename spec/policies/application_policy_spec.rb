@@ -3,15 +3,25 @@
 require 'rails_helper'
 
 RSpec.describe ApplicationPolicy do
-  subject { described_class.new user, foo }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:policy) { described_class.new user, record }
 
+  ##
+  # Test variables
+  #
   let(:user) { create :user }
-  let(:foo) { 'foo' }
+  let(:record) { 'record' }
 
-  it 'should not permit anything' do
-    expect { subject.index? }.to raise_error OpenWebslides::NotImplementedError
-    expect { subject.create? }.to raise_error OpenWebslides::NotImplementedError
-    expect { subject.update? }.to raise_error OpenWebslides::NotImplementedError
-    expect { subject.destroy? }.to raise_error OpenWebslides::NotImplementedError
-  end
+  ##
+  # Tests
+  #
+  it { is_expected.to have_attributes :user => user, :record => record }
 end

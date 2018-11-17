@@ -3,10 +3,25 @@
 require 'rails_helper'
 
 RSpec.describe PullRequestPolicy do
-  subject { described_class.new user, record }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:policy) { described_class.new user, pull_request }
 
-  let(:record) { create :pull_request }
+  ##
+  # Test variables
+  #
+  let(:pull_request) { create :pull_request }
 
+  ##
+  # Tests
+  #
   context 'when the user is a guest' do
     let(:user) { nil }
 
@@ -18,7 +33,7 @@ RSpec.describe PullRequestPolicy do
     it { is_expected.to forbid_action :show_target }
   end
 
-  context 'when the user is a user' do
+  context 'when the user is just a user' do
     let(:user) { build :user }
 
     it { is_expected.to forbid_action :show }
@@ -29,7 +44,7 @@ RSpec.describe PullRequestPolicy do
     it { is_expected.to forbid_action :show_target }
 
     context 'when the source is updatable' do
-      before { record.source.collaborators << user }
+      before { pull_request.source.collaborators << user }
 
       it { is_expected.to permit_action :show }
       it { is_expected.to forbid_action :create }
@@ -40,7 +55,7 @@ RSpec.describe PullRequestPolicy do
     end
 
     context 'when the target is updatable' do
-      before { record.target.collaborators << user }
+      before { pull_request.target.collaborators << user }
 
       it { is_expected.to permit_action :show }
       it { is_expected.to forbid_action :create }
@@ -51,8 +66,8 @@ RSpec.describe PullRequestPolicy do
     end
   end
 
-  context 'when the user is the same' do
-    let(:user) { record.user }
+  context 'when the user is an owner' do
+    let(:user) { pull_request.user }
 
     it { is_expected.to forbid_action :show }
     it { is_expected.to forbid_action :create }
@@ -62,7 +77,7 @@ RSpec.describe PullRequestPolicy do
     it { is_expected.to forbid_action :show_target }
 
     context 'when the source is updatable' do
-      before { record.source.collaborators << user }
+      before { pull_request.source.collaborators << user }
 
       it { is_expected.to permit_action :show }
 
@@ -75,14 +90,14 @@ RSpec.describe PullRequestPolicy do
       end
 
       context 'when the target is not showable' do
-        before { record.target.update :access => :private }
+        before { pull_request.target.update :access => :private }
 
         it { is_expected.to forbid_action :create }
       end
     end
 
     context 'when the target is updatable' do
-      before { record.target.collaborators << user }
+      before { pull_request.target.collaborators << user }
 
       it { is_expected.to permit_action :show }
       it { is_expected.to forbid_action :create }

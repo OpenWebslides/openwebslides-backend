@@ -3,10 +3,25 @@
 require 'rails_helper'
 
 RSpec.describe FeedItemPolicy do
-  subject { described_class.new user, record }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:policy) { described_class.new user, feed_item }
 
-  let(:record) { build :feed_item, :topic => topic }
+  ##
+  # Test variables
+  #
+  let(:feed_item) { build :feed_item, :topic => topic }
 
+  ##
+  # Tests
+  #
   context 'when the topic is public' do
     let(:topic) { create :topic, :access => :public }
 
@@ -20,7 +35,7 @@ RSpec.describe FeedItemPolicy do
       it { is_expected.to permit_action :show_topic }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is just a user' do
       let(:user) { build :user }
 
       it { is_expected.to permit_action :index }
@@ -44,7 +59,7 @@ RSpec.describe FeedItemPolicy do
       it { is_expected.to forbid_action :show_topic }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is just a user' do
       let(:user) { build :user }
 
       it { is_expected.to permit_action :index }
@@ -68,7 +83,7 @@ RSpec.describe FeedItemPolicy do
       it { is_expected.to forbid_action :show_topic }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is just a user' do
       let(:user) { build :user }
 
       it { is_expected.to permit_action :index }
@@ -78,7 +93,7 @@ RSpec.describe FeedItemPolicy do
       it { is_expected.to forbid_action :show_topic }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is a topic owner' do
       let(:user) { topic.user }
 
       it { is_expected.to permit_action :index }

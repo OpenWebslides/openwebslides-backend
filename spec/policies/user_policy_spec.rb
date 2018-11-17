@@ -3,10 +3,25 @@
 require 'rails_helper'
 
 RSpec.describe UserPolicy do
-  subject { described_class.new user, record }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:policy) { described_class.new user, record }
 
+  ##
+  # Test variables
+  #
   let(:record) { build :user }
 
+  ##
+  # Tests
+  #
   context 'when the user is a guest' do
     let(:user) { nil }
 
@@ -23,7 +38,7 @@ RSpec.describe UserPolicy do
     it { is_expected.to forbid_action :show_alerts }
   end
 
-  context 'when the user is a user' do
+  context 'when the user is just a user' do
     let(:user) { build :user }
 
     it { is_expected.to permit_action :index }

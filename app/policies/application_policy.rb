@@ -8,26 +8,6 @@ class ApplicationPolicy
     @record = record
   end
 
-  def index?
-    raise OpenWebslides::NotImplementedError
-  end
-
-  def create?
-    raise OpenWebslides::NotImplementedError
-  end
-
-  def show?
-    raise OpenWebslides::NotImplementedError
-  end
-
-  def update?
-    raise OpenWebslides::NotImplementedError
-  end
-
-  def destroy?
-    raise OpenWebslides::NotImplementedError
-  end
-
   class Scope
     attr_reader :user, :scope
 
