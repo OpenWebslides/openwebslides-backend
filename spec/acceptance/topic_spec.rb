@@ -66,42 +66,6 @@ RSpec.describe 'Topic', :type => :request do
       end
     end
 
-    describe 'cannot create a topic with the same title as an existing topic belonging to the user' do
-      before { create :topic, :title => title }
-
-      it 'returns a validation error' do
-        params = {
-          :data => {
-            :type => 'topics',
-            :attributes => {
-              :title => title,
-              :description => description,
-              :rootContentItemId => 'ivks4jgtxr'
-            },
-            :relationships => {
-              :user => {
-                :data => {
-                  :type => 'users',
-                  :id => user.id
-                }
-              }
-            }
-          }
-        }
-
-        headers = {
-          'Content-Type' => 'application/vnd.api+json',
-          'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
-          'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
-        }
-
-        post '/api/topics', :params => params.to_json, :headers => headers
-
-        expect(response.status).to eq 422
-        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      end
-    end
-
     describe 'can create a public topic' do
       it 'returns without any errors' do
         params = {

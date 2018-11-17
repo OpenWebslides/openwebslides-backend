@@ -44,7 +44,7 @@ RSpec.describe Repository::Filesystem::Copy do
       it 'raises a RepoExistsError' do
         subject.fork = fork
 
-        expect { subject.execute }.to raise_error OpenWebslides::RepoExistsError
+        expect { subject.execute }.to raise_error OpenWebslides::Repo::RepoExistsError
       end
     end
 

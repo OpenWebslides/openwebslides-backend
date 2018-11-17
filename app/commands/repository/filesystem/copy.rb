@@ -14,7 +14,7 @@ module Repository
         raise OpenWebslides::ArgumentError, 'No fork specified' unless @fork
 
         # Create initial directory
-        raise OpenWebslides::RepoExistsError if Dir.exist? repo_path(@fork)
+        raise OpenWebslides::Repo::RepoExistsError if Dir.exist? repo_path(@fork)
 
         FileUtils.mkdir_p repo_path(@fork)
 
