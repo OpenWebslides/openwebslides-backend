@@ -5,8 +5,8 @@ class AssetPolicy < ApplicationPolicy
   # Resource
   #
   def create?
-    # Users can create but only for updatable topics
-    topic_policy.update?
+    # Users can create but only for updatable content
+    topic_policy.update_content?
   end
 
   def show?
@@ -15,13 +15,13 @@ class AssetPolicy < ApplicationPolicy
   end
 
   def update?
-    # Users can update but only for updatable topics
-    topic_policy.update?
+    # Users can update but only for updatable content
+    topic_policy.update_content?
   end
 
   def destroy?
-    # Users can destroy but only for updatable topics
-    topic_policy.update?
+    # Users can destroy but only for updatable content
+    topic_policy.update_content?
   end
 
   ##

@@ -36,6 +36,11 @@ class TopicPolicy < ApplicationPolicy
     @record.user == @user
   end
 
+  def update_content?
+    # User can update content if content is updatable
+    content_policy.update?
+  end
+
   def destroy?
     update?
   end
@@ -123,18 +128,18 @@ class TopicPolicy < ApplicationPolicy
   # Relationships: incoming_pull_requests
   #
   def show_incoming_pull_requests?
-    # Users can show incoming pull requests relationship if the topic is updatable
+    # Users can show incoming pull requests relationship if the topic content is updatable
     # Policy scope the pull requests separately in the controller
-    update?
+    update_content?
   end
 
   ##
   # Relationships: outgoing_pull_requests
   #
   def show_outgoing_pull_requests?
-    # Users can show outgoing pull requests relationship if the topic is updatable
+    # Users can show outgoing pull requests relationship if the topic content is updatable
     # Policy scope the pull requests separately in the controller
-    update?
+    update_content?
   end
 
   ##
@@ -154,5 +159,11 @@ class TopicPolicy < ApplicationPolicy
         scope.where('topics.state' => 'public_access')
       end
     end
+  end
+
+  private
+
+  def content_policy
+    @content_policy ||= Pundit.policy! @user, Content.new(:topic => @record)
   end
 end
