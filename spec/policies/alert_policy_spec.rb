@@ -3,10 +3,25 @@
 require 'rails_helper'
 
 RSpec.describe AlertPolicy do
-  subject { described_class.new user, record }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:policy) { described_class.new user, alert }
 
-  let(:record) { build :alert }
+  ##
+  # Test variables
+  #
+  let(:alert) { build :alert }
 
+  ##
+  # Tests
+  #
   context 'when the user is a guest' do
     let(:user) { nil }
 
@@ -19,7 +34,7 @@ RSpec.describe AlertPolicy do
     it { is_expected.to forbid_action :show_pull_request }
   end
 
-  context 'when the user is a user' do
+  context 'when the user is just a user' do
     let(:user) { build :user }
 
     it { is_expected.to forbid_action :show }
@@ -31,8 +46,8 @@ RSpec.describe AlertPolicy do
     it { is_expected.to forbid_action :show_pull_request }
   end
 
-  context 'when the user is the same' do
-    let(:user) { record.user }
+  context 'when the user is an owner' do
+    let(:user) { alert.user }
 
     it { is_expected.to permit_action :show }
     it { is_expected.to permit_action :update }

@@ -3,11 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe AnnotationPolicy do
-  subject { described_class.new user, annotation }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:policy) { described_class.new user, annotation }
 
+  ##
+  # Test variables
+  #
   let(:annotation) { build :annotation, :topic => topic }
 
-  context 'when a topic is public' do
+  ##
+  # Tests
+  #
+  context 'when the topic is public' do
     let(:topic) { build :topic, :with_collaborators, :state => :public_access }
 
     context 'when the user is a guest' do
@@ -51,7 +66,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is an owner' do
       let(:user) { annotation.user }
 
       it { is_expected.to permit_action :create }
@@ -80,7 +95,7 @@ RSpec.describe AnnotationPolicy do
     end
   end
 
-  context 'when a topic is protected' do
+  context 'when the topic is protected' do
     let(:topic) { build :topic, :with_collaborators, :state => :protected_access }
 
     context 'when the user is a guest' do
@@ -124,7 +139,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is an owner' do
       let(:user) { annotation.user }
 
       it { is_expected.to permit_action :create }
@@ -153,7 +168,7 @@ RSpec.describe AnnotationPolicy do
     end
   end
 
-  context 'when a topic is private' do
+  context 'when the topic is private' do
     let(:topic) { build :topic, :with_collaborators, :state => :private_access }
 
     context 'when the user is a guest' do
@@ -197,7 +212,7 @@ RSpec.describe AnnotationPolicy do
       it { is_expected.to permit_action :show_user }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is an owner' do
       before { topic.collaborators << annotation.user }
 
       let(:user) { annotation.user }

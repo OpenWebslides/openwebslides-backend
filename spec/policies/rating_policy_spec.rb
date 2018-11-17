@@ -3,11 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe RatingPolicy do
-  subject { described_class.new user, rating }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:policy) { described_class.new user, rating }
 
+  ##
+  # Test variables
+  #
   let(:rating) { build :rating, :user => user, :annotation => topic.conversations.first }
 
-  context 'when a topic is public' do
+  ##
+  # Tests
+  #
+  context 'when the topic is public' do
     let(:topic) { build :topic, :with_conversations, :with_collaborators, :state => :public_access }
 
     context 'when the user is a guest' do
@@ -17,7 +32,7 @@ RSpec.describe RatingPolicy do
       it { is_expected.to forbid_action :destroy }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is just a user' do
       let(:user) { build :user }
 
       it { is_expected.to permit_action :create }
@@ -31,7 +46,7 @@ RSpec.describe RatingPolicy do
       it { is_expected.to permit_action :destroy }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is a topic owner' do
       let(:user) { topic.user }
 
       it { is_expected.to permit_action :create }
@@ -39,7 +54,7 @@ RSpec.describe RatingPolicy do
     end
   end
 
-  context 'when a topic is protected' do
+  context 'when the topic is protected' do
     let(:topic) { build :topic, :with_conversations, :with_collaborators, :state => :protected_access }
 
     context 'when the user is a guest' do
@@ -49,7 +64,7 @@ RSpec.describe RatingPolicy do
       it { is_expected.to forbid_action :destroy }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is just a user' do
       let(:user) { build :user }
 
       it { is_expected.to permit_action :create }
@@ -63,7 +78,7 @@ RSpec.describe RatingPolicy do
       it { is_expected.to permit_action :destroy }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is a topic owner' do
       let(:user) { topic.user }
 
       it { is_expected.to permit_action :create }
@@ -71,7 +86,7 @@ RSpec.describe RatingPolicy do
     end
   end
 
-  context 'when a topic is private' do
+  context 'when the topic is private' do
     let(:topic) { build :topic, :with_conversations, :with_collaborators, :state => :private_access }
 
     context 'when the user is a guest' do
@@ -81,7 +96,7 @@ RSpec.describe RatingPolicy do
       it { is_expected.to forbid_action :destroy }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is just a user' do
       let(:user) { build :user }
 
       it { is_expected.to forbid_action :create }
@@ -95,7 +110,7 @@ RSpec.describe RatingPolicy do
       it { is_expected.to permit_action :destroy }
     end
 
-    context 'when the user is a user' do
+    context 'when the user is a topic owner' do
       let(:user) { topic.user }
 
       it { is_expected.to permit_action :create }
