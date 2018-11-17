@@ -3,8 +3,20 @@
 require 'rails_helper'
 
 RSpec.describe FeedItemPolicy::Scope do
-  subject { described_class.new(user, FeedItem).resolve.count }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:scope) { described_class.new(user, FeedItem).resolve.count }
 
+  ##
+  # Test variables
+  #
   let(:owner) { create :user }
 
   before :each do
@@ -21,6 +33,9 @@ RSpec.describe FeedItemPolicy::Scope do
     create :feed_item, :topic => d5, :user => d5.user
   end
 
+  ##
+  # Tests
+  #
   context 'when the user is a guest' do
     let(:user) { nil }
 

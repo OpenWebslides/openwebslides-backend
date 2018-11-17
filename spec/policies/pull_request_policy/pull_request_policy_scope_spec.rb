@@ -3,8 +3,20 @@
 require 'rails_helper'
 
 RSpec.describe PullRequestPolicy::Scope do
-  subject { described_class.new(user, PullRequest).resolve.count }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:scope) { described_class.new(user, PullRequest).resolve.count }
 
+  ##
+  # Test variables
+  #
   let(:pr_user) { create :user, :confirmed }
 
   let(:source) { create :topic, :upstream => target }
@@ -16,6 +28,9 @@ RSpec.describe PullRequestPolicy::Scope do
     create(:pull_request, :user => pr_user, :source => source, :target => target)
   end
 
+  ##
+  # Tests
+  #
   context 'when the user is a guest' do
     let(:user) { nil }
 
