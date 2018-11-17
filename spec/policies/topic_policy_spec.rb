@@ -23,6 +23,7 @@ RSpec.describe TopicPolicy do
       it 'permits only read' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
+        expect(subject).to forbid_action :update_content
         expect(subject).to forbid_action :destroy
         expect(subject).to forbid_action :fork
 
@@ -45,6 +46,7 @@ RSpec.describe TopicPolicy do
       it 'does not permit anything' do
         expect(subject).to forbid_action :show
         expect(subject).to forbid_action :update
+        expect(subject).to forbid_action :update_content
         expect(subject).to forbid_action :destroy
         expect(subject).to forbid_action :fork
 
@@ -67,6 +69,7 @@ RSpec.describe TopicPolicy do
       it 'does not permit anything' do
         expect(subject).to forbid_action :show
         expect(subject).to forbid_action :update
+        expect(subject).to forbid_action :update_content
         expect(subject).to forbid_action :destroy
         expect(subject).to forbid_action :fork
 
@@ -100,6 +103,7 @@ RSpec.describe TopicPolicy do
       it 'permits only read' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
+        expect(subject).to forbid_action :update_content
         expect(subject).to forbid_action :destroy
         expect(subject).to permit_action :fork
 
@@ -122,6 +126,7 @@ RSpec.describe TopicPolicy do
       it 'permits only read' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
+        expect(subject).to forbid_action :update_content
         expect(subject).to forbid_action :destroy
         expect(subject).to permit_action :fork
 
@@ -144,6 +149,7 @@ RSpec.describe TopicPolicy do
       it 'does not permit anything' do
         expect(subject).to forbid_action :show
         expect(subject).to forbid_action :update
+        expect(subject).to forbid_action :update_content
         expect(subject).to forbid_action :destroy
         expect(subject).to forbid_action :fork
 
@@ -174,9 +180,11 @@ RSpec.describe TopicPolicy do
     context 'when a topic is public' do
       let(:topic) { build :topic, :with_collaborators, :access => :public }
       let(:user) { topic.collaborators.first }
-      it 'should permit update' do
+
+      it 'does not permit update' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
+        expect(subject).to permit_action :update_content
         expect(subject).to forbid_action :destroy
         expect(subject).to permit_action :fork
 
@@ -199,6 +207,7 @@ RSpec.describe TopicPolicy do
       it 'should not permit anything' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
+        expect(subject).to permit_action :update_content
         expect(subject).to forbid_action :destroy
         expect(subject).to permit_action :fork
 
@@ -221,6 +230,7 @@ RSpec.describe TopicPolicy do
       it 'should not permit anything' do
         expect(subject).to permit_action :show
         expect(subject).to forbid_action :update
+        expect(subject).to permit_action :update_content
         expect(subject).to forbid_action :destroy
         expect(subject).to permit_action :fork
 
@@ -254,6 +264,7 @@ RSpec.describe TopicPolicy do
       it 'should permit everything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
+        expect(subject).to permit_action :update_content
         expect(subject).to permit_action :destroy
         expect(subject).to permit_action :fork
 
@@ -276,6 +287,7 @@ RSpec.describe TopicPolicy do
       it 'should permit everything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
+        expect(subject).to permit_action :update_content
         expect(subject).to permit_action :destroy
         expect(subject).to permit_action :fork
 
@@ -298,6 +310,7 @@ RSpec.describe TopicPolicy do
       it 'should permit everything' do
         expect(subject).to permit_action :show
         expect(subject).to permit_action :update
+        expect(subject).to permit_action :update_content
         expect(subject).to permit_action :destroy
         expect(subject).to permit_action :fork
 
