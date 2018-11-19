@@ -70,10 +70,7 @@ OpenWebslides.configure do |config|
   config.api.asset_url_lifetime = 5.hours
 
   ##
-  # API version (semver)
+  # API version
   #
-  # All requests with a version >= MAJOR.0 and < MAJOR.(MINOR + 1) will be processed
-  # For example, if the API version is 3.2.3, requests with version 3.0 up to < 3.3 will be processed
-  #
-  config.api.version = '6.2.0'
+  config.api.version = '7.0.0'
 end

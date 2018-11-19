@@ -35,21 +35,10 @@ module Versioning
 
   # Check if the given version satisfies the server version
   def compatible_request_version?(request_version)
-    major_constraint.satisfies?(request_version) && minor_constraint.satisfies?(request_version)
+    Semverse::Constraint.new(request_version).satisfies? OpenWebslides.config.api.version
   end
 
   def accept_header
     request.accept || ''
-  end
-
-  def major_constraint
-    major_version = Semverse::Version.new(OpenWebslides.config.api.version).major
-    @major_constraint ||= Semverse::Constraint.new(">= #{major_version}.0")
-  end
-
-  def minor_constraint
-    major_version = Semverse::Version.new(OpenWebslides.config.api.version).major
-    minor_version = Semverse::Version.new(OpenWebslides.config.api.version).minor
-    @minor_constraint ||= Semverse::Constraint.new("< #{major_version}.#{minor_version + 1}")
   end
 end
