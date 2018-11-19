@@ -72,23 +72,34 @@ RSpec.describe UsersController do
   end
 
   describe '#compatible_request_version?' do
-    before { allow(OpenWebslides.config.api).to receive(:version).and_return version }
+    before { allow(OpenWebslides.config.api).to receive(:version).and_return '2.5.3' }
 
-    context 'when the version is 2.5.3' do
-      let(:version) { '2.5.3' }
+    describe 'strict operator' do
+      it { is_expected.not_to be_compatible_with '1' }
+      it { is_expected.not_to be_compatible_with '2' }
+      it { is_expected.not_to be_compatible_with '3' }
 
+      it { is_expected.not_to be_compatible_with '2.4' }
+      it { is_expected.not_to be_compatible_with '2.5' }
+      it { is_expected.not_to be_compatible_with '2.6' }
+
+      it { is_expected.not_to be_compatible_with '2.5.2' }
       it { is_expected.to be_compatible_with '2.5.3' }
-      it { is_expected.to be_compatible_with '2.5.1' }
-      it { is_expected.to be_compatible_with '2.4.8' }
+      it { is_expected.not_to be_compatible_with '2.5.4' }
+    end
 
-      it { is_expected.to be_compatible_with '2.2.6' }
-      it { is_expected.to be_compatible_with '2.0.0' }
+    describe 'twiddle wakka operator' do
+      it { is_expected.not_to be_compatible_with '~>1' }
+      it { is_expected.to be_compatible_with '~>2' }
+      it { is_expected.not_to be_compatible_with '~>3' }
 
-      it { is_expected.not_to be_compatible_with '1.7.8' }
-      it { is_expected.not_to be_compatible_with '0.0.1' }
+      it { is_expected.to be_compatible_with '~>2.4' }
+      it { is_expected.to be_compatible_with '~>2.5' }
+      it { is_expected.not_to be_compatible_with '~>2.6' }
 
-      it { is_expected.not_to be_compatible_with '2.6.2' }
-      it { is_expected.not_to be_compatible_with '3.1.4' }
+      it { is_expected.to be_compatible_with '~>2.5.2' }
+      it { is_expected.to be_compatible_with '~>2.5.3' }
+      it { is_expected.not_to be_compatible_with '~>2.5.4' }
     end
   end
 end
