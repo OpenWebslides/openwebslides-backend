@@ -21,7 +21,7 @@ module Versioning
     return true if request_versions.any? { |v| compatible_request_version? v }
 
     raise JSONAPI::Exceptions::UnacceptableVersionError, request_versions.join(',')
-  rescue HTTP::Accept::ParseError
+  rescue HTTP::Accept::ParseError, Semverse::InvalidConstraintFormat
     raise JSONAPI::Exceptions::UnacceptableVersionError, request.accept
   end
 
