@@ -59,6 +59,12 @@ RSpec.describe UsersController do
 
       it { is_expected.to respond_with :not_acceptable }
     end
+
+    context 'when it specifies an invalid constraint' do
+      let(:accept_header) { 'application/vnd.api+json, application/vnd.openwebslides+json; version=~>foobar' }
+
+      it { is_expected.to respond_with :not_acceptable }
+    end
   end
 
   describe 'response Content-Type header' do
