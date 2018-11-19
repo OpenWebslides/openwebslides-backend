@@ -56,7 +56,8 @@ class PullRequest < ApplicationRecord
 
   validate :target_is_upstream_source
 
-  validate :source_has_one_open_pr
+  validate :source_has_one_open_pr,
+           :on => :create
 
   ##
   # Callbacks
