@@ -6,76 +6,63 @@ require 'rails_helper'
 # VersioningController specifically for this test would imply creating a dummy
 # route, resource and policy as well. To keep things simple UsersController is the test subject
 RSpec.describe UsersController do
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Test variables
+  #
+  ##
+  # Tests
+  #
   describe 'request Accept header' do
-    before :each do
+    before do
       request.headers['Accept'] = accept_header
+      get :index
     end
 
-    describe 'malformed header' do
+    context 'when it is malformed' do
       let(:accept_header) { 'foobar' }
 
-      it 'returns a 406' do
-        get :index
-
-        expect(response.status).to eq 406
-      end
+      it { is_expected.to respond_with :not_acceptable }
     end
 
-    describe 'no header' do
+    context 'when it is empty' do
       let(:accept_header) { '' }
 
-      it 'returns a 406' do
-        get :index
-
-        expect(response.status).to eq 406
-      end
+      it { is_expected.to respond_with :not_acceptable }
     end
 
-    describe 'no version in header' do
+    context 'when it specifies no version' do
       let(:accept_header) { 'application/vnd.api+json' }
 
-      it 'fails' do
-        get :index
-
-        expect(response.status).to eq 406
-      end
+      it { is_expected.to respond_with :not_acceptable }
     end
 
-    describe 'exact version' do
+    context 'when it specifies an exact version' do
       let(:accept_header) { "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}" }
 
-      it 'succeeds' do
-        get :index
-
-        expect(response.status).to eq 200
-      end
+      it { is_expected.to respond_with :ok }
     end
 
-    describe 'incompatible version' do
+    context 'when it specifies an exact incompatible version' do
       let(:accept_header) { 'application/vnd.api+json, application/vnd.openwebslides+json; version=1.0.0' }
 
-      it 'fails' do
-        get :index
-
-        expect(response.status).to eq 406
-      end
+      it { is_expected.to respond_with :not_acceptable }
     end
 
-    describe 'invalid mime type' do
+    context 'when it specifies an invalid mime type' do
       let(:accept_header) { 'application/vnd.api+json, application/vnd.foobar+json; version=1.0.0' }
 
-      it 'fails' do
-        get :index
-
-        expect(response.status).to eq 406
-      end
+      it { is_expected.to respond_with :not_acceptable }
     end
   end
 
   describe 'response Content-Type header' do
-    before :each do
-      request.headers['Accept'] = "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
+    before { request.headers['Accept'] = "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}" }
 
     it 'returns a valid Content-Type header' do
       get :index
@@ -85,32 +72,23 @@ RSpec.describe UsersController do
   end
 
   describe '#compatible_request_version?' do
-    before :each do
-      allow(OpenWebslides.config.api).to receive(:version).and_return '2.5.3'
-    end
+    before { allow(OpenWebslides.config.api).to receive(:version).and_return version }
 
-    it 'is compatible when server is the same version as the request' do
-      expect(subject.send :compatible_request_version?, '2.5.3').to eq true
-    end
+    context 'when the version is 2.5.3' do
+      let(:version) { '2.5.3' }
 
-    it 'is compatible when server is a bit newer than request, and request is backwards compatible' do
-      expect(subject.send :compatible_request_version?, '2.5.1').to eq true
-      expect(subject.send :compatible_request_version?, '2.4.8').to eq true
-    end
+      it { is_expected.to be_compatible_with '2.5.3' }
+      it { is_expected.to be_compatible_with '2.5.1' }
+      it { is_expected.to be_compatible_with '2.4.8' }
 
-    it 'is compatible when server is a lot newer than request, and request is backwards compatible' do
-      expect(subject.send :compatible_request_version?, '2.2.6').to eq true
-      expect(subject.send :compatible_request_version?, '2.0.0').to eq true
-    end
+      it { is_expected.to be_compatible_with '2.2.6' }
+      it { is_expected.to be_compatible_with '2.0.0' }
 
-    it 'is not compatible when server is a newer than request, and request is not backwards compatible' do
-      expect(subject.send :compatible_request_version?, '1.7.8').to eq false
-      expect(subject.send :compatible_request_version?, '0.0.1').to eq false
-    end
+      it { is_expected.not_to be_compatible_with '1.7.8' }
+      it { is_expected.not_to be_compatible_with '0.0.1' }
 
-    it 'is not compatible when server is older than request' do
-      expect(subject.send :compatible_request_version?, '2.6.2').to eq false
-      expect(subject.send :compatible_request_version?, '3.1.4').to eq false
+      it { is_expected.not_to be_compatible_with '2.6.2' }
+      it { is_expected.not_to be_compatible_with '3.1.4' }
     end
   end
 end
