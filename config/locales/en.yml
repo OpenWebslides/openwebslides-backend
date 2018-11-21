@@ -40,9 +40,9 @@ en:
     mailer:
       conversation:
         create:
-          subject: "Conversation added"
+          subject: "Conversation posted on %{title}"
       comment:
         create:
-          subject: "Comment added"
+          subject: "Comment posted on %{title}"
     topics:
       forked: "Personal copy of %{title}"

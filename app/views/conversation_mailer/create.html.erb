@@ -1,7 +1,7 @@
-<p>Hello <%= @topic.user.name %>!</p>
+<p>Hey there!</p>
 
 <p>
-  <strong><%= @user.name %></strong> posted a <%= @conversation.conversation_type %> on the slide topic <strong><%= @topic.title %></strong>:
+  We're just emailing you to let you know that <strong><%= @conversation.user.name %></strong> posted a <%= @conversation.conversation_type %> on your topic <strong><%= @conversation.topic.title %></strong>.
 </p>
 
 <p>
@@ -10,4 +10,6 @@
   </blockquote>
 </p>
 
-<p><%= link_to 'View complete conversation', topic_url(@topic) %></p>
+<div class="row center">
+  <%= link_to 'Go to conversation', topic_url(@conversation.topic), :class => 'button' %>
+</div>

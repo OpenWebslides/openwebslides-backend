@@ -3,9 +3,8 @@
 class ConversationMailer < ApplicationMailer
   def create(conversation)
     @conversation = conversation
-    @user = conversation.user
-    @topic = conversation.topic
 
-    mail :to => @topic.user.email, :subject => I18n.t('openwebslides.mailer.conversation.create.subject')
+    mail :to => @conversation.topic.user.email,
+         :subject => I18n.t('openwebslides.mailer.conversation.create.subject', :title => @conversation.topic.title)
   end
 end
