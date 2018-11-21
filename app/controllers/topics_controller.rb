@@ -31,18 +31,21 @@ class TopicsController < ApplicationController
     rescue ArgumentError
       # FIXME: Topic.new throws ArgumentError when :state is invalid
       # See https://github.com/rails/rails/issues/13971#issuecomment-287030984
+      # FIXME: Remove the errors check in Topics::Create
       @topic = Topic.new topic_params.merge :state => ''
-      invalid_state = true
+      @topic.errors.add :state, I18n.t('openwebslides.validations.topic.invalid_state')
     end
 
     authorize @topic
 
-    if service.create
-      jsonapi_render :json => @topic, :status => :created
+    @topic = Topics::Create.call @topic
+
+    if @topic.errors.any?
+      jsonapi_render_errors :json => @topic,
+                            :status => :unprocessable_entity
     else
-      # Explicitly add errors here, because @topic.errors gets cleared on #save
-      @topic.errors.add :state, 'is invalid' if invalid_state
-      jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
+      jsonapi_render :json => @topic,
+                     :status => :created
     end
   end
 

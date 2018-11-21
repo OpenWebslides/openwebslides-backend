@@ -8,26 +8,6 @@ class TopicService < ApplicationService
   end
 
   ##
-  # Persist a newly built topic to the database and the filesystem
-  #
-  def create
-    # Persist to database
-    if @topic.save
-      # Persist to file system
-      Repository::Create.new(@topic).execute
-
-      # Create feed item
-      FeedItem.create :user => @topic.user,
-                      :topic => @topic,
-                      :event_type => :topic_created
-
-      true
-    else
-      false
-    end
-  end
-
-  ##
   # Read the filesystem contents of a topic
   #
   def read
