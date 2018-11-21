@@ -8,6 +8,6 @@ class ApplicationService
   # Call a service with parameters
   #
   def self.call(*args, &block)
-    new(*args, &block).call
+    new.call *args, &block
   end
 end
