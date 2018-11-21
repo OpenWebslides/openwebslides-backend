@@ -7,6 +7,7 @@ FactoryBot.define do
     password { Faker::Internet.password 6 }
     password_confirmation { password }
     tos_accepted true
+    alert_emails { true }
 
     trait :with_topics do
       topics { build_list :topic, 3 }

@@ -44,6 +44,13 @@ RSpec.describe User, :type => :model do
     it { is_expected.not_to allow_value('abc12').for(:password) }
     it { is_expected.to allow_value('abc123').for(:password) }
 
+    it { is_expected.to allow_value(nil).for(:alert_emails) }
+    it { is_expected.to allow_value('').for(:alert_emails) }
+    it { is_expected.to allow_value(false).for(:alert_emails) }
+    it { is_expected.to allow_value(true).for(:alert_emails) }
+    it { is_expected.to allow_value('foo').for(:alert_emails) }
+    it { is_expected.to allow_value('false').for(:alert_emails) }
+
     it 'is invalid without attributes' do
       expect(User.new).not_to be_valid
     end
