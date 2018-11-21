@@ -1,3 +1,13 @@
 # frozen_string_literal: true
 
-class ApplicationService; end
+##
+# Abstract service
+#
+class ApplicationService
+  ##
+  # Call a service with parameters
+  #
+  def self.call(*args, &block)
+    new(*args, &block).call
+  end
+end
