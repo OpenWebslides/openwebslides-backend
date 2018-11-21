@@ -4,7 +4,7 @@ class CommentMailer < ApplicationMailer
   def create(comment)
     @comment = comment
 
-    mail :to => @comment.conversation.user.email,
+    mail :to => [@comment.conversation.user.email, @comment.topic.user.email],
          :subject => I18n.t('openwebslides.mailer.comment.create.subject', :title => @comment.topic.title)
   end
 end
