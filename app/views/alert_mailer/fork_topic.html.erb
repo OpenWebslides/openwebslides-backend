@@ -1,0 +1,9 @@
+<p>Hey there!</p>
+
+<p>
+  We're just emailing you to let you know that <strong><%= @alert.subject.name %></strong> made a copy of your topic <strong><%= @alert.topic.title %></strong>.
+</p>
+
+<div class="row center">
+  <%= link_to 'Go to topic', web_topic_viewer_url(@alert.topic), :class => 'button' %>
+</div>

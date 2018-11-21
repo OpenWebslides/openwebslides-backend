@@ -19,7 +19,7 @@ RSpec.describe Alert, :type => :model do
   #
   describe 'attributes' do
     it { is_expected.to allow_values(false, 'false', true, 'true').for :read }
-    it { is_expected.to define_enum_for(:alert_type).with %i[topic_updated pr_submitted pr_accepted pr_rejected] }
+    it { is_expected.to define_enum_for(:alert_type).with %i[topic_updated pr_submitted pr_accepted pr_rejected topic_forked] }
 
     describe 'read must be true on update' do
       subject(:alert) { create :update_alert, :alert_type => :topic_updated }
@@ -56,6 +56,20 @@ RSpec.describe Alert, :type => :model do
 
           it { is_expected.not_to be_valid }
         end
+      end
+    end
+
+    context 'when alert_type is `topic_forked`' do
+      subject(:alert) { build :forked_alert, :alert_type => :topic_forked }
+
+      it { is_expected.to be_valid }
+      it { is_expected.not_to validate_presence_of :count }
+      it { is_expected.not_to validate_numericality_of(:count).only_integer }
+
+      context 'when count is non-nil' do
+        before { alert.count = 1 }
+
+        it { is_expected.not_to be_valid }
       end
     end
   end
@@ -126,6 +140,32 @@ RSpec.describe Alert, :type => :model do
 
           it { is_expected.to be_valid }
         end
+      end
+    end
+
+    context 'when alert_type is `topic_forked`' do
+      subject(:alert) { build :forked_alert, :alert_type => :topic_forked }
+
+      it { is_expected.to validate_presence_of :topic }
+      it { is_expected.not_to validate_presence_of :pull_request }
+      it { is_expected.to validate_presence_of :subject }
+
+      context 'when topic is non-nil' do
+        before { alert.topic = build(:topic) }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'when pull_request is non-nil' do
+        before { alert.pull_request = build(:pull_request) }
+
+        it { is_expected.not_to be_valid }
+      end
+
+      context 'when subject is non-nil' do
+        before { alert.subject = build(:user) }
+
+        it { is_expected.to be_valid }
       end
     end
   end

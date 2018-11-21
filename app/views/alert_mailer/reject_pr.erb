@@ -1,0 +1,16 @@
+<p>Hey there!</p>
+
+<p>
+  We're just emailing you to let you know that <strong><%= @alert.subject.name %></strong> rejected your updates on <strong><%= @alert.topic.title %></strong>. Luckily, they provided some feedback for you.
+</p>
+
+<p>
+  <blockquote>
+    <%= @alert.pull_request.feedback %>
+    <div class="subject">&mdash; <%= @alert.subject.name %></div>
+  </blockquote>
+</p>
+
+<div class="row center">
+  <%= link_to 'Go to topic', web_topic_editor_url(@alert.topic), :class => 'button' %>
+</div>

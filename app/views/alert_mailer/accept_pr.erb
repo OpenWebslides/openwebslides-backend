@@ -1,0 +1,18 @@
+<p>Hey there!</p>
+
+<p>
+  We're just emailing you to let you know that <strong><%= @alert.subject.name %></strong> accepted the updates you shared on <strong><%= @alert.topic.title %></strong>. That means your changes are now integrated in the topic! Congrats!
+</p>
+
+<% if @alert.pull_request.feedback %>
+  <p>
+  <blockquote>
+    <%= @alert.pull_request.feedback %>
+    <div class="subject">&mdash; <%= @alert.subject.name %></div>
+  </blockquote>
+  </p>
+<% end %>
+
+<div class="row center">
+  <%= link_to 'Go to topic', web_topic_editor_url(@alert.topic), :class => 'button' %>
+</div>
