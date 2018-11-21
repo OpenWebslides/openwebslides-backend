@@ -12,9 +12,11 @@ module Notifications
                       :topic => fork
 
       # Generate alert
-      Alert.create :alert_type => :topic_forked,
-                   :user => fork.upstream.user,
-                   :subject => fork.user
+      alert = Alert.create :alert_type => :topic_forked,
+                           :user => fork.upstream.user,
+                           :subject => fork.user
+
+      AlertMailer.fork_topic(alert) if fork.upstream.user.alert_emails?
     end
   end
 end

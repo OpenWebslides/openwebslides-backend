@@ -9,7 +9,8 @@ RSpec.describe Notifications::Fork do
   ##
   # Test variables
   #
-  let(:topic) { create :topic, :upstream => create(:topic) }
+  let(:topic) { create :topic, :upstream => create(:topic, :user => user) }
+  let(:user) { create :user, :confirmed }
 
   ##
   # Subject
@@ -38,9 +39,23 @@ RSpec.describe Notifications::Fork do
     subject.call topic
   end
 
-  describe 'return value' do
-    subject { described_class.call topic }
+  context 'when the upstream topic owner has email notifications enabled' do
+    let(:user) { create :user, :confirmed, :alert_emails => true }
 
-    it { is_expected.to be_instance_of Alert }
+    it 'sends an email' do
+      expect(AlertMailer).to receive(:fork_topic).with instance_of Alert
+
+      subject.call topic
+    end
+  end
+
+  context 'when the upstream topic owner has email notifications disabled' do
+    let(:user) { create :user, :confirmed, :alert_emails => false }
+
+    it 'does not send an email' do
+      expect(AlertMailer).not_to receive(:fork_topic).with instance_of Alert
+
+      subject.call topic
+    end
   end
 end
