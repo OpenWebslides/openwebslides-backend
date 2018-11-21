@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_15_171914) do
+ActiveRecord::Schema.define(version: 2018_11_21_161659) do
 
   create_table "alerts", force: :cascade do |t|
     t.integer "user_id"
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(version: 2018_11_15_171914) do
     t.boolean "tos_accepted"
     t.string "locale", default: "", null: false
     t.string "name", default: "", null: false
+    t.boolean "alert_emails", default: true, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
