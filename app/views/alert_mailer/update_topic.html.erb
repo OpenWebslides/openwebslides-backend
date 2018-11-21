@@ -1,0 +1,9 @@
+<p>Hey there!</p>
+
+<p>
+  There are <strong><%= @alert.count %> updates</strong> available for your topic <strong><%= @alert.topic.title %></strong>. Get them while they're hot!
+</p>
+
+<div class="row center">
+  <%= link_to 'See updates', web_topic_editor_url(@alert.topic), :class => 'button' %>
+</div>

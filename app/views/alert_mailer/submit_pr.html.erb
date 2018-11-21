@@ -1,0 +1,16 @@
+<p>Hey there!</p>
+
+<p>
+  We're emailing you to let you know that <strong><%= @alert.subject.name %></strong> shared updates with you on your topic <strong><%= @alert.topic.title %></strong>. Integrating these updates into your topic is just a click away!
+</p>
+
+<p>
+  <blockquote>
+    <%= @alert.pull_request.message %>
+    <div class="subject">&mdash; <%= @alert.subject.name %></div>
+  </blockquote>
+</p>
+
+<div class="row center">
+  <%= link_to 'See updates', web_topic_editor_url(@alert.topic), :class => 'button' %>
+</div>

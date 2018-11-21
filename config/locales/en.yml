@@ -44,5 +44,16 @@ en:
       comment:
         create:
           subject: "Comment posted on %{title}"
+      alert:
+        update_topic:
+          subject: "Updates available for %{title}"
+        submit_pr:
+          subject: "Updates shared with you on %{title}"
+        accept_pr:
+          subject: "Updates accepted on %{title}"
+        reject_pr:
+          subject: "Updates rejected on %{title}"
+        fork_topic:
+          subject: "Copy created of %{title}"
     topics:
       forked: "Personal copy of %{title}"
