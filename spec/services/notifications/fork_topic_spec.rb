@@ -41,6 +41,7 @@ RSpec.describe Notifications::ForkTopic do
     expect(Alert).to receive(:create)
       .with :alert_type => :topic_forked,
             :user => topic.upstream.user,
+            :topic => topic.upstream,
             :subject => topic.user
 
     subject.call topic

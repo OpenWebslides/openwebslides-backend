@@ -37,12 +37,16 @@ RSpec.describe Notifications::AcceptPR do
     expect(Alert).to receive(:create)
       .with :alert_type => :pr_accepted,
             :user => target.user,
+            :pull_request => pull_request,
+            :topic => target,
             :subject => pull_request.user
 
     target.collaborators.each do |collaborator|
       expect(Alert).to receive(:create)
         .with :alert_type => :pr_accepted,
               :user => collaborator,
+              :pull_request => pull_request,
+              :topic => target,
               :subject => pull_request.user
     end
 

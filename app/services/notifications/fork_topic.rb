@@ -14,6 +14,7 @@ module Notifications
       # Generate alert
       alert = Alert.create :alert_type => :topic_forked,
                            :user => fork.upstream.user,
+                           :topic => fork.upstream,
                            :subject => fork.user
 
       return unless fork.upstream.user.alert_emails?
