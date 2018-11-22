@@ -34,13 +34,15 @@ RSpec.describe Topics::Create do
     it 'persists the topic to the filesystem' do
       dbl = double 'Repository::Create'
 
-      expect(Repository::Create).to receive(:new).and_return dbl
+      expect(Repository::Create).to receive(:new)
+        .with(instance_of Topic)
+        .and_return dbl
       expect(dbl).to receive :execute
 
       subject.call topic
     end
 
-    it 'calls Notifications#Create' do
+    it 'creates appropriate notifications' do
       expect(Notifications::Create).to receive(:call).with topic
 
       subject.call topic
@@ -62,7 +64,7 @@ RSpec.describe Topics::Create do
       subject.call topic
     end
 
-    it 'does not call Notifications#Create' do
+    it 'does not create any notifications' do
       expect(Notifications::Create).not_to receive :call
 
       subject.call topic
