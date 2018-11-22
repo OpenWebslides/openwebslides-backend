@@ -24,22 +24,20 @@ RSpec.describe Topics::Delete do
   ##
   # Tests
   #
-  describe 'the forked topic' do
-    it 'destroys the topic' do
-      subject.call topic
+  it 'destroys the topic in the database' do
+    subject.call topic
 
-      expect(topic).to be_destroyed
-    end
+    expect(topic).to be_destroyed
+  end
 
-    it 'calls Repository::Delete' do
-      dbl = double 'Repository::Delete'
+  it 'deletes the topic in the filesystem' do
+    dbl = double 'Repository::Delete'
 
-      expect(Repository::Delete).to receive(:new)
-        .with(instance_of Topic)
-        .and_return dbl
-      expect(dbl).to receive :execute
+    expect(Repository::Delete).to receive(:new)
+      .with(instance_of Topic)
+      .and_return dbl
+    expect(dbl).to receive :execute
 
-      subject.call topic
-    end
+    subject.call topic
   end
 end

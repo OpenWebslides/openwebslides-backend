@@ -26,10 +26,14 @@ class AssetsController < ApplicationController
 
     authorize @asset
 
-    if service.create :author => current_user, :file => uploaded_file
-      jsonapi_render :json => @asset, :status => :created
+    @asset = Assets::Create.call @asset, current_user, uploaded_file
+
+    if @asset.errors.any?
+      jsonapi_render_errors :json => @asset,
+                            :status => :unprocessable_entity
     else
-      jsonapi_render_errors :json => @asset, :status => :unprocessable_entity
+      jsonapi_render :json => @asset,
+                     :status => :created
     end
   end
 
@@ -48,7 +52,7 @@ class AssetsController < ApplicationController
 
     authorize @asset
 
-    service.delete :author => current_user
+    Assets::Delete.call @asset, current_user
 
     head :no_content
   end
@@ -68,12 +72,6 @@ class AssetsController < ApplicationController
     return head :unauthorized unless token && token.valid?
 
     # Send file
-    send_file service.find
-  end
-
-  protected
-
-  def service
-    AssetService.new @asset
+    send_file Assets::Find.call @asset
   end
 end
