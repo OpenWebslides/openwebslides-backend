@@ -44,4 +44,11 @@ RSpec.describe Assets::Delete do
 
     subject.call asset, user
   end
+
+  describe 'return value' do
+    subject { described_class.call asset, user }
+
+    it { is_expected.to be_instance_of Asset }
+    it { is_expected.to be_valid }
+  end
 end

@@ -17,6 +17,8 @@ module Contents
 
       # Generate appropriate notifications
       Notifications::Update.call topic, user
+
+      topic
     rescue OpenWebslides::FormatError => e
       topic.errors.add :content, e.error_type
       topic

@@ -49,4 +49,11 @@ RSpec.describe Topics::Fork do
 
     subject.call topic, user
   end
+
+  describe 'return value' do
+    subject { described_class.call topic, user }
+
+    it { is_expected.to be_instance_of Topic }
+    it { is_expected.to be_valid }
+  end
 end

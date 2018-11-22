@@ -46,4 +46,11 @@ RSpec.describe Assets::Create do
 
     subject.call asset, user, file
   end
+
+  describe 'return value' do
+    subject { described_class.call asset, user, file }
+
+    it { is_expected.to be_instance_of Asset }
+    it { is_expected.to be_valid }
+  end
 end

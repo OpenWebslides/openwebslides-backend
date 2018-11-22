@@ -34,4 +34,11 @@ RSpec.describe Contents::Read do
 
     subject.call topic
   end
+
+  describe 'return value' do
+    subject { described_class.call topic }
+
+    # Return value is stubbed
+    it { is_expected.to be_nil }
+  end
 end

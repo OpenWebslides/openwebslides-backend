@@ -69,5 +69,12 @@ RSpec.describe Topics::Create do
 
       subject.call topic
     end
+
+    describe 'return value' do
+      subject { described_class.call topic }
+
+      it { is_expected.to be_instance_of Topic }
+      it { is_expected.not_to be_valid }
+    end
   end
 end

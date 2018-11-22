@@ -34,4 +34,10 @@ RSpec.describe Assets::Find do
 
     subject.call asset
   end
+
+  describe 'return value' do
+    subject { described_class.call asset }
+
+    it { is_expected.to be_nil }
+  end
 end

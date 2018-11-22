@@ -28,7 +28,7 @@ RSpec.describe Contents::Update do
   # Tests
   #
   it 'updates the contents of a topic' do
-    dbl = double 'Repository::Create'
+    dbl = double 'Repository::Update'
 
     expect(Repository::Update).to receive(:new)
       .with(instance_of Topic)
@@ -47,5 +47,12 @@ RSpec.describe Contents::Update do
     expect(Notifications::Update).to receive(:call).with topic, user
 
     subject.call topic, user, content, message
+  end
+
+  describe 'return value' do
+    subject { described_class.call topic, user, content, message }
+
+    it { is_expected.to be_instance_of Topic }
+    it { is_expected.to be_valid }
   end
 end

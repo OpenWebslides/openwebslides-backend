@@ -37,4 +37,10 @@ RSpec.describe Notifications::Fork do
 
     subject.call topic
   end
+
+  describe 'return value' do
+    subject { described_class.call topic }
+
+    it { is_expected.to be_instance_of Alert }
+  end
 end
