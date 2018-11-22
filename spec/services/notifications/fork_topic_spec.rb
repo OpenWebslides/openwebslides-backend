@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Notifications::Fork do
+RSpec.describe Notifications::ForkTopic do
   ##
   # Configuration
   #

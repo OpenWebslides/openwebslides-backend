@@ -4,7 +4,7 @@ module Notifications
   ##
   # Generate feed item and alert when a topic is forked
   #
-  class Fork < ApplicationService
+  class ForkTopic < ApplicationService
     def call(fork)
       # Generate feed item
       FeedItem.create :event_type => :topic_forked,
