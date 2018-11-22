@@ -22,26 +22,15 @@ class ForkController < ApplicationController
 
     authorize @topic, :fork?
 
-    @fork = @topic.dup
+    @fork = Topics::Fork.call @topic, current_user
 
-    params = {
-      :author => current_user,
-      :fork => @fork
-    }
-
-    if service.fork params
+    if @fork.errors.any?
+      jsonapi_render_errors :json => @fork,
+                            :status => :unprocessable_entity
+    else
       jsonapi_render :json => @fork,
                      :status => :created,
                      :options => { :resource => TopicResource }
-    else
-      jsonapi_render_errors :json => @fork,
-                            :status => :unprocessable_entity
     end
-  end
-
-  protected
-
-  def service
-    TopicService.new @topic
   end
 end

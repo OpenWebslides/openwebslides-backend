@@ -59,37 +59,4 @@ class TopicService < ApplicationService
     # Delete database
     @topic.destroy
   end
-
-  ##
-  # Duplicate (fork) a topic in the database and the filesystem
-  #
-  # WARNING: @topic contains the _original_ topic in this context
-  #
-  def fork(params)
-    fork = params[:fork]
-
-    # Set new attributes: author, upstream topic and prepend title
-    fork.user = params[:author]
-    fork.upstream = @topic
-    fork.title = I18n.t('openwebslides.topics.forked', :title => @topic.title)
-
-    # Persist to database
-    if fork.save
-      # Fork repository in filesystem
-      command = Repository::Fork.new @topic
-
-      command.fork = fork
-
-      command.execute
-
-      # Generate feed item
-      FeedItem.create :user => params[:author],
-                      :topic => @topic,
-                      :event_type => :topic_forked
-
-      true
-    else
-      false
-    end
-  end
 end
