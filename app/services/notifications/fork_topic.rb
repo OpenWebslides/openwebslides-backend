@@ -16,7 +16,9 @@ module Notifications
                            :user => fork.upstream.user,
                            :subject => fork.user
 
-      AlertMailer.fork_topic(alert) if fork.upstream.user.alert_emails?
+      return unless fork.upstream.user.alert_emails?
+
+      AlertMailer.fork_topic(alert).deliver_later
     end
   end
 end

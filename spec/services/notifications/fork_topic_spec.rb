@@ -18,6 +18,13 @@ RSpec.describe Notifications::ForkTopic do
   ##
   # Stubs and mocks
   #
+  let(:mail) { double 'Mail', :deliver_later => true }
+
+  before do
+    allow(AlertMailer).to receive(:fork_topic)
+      .and_return mail
+  end
+
   ##
   # Tests
   #
@@ -53,7 +60,7 @@ RSpec.describe Notifications::ForkTopic do
     let(:user) { create :user, :confirmed, :alert_emails => false }
 
     it 'does not send an email' do
-      expect(AlertMailer).not_to receive(:fork_topic).with instance_of Alert
+      expect(AlertMailer).not_to receive :fork_topic
 
       subject.call topic
     end
