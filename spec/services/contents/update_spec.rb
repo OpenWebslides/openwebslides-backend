@@ -44,7 +44,7 @@ RSpec.describe Contents::Update do
   end
 
   it 'creates appropriate notifications' do
-    expect(Notifications::Update).to receive(:call).with topic, user
+    expect(Notifications::UpdateTopic).to receive(:call).with topic, user
 
     subject.call topic, user, content, message
   end
