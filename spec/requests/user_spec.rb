@@ -182,6 +182,16 @@ RSpec.describe 'User API', :type => :request do
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
       expect(user.valid_password? password).to be true
     end
+
+    it 'disables email notifications' do
+      expect(user).to be_alert_emails
+      patch user_path(:id => user.id), :params => update_body(user.id, :alertEmails => false), :headers => headers
+
+      user.reload
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      expect(user).not_to be_alert_emails
+    end
   end
 
   describe 'DELETE /:id' do

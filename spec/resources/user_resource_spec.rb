@@ -31,6 +31,7 @@ RSpec.describe UserResource, :type => :resource do
   it { is_expected.not_to have_attribute :locale }
   it { is_expected.not_to have_attribute :email }
   it { is_expected.not_to have_attribute :tos_accepted }
+  it { is_expected.not_to have_attribute :alert_emails }
 
   it { is_expected.to have_many(:topics).with_class_name 'Topic' }
   it { is_expected.to have_many(:collaborations).with_class_name 'Topic' }
@@ -55,16 +56,16 @@ RSpec.describe UserResource, :type => :resource do
       let(:context) { { :current_user => user } }
 
       it 'has a valid set of fetchable fields' do
-        expect(subject.fetchable_fields).to match_array %i[id name locale email gravatar_hash topics collaborations alerts]
+        expect(subject.fetchable_fields).to match_array %i[id name locale email gravatar_hash alert_emails topics collaborations alerts]
       end
     end
 
     it 'has a valid set of creatable fields' do
-      expect(described_class.creatable_fields).to match_array %i[name email locale password tos_accepted]
+      expect(described_class.creatable_fields).to match_array %i[name email locale password tos_accepted alert_emails]
     end
 
     it 'has a valid set of updatable fields' do
-      expect(described_class.updatable_fields).to match_array %i[name locale password topics collaborations]
+      expect(described_class.updatable_fields).to match_array %i[name locale password topics collaborations alert_emails]
     end
 
     it 'has a valid set of sortable fields' do
