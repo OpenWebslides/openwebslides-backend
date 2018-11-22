@@ -23,10 +23,14 @@ class ConversationsController < ApplicationController
 
     authorize @conversation
 
-    if service.create
-      jsonapi_render :json => @conversation, :status => :created
+    @conversation = Annotations::CreateConversation.call @conversation
+
+    if @conversation.errors.any?
+      jsonapi_render_errors :json => @conversation,
+                            :status => :unprocessable_entity
     else
-      jsonapi_render_errors :json => @conversation, :status => :unprocessable_entity
+      jsonapi_render :json => @conversation,
+                     :status => :created
     end
   end
 
@@ -46,10 +50,13 @@ class ConversationsController < ApplicationController
     authorize @conversation
     # TODO: authorize state changes
 
-    if service.update resource_params
-      jsonapi_render :json => @conversation
+    @conversation = Annotations::Update.call @conversation, resource_params
+
+    if @conversation.errors.any?
+      jsonapi_render_errors :json => @conversation,
+                            :status => :unprocessable_entity
     else
-      jsonapi_render_errors :json => @conversation, :status => :unprocessable_entity
+      jsonapi_render :json => @conversation
     end
   end
 
@@ -59,7 +66,7 @@ class ConversationsController < ApplicationController
 
     authorize @conversation
 
-    service.delete
+    Annotations::Delete.call @conversation
 
     head :no_content
   end
@@ -75,9 +82,5 @@ class ConversationsController < ApplicationController
   def conversation_params
     resource_params.merge :user_id => relationship_params[:user],
                           :topic_id => relationship_params[:topic]
-  end
-
-  def service
-    @service ||= ConversationService.new @conversation
   end
 end

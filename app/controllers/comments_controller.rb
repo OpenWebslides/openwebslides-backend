@@ -23,10 +23,14 @@ class CommentsController < ApplicationController
 
     authorize @comment
 
-    if service.create
-      jsonapi_render :json => @comment, :status => :created
+    @comment = Annotations::CreateComment.call @comment
+
+    if @comment.errors.any?
+      jsonapi_render_errors :json => @comment,
+                            :status => :unprocessable_entity
     else
-      jsonapi_render_errors :json => @comment, :status => :unprocessable_entity
+      jsonapi_render :json => @comment,
+                     :status => :created
     end
   end
 
@@ -46,10 +50,13 @@ class CommentsController < ApplicationController
     authorize @comment
     # TODO: authorize state change
 
-    if service.update resource_params
-      jsonapi_render :json => @comment
+    @comment = Annotations::Update.call @comment, resource_params
+
+    if @comment.errors.any?
+      jsonapi_render_errors :json => @comment,
+                            :status => :unprocessable_entity
     else
-      jsonapi_render_errors :json => @comment, :status => :unprocessable_entity
+      jsonapi_render :json => @comment
     end
   end
 
@@ -59,7 +66,7 @@ class CommentsController < ApplicationController
 
     authorize @comment
 
-    service.delete
+    Annotations::Delete.call @comment
 
     head :no_content
   end
@@ -76,9 +83,5 @@ class CommentsController < ApplicationController
     resource_params.merge :user_id => relationship_params[:user],
                           :topic_id => relationship_params[:topic],
                           :conversation_id => relationship_params[:conversation]
-  end
-
-  def service
-    @service ||= CommentService.new @comment
   end
 end
