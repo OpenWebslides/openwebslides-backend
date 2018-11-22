@@ -48,15 +48,4 @@ class TopicService < ApplicationService
     @topic.errors.add :content, e.error_type
     false
   end
-
-  ##
-  # Delete a topic from the database and the filesystem
-  #
-  def delete
-    # Delete repository
-    Repository::Delete.new(@topic).execute
-
-    # Delete database
-    @topic.destroy
-  end
 end

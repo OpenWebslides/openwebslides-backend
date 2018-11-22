@@ -81,7 +81,7 @@ class TopicsController < ApplicationController
 
     authorize @topic
 
-    service.delete
+    Topics::Delete.call @topic
 
     head :no_content
   end
@@ -96,9 +96,5 @@ class TopicsController < ApplicationController
 
   def topic_params
     resource_params.merge :user_id => relationship_params[:user]
-  end
-
-  def service
-    TopicService.new @topic
   end
 end
