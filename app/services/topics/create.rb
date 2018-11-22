@@ -16,7 +16,7 @@ module Topics
         Repository::Create.new(topic).execute
 
         # Generate appropriate notifications
-        Notifications::Create.call topic
+        Notifications::CreateTopic.call topic
       end
 
       topic
