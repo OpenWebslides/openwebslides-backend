@@ -44,6 +44,6 @@ class ContentResource < ApplicationResource
   # Methods
   #
   def content
-    TopicService.new(@model).read
+    Contents::Read.call @model
   end
 end

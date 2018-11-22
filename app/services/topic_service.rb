@@ -8,13 +8,6 @@ class TopicService < ApplicationService
   end
 
   ##
-  # Read the filesystem contents of a topic
-  #
-  def read
-    Repository::Read.new(@topic).execute
-  end
-
-  ##
   # Update the filesystem contents of a topic
   #
   def update(params)
