@@ -35,6 +35,8 @@ en:
       alert:
         topic_equals_target: "must equal pull request target topic"
         update_read_is_true: "must be true"
+      topic:
+        invalid_state: "is invalid"
     annotations:
       hidden: "[deleted]"
     mailer:

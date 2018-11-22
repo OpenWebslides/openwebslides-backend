@@ -62,11 +62,9 @@ RSpec.describe Repository::Filesystem::Write do
   # Tests
   #
   describe '#execute' do
-    before :each do
-      service = TopicService.new topic
-
+    before do
       # Make sure the topic repository is created
-      service.create
+      Topics::Create.call topic
     end
 
     it 'raises an error when content is not specified' do

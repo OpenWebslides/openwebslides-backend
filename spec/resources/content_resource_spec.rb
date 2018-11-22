@@ -3,6 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe ContentResource, :type => :resource do
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:resource) { described_class.new topic, context }
+
+  ##
+  # Test variables
+  #
+  let(:topic) { create :topic }
+  let(:context) { {} }
+
+  ##
+  # Tests
+  #
   it 'should be abstract' do
     expect(described_class.abstract).to be true
   end
@@ -23,6 +43,16 @@ RSpec.describe ContentResource, :type => :resource do
 
     it 'has a valid set of sortable fields' do
       expect(described_class.sortable_fields).to match_array %i[]
+    end
+  end
+
+  describe 'methods' do
+    describe '#content' do
+      it 'reads the contents of a repository' do
+        expect(Contents::Read).to receive(:call).with topic
+
+        subject.content
+      end
     end
   end
 end

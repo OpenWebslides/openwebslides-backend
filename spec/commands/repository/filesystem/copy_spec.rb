@@ -30,15 +30,15 @@ RSpec.describe Repository::Filesystem::Copy do
   # Tests
   #
   describe '#execute' do
-    before :each do
+    before do
       # Make sure the topic repository is created
-      TopicService.new(topic).create
+      Topics::Create.call topic
     end
 
     describe 'repository already exists' do
       before do
         # Create the fork repository as well
-        TopicService.new(fork).create
+        Topics::Create.call fork
       end
 
       it 'raises a RepoExistsError' do

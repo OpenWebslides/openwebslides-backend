@@ -67,44 +67,6 @@ RSpec.describe Topic, :type => :model do
     it { is_expected.to have_many(:incoming_pull_requests).class_name('PullRequest').dependent(:destroy).inverse_of(:target) }
     it { is_expected.to have_many(:outgoing_pull_requests).class_name('PullRequest').dependent(:destroy).inverse_of(:source) }
 
-    ## TODO: move this to topic acceptance spec
-    it 'generates a feed_item on create' do
-      count = FeedItem.count
-
-      d = build :topic
-      TopicService.new(d).create
-
-      expect(FeedItem.count).to eq count + 1
-      expect(FeedItem.last.event_type).to eq 'topic_created'
-      expect(FeedItem.last.topic).to eq d
-    end
-
-    # TODO: move this to topic acceptance spec
-    it 'generates a feed_item on update' do
-      d = create :topic
-
-      count = FeedItem.count
-
-      TopicService.new(d).update :author => user, :content => 'foo'
-
-      expect(FeedItem.count).to eq count + 1
-      expect(FeedItem.last.event_type).to eq 'topic_updated'
-      expect(FeedItem.last.topic).to eq d
-    end
-
-    # TODO: move this to topic acceptance spec
-    it 'generates a feed_item on fork' do
-      d = create :topic
-
-      count = FeedItem.count
-
-      TopicService.new(d).fork :author => user, :fork => d.dup
-
-      expect(FeedItem.count).to eq count + 1
-      expect(FeedItem.last.event_type).to eq 'topic_forked'
-      expect(FeedItem.last.topic).to eq d
-    end
-
     context 'not a fork' do
       describe 'upstream' do
         it 'is empty' do

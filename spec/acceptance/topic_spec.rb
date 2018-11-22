@@ -9,7 +9,7 @@ RSpec.describe 'Topic', :type => :request do
   ##
   # Configuration
   #
-  before :each do
+  before do
     OpenWebslides.configure do |config|
       ##
       # Absolute path to persistent repository storage
@@ -95,16 +95,12 @@ RSpec.describe 'Topic', :type => :request do
   describe 'A user can retrieve the contents of a topic' do
     let(:topic) { create :topic, :root_content_item_id => 'qyrgv0bcd6' }
 
-    before :each do
-      service = TopicService.new topic
-
+    before do
       # Make sure the topic repository is created
-      service.create
+      Topics::Create.call topic
 
       # Populate the topic with some dummy content
-      service.update :author => user,
-                     :content => content,
-                     :message => 'Update content'
+      Contents::Update.call topic, user, content, 'Update content'
     end
 
     it 'returns without any errors' do
@@ -123,11 +119,9 @@ RSpec.describe 'Topic', :type => :request do
   describe 'An owner can update the contents of a topic' do
     let(:topic) { create :topic, :user => user }
 
-    before(:each) do
-      service = TopicService.new topic
-
+    before do
       # Make sure the topic repository is created
-      service.create
+      Topics::Create.call topic
     end
 
     it 'returns without any errors' do
@@ -163,11 +157,9 @@ RSpec.describe 'Topic', :type => :request do
   describe 'An owner can delete a topic' do
     let(:topic) { create :topic, :user => user }
 
-    before(:each) do
-      service = TopicService.new topic
-
+    before do
       # Make sure the topic repository is created
-      service.create
+      Topics::Create.call topic
     end
 
     it 'returns without any errors' do
