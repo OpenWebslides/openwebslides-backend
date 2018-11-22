@@ -9,8 +9,12 @@ RSpec.describe Notifications::ForkTopic do
   ##
   # Test variables
   #
-  let(:topic) { create :topic, :upstream => create(:topic, :user => user) }
-  let(:user) { create :user, :confirmed }
+  let(:topic) { create :topic, :upstream => upstream }
+  let(:upstream) { create :topic, :user => user, :collaborators => collaborators }
+  let(:user) { create :user, :confirmed, :alert_emails => alert_emails }
+  let(:collaborators) { create_list :user, 3, :confirmed, :alert_emails => alert_emails }
+
+  let(:alert_emails) { true }
 
   ##
   # Subject
@@ -37,12 +41,20 @@ RSpec.describe Notifications::ForkTopic do
     subject.call topic
   end
 
-  it 'generates an alert' do
+  it 'generates an alert for the target topic owner and collaborators' do
     expect(Alert).to receive(:create)
       .with :alert_type => :topic_forked,
             :user => topic.upstream.user,
             :topic => topic.upstream,
             :subject => topic.user
+
+    topic.upstream.collaborators.each do |collaborator|
+      expect(Alert).to receive(:create)
+        .with :alert_type => :topic_forked,
+              :user => collaborator,
+              :topic => topic.upstream,
+              :subject => topic.user
+    end
 
     subject.call topic
   end
@@ -51,7 +63,9 @@ RSpec.describe Notifications::ForkTopic do
     let(:user) { create :user, :confirmed, :alert_emails => true }
 
     it 'sends an email' do
-      expect(AlertMailer).to receive(:fork_topic).with instance_of Alert
+      expect(AlertMailer).to receive(:fork_topic)
+        .exactly(4).times
+        .with instance_of Alert
 
       subject.call topic
     end

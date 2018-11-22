@@ -59,7 +59,7 @@ RSpec.describe Notifications::SubmitPR do
     it 'sends an email' do
       expect(AlertMailer).to receive(:submit_pr)
         .exactly(4).times
-        .with instance_of(Alert)
+        .with instance_of Alert
 
       subject.call pull_request
     end
@@ -69,7 +69,7 @@ RSpec.describe Notifications::SubmitPR do
     let(:alert_emails) { false }
 
     it 'does not send an email' do
-      expect(AlertMailer).not_to receive(:submit_pr)
+      expect(AlertMailer).not_to receive :submit_pr
 
       subject.call pull_request
     end

@@ -6,7 +6,7 @@ module Notifications
   #
   class SubmitPR < ApplicationService
     def call(pull_request)
-      # Generate alert
+      # Generate alerts
       ([pull_request.target.user] + pull_request.target.collaborators).each do |user|
         alert = Alert.create :alert_type => :pr_submitted,
                              :user => user,
