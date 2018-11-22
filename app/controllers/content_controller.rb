@@ -30,17 +30,15 @@ class ContentController < ApplicationController
 
     authorize @topic
 
+    # Explicitly permit the array of content items
     content = resource_params[:content].map { |p| p.permit!.to_hash }
-    params = {
-      :author => current_user,
-      :content => content,
-      :message => resource_params[:message]
-    }
 
-    if service.update params
-      head :no_content
-    else
+    @topic = Contents::Update.call @topic, current_user, content, resource_params[:message]
+
+    if @topic.errors.any?
       jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
+    else
+      head :no_content
     end
   end
 
@@ -49,10 +47,4 @@ class ContentController < ApplicationController
   #
   # Relationships and related resource actions are implemented in the respective concerns
   #
-
-  protected
-
-  def service
-    TopicService.new @topic
-  end
 end
