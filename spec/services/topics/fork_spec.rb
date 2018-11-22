@@ -45,7 +45,7 @@ RSpec.describe Topics::Fork do
   end
 
   it 'calls Notifications::Fork' do
-    expect(Notifications::Fork).to receive(:call).with instance_of Topic
+    expect(Notifications::ForkTopic).to receive(:call).with instance_of Topic
 
     subject.call topic, user
   end

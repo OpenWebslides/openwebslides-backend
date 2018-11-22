@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Notifications::Create do
+RSpec.describe Notifications::CreateTopic do
   ##
   # Configuration
   #

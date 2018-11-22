@@ -32,7 +32,7 @@ module Topics
         command.execute
 
         # Generate appropriate notifications
-        Notifications::Fork.call @fork
+        Notifications::ForkTopic.call @fork
       end
 
       # return AR record

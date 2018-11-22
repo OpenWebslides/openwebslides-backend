@@ -16,7 +16,7 @@ module Contents
       command.execute
 
       # Generate appropriate notifications
-      Notifications::Update.call topic, user
+      Notifications::UpdateTopic.call topic, user
 
       topic
     rescue OpenWebslides::FormatError => e

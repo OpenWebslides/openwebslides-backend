@@ -34,10 +34,14 @@ class PullRequestsController < ApplicationController
 
     authorize @pull_request
 
-    if @pull_request.save
-      jsonapi_render :json => @pull_request, :status => :created
+    @pull_request = PullRequests::Create.call @pull_request
+
+    if @pull_request.errors.any?
+      jsonapi_render_errors :json => @pull_request,
+                            :status => :unprocessable_entity
     else
-      jsonapi_render_errors :json => @pull_request, :status => :unprocessable_entity
+      jsonapi_render :json => @pull_request,
+                     :status => :created
     end
   end
 

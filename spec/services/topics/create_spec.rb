@@ -43,7 +43,7 @@ RSpec.describe Topics::Create do
     end
 
     it 'creates appropriate notifications' do
-      expect(Notifications::Create).to receive(:call).with topic
+      expect(Notifications::CreateTopic).to receive(:call).with topic
 
       subject.call topic
     end
@@ -65,7 +65,7 @@ RSpec.describe Topics::Create do
     end
 
     it 'does not create any notifications' do
-      expect(Notifications::Create).not_to receive :call
+      expect(Notifications::CreateTopic).not_to receive :call
 
       subject.call topic
     end

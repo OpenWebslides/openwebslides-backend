@@ -4,7 +4,7 @@ module Notifications
   ##
   # Generate feed item and alert when a topic is updated
   #
-  class Update < ApplicationService
+  class UpdateTopic < ApplicationService
     def call(topic, user)
       # Generate feed item
       FeedItem.create :event_type => :topic_updated,
