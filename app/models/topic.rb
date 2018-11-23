@@ -85,6 +85,8 @@ class Topic < ApplicationRecord
 
   validate :upstream_xor_forks
 
+  validate :more_permissive_upstream
+
   ##
   # State
   #
@@ -149,5 +151,16 @@ class Topic < ApplicationRecord
 
     errors.add :upstream, 'cannot be non-empty when forks are specified'
     errors.add :forks, 'cannot be non-empty when upstream is specified'
+  end
+
+  # Forked topics cannot be more permissive than their upstream
+  def more_permissive_upstream
+    return unless upstream
+
+    # Add error in case of (public and upstream is protected/private),
+    # or (public/protected and upstream is private)
+    return unless (public? && !upstream.public?) || !private? && upstream.private?
+
+    errors.add :access, I18n.t('openwebslides.validations.topic.more_permissive_upstream')
   end
 end

@@ -44,6 +44,74 @@ RSpec.describe Topic, :type => :model do
     end
 
     it { is_expected.to be_valid }
+
+    describe 'cannot have a more permissive access level than the upstream' do
+      context 'when the upstream is public' do
+        let(:upstream) { create :topic, :access => :public }
+
+        context 'when the fork is public' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :public }
+
+          it { is_expected.to be_valid }
+        end
+
+        context 'when the fork is protected' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :protected }
+
+          it { is_expected.to be_valid }
+        end
+
+        context 'when the fork is private' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :private }
+
+          it { is_expected.to be_valid }
+        end
+      end
+
+      context 'when the upstream is protected' do
+        let(:upstream) { create :topic, :access => :protected }
+
+        context 'when the fork is public' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :public }
+
+          it { is_expected.not_to be_valid }
+        end
+
+        context 'when the fork is protected' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :protected }
+
+          it { is_expected.to be_valid }
+        end
+
+        context 'when the fork is private' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :private }
+
+          it { is_expected.to be_valid }
+        end
+      end
+
+      context 'when the upstream is private' do
+        let(:upstream) { create :topic, :access => :private }
+
+        context 'when the fork is public' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :public }
+
+          it { is_expected.not_to be_valid }
+        end
+
+        context 'when the fork is protected' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :protected }
+
+          it { is_expected.not_to be_valid }
+        end
+
+        context 'when the fork is private' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :private }
+
+          it { is_expected.to be_valid }
+        end
+      end
+    end
   end
 
   describe 'state machine' do
