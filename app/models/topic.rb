@@ -142,15 +142,15 @@ class Topic < ApplicationRecord
   #
   def upstream_cannot_be_fork
     # If upstream is set, it cannot reference a topic that is a fork too (where upstream is non-empty)
-    errors.add :upstream, 'cannot be a fork' if upstream&.upstream
+    errors.add :upstream, I18n.t('openwebslides.validations.topic.upstream_cannot_be_fork') if upstream&.upstream
   end
 
   def upstream_xor_forks
     # Either `forks` or `upstream` can be set
     return unless upstream && forks.any?
 
-    errors.add :upstream, 'cannot be non-empty when forks are specified'
-    errors.add :forks, 'cannot be non-empty when upstream is specified'
+    errors.add :upstream, I18n.t('openwebslides.validations.topic.upstream_xor_forks')
+    errors.add :forks, I18n.t('openwebslides.validations.topic.upstream_xor_forks')
   end
 
   # Forked topics cannot be more permissive than their upstream

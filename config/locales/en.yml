@@ -36,6 +36,8 @@ en:
         topic_equals_target: "must equal pull request target topic"
         update_read_is_true: "must be true"
       topic:
+        upstream_cannot_be_fork: "cannot be a fork"
+        upstream_xor_forks: "cannot be non-empty when forks are specified"
         more_permissive_upstream: "cannot be more permissive than the upstream topic"
     annotations:
       hidden: "[deleted]"
