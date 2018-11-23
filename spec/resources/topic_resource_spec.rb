@@ -13,7 +13,7 @@ RSpec.describe TopicResource, :type => :resource do
   it { is_expected.to have_primary_key :id }
 
   it { is_expected.to have_attribute :title }
-  it { is_expected.to have_attribute :state }
+  it { is_expected.to have_attribute :access }
   it { is_expected.to have_attribute :root_content_item_id }
   it { is_expected.to have_attribute :description }
 
@@ -30,37 +30,37 @@ RSpec.describe TopicResource, :type => :resource do
 
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id title state description root_content_item_id user upstream content forks collaborators assets conversations incoming_pull_requests outgoing_pull_requests]
+      expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets conversations incoming_pull_requests outgoing_pull_requests]
     end
 
     it 'should omit empty fields' do
       subject { described_class.new nil_topic, context }
-      expect(subject.fetchable_fields).to match_array %i[id title state description root_content_item_id user upstream content forks collaborators assets conversations incoming_pull_requests outgoing_pull_requests]
+      expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets conversations incoming_pull_requests outgoing_pull_requests]
     end
 
     it 'should have a valid set of creatable fields' do
-      expect(described_class.creatable_fields).to match_array %i[title state description root_content_item_id user]
+      expect(described_class.creatable_fields).to match_array %i[title access description root_content_item_id user]
     end
 
     it 'should have a valid set of updatable fields' do
-      expect(described_class.updatable_fields).to match_array %i[title state description user]
+      expect(described_class.updatable_fields).to match_array %i[title access description user]
     end
 
     it 'should have a valid set of sortable fields' do
-      expect(described_class.sortable_fields context).to match_array %i[id title state description]
+      expect(described_class.sortable_fields context).to match_array %i[id title access description]
     end
   end
 
   describe 'filters' do
     it 'should have a valid set of filters' do
-      expect(described_class.filters.keys).to match_array %i[id title state description]
+      expect(described_class.filters.keys).to match_array %i[id title access description]
     end
 
-    let(:verify) { described_class.filters[:state][:verify] }
+    let(:verify) { described_class.filters[:access][:verify] }
 
-    it 'should verify state' do
-      expect(verify.call(%w[public_access foo protected_access private_access bar], {}))
-        .to match_array %w[public_access protected_access private_access]
+    it 'should verify access' do
+      expect(verify.call(%w[public foo protected private bar], {}))
+        .to match_array %w[public protected private]
     end
   end
 end

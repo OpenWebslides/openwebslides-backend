@@ -8,7 +8,7 @@ class TopicResource < ApplicationResource
   # Attributes
   #
   attribute :title
-  attribute :state
+  attribute :access
   attribute :description
   attribute :root_content_item_id
 
@@ -31,8 +31,8 @@ class TopicResource < ApplicationResource
   #
   filter :title
   filter :description
-  filter :state,
-         :verify => ->(values, _) { values & Topic.states.keys }
+  filter :access,
+         :verify => ->(values, _) { values & Topic.state_machine.states.map(&:name).map(&:to_s) }
 
   ##
   # Callbacks
