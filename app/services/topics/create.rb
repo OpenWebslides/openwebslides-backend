@@ -8,7 +8,6 @@ module Topics
     def call(topic)
       # Return if topic has errors already
       # This happens because status is validated in TopicsController
-      # FIXME: Move Topic#status from enum to state machine
       return topic if topic.errors.any?
 
       if topic.save
