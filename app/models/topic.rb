@@ -14,9 +14,6 @@ class Topic < ApplicationRecord
   # Topic description
   property :description
 
-  # Access level
-  enum :state => %i[public_access protected_access private_access]
-
   # Root content item identifier
   property :root_content_item_id
 
@@ -78,7 +75,7 @@ class Topic < ApplicationRecord
   validates :title,
             :presence => true
 
-  validates :state,
+  validates :access,
             :presence => true
 
   validates :root_content_item_id,
@@ -87,6 +84,33 @@ class Topic < ApplicationRecord
   validate :upstream_cannot_be_fork
 
   validate :upstream_xor_forks
+
+  ##
+  # State
+  #
+  state_machine :access, :initial => :public do
+    state :public
+    state :private
+    state :protected
+
+    # Make a topic private
+    event :set_private do
+      transition :public => :private,
+                 :protected => :private
+    end
+
+    # Make a topic protected
+    event :set_protected do
+      transition :public => :protected,
+                 :private => :protected
+    end
+
+    # Make a topic public
+    event :set_public do
+      transition :protected => :public,
+                 :private => :public
+    end
+  end
 
   ##
   # Callbacks
