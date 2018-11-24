@@ -10,9 +10,9 @@ RSpec.describe FeedItemPolicy::Scope do
   before :each do
     d1 = create :topic
     d2 = create :topic, :user => owner
-    d3 = create :topic, :state => :protected_access
-    d4 = create :topic, :state => :private_access
-    d5 = create :topic, :state => :private_access, :user => owner
+    d3 = create :topic, :access => :protected
+    d4 = create :topic, :access => :private
+    d5 = create :topic, :access => :private, :user => owner
 
     create :feed_item, :topic => d1, :user => d1.user
     create :feed_item, :topic => d2, :user => d2.user

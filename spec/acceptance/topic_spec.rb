@@ -61,7 +61,7 @@ RSpec.describe 'Topic', :type => :request do
           :attributes => {
             :title => title,
             :description => description,
-            :state => 'private_access',
+            :access => 'private',
             :rootContentItemId => 'ivks4jgtxr'
           },
           :relationships => {
@@ -87,7 +87,7 @@ RSpec.describe 'Topic', :type => :request do
       data = JSON.parse(response.body)['data']
       expect(data['attributes']).to match 'title' => title,
                                           'description' => description,
-                                          'state' => 'private_access',
+                                          'access' => 'private',
                                           'rootContentItemId' => 'ivks4jgtxr'
     end
   end

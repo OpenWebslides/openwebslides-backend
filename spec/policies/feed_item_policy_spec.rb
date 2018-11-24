@@ -8,7 +8,7 @@ RSpec.describe FeedItemPolicy do
   let(:record) { build :feed_item, :topic => topic }
 
   context 'public topics' do
-    let(:topic) { create :topic, :state => 'public_access' }
+    let(:topic) { create :topic, :access => :public }
 
     context 'for a guest' do
       let(:user) { nil }
@@ -32,7 +32,7 @@ RSpec.describe FeedItemPolicy do
   end
 
   context 'protected topics' do
-    let(:topic) { create :topic, :state => 'protected_access' }
+    let(:topic) { create :topic, :access => :protected }
 
     context 'for a guest' do
       let(:user) { nil }
@@ -56,7 +56,7 @@ RSpec.describe FeedItemPolicy do
   end
 
   context 'private topics' do
-    let(:topic) { create :topic, :state => 'private_access' }
+    let(:topic) { create :topic, :access => :private }
 
     context 'for a guest' do
       let(:user) { nil }

@@ -32,7 +32,7 @@ RSpec.describe Topics::Fork do
     it 'attributes' do
       is_expected.to have_attributes :title => I18n.t('openwebslides.topics.forked', :title => topic.title),
                                      :description => topic.description,
-                                     :state => topic.state,
+                                     :access => topic.access,
                                      :root_content_item_id => topic.root_content_item_id,
                                      :upstream => topic,
                                      :user => user

@@ -8,7 +8,7 @@ RSpec.describe AnnotationPolicy do
   let(:annotation) { build :annotation, :topic => topic }
 
   context 'for public topics' do
-    let(:topic) { build :topic, :with_collaborators, :state => :public_access }
+    let(:topic) { build :topic, :with_collaborators, :access => :public }
 
     context 'for a guest' do
       let(:user) { nil }
@@ -79,7 +79,7 @@ RSpec.describe AnnotationPolicy do
   end
 
   context 'for protected topics' do
-    let(:topic) { build :topic, :with_collaborators, :state => :protected_access }
+    let(:topic) { build :topic, :with_collaborators, :access => :protected }
 
     context 'for a guest' do
       let(:user) { nil }
@@ -150,7 +150,7 @@ RSpec.describe AnnotationPolicy do
   end
 
   context 'for private topics' do
-    let(:topic) { build :topic, :with_collaborators, :state => :private_access }
+    let(:topic) { build :topic, :with_collaborators, :access => :private }
 
     context 'for a guest' do
       let(:user) { nil }

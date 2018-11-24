@@ -75,7 +75,7 @@ RSpec.describe PullRequestPolicy do
       end
 
       context 'when the target is not showable' do
-        before { record.target.update :state => :private_access }
+        before { record.target.update :access => :private }
 
         it { is_expected.to forbid_action :create }
       end
