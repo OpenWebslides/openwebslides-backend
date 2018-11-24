@@ -76,7 +76,7 @@ namespace :db do
 
         deck_count.times do
           deck = user.topics.build :name => Faker::Lorem.words.join(' '),
-                                   :state => %i[public_access protected_access private_access].sample
+                                   :access => %i[public protected private].sample
 
           # 80% of the decks have a description
           deck.description = Faker::Lorem.words(10).join(' ') if prob 0.8

@@ -11,7 +11,7 @@ RSpec.describe 'Topic API', :type => :request do
   let(:attributes) do
     {
       :title => title,
-      :state => %i[public_access protected_access private_access].sample,
+      :access => %i[public protected private].sample,
       :description => Faker::Lorem.words(20).join(' '),
       :rootContentItemId => Faker::Lorem.words(3).join('')
     }
@@ -87,20 +87,23 @@ RSpec.describe 'Topic API', :type => :request do
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
-    it 'rejects empty state' do
-      post topics_path, :params => request_body(attributes.merge :state => ''), :headers => headers
+    it 'rejects invalid access' do
+      post topics_path, :params => request_body(attributes.merge :access => 'foo'), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
-    it 'rejects invalid state' do
-      post topics_path, :params => request_body(attributes.merge :state => 'foo'), :headers => headers
+    it 'defaults empty access to public' do
+      post topics_path, :params => request_body(attributes.merge :access => ''), :headers => headers
 
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+      expect(response.status).to eq 201
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+      attributes = JSON.parse(response.body)['data']['attributes']
+
+      expect(attributes['access']).to eq 'public'
     end
 
     it 'returns successful' do
@@ -211,8 +214,17 @@ RSpec.describe 'Topic API', :type => :request do
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
-    it 'rejects invalid state' do
-      patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes.except(:rootContentItemId).merge(:state => 'foo')), :headers => headers
+    it 'rejects empty access' do
+      patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes.except(:rootContentItemId).merge(:access => '')), :headers => headers
+
+      expect(response.status).to eq 422
+      # Two validation errors: `access` cannot be blank, `access` is invalid
+      expect(jsonapi_error_code(response)).to eq [JSONAPI::VALIDATION_ERROR, JSONAPI::VALIDATION_ERROR]
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    end
+
+    it 'rejects invalid access' do
+      patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes.except(:rootContentItemId).merge(:access => 'foo')), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR

@@ -8,7 +8,7 @@ module Topics
     def call(topic, user)
       fork_params = topic.slice :title,
                                 :description,
-                                :state,
+                                :access,
                                 :root_content_item_id
 
       @fork = Topic.new fork_params

@@ -26,15 +26,7 @@ class TopicsController < ApplicationController
 
   # POST /topics
   def create
-    begin
-      @topic = Topic.new topic_params
-    rescue ArgumentError
-      # FIXME: Topic.new throws ArgumentError when :state is invalid
-      # See https://github.com/rails/rails/issues/13971#issuecomment-287030984
-      # FIXME: Remove the errors check in Topics::Create
-      @topic = Topic.new topic_params.merge :state => ''
-      @topic.errors.add :state, I18n.t('openwebslides.validations.topic.invalid_state')
-    end
+    @topic = Topic.new topic_params
 
     authorize @topic
 
@@ -69,10 +61,6 @@ class TopicsController < ApplicationController
     else
       jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
     end
-  rescue ArgumentError
-    # Add error to catch invalid state
-    @topic.errors.add :state, 'is invalid'
-    jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
   end
 
   # DELETE /topics/:id

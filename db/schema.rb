@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_21_161659) do
+ActiveRecord::Schema.define(version: 2018_11_23_123825) do
 
   create_table "alerts", force: :cascade do |t|
     t.integer "user_id"
@@ -108,13 +108,13 @@ ActiveRecord::Schema.define(version: 2018_11_21_161659) do
 
   create_table "topics", force: :cascade do |t|
     t.string "title"
-    t.integer "state", default: 0
     t.string "description"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "root_content_item_id"
     t.integer "upstream_id"
+    t.string "access", default: "", null: false
     t.index ["upstream_id"], name: "index_topics_on_upstream_id"
     t.index ["user_id"], name: "index_topics_on_user_id"
   end

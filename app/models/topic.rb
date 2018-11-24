@@ -14,9 +14,6 @@ class Topic < ApplicationRecord
   # Topic description
   property :description
 
-  # Access level
-  enum :state => %i[public_access protected_access private_access]
-
   # Root content item identifier
   property :root_content_item_id
 
@@ -78,7 +75,7 @@ class Topic < ApplicationRecord
   validates :title,
             :presence => true
 
-  validates :state,
+  validates :access,
             :presence => true
 
   validates :root_content_item_id,
@@ -87,6 +84,35 @@ class Topic < ApplicationRecord
   validate :upstream_cannot_be_fork
 
   validate :upstream_xor_forks
+
+  validate :more_permissive_upstream
+
+  ##
+  # State
+  #
+  state_machine :access, :initial => :public do
+    state :public
+    state :private
+    state :protected
+
+    # Make a topic private
+    event :set_private do
+      transition :public => :private,
+                 :protected => :private
+    end
+
+    # Make a topic protected
+    event :set_protected do
+      transition :public => :protected,
+                 :private => :protected
+    end
+
+    # Make a topic public
+    event :set_public do
+      transition :protected => :public,
+                 :private => :public
+    end
+  end
 
   ##
   # Callbacks
@@ -116,14 +142,25 @@ class Topic < ApplicationRecord
   #
   def upstream_cannot_be_fork
     # If upstream is set, it cannot reference a topic that is a fork too (where upstream is non-empty)
-    errors.add :upstream, 'cannot be a fork' if upstream&.upstream
+    errors.add :upstream, I18n.t('openwebslides.validations.topic.upstream_cannot_be_fork') if upstream&.upstream
   end
 
   def upstream_xor_forks
     # Either `forks` or `upstream` can be set
     return unless upstream && forks.any?
 
-    errors.add :upstream, 'cannot be non-empty when forks are specified'
-    errors.add :forks, 'cannot be non-empty when upstream is specified'
+    errors.add :upstream, I18n.t('openwebslides.validations.topic.upstream_xor_forks')
+    errors.add :forks, I18n.t('openwebslides.validations.topic.upstream_xor_forks')
+  end
+
+  # Forked topics cannot be more permissive than their upstream
+  def more_permissive_upstream
+    return unless upstream
+
+    # Add error in case of (public and upstream is protected/private),
+    # or (public/protected and upstream is private)
+    return unless (public? && !upstream.public?) || !private? && upstream.private?
+
+    errors.add :access, I18n.t('openwebslides.validations.topic.more_permissive_upstream')
   end
 end

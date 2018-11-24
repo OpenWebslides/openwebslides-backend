@@ -6,10 +6,6 @@ module Topics
   #
   class Create < ApplicationService
     def call(topic)
-      # Return if topic has errors already
-      # This happens because status is validated in TopicsController
-      return topic if topic.errors.any?
-
       if topic.save
         # Persist to file system
         Repository::Create.new(topic).execute

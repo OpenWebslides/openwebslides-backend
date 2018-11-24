@@ -36,9 +36,6 @@ RSpec.describe Topic, :type => :model do
     it { is_expected.not_to allow_value(nil).for(:title) }
     it { is_expected.not_to allow_value('').for(:title) }
 
-    it { is_expected.not_to allow_value(nil).for(:state) }
-    it { is_expected.not_to allow_value('').for(:state) }
-
     it { is_expected.not_to allow_value(nil).for(:root_content_item_id) }
     it { is_expected.not_to allow_value('').for(:root_content_item_id) }
 
@@ -48,8 +45,99 @@ RSpec.describe Topic, :type => :model do
 
     it { is_expected.to be_valid }
 
-    it 'has a valid :status enum' do
-      expect(%w[public_access protected_access private_access]).to include subject.state
+    describe 'cannot have a more permissive access level than the upstream' do
+      context 'when the upstream is public' do
+        let(:upstream) { create :topic, :access => :public }
+
+        context 'when the fork is public' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :public }
+
+          it { is_expected.to be_valid }
+        end
+
+        context 'when the fork is protected' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :protected }
+
+          it { is_expected.to be_valid }
+        end
+
+        context 'when the fork is private' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :private }
+
+          it { is_expected.to be_valid }
+        end
+      end
+
+      context 'when the upstream is protected' do
+        let(:upstream) { create :topic, :access => :protected }
+
+        context 'when the fork is public' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :public }
+
+          it { is_expected.not_to be_valid }
+        end
+
+        context 'when the fork is protected' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :protected }
+
+          it { is_expected.to be_valid }
+        end
+
+        context 'when the fork is private' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :private }
+
+          it { is_expected.to be_valid }
+        end
+      end
+
+      context 'when the upstream is private' do
+        let(:upstream) { create :topic, :access => :private }
+
+        context 'when the fork is public' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :public }
+
+          it { is_expected.not_to be_valid }
+        end
+
+        context 'when the fork is protected' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :protected }
+
+          it { is_expected.not_to be_valid }
+        end
+
+        context 'when the fork is private' do
+          let(:topic) { build :topic, :upstream => upstream, :access => :private }
+
+          it { is_expected.to be_valid }
+        end
+      end
+    end
+  end
+
+  describe 'state machine' do
+    let(:subject) { build :topic }
+
+    it { is_expected.to have_states :public, :private, :protected }
+
+    context 'when the topic is public' do
+      it { is_expected.to handle_events :set_private, :set_protected, :when => :public }
+
+      it { is_expected.to transition_from :public, :to_state => :private, :on_event => :set_private }
+      it { is_expected.to transition_from :public, :to_state => :protected, :on_event => :set_protected }
+    end
+
+    context 'when the topic is protected' do
+      it { is_expected.to handle_events :set_private, :set_public, :when => :protected }
+
+      it { is_expected.to transition_from :protected, :to_state => :private, :on_event => :set_private }
+      it { is_expected.to transition_from :protected, :to_state => :public, :on_event => :set_public }
+    end
+
+    context 'when the topic is private' do
+      it { is_expected.to handle_events :set_protected, :set_public, :when => :private }
+
+      it { is_expected.to transition_from :private, :to_state => :protected, :on_event => :set_protected }
+      it { is_expected.to transition_from :private, :to_state => :public, :on_event => :set_public }
     end
   end
 

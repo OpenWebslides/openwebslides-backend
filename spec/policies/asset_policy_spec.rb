@@ -8,7 +8,7 @@ RSpec.describe AssetPolicy do
   let(:asset) { topic.assets.first }
 
   context 'for public topics' do
-    let(:topic) { build :topic, :with_assets, :with_collaborators, :state => :public_access }
+    let(:topic) { build :topic, :with_assets, :with_collaborators, :access => :public }
 
     context 'for a guest' do
       let(:user) { nil }
@@ -72,7 +72,7 @@ RSpec.describe AssetPolicy do
   end
 
   context 'for protected topics' do
-    let(:topic) { build :topic, :with_assets, :with_collaborators, :state => :protected_access }
+    let(:topic) { build :topic, :with_assets, :with_collaborators, :access => :protected }
 
     context 'for a guest' do
       let(:user) { nil }
@@ -136,7 +136,7 @@ RSpec.describe AssetPolicy do
   end
 
   context 'for private topics' do
-    let(:topic) { build :topic, :with_assets, :with_collaborators, :state => :private_access }
+    let(:topic) { build :topic, :with_assets, :with_collaborators, :access => :private }
 
     context 'for a guest' do
       let(:user) { nil }

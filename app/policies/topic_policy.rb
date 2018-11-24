@@ -18,13 +18,13 @@ class TopicPolicy < ApplicationPolicy
 
   def show?
     # Users can show public topics, collaborations and owned topics
-    if @record.public_access?
+    if @record.public?
       # Users and guests can show
       true
-    elsif @record.protected_access?
+    elsif @record.protected?
       # Users can show protected topic
       !@user.nil?
-    elsif @record.private_access?
+    elsif @record.private?
       return false if @user.nil?
 
       # Owner and collaborators can read private topic
@@ -150,14 +150,14 @@ class TopicPolicy < ApplicationPolicy
     def resolve
       if @user
         # Users can see public topics, protected topics and collaborations
-        query = 'topics.state != ? OR topics.user_id = ? OR access_grants.user_id = ?'
+        query = 'topics.access != "private" OR topics.user_id = ? OR access_grants.user_id = ?'
 
         scope.joins('LEFT OUTER JOIN grants access_grants ON access_grants.topic_id = topics.id')
-             .where(query, Topic.states['private_access'], @user.id, @user.id)
+             .where(query, @user.id, @user.id)
              .distinct
       else
         # Everyone can see public topics
-        scope.where('topics.state' => 'public_access')
+        scope.where('topics.access' => 'public')
       end
     end
   end
