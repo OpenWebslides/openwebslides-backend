@@ -6,20 +6,7 @@ RSpec.describe Repository::Filesystem::Init do
   ##
   # Configuration
   #
-  around do |example|
-    temp_dir = Dir.mktmpdir
-
-    OpenWebslides.configure do |config|
-      ##
-      # Absolute path to persistent repository storage
-      #
-      config.repository.path = temp_dir
-    end
-
-    example.run
-
-    FileUtils.rm_rf temp_dir
-  end
+  include_context 'repository'
 
   ##
   # Subject
@@ -37,7 +24,7 @@ RSpec.describe Repository::Filesystem::Init do
   #
   context 'when the repository does not exist' do
     it 'creates the repository structure' do
-      described_class.call repo
+      subject.call repo
 
       expect(File).to exist File.join repo.path, 'content.yml'
       expect(File).to exist File.join repo.path, 'assets', '.keep'
@@ -46,10 +33,10 @@ RSpec.describe Repository::Filesystem::Init do
   end
 
   context 'when the repository already exists' do
-    before { described_class.call repo }
+    before { subject.call repo }
 
     it 'raises a RepoExistsError' do
-      expect { described_class.call repo }.to raise_error OpenWebslides::RepoExistsError
+      expect { subject.call repo }.to raise_error OpenWebslides::RepoExistsError
     end
   end
 end

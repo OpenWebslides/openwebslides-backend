@@ -1,0 +1,16 @@
+# frozen_string_literal: true
+
+module Repository
+  module Filesystem
+    ##
+    # Delete repository directory
+    #
+    class Delete < ApplicationService
+      def call(repo)
+        raise OpenWebslides::RepoDoesNotExistError unless Dir.exist? repo.path
+
+        FileUtils.rm_r repo.path, :secure => true
+      end
+    end
+  end
+end

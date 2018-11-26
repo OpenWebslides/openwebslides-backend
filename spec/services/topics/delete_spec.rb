@@ -6,39 +6,34 @@ RSpec.describe Topics::Delete do
   ##
   # Configuration
   #
+  include_context 'repository'
+
+  ##
+  # described_class
+  #
   ##
   # Test variables
   #
   let(:topic) { create :topic }
 
   ##
-  # Subject
-  #
-  ##
   # Stubs and mocks
   #
-  before do
-    Stub::Command.create Repository::Delete
-  end
-
   ##
   # Tests
   #
+  before { Repository::Create.call topic }
+
   it 'destroys the topic in the database' do
-    subject.call topic
+    described_class.call topic
 
     expect(topic).to be_destroyed
   end
 
   it 'deletes the topic in the filesystem' do
-    dbl = double 'Repository::Delete'
+    expect(Repository::Delete).to receive(:call).with topic
 
-    expect(Repository::Delete).to receive(:new)
-      .with(instance_of Topic)
-      .and_return dbl
-    expect(dbl).to receive :execute
-
-    subject.call topic
+    described_class.call topic
   end
 
   describe 'return value' do

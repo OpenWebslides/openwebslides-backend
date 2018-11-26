@@ -6,20 +6,7 @@ RSpec.describe Repository::Git::Commit do
   ##
   # Configuration
   #
-  around do |example|
-    temp_dir = Dir.mktmpdir
-
-    OpenWebslides.configure do |config|
-      ##
-      # Absolute path to persistent repository storage
-      #
-      config.repository.path = temp_dir
-    end
-
-    example.run
-
-    FileUtils.rm_rf temp_dir
-  end
+  include_context 'repository'
 
   ##
   # Subject
@@ -53,7 +40,7 @@ RSpec.describe Repository::Git::Commit do
     it 'creates a commit' do
       commit_count = `GIT_DIR=#{File.join repo.path, '.git'} git rev-list --count master`.to_i
 
-      described_class.call repo, user, message
+      subject.call repo, user, message
 
       new_commit_count = `GIT_DIR=#{File.join repo.path, '.git'} git rev-list --count master`.to_i
 
@@ -63,7 +50,7 @@ RSpec.describe Repository::Git::Commit do
 
   context 'when the working tree is clean' do
     it 'raises an EmptyCommitError' do
-      expect { described_class.call repo, user, message }.to raise_error OpenWebslides::EmptyCommitError
+      expect { subject.call repo, user, message }.to raise_error OpenWebslides::EmptyCommitError
     end
   end
 end

@@ -6,20 +6,7 @@ RSpec.describe Repository::Create do
   ##
   # Configuration
   #
-  around do |example|
-    temp_dir = Dir.mktmpdir
-
-    OpenWebslides.configure do |config|
-      ##
-      # Absolute path to persistent repository storage
-      #
-      config.repository.path = temp_dir
-    end
-
-    example.run
-
-    FileUtils.rm_rf temp_dir
-  end
+  include_context 'repository'
 
   ##
   # Subject
@@ -38,7 +25,7 @@ RSpec.describe Repository::Create do
   # Tests
   #
   it 'creates the directory structure' do
-    described_class.call topic
+    subject.call topic
 
     expect(File).to be_directory repository_path
     expect(File).to be_directory File.join repository_path, 'content'
@@ -47,13 +34,13 @@ RSpec.describe Repository::Create do
   end
 
   it 'creates and initializes a git repository' do
-    described_class.call topic
+    subject.call topic
 
     expect(File).to be_directory File.join repository_path, '.git'
   end
 
   it 'creates an initial commit' do
-    described_class.call topic
+    subject.call topic
 
     expect(`GIT_DIR=#{File.join repository_path, '.git'} git rev-list --count master`.to_i).to eq 1
   end

@@ -6,21 +6,19 @@ RSpec.describe Topics::Create do
   ##
   # Configuration
   #
+  include_context 'repository'
+
+  ##
+  # Subject
+  #
   ##
   # Test variables
   #
   let(:topic) { build :topic }
 
   ##
-  # Subject
-  #
-  ##
   # Stubs and mocks
   #
-  before do
-    Stub::Command.create Repository::Create
-  end
-
   ##
   # Tests
   #
