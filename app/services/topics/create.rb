@@ -8,7 +8,7 @@ module Topics
     def call(topic)
       if topic.save
         # Persist to file system
-        Repository::Create.new(topic).execute
+        Repository::Create.call topic
 
         # Generate appropriate notifications
         Notifications::CreateTopic.call topic

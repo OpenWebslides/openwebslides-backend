@@ -32,12 +32,7 @@ RSpec.describe Topics::Create do
     end
 
     it 'persists the topic to the filesystem' do
-      dbl = double 'Repository::Create'
-
-      expect(Repository::Create).to receive(:new)
-        .with(instance_of Topic)
-        .and_return dbl
-      expect(dbl).to receive :execute
+      expect(Repository::Create).to receive(:call).with topic
 
       subject.call topic
     end
