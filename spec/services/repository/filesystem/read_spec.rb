@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Repository::Filesystem::Delete do
+RSpec.describe Repository::Filesystem::Read do
   ##
   # Configuration
   #
@@ -31,10 +31,8 @@ RSpec.describe Repository::Filesystem::Delete do
   context 'when the repository already exists' do
     before { Repository::Create.call repo.topic }
 
-    it 'deletes the repository structure' do
-      subject.call repo
+    subject { described_class.call repo }
 
-      expect(File).not_to exist repo.path
-    end
+    it { is_expected.to be_an Array }
   end
 end

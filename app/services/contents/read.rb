@@ -6,7 +6,7 @@ module Contents
   #
   class Read < ApplicationService
     def call(topic)
-      Repository::Read.new(topic).execute
+      Repository::Read.call topic
     end
   end
 end

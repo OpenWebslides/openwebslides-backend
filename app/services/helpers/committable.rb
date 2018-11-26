@@ -43,6 +43,18 @@ module Helpers
       def index
         File.join path, 'content.yml'
       end
+
+      ##
+      # Ensure the repository data format version is compatible
+      #
+      def validate_version!
+        constraint = Semverse::Constraint.new "~> #{OpenWebslides.config.repository.version}"
+
+        yaml = YAML.safe_load File.read index
+
+        repository_version = yaml['version']
+        raise OpenWebslides::IncompatibleVersionError unless constraint.satisfies? repository_version
+      end
     end
   end
 end
