@@ -11,6 +11,11 @@ module Repository
 
         git.checkout 'refs/heads/master' unless git.index.count.zero?
 
+        # Prevent empty commits
+        status = []
+        git.status { |file, status_data| status.concat status_data }
+        raise OpenWebslides::EmptyCommitError if status.empty?
+
         # Stage all changes
         index = git.index
         index.add_all
