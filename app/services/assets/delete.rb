@@ -5,16 +5,19 @@ module Assets
   # Delete an asset in database and filesystem
   #
   class Delete < ApplicationService
+    include Helpers::Lockable
+    include Helpers::Committable
+
     def call(asset, user)
-      # Delete in filesystem
-      command = Repository::Asset::Destroy.new asset
+      write_lock asset.topic do
+        repo = repo_for asset.topic
 
-      command.author = user
+        # Delete in filesystem
+        Repository::Asset::Delete.call repo, asset, user
 
-      command.execute
-
-      # Delete in database
-      asset.destroy
+        # Delete in database
+        asset.destroy
+      end
     end
   end
 end
