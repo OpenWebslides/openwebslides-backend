@@ -33,10 +33,11 @@ class ContentController < ApplicationController
     # Explicitly permit the array of content items
     content = resource_params[:content].map { |p| p.permit!.to_hash }
 
-    @topic = Contents::Update.call @topic, current_user, content, resource_params[:message]
+    @topic = Topics::UpdateContent.call @topic, content, current_user, resource_params[:message]
 
     if @topic.errors.any?
-      jsonapi_render_errors :json => @topic, :status => :unprocessable_entity
+      jsonapi_render_errors :json => @topic,
+                            :status => :unprocessable_entity
     else
       head :no_content
     end

@@ -44,6 +44,6 @@ class ContentResource < ApplicationResource
   # Methods
   #
   def content
-    Contents::Read.call @model
+    Repository::Read.call @model
   end
 end

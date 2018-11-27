@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Content API', :type => :request do
+  include_context 'repository'
+
   let(:user) { create :user, :confirmed }
   let(:topic) { create :topic, :user => user }
 
@@ -13,17 +15,15 @@ RSpec.describe 'Content API', :type => :request do
         :attributes => {
           :message => 'Update topic content',
           :content => [{
-            :foo => 'bar'
+            :id => topic.root_content_item_id,
+            :type => 'contentItemTypes/ROOT'
           }]
         }
       }
     }.to_json
   end
 
-  before do
-    Stub::Command.create Repository::Read
-    Stub::Command.create Repository::Update, %i[content= author= message=]
-  end
+  before { Topics::Create.call topic }
 
   describe 'GET /' do
     before do

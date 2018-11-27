@@ -1,19 +1,13 @@
 # frozen_string_literal: true
 
-module Contents
+module Topics
   ##
   # Update the contents of a topic
   #
-  class Update < ApplicationService
-    def call(topic, user, content, message)
+  class UpdateContent < ApplicationService
+    def call(topic, content, user, message)
       # Update in filesystem
-      command = Repository::Update.new topic
-
-      command.author = user
-      command.content = content
-      command.message = message
-
-      command.execute
+      Repository::Update.call topic, content, user, message
 
       # Generate appropriate notifications
       Notifications::UpdateTopic.call topic, user

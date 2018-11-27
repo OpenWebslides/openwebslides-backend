@@ -6,13 +6,14 @@ RSpec.describe 'Fork API', :type => :request do
   ##
   # Configuration
   #
+  include_context 'repository'
+
   ##
   # Stubs and mocks
   #
-  before do
-    Stub::Command.create Repository::Fork, %i[fork=]
-  end
-
+  ##
+  # Subject
+  #
   ##
   # Test variables
   #
@@ -22,6 +23,8 @@ RSpec.describe 'Fork API', :type => :request do
   ##
   # Tests
   #
+  before { Topics::Create.call topic }
+
   describe 'POST /topics/:id/fork' do
     before do
       add_content_type_header

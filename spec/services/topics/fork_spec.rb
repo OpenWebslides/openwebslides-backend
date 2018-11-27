@@ -6,25 +6,25 @@ RSpec.describe Topics::Fork do
   ##
   # Configuration
   #
+  include_context 'repository'
+
   ##
   # Test variables
+  #
+  ##
+  # Subject
   #
   let(:topic) { create :topic }
   let(:user) { create :user }
 
   ##
-  # Subject
-  #
-  ##
   # Stubs and mocks
   #
-  before do
-    Stub::Command.create Repository::Fork, %i[fork=]
-  end
-
   ##
   # Tests
   #
+  before { Topics::Create.call topic }
+
   describe 'the forked topic' do
     subject { described_class.call topic, user }
 
