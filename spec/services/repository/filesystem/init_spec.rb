@@ -30,6 +30,12 @@ RSpec.describe Repository::Filesystem::Init do
       expect(File).to exist File.join repo.path, 'assets', '.keep'
       expect(File).to exist File.join repo.path, 'content', '.keep'
     end
+
+    it 'writes the index file' do
+      expect(Repository::Filesystem::WriteIndex).to receive(:call).with repo
+
+      subject.call repo
+    end
   end
 
   context 'when the repository already exists' do

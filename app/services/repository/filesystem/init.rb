@@ -12,8 +12,8 @@ module Repository
 
         FileUtils.mkdir_p repo.path
 
-        # Create empty index file
-        File.write repo.index, { 'version' => OpenWebslides.config.repository.version }.to_yaml
+        # Write empty index file
+        Repository::Filesystem::WriteIndex.call repo
 
         # Create content item directory
         FileUtils.mkdir_p repo.content_path
