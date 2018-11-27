@@ -50,15 +50,15 @@ module OpenWebslides
     # Verify global configuration
     #
     def verify_global!
-      raise 'tmpdir' unless Dir.exist? tmpdir
-      raise 'lockdir' unless Dir.exist? lockdir
+      FileUtils.mkdir_p tmpdir unless Dir.exist? tmpdir
+      FileUtils.mkdir_p lockdir unless Dir.exist? lockdir
     end
 
     ##
     # Verify repository configuration
     #
     def verify_repository!
-      raise 'repository.path' unless Dir.exist? repository.path
+      FileUtils.mkdir_p repository.path unless Dir.exist? repository.path
       raise 'repository.version' if Semverse::Version.new(repository.version).nil?
     end
 
