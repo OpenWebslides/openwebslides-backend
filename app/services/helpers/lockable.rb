@@ -21,15 +21,8 @@ module Helpers
 
     private
 
-    def lock_path
-      File.join Rails.root.join 'tmp', 'locks'
-    end
-
     def lock(topic, type, block)
-      # TODO: move this to application initialization
-      Dir.mkdir lock_path unless Dir.exist? lock_path
-
-      file = File.join lock_path, "#{topic.id}.lock"
+      file = File.join OpenWebslides.config.lockdir, "#{topic.id}.lock"
 
       File.open(file, File::RDWR | File::CREAT, 0o644) do |lock|
         lock.flock type

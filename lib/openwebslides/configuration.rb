@@ -24,6 +24,7 @@ module OpenWebslides
   #
   class Configuration
     attr_accessor :tmpdir,
+                  :lockdir,
                   :repository,
                   :oauth2,
                   :api
@@ -50,6 +51,7 @@ module OpenWebslides
     #
     def verify_global!
       raise 'tmpdir' unless Dir.exist? tmpdir
+      raise 'lockdir' unless Dir.exist? lockdir
     end
 
     ##
