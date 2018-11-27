@@ -5,7 +5,7 @@ module Helpers
   # Provide helpers for the repository
   #
   module Committable
-    def find_repository(topic)
+    def repo_for(topic)
       Repo.new topic
     end
 

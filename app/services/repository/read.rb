@@ -10,7 +10,7 @@ module Repository
 
     def call(topic)
       read_lock topic do
-        repo = find_repository topic
+        repo = repo_for topic
 
         Filesystem::Read.call repo
       end

@@ -10,7 +10,7 @@ module Repository
 
     def call(topic)
       write_lock topic do
-        repo = find_repository topic
+        repo = repo_for topic
 
         # Delete repository
         Repository::Filesystem::Delete.call repo

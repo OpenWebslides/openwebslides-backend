@@ -10,7 +10,7 @@ module Repository
 
     def call(topic, content, user, message)
       write_lock topic do
-        repo = find_repository topic
+        repo = repo_for topic
 
         # Write content items
         Repository::Filesystem::Write.call repo, content

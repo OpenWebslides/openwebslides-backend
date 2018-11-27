@@ -11,8 +11,8 @@ module Repository
     def call(upstream, downstream)
       read_lock upstream do
         write_lock downstream do
-          repo = find_repository upstream
-          fork = find_repository downstream
+          repo = repo_for upstream
+          fork = repo_for downstream
 
           # Duplicate repository
           Repository::Filesystem::Fork.call repo, fork

@@ -29,10 +29,26 @@ RSpec.describe Repository::Filesystem::Read do
   end
 
   context 'when the repository already exists' do
-    before { Repository::Create.call repo.topic }
+    before do
+      FileUtils.mkdir_p repo.content_path
+
+      # Dummy index file
+      index_hash = {
+        'version' => OpenWebslides.config.repository.version,
+        'root' => 'j0vcu0y7vk'
+      }
+      File.write repo.index, index_hash.to_yaml
+
+      # Dummy content items
+      content_item_hash = {
+        'id' => 'j0vcu0y7vk',
+        'foo' => 'bar'
+      }
+      File.write File.join(repo.content_path, 'j0vcu0y7vk.yml'), content_item_hash.to_yaml
+    end
 
     subject { described_class.call repo }
 
-    it { is_expected.to be_an Array }
+    it { is_expected.to eq [{ 'id' => 'j0vcu0y7vk', 'foo' => 'bar' }] }
   end
 end
