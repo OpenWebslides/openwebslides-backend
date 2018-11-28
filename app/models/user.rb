@@ -98,22 +98,11 @@ class User < ApplicationRecord
     user
   end
 
-  # TODO: deprecate in favor of #increment(:token_version)
-  def increment_token_version
-    self.token_version += 1
-  end
-
-  # TODO: deprecate in favor of #increment(:token_version)
-  def increment_token_version!
-    increment_token_version
-    save!
-  end
-
   ##
   # Overrides
   #
   def password=(new_password)
-    increment_token_version
+    increment :token_version
     super new_password
   end
 

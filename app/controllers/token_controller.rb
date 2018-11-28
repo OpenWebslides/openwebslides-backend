@@ -32,7 +32,7 @@ class TokenController < ApplicationController
   def destroy
     authorize :token
 
-    current_user.increment_token_version!
+    current_user.increment! :token_version
 
     head :no_content
   end
