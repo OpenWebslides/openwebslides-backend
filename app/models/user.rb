@@ -10,12 +10,12 @@ class User < ApplicationRecord
   ##
   # Properties
   #
-  property :name
-  property :email
-  property :locale
-  property :token_version
-  property :tos_accepted
-  property :alert_emails
+  attribute :name
+  attribute :email
+  attribute :locale
+  attribute :token_version
+  attribute :tos_accepted
+  attribute :alert_emails
 
   ##
   # Associations

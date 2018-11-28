@@ -7,7 +7,7 @@ class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
   ##
-  # Dummy method to define a property
+  # Dummy method to define an attribute
   #
-  def self.property(*args); end
+  def self.attribute(*args); end
 end

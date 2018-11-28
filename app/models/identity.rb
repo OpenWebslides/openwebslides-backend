@@ -9,10 +9,10 @@ class Identity < ApplicationRecord
   #
 
   # Unique user identifier
-  property :uid
+  attribute :uid
 
   # Identity provider
-  property :provider
+  attribute :provider
 
   ##
   # Associations

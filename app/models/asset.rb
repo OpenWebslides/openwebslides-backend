@@ -9,7 +9,7 @@ class Asset < ApplicationRecord
   #
 
   # Relative path to asset file
-  property :filename
+  attribute :filename
 
   ##
   # Associations
