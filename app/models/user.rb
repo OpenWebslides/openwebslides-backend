@@ -82,7 +82,6 @@ class User < ApplicationRecord
   ##
   # Callbacks
   #
-  before_create :create_email_identity
   after_initialize :set_default_locale
 
   ##
@@ -116,10 +115,6 @@ class User < ApplicationRecord
   end
 
   private
-
-  def create_email_identity
-    identities.build :provider => 'email', :uid => email
-  end
 
   def set_default_locale
     self.locale = 'en' if locale.blank?

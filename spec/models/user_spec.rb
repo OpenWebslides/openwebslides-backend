@@ -81,10 +81,6 @@ RSpec.describe User, :type => :model do
     it { is_expected.to have_many(:annotations).inverse_of(:user).dependent :destroy }
     it { is_expected.to have_many(:ratings).inverse_of(:user).dependent :destroy }
     it { is_expected.to have_many(:alerts).inverse_of(:user).dependent :destroy }
-
-    it 'has an email identity after creating' do
-      expect(user.identities.first&.provider).to eq 'email'
-    end
   end
 
   describe 'methods' do

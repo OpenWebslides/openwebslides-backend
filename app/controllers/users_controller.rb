@@ -29,12 +29,14 @@ class UsersController < ApplicationController
 
     authorize @user
 
-    if @user.save
-      jsonapi_render :json => @user,
-                     :status => :created
-    else
+    @user = Users::Create.call @user
+
+    if @user.errors.any?
       jsonapi_render_errors :json => @user,
                             :status => :unprocessable_entity
+    else
+      jsonapi_render :json => @user,
+                     :status => :created
     end
   end
 
