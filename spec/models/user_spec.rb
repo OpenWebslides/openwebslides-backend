@@ -98,8 +98,8 @@ RSpec.describe User, :type => :model do
       context 'when the user is unconfirmed' do
         subject(:user) { create :user }
 
-        it 'raises an UnconfirmedError' do
-          expect { User.find_by_token :id => user.id }.to raise_error JSONAPI::Exceptions::UnconfirmedError
+        it 'returns nil' do
+          expect(User.find_by_token :id => user.id).to be_nil
         end
       end
 

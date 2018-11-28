@@ -89,13 +89,7 @@ class User < ApplicationRecord
   # Methods
   #
   def self.find_by_token(params)
-    user = find_by params
-    return nil unless user
-
-    # TODO: raise another error and move this to the controller or something
-    raise JSONAPI::Exceptions::UnconfirmedError unless user.confirmed?
-
-    user
+    confirmed.find_by params
   end
 
   ##
@@ -109,6 +103,8 @@ class User < ApplicationRecord
   ##
   # Helpers and callback methods
   #
+  scope :confirmed, -> { where.not(:confirmed_at => nil) }
+
   def readonly_email
     errors.add :email, I18n.t('openwebslides.validations.user.readonly_email') if email_changed?
   end
