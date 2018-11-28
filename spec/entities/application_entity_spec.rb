@@ -13,7 +13,7 @@ RSpec.describe ApplicationEntity, :type => :model do
   # Test variables
   #
   class TestEntity < ApplicationEntity
-    property :my_attribute
+    attribute :my_attribute
     belongs_to :my_association
   end
 

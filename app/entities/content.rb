@@ -7,7 +7,7 @@ class Content < ApplicationEntity
   ##
   # Properties
   #
-  property :content
+  attribute :content
 
   ##
   # Associations

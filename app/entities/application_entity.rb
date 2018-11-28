@@ -31,16 +31,16 @@ class ApplicationEntity
     end
   end
 
-  # Define a property
-  def self.property(property_sym, *_args)
-    attr_accessor property_sym
+  # Define an attribute
+  def self.attribute(attribute_sym, *_args)
+    attr_accessor attribute_sym
   end
 
   # Define an association
-  def self.belongs_to(property_sym, *args)
-    property property_sym, *args
+  def self.belongs_to(attribute_sym, *args)
+    attribute attribute_sym, *args
 
-    validates property_sym,
+    validates attribute_sym,
               :presence => true
   end
 
