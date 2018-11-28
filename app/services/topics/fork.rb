@@ -25,11 +25,7 @@ module Topics
 
       if @fork.save
         # Fork repository in filesystem
-        command = Repository::Fork.new topic
-
-        command.fork = @fork
-
-        command.execute
+        Repository::Fork.call topic, @fork
 
         # Generate appropriate notifications
         Notifications::ForkTopic.call @fork

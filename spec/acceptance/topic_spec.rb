@@ -100,7 +100,7 @@ RSpec.describe 'Topic', :type => :request do
       Topics::Create.call topic
 
       # Populate the topic with some dummy content
-      Contents::Update.call topic, user, content, 'Update content'
+      Topics::UpdateContent.call topic, content, user, 'Update content'
     end
 
     it 'returns without any errors' do

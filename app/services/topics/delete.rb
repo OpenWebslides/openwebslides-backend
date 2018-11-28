@@ -7,7 +7,7 @@ module Topics
   class Delete < ApplicationService
     def call(topic)
       # Delete in filesystem
-      Repository::Delete.new(topic).execute
+      Repository::Delete.call topic
 
       # Delete in database
       topic.destroy

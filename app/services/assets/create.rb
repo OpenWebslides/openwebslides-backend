@@ -5,15 +5,17 @@ module Assets
   # Persist a new asset in database and filesystem
   #
   class Create < ApplicationService
+    include Helpers::Lockable
+    include Helpers::Committable
+
     def call(asset, user, file)
-      if asset.save
-        # Persist to filesystem
-        command = Repository::Asset::UpdateFile.new asset
+      write_lock asset.topic do
+        repo = repo_for asset.topic
 
-        command.author = user
-        command.file = file.path
-
-        command.execute
+        if asset.save
+          # Persist to filesystem
+          Repository::Asset::UpdateFile.call repo, asset, user, file.path
+        end
       end
 
       asset

@@ -3,16 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'Assets API', :type => :request do
+  include_context 'repository'
+
   let(:asset) { create :asset, :with_topic }
   let(:topic) { asset.topic }
   let(:user) { topic.user }
 
   let(:asset_file) { Rails.root.join 'spec', 'support', 'asset.png' }
-
-  before do
-    Stub::Command.create Repository::Asset::UpdateFile, %i[author= file=]
-    Stub::Command.create Repository::Asset::Destroy, %i[author=]
-  end
 
   describe 'POST /' do
     before do
@@ -21,6 +18,8 @@ RSpec.describe 'Assets API', :type => :request do
       @headers['Content-Disposition'] = 'attachment; filename="asset.png"'
 
       @body = fixture_file_upload(asset_file)
+
+      allow(Repository::Asset::UpdateFile).to receive :call
     end
 
     it 'rejects without Content-Disposition' do
@@ -57,9 +56,7 @@ RSpec.describe 'Assets API', :type => :request do
   end
 
   describe 'GET /:id' do
-    before do
-      add_auth_header
-    end
+    before { add_auth_header }
 
     it 'rejects an invalid id' do
       get asset_path(:id => 0), :headers => headers
@@ -86,6 +83,8 @@ RSpec.describe 'Assets API', :type => :request do
   describe 'DELETE /:id' do
     before do
       add_auth_header
+
+      allow(Repository::Asset::Delete).to receive :call
     end
 
     it 'rejects non-existant assets' do
@@ -114,11 +113,7 @@ RSpec.describe 'Assets API', :type => :request do
       @token.subject = user
       @token.object = asset
 
-      stub = Stub::Command.create Repository::Asset::Find
-
-      # Stub Find#excute to return a real file path
-      allow(stub.stub_double).to receive(:execute)
-        .and_return asset_file
+      allow(Repository::Asset::Find).to receive(:call).and_return asset_file
     end
 
     it 'rejects no token' do

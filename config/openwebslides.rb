@@ -17,6 +17,11 @@ OpenWebslides.configure do |config|
   #
   config.tmpdir = Rails.root.join 'tmp', 'uploads'
 
+  ##
+  # Directory for filesystem locks
+  #
+  config.lockdir = Rails.root.join 'tmp', 'locks'
+
   #########################################
   ##      Repository configuration       ##
   #########################################

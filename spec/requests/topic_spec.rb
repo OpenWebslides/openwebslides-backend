@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Topic API', :type => :request do
+  include_context 'repository'
+
   let(:title) { Faker::Lorem.words(4).join(' ') }
 
   let(:user) { create :user, :confirmed }
@@ -42,11 +44,6 @@ RSpec.describe 'Topic API', :type => :request do
         :attributes => attributes
       }
     }.to_json
-  end
-
-  before do
-    Stub::Command.create Repository::Create
-    Stub::Command.create Repository::Delete
   end
 
   describe 'GET /' do
@@ -253,6 +250,8 @@ RSpec.describe 'Topic API', :type => :request do
   describe 'DELETE /:id' do
     before do
       add_auth_header
+
+      Topics::Create.call topic
     end
 
     it 'rejects non-existant topics' do
