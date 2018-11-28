@@ -2,12 +2,25 @@
 
 FactoryBot.define do
   factory :user do
+    ##
+    # Attributes
+    #
     name { Faker::Name.name }
     email { Faker::Internet.email }
     password { Faker::Internet.password 6 }
     password_confirmation { password }
-    tos_accepted true
+    tos_accepted { true }
     alert_emails { true }
+
+    ##
+    # Associations
+    #
+    ##
+    # Traits
+    #
+    trait :confirmed do
+      after :build, &:confirm
+    end
 
     trait :with_topics do
       topics { build_list :topic, 3 }
@@ -17,8 +30,8 @@ FactoryBot.define do
       identities { build_list :identity, 3 }
     end
 
-    trait :confirmed do
-      after :build, &:confirm
-    end
+    ##
+    # Factories
+    #
   end
 end

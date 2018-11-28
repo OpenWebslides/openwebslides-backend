@@ -2,8 +2,20 @@
 
 FactoryBot.define do
   factory :alert do
+    ##
+    # Attributes
+    #
+    ##
+    # Associations
+    #
     user { build :user, :confirmed }
 
+    ##
+    # Traits
+    #
+    ##
+    # Factories
+    #
     factory :update_alert do
       alert_type { :topic_updated }
       count { Faker::Number.number 1 }
