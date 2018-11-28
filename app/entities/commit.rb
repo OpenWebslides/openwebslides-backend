@@ -9,8 +9,8 @@ class Commit < ApplicationEntity
   ##
   # Properties
   #
-  property :content_items
-  property :message
+  attribute :content_items
+  attribute :message
 
   ##
   # Associations
