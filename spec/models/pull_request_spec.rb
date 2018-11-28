@@ -10,10 +10,13 @@ RSpec.describe PullRequest, :type => :model do
   # Stubs and mocks
   #
   ##
-  # Test variables
+  # Subject
   #
   let(:subject) { create :pull_request }
 
+  ##
+  # Test variables
+  #
   ##
   # Tests
   #

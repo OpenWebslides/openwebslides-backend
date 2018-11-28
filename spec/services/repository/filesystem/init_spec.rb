@@ -42,7 +42,7 @@ RSpec.describe Repository::Filesystem::Init do
     before { subject.call repo }
 
     it 'raises a RepoExistsError' do
-      expect { subject.call repo }.to raise_error OpenWebslides::RepoExistsError
+      expect { subject.call repo }.to raise_error OpenWebslides::Repo::RepoExistsError
     end
   end
 end

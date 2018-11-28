@@ -53,7 +53,7 @@ module Helpers
         yaml = YAML.safe_load File.read index
 
         repository_version = yaml['version']
-        raise OpenWebslides::IncompatibleVersionError unless constraint.satisfies? repository_version
+        raise OpenWebslides::Content::IncompatibleVersionError unless constraint.satisfies? repository_version
       end
     end
   end

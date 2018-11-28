@@ -9,8 +9,8 @@ module Repository
     #
     class Fork < ApplicationService
       def call(repo, fork)
-        raise OpenWebslides::RepoDoesNotExistError unless Dir.exist? repo.path
-        raise OpenWebslides::RepoExistsError if Dir.exist? fork.path
+        raise OpenWebslides::Repo::RepoDoesNotExistError unless Dir.exist? repo.path
+        raise OpenWebslides::Repo::RepoExistsError if Dir.exist? fork.path
 
         # Create initial directory
         FileUtils.mkdir_p fork.path

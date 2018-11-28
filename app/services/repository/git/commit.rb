@@ -14,7 +14,7 @@ module Repository
         # Prevent empty commits
         status = []
         git.status { |file, status_data| status.concat status_data }
-        raise OpenWebslides::EmptyCommitError if status.empty?
+        raise OpenWebslides::Repo::EmptyCommitError if status.empty?
 
         # Stage all changes
         index = git.index

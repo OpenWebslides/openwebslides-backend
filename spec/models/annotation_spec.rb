@@ -3,29 +3,41 @@
 require 'rails_helper'
 
 RSpec.describe Annotation, :type => :model do
-  describe 'attributes' do
-    it { is_expected.not_to allow_value(nil).for(:content_item_id) }
-    it { is_expected.not_to allow_value('').for(:content_item_id) }
-  end
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:annotation) { build :annotation }
+
+  ##
+  # Test variables
+  #
+  ##
+  # Tests
+  #
+  it { is_expected.to be_valid }
 
   describe 'attributes' do
-    it { is_expected.not_to allow_value(nil).for(:state) }
-    it { is_expected.not_to allow_value('').for(:state) }
+    it { is_expected.to validate_presence_of :content_item_id }
+    it { is_expected.to validate_presence_of :state }
   end
 
   describe 'associations' do
-    it { is_expected.to belong_to(:user).inverse_of(:annotations) }
-    it { is_expected.to belong_to(:topic).inverse_of(:annotations) }
+    it { is_expected.to belong_to(:user).inverse_of :annotations }
+    it { is_expected.to belong_to(:topic).inverse_of :annotations }
 
-    it { is_expected.to have_many(:ratings).dependent(:destroy).inverse_of(:annotation) }
+    it { is_expected.to have_many(:ratings).dependent(:destroy).inverse_of :annotation }
   end
 
   describe 'state machine' do
-    let(:subject) { build :annotation }
-
     it { is_expected.to have_states :created, :secret, :edited, :flagged, :hidden }
 
-    context 'created' do
+    context 'when state is :created' do
       it { is_expected.to handle_events :edit, :protect, :flag, :hide, :when => :created }
       it { is_expected.to reject_events :publish, :when => :created }
 
@@ -35,7 +47,7 @@ RSpec.describe Annotation, :type => :model do
       it { is_expected.to transition_from :created, :to_state => :hidden, :on_event => :hide }
     end
 
-    context 'edited' do
+    context 'when state is :edited' do
       it { is_expected.to handle_events :edit, :flag, :hide, :when => :edited }
       it { is_expected.to reject_events :protect, :publish, :when => :edited }
 
@@ -44,7 +56,7 @@ RSpec.describe Annotation, :type => :model do
       it { is_expected.to transition_from :edited, :to_state => :hidden, :on_event => :hide }
     end
 
-    context 'secret' do
+    context 'when state is :secret' do
       it { is_expected.to handle_events :edit, :publish, :hide, :when => :secret }
       it { is_expected.to reject_events :protect, :flag, :when => :secret }
 
@@ -52,33 +64,33 @@ RSpec.describe Annotation, :type => :model do
       it { is_expected.to transition_from :secret, :to_state => :created, :on_event => :publish }
     end
 
-    context 'flagged' do
+    context 'when state is :flagged' do
       it { is_expected.to handle_events :hide, :when => :flagged }
       it { is_expected.to reject_events :edit, :protect, :publish, :flag, :when => :flagged }
 
       it { is_expected.to transition_from :flagged, :to_state => :hidden, :on_event => :hide }
     end
 
-    context 'hidden' do
+    context 'when state is :hidden' do
       it { is_expected.to reject_events :hide, :edit, :protect, :publish, :flag, :when => :hidden }
     end
   end
 
   describe 'methods' do
-    describe 'locked?' do
-      let(:subject) { build :annotation }
-
-      context 'unlocked' do
+    describe '#locked?' do
+      context 'when annotation is unlocked' do
         it { is_expected.not_to be_locked }
       end
 
-      context 'flagged' do
-        before { subject.flag }
+      context 'when annotation is flagged' do
+        before { annotation.flag }
+
         it { is_expected.to be_locked }
       end
 
-      context 'hidden' do
-        before { subject.hide }
+      context 'when annotation is hidden' do
+        before { annotation.hide }
+
         it { is_expected.to be_locked }
       end
     end

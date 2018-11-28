@@ -2,35 +2,43 @@
 
 require 'rails_helper'
 
-RSpec.describe AssetToken, :type => :model do
+RSpec.describe Asset::Token, :type => :model do
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject(:asset_token) { build :asset_token, :subject => user, :object => asset }
+
+  ##
+  # Test variables
+  #
+  let(:lifetime) { OpenWebslides.config.api.asset_url_lifetime.from_now.to_i }
   let(:user) { create :user, :confirmed }
   let(:asset) { create :asset, :with_topic }
 
-  let(:lifetime) { OpenWebslides.config.api.asset_url_lifetime.from_now.to_i }
-
-  let(:token) do
-    token = AssetToken.new
-    token.subject = user
-    token.object = asset
-
-    token
+  describe 'attributes' do
+    it { is_expected.to be_a Asset::Token }
+    it { is_expected.to respond_to :object }
   end
 
-  describe 'properties' do
-    it 'has an object' do
-      expect(token).to respond_to :object
-      expect(token.subject).to eq user
-    end
-  end
+  describe 'methods' do
+    # Serialize and deserialize object to let JWT::Auth::Token
+    # fill in the defaults for all attributes
+    subject(:token) { Asset::Token.from_token asset_token.to_jwt }
 
-  describe 'valid?' do
-    it 'is invalid without object' do
-      jwt = token.to_jwt
+    describe '#valid?' do
+      it { is_expected.to be_valid }
 
-      t = AssetToken.from_token jwt
-      t.object = nil
+      context 'without token' do
+        before { token.object = nil }
 
-      expect(t).not_to be_valid
+        it { is_expected.not_to be_valid }
+      end
     end
   end
 
@@ -44,10 +52,10 @@ RSpec.describe AssetToken, :type => :model do
       JWT.encode payload, Rails.application.secrets.secret_key_base
     end
 
-    let(:token) { AssetToken.from_token jwt }
+    let(:token) { Asset::Token.from_token jwt }
 
-    it 'matches object' do
-      expect(token.object.id).to eq asset.id
+    describe '#from_token' do
+      it { is_expected.to have_attributes :object => asset }
     end
   end
 end

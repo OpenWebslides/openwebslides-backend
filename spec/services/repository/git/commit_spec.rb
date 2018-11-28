@@ -50,7 +50,7 @@ RSpec.describe Repository::Git::Commit do
 
   context 'when the working tree is clean' do
     it 'raises an EmptyCommitError' do
-      expect { subject.call repo, user, message }.to raise_error OpenWebslides::EmptyCommitError
+      expect { subject.call repo, user, message }.to raise_error OpenWebslides::Repo::EmptyCommitError
     end
   end
 end

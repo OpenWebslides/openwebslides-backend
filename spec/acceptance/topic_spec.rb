@@ -26,156 +26,187 @@ RSpec.describe 'Topic', :type => :request do
   let(:title) { Faker::Lorem.words(4).join(' ') }
   let(:description) { Faker::Lorem.words(20).join(' ') }
 
-  let(:content) do
-    root = {
-      'id' => topic.root_content_item_id,
-      'type' => 'contentItemTypes/ROOT',
-      'childItemIds' => ['ivks4jgtxr']
-    }
-    heading = {
-      'id' => 'ivks4jgtxr',
-      'type' => 'contentItemTypes/HEADING',
-      'text' => 'This is a heading',
-      'metadata' => { 'tags' => [], 'visibilityOverrides' => {} },
-      'subItemIds' => ['oswmjc09be']
-    }
-    paragraph = {
-      'id' => 'oswmjc09be',
-      'type' => 'contentItemTypes/PARAGRAPH',
-      'text' => 'This is a paragraph',
-      'metadata' => { 'tags' => [], 'visibilityOverrides' => {} },
-      'subItemIds' => []
-    }
-
-    [root, heading, paragraph]
-  end
-
   ##
   # Tests
   #
-  describe 'A user can create a topic' do
-    it 'returns without any errors' do
-      params = {
-        :data => {
-          :type => 'topics',
-          :attributes => {
-            :title => title,
-            :description => description,
-            :access => 'private',
-            :rootContentItemId => 'ivks4jgtxr'
-          },
-          :relationships => {
-            :user => {
-              :data => {
-                :type => 'users',
-                :id => user.id
+  context 'A guest' do
+    describe 'cannot create a topic'
+  end
+
+  context 'A user' do
+    describe 'cannot create a topic without title' do
+      it 'returns a validation error' do
+        params = {
+          :data => {
+            :type => 'topics',
+            :attributes => {
+              :rootContentItemId => 'ivks4jgtxr'
+            },
+            :relationships => {
+              :user => {
+                :data => {
+                  :type => 'users',
+                  :id => user.id
+                }
               }
             }
           }
         }
-      }
 
-      headers = {
-        'Content-Type' => 'application/vnd.api+json',
-        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
-        'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
-      }
+        headers = {
+          'Content-Type' => 'application/vnd.api+json',
+          'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
+          'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
+        }
 
-      post '/api/topics', :params => params.to_json, :headers => headers
+        post '/api/topics', :params => params.to_json, :headers => headers
 
-      expect(response.status).to eq 201
-      data = JSON.parse(response.body)['data']
-      expect(data['attributes']).to match 'title' => title,
-                                          'description' => description,
-                                          'access' => 'private',
-                                          'rootContentItemId' => 'ivks4jgtxr'
-    end
-  end
-
-  describe 'A user can retrieve the contents of a topic' do
-    let(:topic) { create :topic, :root_content_item_id => 'qyrgv0bcd6' }
-
-    before do
-      # Make sure the topic repository is created
-      Topics::Create.call topic
-
-      # Populate the topic with some dummy content
-      Topics::UpdateContent.call topic, content, user, 'Update content'
+        expect(response.status).to eq 422
+        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+      end
     end
 
-    it 'returns without any errors' do
-      headers = {
-        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      }
-
-      get "/api/topics/#{topic.id}/content", :headers => headers
-
-      expect(response.status).to eq 200
-      data = JSON.parse(response.body)['data']['attributes']
-      expect(data['content']).to match_array content
-    end
-  end
-
-  describe 'An owner can update the contents of a topic' do
-    let(:topic) { create :topic, :user => user }
-
-    before do
-      # Make sure the topic repository is created
-      Topics::Create.call topic
-    end
-
-    it 'returns without any errors' do
-      params = {
-        :data => {
-          :id => topic.id,
-          :type => 'contents',
-          :attributes => {
-            :content => content,
-            :message => 'Update content'
+    describe 'can create a public topic' do
+      it 'returns without any errors' do
+        params = {
+          :data => {
+            :type => 'topics',
+            :attributes => {
+              :title => title,
+              :description => description,
+              :rootContentItemId => 'ivks4jgtxr'
+            },
+            :relationships => {
+              :user => {
+                :data => {
+                  :type => 'users',
+                  :id => user.id
+                }
+              }
+            }
           }
         }
-      }
 
-      headers = {
-        'Content-Type' => 'application/vnd.api+json',
-        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
-        'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
-      }
+        headers = {
+          'Content-Type' => 'application/vnd.api+json',
+          'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
+          'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
+        }
 
-      patch "/api/topics/#{topic.id}/content", :params => params.to_json, :headers => headers
+        post '/api/topics', :params => params.to_json, :headers => headers
 
-      expect(response.status).to eq 204
-
-      get "/api/topics/#{topic.id}/content", :headers => headers
-
-      expect(response.status).to eq 200
-      data = JSON.parse(response.body)['data']['attributes']
-      expect(data['content']).to match_array content
-    end
-  end
-
-  describe 'An owner can delete a topic' do
-    let(:topic) { create :topic, :user => user }
-
-    before do
-      # Make sure the topic repository is created
-      Topics::Create.call topic
+        expect(response.status).to eq 201
+        data = JSON.parse(response.body)['data']
+        expect(data['attributes']).to match 'title' => title,
+                                            'description' => description,
+                                            'access' => 'public',
+                                            'rootContentItemId' => 'ivks4jgtxr'
+      end
     end
 
-    it 'returns without any errors' do
-      headers = {
-        'Content-Type' => 'application/vnd.api+json',
-        'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
-        'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
-      }
+    describe 'can create a protected topic' do
+      it 'returns without any errors' do
+        params = {
+          :data => {
+            :type => 'topics',
+            :attributes => {
+              :title => title,
+              :description => description,
+              :access => 'protected',
+              :rootContentItemId => 'ivks4jgtxr'
+            },
+            :relationships => {
+              :user => {
+                :data => {
+                  :type => 'users',
+                  :id => user.id
+                }
+              }
+            }
+          }
+        }
 
-      delete "/api/topics/#{topic.id}", :headers => headers
+        headers = {
+          'Content-Type' => 'application/vnd.api+json',
+          'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
+          'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
+        }
 
-      expect(response.status).to eq 204
+        post '/api/topics', :params => params.to_json, :headers => headers
 
-      get "/api/topics/#{topic.id}", :headers => headers
+        expect(response.status).to eq 201
+        data = JSON.parse(response.body)['data']
+        expect(data['attributes']).to match 'title' => title,
+                                            'description' => description,
+                                            'access' => 'protected',
+                                            'rootContentItemId' => 'ivks4jgtxr'
+      end
+    end
 
-      expect(response.status).to eq 404
+    describe 'can create a private topic' do
+      it 'returns without any errors' do
+        params = {
+          :data => {
+            :type => 'topics',
+            :attributes => {
+              :title => title,
+              :description => description,
+              :access => 'private',
+              :rootContentItemId => 'ivks4jgtxr'
+            },
+            :relationships => {
+              :user => {
+                :data => {
+                  :type => 'users',
+                  :id => user.id
+                }
+              }
+            }
+          }
+        }
+
+        headers = {
+          'Content-Type' => 'application/vnd.api+json',
+          'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
+          'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
+        }
+
+        post '/api/topics', :params => params.to_json, :headers => headers
+
+        expect(response.status).to eq 201
+        data = JSON.parse(response.body)['data']
+        expect(data['attributes']).to match 'title' => title,
+                                            'description' => description,
+                                            'access' => 'private',
+                                            'rootContentItemId' => 'ivks4jgtxr'
+      end
+    end
+
+    context 'An owner' do
+      describe 'can delete a topic' do
+        let(:topic) { create :topic, :user => user }
+
+        before do
+          # Make sure the topic repository is created
+          Topics::Create.call topic
+        end
+
+        it 'returns without any errors' do
+          headers = {
+            'Content-Type' => 'application/vnd.api+json',
+            'Accept' => "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}",
+            'Authorization' => "Bearer #{JWT::Auth::Token.from_user(user).to_jwt}"
+          }
+
+          delete "/api/topics/#{topic.id}", :headers => headers
+
+          expect(response.status).to eq 204
+
+          get "/api/topics/#{topic.id}", :headers => headers
+
+          expect(response.status).to eq 404
+        end
+      end
     end
   end
 end

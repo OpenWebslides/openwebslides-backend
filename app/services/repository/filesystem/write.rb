@@ -16,10 +16,10 @@ module Repository
 
         # Find root content item
         root = content.find { |c| c['type'] == 'contentItemTypes/ROOT' }
-        raise OpenWebslides::NoRootContentItemError unless root
+        raise OpenWebslides::Content::NoRootContentItemError unless root
 
         # Ensure root content item is equal to the database
-        raise OpenWebslides::InvalidRootContentItemError unless root['id'] == repo.topic.root_content_item_id
+        raise OpenWebslides::Content::InvalidRootContentItemError unless root['id'] == repo.topic.root_content_item_id
 
         # Write index file including root content item identifier
         Repository::Filesystem::WriteIndex.call repo, 'root' => root['id']
@@ -32,7 +32,7 @@ module Repository
 
       # Write content item
       def write_content_item(content_item)
-        raise OpenWebslides::FormatError unless content_item['id']
+        raise OpenWebslides::Content::InvalidContentItemError unless content_item['id']
 
         file_path = File.join repo.content_path, "#{content_item['id']}.yml"
 

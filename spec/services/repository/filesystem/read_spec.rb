@@ -24,7 +24,7 @@ RSpec.describe Repository::Filesystem::Read do
   #
   context 'when the repository does not exist' do
     it 'raises a RepoDoesNotExistError' do
-      expect { subject.call repo }.to raise_error OpenWebslides::RepoDoesNotExistError
+      expect { subject.call repo }.to raise_error OpenWebslides::Repo::RepoDoesNotExistError
     end
   end
 

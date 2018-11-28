@@ -16,8 +16,8 @@ class Grant < ApplicationRecord
   ##
   # Validations
   #
-  validates_uniqueness_of :topic_id,
-                          :scope => :user_id
+  validates_uniqueness_of :topic,
+                          :scope => :user
 
   ##
   # Callbacks

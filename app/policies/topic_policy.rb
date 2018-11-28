@@ -10,10 +10,7 @@ class TopicPolicy < ApplicationPolicy
   end
 
   def create?
-    return false if @user.nil?
-
-    # Users can create a topic but only for itself
-    @record.user == @user
+    update?
   end
 
   def show?
@@ -35,15 +32,17 @@ class TopicPolicy < ApplicationPolicy
   def update?
     return false if @user.nil?
 
-    # Owner and collaborators can update topic
-    @record.user == @user || @record.collaborators.include?(@user)
+    # Owner can update topic
+    @record.user == @user
+  end
+
+  def update_content?
+    # User can update content if content is updatable
+    content_policy.update?
   end
 
   def destroy?
-    return false if @user.nil?
-
-    # Owner can destroy topic
-    @record.user == @user
+    update?
   end
 
   def fork?
@@ -129,18 +128,18 @@ class TopicPolicy < ApplicationPolicy
   # Relationships: incoming_pull_requests
   #
   def show_incoming_pull_requests?
-    # Users can show incoming pull requests relationship if the topic is updatable
+    # Users can show incoming pull requests relationship if the topic content is updatable
     # Policy scope the pull requests separately in the controller
-    update?
+    update_content?
   end
 
   ##
   # Relationships: outgoing_pull_requests
   #
   def show_outgoing_pull_requests?
-    # Users can show outgoing pull requests relationship if the topic is updatable
+    # Users can show outgoing pull requests relationship if the topic content is updatable
     # Policy scope the pull requests separately in the controller
-    update?
+    update_content?
   end
 
   ##
@@ -160,5 +159,11 @@ class TopicPolicy < ApplicationPolicy
         scope.where('topics.access' => 'public')
       end
     end
+  end
+
+  private
+
+  def content_policy
+    @content_policy ||= Pundit.policy! @user, Content.new(:topic => @record)
   end
 end

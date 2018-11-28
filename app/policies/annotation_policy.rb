@@ -37,8 +37,8 @@ class AnnotationPolicy < ApplicationPolicy
   def flag?
     return false if @user.nil?
 
-    # Users can flag but only for updatable topic
-    topic_policy.update?
+    # Users can flag but only for updatable content
+    topic_policy.update_content?
   end
 
   ##

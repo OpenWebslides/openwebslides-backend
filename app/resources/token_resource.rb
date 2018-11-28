@@ -22,6 +22,25 @@ class TokenResource < ApplicationResource
   # Callbacks
   #
   ##
+  # Overrides
+  #
+  def self.fields
+    super - %i[id email password]
+  end
+
+  def self.creatable_fields(context = {})
+    super(context)
+  end
+
+  def self.updatable_fields(context = {})
+    super(context) - %i[email password]
+  end
+
+  def self.sortable_fields(context = {})
+    super(context) - %i[id email password]
+  end
+
+  ##
   # Methods
   #
 end

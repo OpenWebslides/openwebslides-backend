@@ -7,7 +7,7 @@ module Repository
     #
     class Read < ApplicationService
       def call(repo)
-        raise OpenWebslides::RepoDoesNotExistError unless Dir.exist? repo.path
+        raise OpenWebslides::Repo::RepoDoesNotExistError unless Dir.exist? repo.path
 
         repo.validate_version!
 

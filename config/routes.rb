@@ -61,40 +61,42 @@ Rails.application.routes.draw do
     # Topics API
     #
     jsonapi_resources :topics do
-      # Owner relationship
+      # Relationship: Owner
       jsonapi_related_resource :user
       jsonapi_link :user, :only => :show
 
-      # Upstream relationship
+      # Relationship: upstream
       jsonapi_related_resource :upstream
       jsonapi_link :upstream, :only => :show
 
-      # Forks relationship
+      # Relationship: forks
       jsonapi_related_resources :forks
       jsonapi_links :forks, :only => :show
 
-      # Collaborators relationship
+      # Relationship: Collaborators
       jsonapi_related_resources :collaborators
       jsonapi_links :collaborators, :only => :show
 
-      # Assets relationship
+      # Relationship: Assets
       jsonapi_related_resources :assets
       jsonapi_links :assets, :only => :show
 
-      # Conversations relationship
+      # Relationship: Conversations
       jsonapi_related_resources :conversations
       jsonapi_links :conversations, :only => :show
 
-      # Incoming pull requests relationship
+      # Relationship: Incoming pull requests
       jsonapi_related_resources :incoming_pull_requests
       jsonapi_links :incoming_pull_requests, :only => :show
 
-      # Outgoing pull requests relationship
+      # Relationship: Outgoing pull requests
       jsonapi_related_resources :outgoing_pull_requests
       jsonapi_links :outgoing_pull_requests, :only => :show
 
+      # Nested resource: Assets
       jsonapi_resources :assets, :only => :create
 
+      # Nested resource: Content
       jsonapi_resource :content, :only => %i[show update]
 
       # Fork
@@ -138,42 +140,42 @@ Rails.application.routes.draw do
     # Annotations API
     #
     jsonapi_resources :conversations, :except => %i[index] do
-      # Topic relationship
+      # Relationship: Topic
       jsonapi_related_resource :topic
       jsonapi_link :topic, :only => :show
 
-      # User relationship
+      # Relationship: User
       jsonapi_related_resource :user
       jsonapi_links :user, :only => :show
 
-      # Comments relationship
+      # Relationship: Comments
       jsonapi_related_resources :comments
       jsonapi_links :comments, :only => :show
 
-      # Rating
+      # Nested resource: Rating
       jsonapi_resource :rating, :only => %i[create destroy] do end
 
-      # Flag
+      # Nested resource: Flag
       jsonapi_resource :flag, :only => %i[create] do end
     end
 
     jsonapi_resources :comments, :except => %i[index] do
-      # Topic relationship
+      # Relationship: Topic
       jsonapi_related_resource :topic
       jsonapi_links :topic, :only => :show
 
-      # User relationship
+      # Relationship: User
       jsonapi_related_resource :user
       jsonapi_links :user, :only => :show
 
-      # Conversation relationship
+      # Relationship: Conversation
       jsonapi_related_resource :conversation
       jsonapi_link :conversation, :only => :show
 
-      # Rating
+      # Nested resource: Rating
       jsonapi_resource :rating, :only => %i[create destroy] do end
 
-      # Flag
+      # Nested resource: Flag
       jsonapi_resource :flag, :only => %i[create] do end
     end
 

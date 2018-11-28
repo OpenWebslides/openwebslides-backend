@@ -69,7 +69,7 @@ RSpec.describe 'User API', :type => :request do
       post users_path, :params => request_body(attributes.merge :tosAccepted => false), :headers => headers
 
       expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+      expect(jsonapi_error_code(response)).to eq [JSONAPI::VALIDATION_ERROR, JSONAPI::VALIDATION_ERROR]
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
