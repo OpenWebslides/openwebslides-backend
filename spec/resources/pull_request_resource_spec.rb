@@ -10,10 +10,13 @@ RSpec.describe PullRequestResource, :type => :resource do
   # Stubs and mocks
   #
   ##
+  # Subject
+  #
+  subject(:resource) { described_class.new pull_request, context }
+
+  ##
   # Test variables
   #
-  let(:subject) { described_class.new pull_request, context }
-
   let(:pull_request) { create :pull_request, :state => 'rejected', :feedback => 'feedback' }
   let(:context) { {} }
 

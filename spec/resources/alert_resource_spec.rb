@@ -10,10 +10,13 @@ RSpec.describe AlertResource, :type => :resource do
   # Stubs and mocks
   #
   ##
+  # Subject
+  #
+  subject(:resource) { described_class.new alert, context }
+
+  ##
   # Test variables
   #
-  let(:subject) { described_class.new alert, context }
-
   let(:alert) { create :update_alert }
   let(:context) { {} }
 

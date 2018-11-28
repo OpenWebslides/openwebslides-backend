@@ -10,17 +10,17 @@ RSpec.describe TokenResource, :type => :resource do
   # Stubs and mocks
   #
   ##
-  # Test variables
-  #
-  ##
   # Subject
+  #
+  subject(:resource) { described_class }
+
+  ##
+  # Test variables
   #
   ##
   # Tests
   #
-  it 'is abstract' do
-    expect(described_class.abstract).to be true
-  end
+  it { is_expected.to be_abstract }
 
   describe 'fields' do
     it 'has a valid set of fetchable fields' do

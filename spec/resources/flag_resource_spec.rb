@@ -10,22 +10,17 @@ RSpec.describe FlagResource, :type => :resource do
   # Stubs and mocks
   #
   ##
-  # Test variables
-  #
-  ##
   # Subject
+  #
+  subject(:resource) { described_class }
+
+  ##
+  # Test variables
   #
   ##
   # Tests
   #
-  describe 'fields' do
-    it 'should have a valid set of creatable fields' do
-      expect(described_class.creatable_fields).to be_empty
-    end
-  end
-  it 'is abstract' do
-    expect(described_class.abstract).to be true
-  end
+  it { is_expected.to be_abstract }
 
   describe 'fields' do
     it 'has a valid set of fetchable fields' do
