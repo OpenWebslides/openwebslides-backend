@@ -28,11 +28,11 @@ RSpec.describe ConfirmationResource, :type => :resource do
       expect(described_class.fields).to be_empty
     end
 
-    it 'should have a valid set of creatable fields' do
+    it 'has a valid set of creatable fields' do
       expect(described_class.creatable_fields).to match_array %i[email]
     end
 
-    it 'should have a valid set of updatable fields' do
+    it 'has a valid set of updatable fields' do
       expect(described_class.updatable_fields).to match_array %i[confirmation_token]
     end
 

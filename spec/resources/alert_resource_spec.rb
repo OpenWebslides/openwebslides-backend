@@ -53,7 +53,7 @@ RSpec.describe AlertResource, :type => :resource do
       end
     end
 
-    it 'should have a valid set of updatable fields' do
+    it 'has a valid set of updatable fields' do
       expect(described_class.updatable_fields).to match_array %i[read]
     end
 
@@ -61,7 +61,7 @@ RSpec.describe AlertResource, :type => :resource do
       expect(described_class.sortable_fields context).to match_array %i[created_at]
     end
 
-    it 'should sort on descending :created_at by default' do
+    it 'sorts on descending :created_at by default' do
       expect(described_class.default_sort.first[:field]).to eq 'created_at'
       expect(described_class.default_sort.first[:direction]).to eq :desc
     end

@@ -42,36 +42,36 @@ RSpec.describe TopicResource, :type => :resource do
   it { is_expected.to have_many(:outgoing_pull_requests).with_class_name 'PullRequest' }
 
   describe 'fields' do
-    it 'should have a valid set of fetchable fields' do
+    it 'has a valid set of fetchable fields' do
       expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets conversations incoming_pull_requests outgoing_pull_requests]
     end
 
-    it 'should omit empty fields' do
+    it 'omits empty fields' do
       subject { described_class.new nil_topic, context }
       expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets conversations incoming_pull_requests outgoing_pull_requests]
     end
 
-    it 'should have a valid set of creatable fields' do
+    it 'has a valid set of creatable fields' do
       expect(described_class.creatable_fields).to match_array %i[title access description root_content_item_id user]
     end
 
-    it 'should have a valid set of updatable fields' do
+    it 'has a valid set of updatable fields' do
       expect(described_class.updatable_fields).to match_array %i[title access description user]
     end
 
-    it 'should have a valid set of sortable fields' do
+    it 'has a valid set of sortable fields' do
       expect(described_class.sortable_fields context).to match_array %i[id title access description]
     end
   end
 
   describe 'filters' do
-    it 'should have a valid set of filters' do
+    let(:verify) { described_class.filters[:access][:verify] }
+
+    it 'has a valid set of filters' do
       expect(described_class.filters.keys).to match_array %i[id title access description]
     end
 
-    let(:verify) { described_class.filters[:access][:verify] }
-
-    it 'should verify access' do
+    it 'verifies access' do
       expect(verify.call(%w[public foo protected private bar], {}))
         .to match_array %w[public protected private]
     end

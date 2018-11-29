@@ -56,13 +56,13 @@ RSpec.describe PullRequestResource, :type => :resource do
   end
 
   describe 'filters' do
+    let(:verify) { described_class.filters[:state][:verify] }
+
     it 'has a valid set of filters' do
       expect(described_class.filters.keys).to match_array %i[id state]
     end
 
-    let(:verify) { described_class.filters[:state][:verify] }
-
-    it 'should verify state' do
+    it 'verifies state' do
       expect(verify.call(%w[open foo accepted bar rejected], {}))
         .to match_array %w[open accepted rejected]
     end

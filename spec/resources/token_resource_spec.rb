@@ -28,7 +28,7 @@ RSpec.describe TokenResource, :type => :resource do
       expect(described_class.fields).to be_empty
     end
 
-    it 'should have a valid set of creatable fields' do
+    it 'has a valid set of creatable fields' do
       expect(described_class.creatable_fields).to match_array %i[email password]
     end
 

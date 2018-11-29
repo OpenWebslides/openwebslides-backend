@@ -12,12 +12,13 @@ RSpec.describe Content, :type => :model do
   ##
   # Test variables
   #
+  subject { content }
+
   let(:content) { build :content }
 
   ##
   # Subject
   #
-  subject { content }
 
   ##
   # Tests

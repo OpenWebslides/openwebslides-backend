@@ -113,6 +113,7 @@ RSpec.describe CommentPolicy do
 
     context 'when the user is an owner' do
       before { topic.collaborators << comment.user }
+
       let(:user) { comment.user }
 
       it { is_expected.to permit_action :show_conversation }

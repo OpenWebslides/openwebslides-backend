@@ -29,6 +29,8 @@ RSpec.describe Repository::Filesystem::Read do
   end
 
   context 'when the repository already exists' do
+    subject { described_class.call repo }
+
     before do
       FileUtils.mkdir_p repo.content_path
 
@@ -46,8 +48,6 @@ RSpec.describe Repository::Filesystem::Read do
       }
       File.write File.join(repo.content_path, 'j0vcu0y7vk.yml'), content_item_hash.to_yaml
     end
-
-    subject { described_class.call repo }
 
     it { is_expected.to eq [{ 'id' => 'j0vcu0y7vk', 'foo' => 'bar' }] }
   end
