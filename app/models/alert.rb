@@ -111,7 +111,7 @@ class Alert < ApplicationRecord
 
     # Count and pull request must be blank
     errors.add :count, :present if count?
-    errors.add :pull_request if pull_request
+    errors.add :pull_request, :present if pull_request
   end
 
   def topic_equals_target
