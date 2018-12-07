@@ -30,9 +30,11 @@ class UsersController < ApplicationController
     authorize @user
 
     if @user.save
-      jsonapi_render :json => @user, :status => :created
+      jsonapi_render :json => @user,
+                     :status => :created
     else
-      jsonapi_render_errors :json => @user, :status => :unprocessable_entity
+      jsonapi_render_errors :json => @user,
+                            :status => :unprocessable_entity
     end
   end
 
@@ -51,10 +53,14 @@ class UsersController < ApplicationController
 
     authorize @user
 
-    if @user.update resource_params
+    # If :password is being updated, required :current_password as well
+    method = resource_params.include?(:password) ? :update_with_password : :update_without_password
+
+    if @user.send method, resource_params
       jsonapi_render :json => @user
     else
-      jsonapi_render_errors :json => @user, :status => :unprocessable_entity
+      jsonapi_render_errors :json => @user,
+                            :status => :unprocessable_entity
     end
   end
 

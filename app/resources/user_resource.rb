@@ -11,6 +11,7 @@ class UserResource < ApplicationResource
   attribute :email
   attribute :gravatar_hash
   attribute :locale
+  attribute :current_password
   attribute :password
   attribute :tos_accepted
   attribute :alert_emails
@@ -39,14 +40,14 @@ class UserResource < ApplicationResource
   #
   def fetchable_fields
     if context[:current_user] == _model
-      super - %i[password tos_accepted]
+      super - %i[current_password password tos_accepted]
     else
-      super - %i[email locale password tos_accepted alert_emails]
+      super - %i[email locale current_password password tos_accepted alert_emails]
     end
   end
 
   def self.creatable_fields(context = {})
-    super(context) - %i[gravatar_hash topics collaborations alerts]
+    super(context) - %i[current_password gravatar_hash topics collaborations alerts]
   end
 
   def self.updatable_fields(context = {})
@@ -54,7 +55,7 @@ class UserResource < ApplicationResource
   end
 
   def self.sortable_fields(context)
-    super(context) - %i[gravatar_hash locale password tos_accepted alert_emails alerts]
+    super(context) - %i[gravatar_hash locale current_password password tos_accepted alert_emails alerts]
   end
 
   ##
