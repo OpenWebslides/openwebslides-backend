@@ -61,7 +61,7 @@ RSpec.describe UserResource, :type => :resource do
     end
 
     it 'has a valid set of updatable fields' do
-      expect(described_class.updatable_fields).to match_array %i[name locale password topics collaborations alert_emails]
+      expect(described_class.updatable_fields).to match_array %i[name locale current_password password topics collaborations alert_emails]
     end
 
     it 'has a valid set of sortable fields' do

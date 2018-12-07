@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'User API', :type => :request do
-  let(:user) { create :user, :confirmed }
+  let(:user) { create :user, :confirmed, :password => password }
 
   let(:name) { Faker::Name.name }
   let(:password) { Faker::Internet.password 6 }
@@ -163,6 +163,22 @@ RSpec.describe 'User API', :type => :request do
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
+    it 'rejects update on password when current password is not specified' do
+      patch user_path(:id => user.id), :params => update_body(user.id, :password => 'abcd1234'), :headers => headers
+
+      expect(response.status).to eq 422
+      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    end
+
+    it 'rejects update on password when current password is invalid' do
+      patch user_path(:id => user.id), :params => update_body(user.id, :currentPassword => 'foobar', :password => 'abcd1234'), :headers => headers
+
+      expect(response.status).to eq 422
+      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    end
+
     it 'updates name' do
       expect(user.name).not_to eq name
       patch user_path(:id => user.id), :params => update_body(user.id, :name => name), :headers => headers
@@ -171,16 +187,6 @@ RSpec.describe 'User API', :type => :request do
       expect(response.status).to eq 200
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
       expect(user.name).to eq name
-    end
-
-    it 'updates password' do
-      expect(user.valid_password? password).not_to be true
-      patch user_path(:id => user.id), :params => update_body(user.id, :password => password), :headers => headers
-
-      user.reload
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      expect(user.valid_password? password).to be true
     end
 
     it 'disables email notifications' do

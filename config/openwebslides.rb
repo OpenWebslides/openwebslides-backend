@@ -77,5 +77,5 @@ OpenWebslides.configure do |config|
   ##
   # API version
   #
-  config.api.version = '8.0.1'
+  config.api.version = '9.0.0'
 end
