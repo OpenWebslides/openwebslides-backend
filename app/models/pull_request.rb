@@ -54,6 +54,11 @@ class PullRequest < ApplicationRecord
   validates :message,
             :presence => true
 
+  validates :feedback,
+            :presence => true,
+            :on => :update,
+            :if => :rejected?
+
   validate :target_is_upstream_source
 
   validate :source_has_one_open_pr,

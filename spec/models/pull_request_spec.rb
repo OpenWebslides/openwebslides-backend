@@ -12,7 +12,7 @@ RSpec.describe PullRequest, :type => :model do
   ##
   # Subject
   #
-  let(:subject) { create :pull_request }
+  subject(:pull_request) { create :pull_request }
 
   ##
   # Test variables
@@ -25,7 +25,19 @@ RSpec.describe PullRequest, :type => :model do
   describe 'attributes' do
     it { is_expected.to validate_presence_of(:message) }
 
-    it { is_expected.to allow_values(nil, '', 'foo').for(:feedback) }
+    it { is_expected.to allow_values(nil, '', 'foo').for :feedback }
+
+    context 'when the PR is open' do
+      before { subject.state = 'open' }
+
+      it { is_expected.not_to validate_presence_of(:feedback).on(:update) }
+    end
+
+    context 'when the PR is rejected' do
+      before { subject.state = 'rejected' }
+
+      it { is_expected.to validate_presence_of(:feedback).on(:update) }
+    end
   end
 
   describe 'associations' do
