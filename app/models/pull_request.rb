@@ -33,9 +33,9 @@ class PullRequest < ApplicationRecord
   # State
   #
   state_machine :initial => :open do
-    state :open, :value => 0
-    state :accepted, :value => 1
-    state :rejected, :value => 2
+    state :open
+    state :accepted
+    state :rejected
 
     # Accept/approve a pull request
     event :accept do
