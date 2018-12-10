@@ -12,16 +12,18 @@ RSpec.describe 'Pull Request API', :type => :request do
   ##
   # Test variables
   #
-  let(:pull_request) { create :pull_request }
+  let(:pr) { create :pull_request }
 
   let(:source) { create :topic, :upstream => target }
   let(:target) { create :topic }
 
   let(:user) { create :user, :confirmed }
 
+  let(:feedback) { Faker::Lorem.words(20).join ' ' }
+
   before do
-    pull_request.source.collaborators << user
-    pull_request.target.collaborators << user
+    pr.source.collaborators << user
+    pr.target.collaborators << user
 
     source.collaborators << user
   end
@@ -60,6 +62,16 @@ RSpec.describe 'Pull Request API', :type => :request do
             }
           }
         }
+      }
+    }.to_json
+  end
+
+  def update_body(id, attributes)
+    {
+      :data => {
+        :type => 'pullRequests',
+        :id => id,
+        :attributes => attributes
       }
     }.to_json
   end
@@ -143,7 +155,7 @@ RSpec.describe 'Pull Request API', :type => :request do
     end
 
     it 'returns successful' do
-      get pull_request_path(:id => pull_request.id), :headers => headers
+      get pull_request_path(:id => pr.id), :headers => headers
 
       expect(response.status).to eq 200
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
@@ -157,7 +169,7 @@ RSpec.describe 'Pull Request API', :type => :request do
     end
 
     it 'returns successful' do
-      get topic_incomingPullRequests_path(:topic_id => pull_request.target.id), :headers => headers
+      get topic_incomingPullRequests_path(:topic_id => pr.target.id), :headers => headers
 
       expect(response.status).to eq 200
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
@@ -174,13 +186,67 @@ RSpec.describe 'Pull Request API', :type => :request do
     end
 
     it 'returns successful' do
-      get topic_outgoingPullRequests_path(:topic_id => pull_request.source.id), :headers => headers
+      get topic_outgoingPullRequests_path(:topic_id => pr.source.id), :headers => headers
 
       expect(response.status).to eq 200
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       json = JSON.parse response.body
       expect(json['data'].count).to eq 1
+    end
+  end
+
+  describe 'PUT/PATCH /:id' do
+    before do
+      add_content_type_header
+      add_auth_header
+    end
+
+    it 'rejects empty feedback' do
+      patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :state => 'rejected', :feedback => ''), :headers => headers
+
+      expect(response.status).to eq 422
+      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    end
+
+    context 'when the pull request is already accepted' do
+      before { pr.accept }
+
+      it 'rejects' do
+        patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :state => 'rejected', :feedback => feedback), :headers => headers
+
+        expect(response.status).to eq 422
+        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      end
+    end
+
+    context 'when the pull request is already rejected' do
+      before { pr.rejected }
+
+      it 'rejects' do
+        patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :state => 'rejected', :feedback => feedback), :headers => headers
+
+        expect(response.status).to eq 422
+        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
+        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      end
+    end
+
+    it 'returns successful' do
+      patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :state => 'rejected', :feedback => feedback), :headers => headers
+
+      expect(response.status).to eq 201
+      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+
+      json = JSON.parse response.body
+
+      expect(json['data']['attributes']['feedback']).to eq feedback
+      expect(json['data']['attributes']['state']).to eq 'rejected'
+
+      pr.reload
+      expect(pr).to be_rejected
     end
   end
 end
