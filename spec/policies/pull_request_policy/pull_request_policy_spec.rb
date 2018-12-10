@@ -27,6 +27,7 @@ RSpec.describe PullRequestPolicy do
 
     it { is_expected.to forbid_action :show }
     it { is_expected.to forbid_action :create }
+    it { is_expected.to forbid_action :update }
 
     it { is_expected.to forbid_action :show_user }
     it { is_expected.to forbid_action :show_source }
@@ -38,6 +39,7 @@ RSpec.describe PullRequestPolicy do
 
     it { is_expected.to forbid_action :show }
     it { is_expected.to forbid_action :create }
+    it { is_expected.to forbid_action :update }
 
     it { is_expected.to forbid_action :show_user }
     it { is_expected.to forbid_action :show_source }
@@ -48,6 +50,7 @@ RSpec.describe PullRequestPolicy do
 
       it { is_expected.to permit_action :show }
       it { is_expected.to forbid_action :create }
+      it { is_expected.to forbid_action :update }
 
       it { is_expected.to permit_action :show_user }
       it { is_expected.to permit_action :show_source }
@@ -59,6 +62,7 @@ RSpec.describe PullRequestPolicy do
 
       it { is_expected.to permit_action :show }
       it { is_expected.to forbid_action :create }
+      it { is_expected.to permit_action :update }
 
       it { is_expected.to permit_action :show_user }
       it { is_expected.to permit_action :show_source }
@@ -71,6 +75,7 @@ RSpec.describe PullRequestPolicy do
 
     it { is_expected.to forbid_action :show }
     it { is_expected.to forbid_action :create }
+    it { is_expected.to forbid_action :update }
 
     it { is_expected.to forbid_action :show_user }
     it { is_expected.to forbid_action :show_source }
@@ -80,6 +85,7 @@ RSpec.describe PullRequestPolicy do
       before { pull_request.source.collaborators << user }
 
       it { is_expected.to permit_action :show }
+      it { is_expected.to forbid_action :update }
 
       it { is_expected.to permit_action :show_user }
       it { is_expected.to permit_action :show_source }
@@ -101,6 +107,7 @@ RSpec.describe PullRequestPolicy do
 
       it { is_expected.to permit_action :show }
       it { is_expected.to forbid_action :create }
+      it { is_expected.to permit_action :update }
 
       it { is_expected.to permit_action :show_user }
       it { is_expected.to permit_action :show_source }
