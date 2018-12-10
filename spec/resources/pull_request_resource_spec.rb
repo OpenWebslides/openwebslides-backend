@@ -43,6 +43,10 @@ RSpec.describe PullRequestResource, :type => :resource do
       expect(described_class.creatable_fields).to match_array %i[message user source target]
     end
 
+    it 'has a valid set of updatable fields' do
+      expect(described_class.updatable_fields).to match_array %i[state_event feedback]
+    end
+
     it 'has a valid set of sortable fields' do
       expect(described_class.sortable_fields context).to match_array %i[id state]
     end
@@ -58,32 +62,6 @@ RSpec.describe PullRequestResource, :type => :resource do
     it 'should verify state' do
       expect(verify.call(%w[open foo accepted bar rejected], {}))
         .to match_array %w[open accepted rejected]
-    end
-  end
-
-  describe 'methods' do
-    describe '#state' do
-      context 'when the pull request is open' do
-        it 'returns the state name' do
-          expect(subject.state).to eq 'open'
-        end
-      end
-
-      context 'when the pull request is accepted' do
-        before { pull_request.accept }
-
-        it 'returns the state name' do
-          expect(subject.state).to eq 'accepted'
-        end
-      end
-
-      context 'when the pull request is rejected' do
-        before { pull_request.reject }
-
-        it 'returns the state name' do
-          expect(subject.state).to eq 'rejected'
-        end
-      end
     end
   end
 end

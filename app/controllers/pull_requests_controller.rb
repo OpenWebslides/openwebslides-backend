@@ -45,6 +45,20 @@ class PullRequestsController < ApplicationController
     end
   end
 
+  # PUT/PATCH /users/:id
+  def update
+    @pull_request = PullRequest.find params[:id]
+
+    authorize @pull_request
+
+    if @pull_request.update resource_params
+      jsonapi_render :json => @pull_request
+    else
+      jsonapi_render_errors :json => @pull_request,
+                            :status => :unprocessable_entity
+    end
+  end
+
   ##
   # Relationships
   #

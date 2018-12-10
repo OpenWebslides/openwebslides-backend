@@ -33,9 +33,9 @@ class PullRequest < ApplicationRecord
   # State
   #
   state_machine :initial => :open do
-    state :open, :value => 0
-    state :accepted, :value => 1
-    state :rejected, :value => 2
+    state :open
+    state :accepted
+    state :rejected
 
     # Accept/approve a pull request
     event :accept do
@@ -53,6 +53,11 @@ class PullRequest < ApplicationRecord
   #
   validates :message,
             :presence => true
+
+  validates :feedback,
+            :presence => true,
+            :on => :update,
+            :if => :rejected?
 
   validate :target_is_upstream_source
 
@@ -76,13 +81,13 @@ class PullRequest < ApplicationRecord
   # Helpers and callback methods
   #
   def target_is_upstream_source
-    return if source.upstream == target
+    return if source&.upstream == target
 
     errors.add :source, I18n.t('openwebslides.validations.pull_request.target_is_upstream_source')
   end
 
   def source_has_one_open_pr
-    return unless source.outgoing_pull_requests.any?(&:open?)
+    return unless source&.outgoing_pull_requests&.any?(&:open?)
 
     errors.add :source, I18n.t('openwebslides.validations.pull_request.source_has_one_open_pr')
   end

@@ -21,6 +21,13 @@ class PullRequestPolicy < ApplicationPolicy
     source_policy.update_content? || target_policy.update_content?
   end
 
+  def update?
+    return false if @user.nil?
+
+    # Users can only update if the target content is updatable
+    target_policy.update_content?
+  end
+
   ##
   # Relationship: user
   #

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_23_123825) do
+ActiveRecord::Schema.define(version: 2018_12_10_111610) do
 
   create_table "alerts", force: :cascade do |t|
     t.integer "user_id"
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_123825) do
   create_table "pull_requests", force: :cascade do |t|
     t.string "message", default: "", null: false
     t.string "feedback"
-    t.integer "state"
+    t.string "state", default: "", null: false
     t.integer "user_id"
     t.integer "source_id"
     t.integer "target_id"
