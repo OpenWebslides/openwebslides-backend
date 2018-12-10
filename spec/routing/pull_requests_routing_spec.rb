@@ -17,8 +17,8 @@ RSpec.describe 'pull requests routing', :type => :routing do
     route = '/api/pullRequests/foo'
 
     expect(:get => route).to route_to 'pull_requests#show', :id => 'foo'
-    expect(:patch => route).not_to be_routable
-    expect(:put => route).not_to be_routable
+    expect(:patch => route).to route_to 'pull_requests#update', :id => 'foo'
+    expect(:put => route).to route_to 'pull_requests#update', :id => 'foo'
     expect(:post => route).not_to be_routable
     expect(:delete => route).not_to be_routable
   end
