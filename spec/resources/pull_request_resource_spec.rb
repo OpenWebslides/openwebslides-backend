@@ -43,6 +43,10 @@ RSpec.describe PullRequestResource, :type => :resource do
       expect(described_class.creatable_fields).to match_array %i[message user source target]
     end
 
+    it 'has a valid set of updatable fields' do
+      expect(described_class.updatable_fields).to match_array %i[state feedback]
+    end
+
     it 'has a valid set of sortable fields' do
       expect(described_class.sortable_fields context).to match_array %i[id state]
     end

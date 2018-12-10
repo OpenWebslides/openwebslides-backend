@@ -36,6 +36,10 @@ class PullRequestResource < ApplicationResource
     super(context) - %i[feedback state]
   end
 
+  def self.updatable_fields(context = {})
+    super(context) - %i[message user source target]
+  end
+
   def self.sortable_fields(context)
     super(context) - %i[message feedback]
   end
