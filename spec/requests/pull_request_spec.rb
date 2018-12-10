@@ -203,7 +203,7 @@ RSpec.describe 'Pull Request API', :type => :request do
     end
 
     it 'rejects empty feedback' do
-      patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :state => 'rejected', :feedback => ''), :headers => headers
+      patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :stateEvent => 'reject', :feedback => ''), :headers => headers
 
       expect(response.status).to eq 422
       expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
@@ -214,7 +214,7 @@ RSpec.describe 'Pull Request API', :type => :request do
       before { pr.accept }
 
       it 'rejects' do
-        patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :state => 'rejected', :feedback => feedback), :headers => headers
+        patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :stateEvent => 'reject', :feedback => feedback), :headers => headers
 
         expect(response.status).to eq 422
         expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
@@ -223,10 +223,10 @@ RSpec.describe 'Pull Request API', :type => :request do
     end
 
     context 'when the pull request is already rejected' do
-      before { pr.rejected }
+      before { pr.reject }
 
       it 'rejects' do
-        patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :state => 'rejected', :feedback => feedback), :headers => headers
+        patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :stateEvent => 'reject', :feedback => feedback), :headers => headers
 
         expect(response.status).to eq 422
         expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
@@ -235,9 +235,9 @@ RSpec.describe 'Pull Request API', :type => :request do
     end
 
     it 'returns successful' do
-      patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :state => 'rejected', :feedback => feedback), :headers => headers
+      patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :stateEvent => 'reject', :feedback => feedback), :headers => headers
 
-      expect(response.status).to eq 201
+      expect(response.status).to eq 200
       expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
 
       json = JSON.parse response.body
