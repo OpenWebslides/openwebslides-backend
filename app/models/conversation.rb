@@ -7,7 +7,10 @@ class Conversation < Annotation
   ##
   # Properties
   #
-  enum :conversation_type => %i[question note]
+  enum :conversation_type => {
+    :question => 0,
+    :note => 1
+  }
 
   attribute :title
   attribute :text
