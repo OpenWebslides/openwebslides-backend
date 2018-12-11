@@ -23,7 +23,7 @@ RSpec.describe Notifications::UpdateTopic do
   #
   it 'generates a feed item' do
     expect(FeedItem).to receive(:create)
-      .with :event_type => :topic_updated,
+      .with :feed_item_type => :topic_updated,
             :user => user,
             :topic => topic
 

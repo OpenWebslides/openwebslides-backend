@@ -34,7 +34,7 @@ RSpec.describe Notifications::ForkTopic do
   #
   it 'generates a feed item' do
     expect(FeedItem).to receive(:create)
-      .with :event_type => :topic_forked,
+      .with :feed_item_type => :topic_forked,
             :user => topic.user,
             :topic => topic
 

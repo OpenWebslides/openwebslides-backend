@@ -27,7 +27,7 @@ RSpec.describe FeedItemResource, :type => :resource do
 
   it { is_expected.to be_immutable }
 
-  it { is_expected.to have_attribute :event_type }
+  it { is_expected.to have_attribute :feed_item_type }
   it { is_expected.to have_attribute :topic_title }
   it { is_expected.to have_attribute :user_name }
 
@@ -36,7 +36,7 @@ RSpec.describe FeedItemResource, :type => :resource do
 
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id event_type topic_title user_name topic user]
+      expect(subject.fetchable_fields).to match_array %i[id feed_item_type topic_title user_name topic user]
     end
 
     it 'should have a valid set of sortable fields' do
@@ -53,11 +53,11 @@ RSpec.describe FeedItemResource, :type => :resource do
 
   describe 'filters' do
     it 'should have a valid set of filters' do
-      expect(described_class.filters.keys).to match_array %i[id event_type topic user]
+      expect(described_class.filters.keys).to match_array %i[id feed_item_type topic user]
     end
 
-    describe 'event_type#verify' do
-      subject(:resource) { described_class.filters[:event_type][:verify] }
+    describe 'feed_item_type#verify' do
+      subject(:resource) { described_class.filters[:feed_item_type][:verify] }
 
       it 'filters the right event types' do
         expect(subject.call %w[topic_created foobar topic_updated topic_forked TOPIC_CREATED TOPIC_UPDATED TOPIC_FORKED FOO FOOBAR]).to match_array %w[topic_created topic_updated topic_forked]

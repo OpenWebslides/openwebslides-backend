@@ -23,7 +23,7 @@ RSpec.describe 'FeedItem API', :type => :request do
 
       feed_item = json['data'].first
       expect(feed_item).to include 'attributes'
-      expect(feed_item['attributes']).to include 'eventType'
+      expect(feed_item['attributes']).to include 'feedItemType'
       expect(feed_item['attributes']).to include 'userName'
       expect(feed_item['attributes']).to include 'topicTitle'
       expect(feed_item['meta']).to include 'createdAt'
