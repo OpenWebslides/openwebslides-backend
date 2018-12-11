@@ -7,7 +7,7 @@ module Notifications
   class ForkTopic < ApplicationService
     def call(fork)
       # Generate feed item
-      FeedItem.create :event_type => :topic_forked,
+      FeedItem.create :feed_item_type => :topic_forked,
                       :user => fork.user,
                       :topic => fork
 

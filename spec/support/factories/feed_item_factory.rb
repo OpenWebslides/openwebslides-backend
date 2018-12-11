@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :feed_item do
-    event_type { FeedItem.event_types.keys.sample }
+    feed_item_type { FeedItem.feed_item_types.keys.sample }
     user { build :user }
     topic { build :topic }
   end

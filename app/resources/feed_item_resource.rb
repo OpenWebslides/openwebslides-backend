@@ -9,7 +9,7 @@ class FeedItemResource < ApplicationResource
   ##
   # Attributes
   #
-  attribute :event_type
+  attribute :feed_item_type
   attribute :user_name
   attribute :topic_title
 
@@ -27,8 +27,8 @@ class FeedItemResource < ApplicationResource
   #
   filter :user
   filter :topic
-  filter :event_type,
-         :verify => ->(values, _ = nil) { values.map(&:downcase) & FeedItem.event_types.keys }
+  filter :feed_item_type,
+         :verify => ->(values, _ = nil) { values.map(&:downcase) & FeedItem.feed_item_types.keys }
 
   ##
   # Callbacks

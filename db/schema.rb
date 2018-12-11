@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_10_111610) do
+ActiveRecord::Schema.define(version: 2018_12_11_135610) do
 
   create_table "alerts", force: :cascade do |t|
     t.integer "user_id"
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 2018_12_10_111610) do
   end
 
   create_table "feed_items", force: :cascade do |t|
-    t.integer "event_type"
+    t.integer "feed_item_type"
     t.integer "user_id"
     t.integer "topic_id"
     t.datetime "created_at", null: false

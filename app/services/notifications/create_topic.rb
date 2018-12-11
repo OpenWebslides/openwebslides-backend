@@ -7,7 +7,7 @@ module Notifications
   class CreateTopic < ApplicationService
     def call(topic)
       # Generate feed item
-      FeedItem.create :event_type => :topic_created,
+      FeedItem.create :feed_item_type => :topic_created,
                       :user => topic.user,
                       :topic => topic
     end
