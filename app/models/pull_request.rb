@@ -32,8 +32,8 @@ class PullRequest < ApplicationRecord
   ##
   # State
   #
-  state_machine :initial => :open do
-    state :open do
+  state_machine :initial => :pending do
+    state :pending, :open do
       validates :feedback,
                 :absence => true
     end
@@ -93,7 +93,7 @@ class PullRequest < ApplicationRecord
   end
 
   def source_has_one_open_pr
-    return unless source&.outgoing_pull_requests&.any?(&:open?)
+    return unless source&.outgoing_pull_requests&.any? { |pr| pr.pending? || pr.open? }
 
     errors.add :source, I18n.t('openwebslides.validations.pull_request.source_has_one_open_pr')
   end

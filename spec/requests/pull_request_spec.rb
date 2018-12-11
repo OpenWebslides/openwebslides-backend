@@ -12,7 +12,7 @@ RSpec.describe 'Pull Request API', :type => :request do
   ##
   # Test variables
   #
-  let(:pr) { create :pull_request }
+  let(:pr) { create :pull_request, :state => 'open' }
 
   let(:source) { create :topic, :upstream => target }
   let(:target) { create :topic }
