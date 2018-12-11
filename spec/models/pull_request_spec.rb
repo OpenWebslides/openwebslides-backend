@@ -25,18 +25,64 @@ RSpec.describe PullRequest, :type => :model do
   describe 'attributes' do
     it { is_expected.to validate_presence_of(:message) }
 
-    it { is_expected.to allow_values(nil, '', 'foo').for :feedback }
-
     context 'when the PR is open' do
-      before { subject.state = 'open' }
+      before { subject.update :state => 'open' }
 
-      it { is_expected.not_to validate_presence_of(:feedback).on(:update) }
+      it { is_expected.not_to validate_presence_of :feedback }
+    end
+
+    context 'when the PR is accepted' do
+      before { subject.update :state => 'accepted' }
+
+      it { is_expected.not_to validate_presence_of :feedback }
     end
 
     context 'when the PR is rejected' do
-      before { subject.state = 'rejected' }
+      before { subject.update :state => 'rejected' }
 
-      it { is_expected.to validate_presence_of(:feedback).on(:update) }
+      it { is_expected.to validate_presence_of :feedback }
+    end
+
+    describe 'feedback can only be updated on state change' do
+      context 'from `open` to `open`' do
+        subject { create :pull_request, :state => 'open' }
+
+        it 'rejects update on feedback' do
+          expect { subject.update! :feedback => 'feedback' }.to raise_error ActiveRecord::RecordInvalid
+        end
+      end
+
+      context 'from `open` to `accepted`' do
+        subject { create :pull_request, :state => 'open' }
+
+        it 'accepts update on feedback' do
+          expect { subject.update! :state_event => 'accept', :feedback => 'feedback' }.not_to raise_error
+        end
+      end
+
+      context 'from `open` to `rejected`' do
+        subject { create :pull_request, :state => 'open' }
+
+        it 'accepts update on feedback' do
+          expect { subject.update! :state_event => 'reject', :feedback => 'feedback' }.not_to raise_error
+        end
+      end
+
+      context 'from `accepted` to `accepted`' do
+        subject { create :pull_request, :state => 'accepted', :feedback => 'feedback' }
+
+        it 'rejects update on feedback' do
+          expect { subject.update! :feedback => 'feedback update' }.to raise_error ActiveRecord::RecordInvalid
+        end
+      end
+
+      context 'from `rejected` to `rejected`' do
+        subject { create :pull_request, :state => 'rejected', :feedback => 'feedback' }
+
+        it 'rejects update on feedback' do
+          expect { subject.update! :feedback => 'feedback update' }.to raise_error ActiveRecord::RecordInvalid
+        end
+      end
     end
   end
 
@@ -72,6 +118,9 @@ RSpec.describe PullRequest, :type => :model do
     it { is_expected.to have_states :open, :accepted, :rejected }
 
     context 'when the pull request is open' do
+      # Rejection needs feedback
+      before { subject.feedback = 'feedback' }
+
       it { is_expected.to handle_events :accept, :reject, :when => :open }
 
       it { is_expected.to transition_from :open, :to_state => :accepted, :on_event => :accept }
@@ -90,16 +139,20 @@ RSpec.describe PullRequest, :type => :model do
   describe 'methods' do
     describe '#closed?' do
       context 'when the pull request is open' do
+        before { subject.update :state => 'open' }
+
         it { is_expected.not_to be_closed }
       end
 
       context 'when the pull request is accepted' do
-        before { subject.accept }
+        before { subject.update :state => 'accepted' }
+
         it { is_expected.to be_closed }
       end
 
       context 'when the pull request is rejected' do
-        before { subject.reject }
+        before { subject.update :state => 'rejected' }
+
         it { is_expected.to be_closed }
       end
     end

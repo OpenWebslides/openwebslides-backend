@@ -211,7 +211,7 @@ RSpec.describe 'Pull Request API', :type => :request do
     end
 
     context 'when the pull request is already accepted' do
-      before { pr.accept }
+      before { pr.update :state => 'accepted', :feedback => 'feedback' }
 
       it 'rejects' do
         patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :stateEvent => 'reject', :feedback => feedback), :headers => headers
@@ -223,7 +223,7 @@ RSpec.describe 'Pull Request API', :type => :request do
     end
 
     context 'when the pull request is already rejected' do
-      before { pr.reject }
+      before { pr.update :state => 'rejected', :feedback => 'feedback' }
 
       it 'rejects' do
         patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :stateEvent => 'reject', :feedback => feedback), :headers => headers

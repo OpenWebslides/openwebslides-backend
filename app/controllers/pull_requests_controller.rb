@@ -51,11 +51,13 @@ class PullRequestsController < ApplicationController
 
     authorize @pull_request
 
-    if @pull_request.update resource_params
-      jsonapi_render :json => @pull_request
-    else
+    @pull_request = PullRequests::Update.call @pull_request, resource_params
+
+    if @pull_request.errors.any?
       jsonapi_render_errors :json => @pull_request,
                             :status => :unprocessable_entity
+    else
+      jsonapi_render :json => @pull_request
     end
   end
 

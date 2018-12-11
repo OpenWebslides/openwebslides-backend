@@ -32,6 +32,7 @@ en:
       pull_request:
         target_is_upstream_source: "must have target as upstream"
         source_has_one_open_pr: "can only have one open pull request"
+        feedback_updated_only_on_state_change: "feedback can only be set on accept/reject"
       alert:
         topic_equals_target: "must equal pull request target topic"
         update_read_is_true: "must be true"

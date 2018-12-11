@@ -52,6 +52,8 @@ RSpec.describe AlertMailer do
     let(:mail) { described_class.accept_pr alert }
     let(:alert) { create :pull_request_alert, :alert_type => :pr_accepted, :user => user }
 
+    before { alert.pull_request.update :state => 'accepted', :feedback => 'feedback' }
+
     it 'sets the headers' do
       expect(mail.subject).to match alert.topic.title
       expect(mail.to).to eq [user.email]
@@ -65,6 +67,8 @@ RSpec.describe AlertMailer do
   describe '#reject_pr' do
     let(:mail) { described_class.reject_pr alert }
     let(:alert) { create :pull_request_alert, :alert_type => :pr_rejected, :user => user }
+
+    before { alert.pull_request.update :state => 'rejected', :feedback => 'feedback' }
 
     it 'sets the headers' do
       expect(mail.subject).to match alert.topic.title
