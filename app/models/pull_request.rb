@@ -33,9 +33,17 @@ class PullRequest < ApplicationRecord
   # State
   #
   state_machine :initial => :open do
-    state :open
+    state :open do
+      validates :feedback,
+                :absence => true
+    end
+
     state :accepted
-    state :rejected
+
+    state :rejected do
+      validates :feedback,
+                :presence => true
+    end
 
     # Accept/approve a pull request
     event :accept do
@@ -54,15 +62,13 @@ class PullRequest < ApplicationRecord
   validates :message,
             :presence => true
 
-  validates :feedback,
-            :presence => true,
-            :on => :update,
-            :if => :rejected?
-
   validate :target_is_upstream_source
 
   validate :source_has_one_open_pr,
            :on => :create
+
+  validate :feedback_updated_only_on_state_change,
+           :on => :update
 
   ##
   # Callbacks
@@ -90,5 +96,11 @@ class PullRequest < ApplicationRecord
     return unless source&.outgoing_pull_requests&.any?(&:open?)
 
     errors.add :source, I18n.t('openwebslides.validations.pull_request.source_has_one_open_pr')
+  end
+
+  def feedback_updated_only_on_state_change
+    return unless feedback_changed? && !state_changed?
+
+    errors.add :feedback, I18n.t('openwebslides.validations.pull_request.feedback_updated_only_on_state_change')
   end
 end
