@@ -14,7 +14,7 @@ RSpec.describe PullRequestResource, :type => :resource do
   #
   let(:subject) { described_class.new pull_request, context }
 
-  let(:pull_request) { create :pull_request }
+  let(:pull_request) { create :pull_request, :state => 'rejected', :feedback => 'feedback' }
   let(:context) { {} }
 
   ##

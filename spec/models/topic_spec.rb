@@ -201,8 +201,8 @@ RSpec.describe Topic, :type => :model do
       let(:open_pr) { create :pull_request, :source => fork, :target => topic }
 
       before do
-        create(:pull_request, :source => fork, :target => topic).reject
-        create(:pull_request, :source => fork, :target => topic).accept
+        create :pull_request, :source => fork, :target => topic, :state => 'rejected', :feedback => 'feedback'
+        create :pull_request, :source => fork, :target => topic, :state => 'accepted'
       end
 
       context 'when there is an open pull request' do
