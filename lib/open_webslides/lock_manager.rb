@@ -6,16 +6,18 @@ module OpenWebslides
       @manager ||= Redlock::Client.new [ENV['REDIS_URL'] || 'redis://localhost:6379']
     end
 
-    def self.lock(key, &block)
+    def self.lock(*args, &block)
       timeout = OpenWebslides.config.queue.timeout.in_milliseconds
+      key = args.shift
 
-      OpenWebslides::LockManager.manager.lock key, timeout, &block
+      OpenWebslides::LockManager.manager.lock key, timeout, *args, &block
     end
 
-    def self.lock!(key, &block)
+    def self.lock!(*args, &block)
       timeout = OpenWebslides.config.queue.timeout.in_milliseconds
+      key = args.shift
 
-      OpenWebslides::LockManager.manager.lock! key, timeout, &block
+      OpenWebslides::LockManager.manager.lock! key, timeout, *args, &block
     end
   end
 end
