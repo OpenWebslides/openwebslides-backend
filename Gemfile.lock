@@ -247,6 +247,8 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     redis (4.1.0)
+    redlock (1.0.0)
+      redis (>= 3.0.0, < 5.0)
     reek (5.2.0)
       codeclimate-engine-rb (~> 0.4.0)
       kwalify (~> 0.7.0)
@@ -390,6 +392,8 @@ DEPENDENCIES
   pundit-matchers
   rack-cors
   rails
+  redis
+  redlock
   reek
   rspec
   rspec-rails
