@@ -27,12 +27,14 @@ module OpenWebslides
                   :lockdir,
                   :repository,
                   :oauth2,
-                  :api
+                  :api,
+                  :queue
 
     def initialize
       @repository = OpenStruct.new
       @oauth2 = OpenStruct.new
       @api = OpenStruct.new
+      @queue = OpenStruct.new
     end
 
     ##
@@ -42,6 +44,7 @@ module OpenWebslides
       verify_global!
       verify_repository!
       verify_api!
+      verify_queue!
     end
 
     private
@@ -66,9 +69,16 @@ module OpenWebslides
     # Verify API configuration
     #
     def verify_api!
-      raise 'api.token_lifetime' unless api.token_lifetime&.is_a?(ActiveSupport::Duration)
-      raise 'api.asset_url_lifetime' unless api.token_lifetime&.is_a?(ActiveSupport::Duration)
+      raise 'api.token_lifetime' unless api.token_lifetime&.is_a? ActiveSupport::Duration
+      raise 'api.asset_url_lifetime' unless api.token_lifetime&.is_a? ActiveSupport::Duration
       raise 'repository.version' if Semverse::Version.new(api.version).nil?
+    end
+
+    ##
+    # Verify background queue configuration
+    #
+    def verify_queue!
+      raise 'queue.timeout' unless queue.timeout&.is_a? ActiveSupport::Duration
     end
   end
 end

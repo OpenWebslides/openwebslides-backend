@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'open_webslides/configuration'
-
 ##
 # Open Webslides configuration
 #
@@ -78,4 +76,13 @@ OpenWebslides.configure do |config|
   # API version
   #
   config.api.version = YAML.load_file Rails.root.join 'config', 'version.yml'
+
+  #########################################
+  ##    Background queue configuration   ##
+  #########################################
+
+  ##
+  # Lock timeout
+  #
+  config.queue.timeout = 30.seconds
 end
