@@ -6,16 +6,14 @@ RSpec.describe Topics::UpdateContent do
   ##
   # Configuration
   #
-  include_context 'repository'
-
   ##
   # Subject
   #
   ##
   # Test variables
   #
-  let(:topic) { build :topic }
-  let(:user) { build :user }
+  let(:topic) { create :topic }
+  let(:user) { create :user }
   let(:content) { ['content'] }
   let(:message) { 'This is a message' }
 
@@ -25,15 +23,8 @@ RSpec.describe Topics::UpdateContent do
   ##
   # Tests
   #
-  it 'persists the topic to the filesystem' do
-    expect(Repository::Update).to receive(:call).with topic, content, user, message
-
-    subject.call topic, content, user, message
-  end
-
-  it 'creates appropriate notifications' do
-    allow(Repository::Update).to receive :call
-    expect(Notifications::UpdateTopic).to receive(:call).with topic, user
+  it 'dispatches a background job' do
+    expect(Topics::UpdateContentWorker).to receive(:perform_async).with topic.id, content, user.id, message
 
     subject.call topic, content, user, message
   end

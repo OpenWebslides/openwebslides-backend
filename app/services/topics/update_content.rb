@@ -2,19 +2,17 @@
 
 module Topics
   ##
-  # Update the contents of a topic
+  # Update the contents of a topic in filesystem
   #
   class UpdateContent < ApplicationService
     def call(topic, content, user, message)
-      # Update in filesystem
-      Repository::Update.call topic, content, user, message
+      # Dispatch job to update in filesystem
+      Topics::UpdateContentWorker.perform_async topic.id, content, user.id, message
 
-      # Generate appropriate notifications
-      Notifications::UpdateTopic.call topic, user
+      # TODO: handle asynchronous errors (OpenWebslides::Content::ContentError)
+      # topic.errors.add :content, e.error_type
 
-      topic
-    rescue OpenWebslides::Content::ContentError => e
-      topic.errors.add :content, e.error_type
+      # Return AR record
       topic
     end
   end
