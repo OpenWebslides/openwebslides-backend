@@ -14,6 +14,11 @@ RSpec.describe Helpers::Lockable, :type => :helper do
       # Directory for filesystem locks
       #
       config.lockdir = Dir.mktmpdir
+
+      ##
+      # Lock timeout
+      #
+      config.queue.timeout = 5.seconds
     end
 
     FileUtils.mkdir_p OpenWebslides.config.lockdir
@@ -127,6 +132,16 @@ RSpec.describe Helpers::Lockable, :type => :helper do
         # Specify non-blocking lock, otherwise there's a deadlock
         expect { |b| write_lock topic, File::LOCK_EX | File::LOCK_NB, &b }.not_to yield_control
       end
+    end
+  end
+
+  describe 'timeout' do
+    around do |example|
+      lock(file, File::LOCK_EX) { example.run }
+    end
+
+    it 'raises an OpenWebslides::TimeoutError when the lock cannot be acquired within the configured timeout' do
+      expect { lock(file, File::LOCK_SH) }.to raise_error OpenWebslides::TimeoutError
     end
   end
 end

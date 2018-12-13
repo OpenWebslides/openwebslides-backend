@@ -84,5 +84,5 @@ OpenWebslides.configure do |config|
   ##
   # Lock timeout
   #
-  config.queue.timeout = 30.seconds
+  config.queue.timeout = 10.seconds
 end

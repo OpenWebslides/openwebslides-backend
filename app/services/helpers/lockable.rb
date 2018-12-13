@@ -8,27 +8,59 @@ module Helpers
     ##
     # Lock a repository for writing (exclusive lock)
     #
+    # Params:
+    # +topic+:: Topic to write lock
+    # +type+:: Lock constant, defaults to File::LOCK_EX
+    # +block+:: Procedure to wrap in a write lock
+    #
     def write_lock(topic, type = File::LOCK_EX, &block)
-      lock topic, type, &block
+      file = File.join OpenWebslides.config.lockdir, "#{topic.id}.lock"
+
+      lock file, type, &block
     end
 
     ##
     # Lock a repository for reading (shared lock)
     #
+    # Params:
+    # +topic+:: Topic to read lock
+    # +type+:: Lock constant, defaults to File::LOCK_SH
+    # +block+:: Procedure to wrap in a read lock
+    #
     def read_lock(topic, type = File::LOCK_SH, &block)
-      lock topic, type, &block
+      file = File.join OpenWebslides.config.lockdir, "#{topic.id}.lock"
+
+      lock file, type, &block
     end
 
     private
 
-    def lock(topic, type)
-      file = File.join OpenWebslides.config.lockdir, "#{topic.id}.lock"
+    ##
+    # Lock a file
+    #
+    # Params:
+    # +file+:: File path to lock
+    # +type+:: Lock type
+    # +block+:: Procedure to execute while the file is locked
+    #
+    # Raises:
+    # +OpenWebslides::TimeoutError+:: If the lock cannot be acquired within the configured timeout
+    #
+    def lock(file, type)
+      File.open(file, File::RDWR | File::CREAT, 0o644) do |f|
+        # rubocop:disable Style/ColonMethodCall
+        result = Timeout::timeout(timeout, OpenWebslides::TimeoutError) do
+          f.flock type
+        end
 
-      File.open(file, File::RDWR | File::CREAT, 0o644) do |lock|
-        yield if lock.flock type
+        yield if result
       ensure
-        lock.flock File::LOCK_UN
+        f.flock File::LOCK_UN
       end
+    end
+
+    def timeout
+      OpenWebslides.config.queue.timeout.to_i
     end
   end
 end
