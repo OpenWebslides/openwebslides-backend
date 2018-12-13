@@ -6,11 +6,10 @@ module Repo
   #
   class Create < ApplicationService
     include Helpers::Lockable
-    include Helpers::Committable
 
     def call(topic)
       write_lock topic do
-        repo = repo_for topic
+        repo = Repository.new :topic => topic
 
         # Create and populate local repository
         Repo::Filesystem::Init.call repo

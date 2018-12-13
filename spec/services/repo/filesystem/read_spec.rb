@@ -14,7 +14,7 @@ RSpec.describe Repo::Filesystem::Read do
   ##
   # Test variables
   #
-  let(:repository) { Helpers::Committable::Repo.new create(:topic) }
+  let(:repo) { Repository.new :topic => create(:topic) }
 
   ##
   # Stubs and mocks
@@ -50,7 +50,9 @@ RSpec.describe Repo::Filesystem::Read do
     end
 
     it 'validates the repository version' do
-      expect(Repo::Filesystem::Compatible).to receive(:call).with repo
+      expect(Repo::Filesystem::Compatible).to receive(:call)
+        .with(repo)
+        .and_return true
 
       subject.call repo
     end

@@ -14,7 +14,7 @@ RSpec.describe Repo::Git::Commit do
   ##
   # Test variables
   #
-  let(:repository) { Helpers::Committable::Repo.new create(:topic) }
+  let(:repo) { Repository.new :topic => create(:topic) }
 
   let(:user) { create :user }
   let(:message) { 'This is a commit message' }

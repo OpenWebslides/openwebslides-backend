@@ -14,8 +14,8 @@ RSpec.describe Repo::Filesystem::Fork do
   ##
   # Test variables
   #
-  let(:repository) { Helpers::Committable::Repo.new create(:topic) }
-  let(:fork) { Helpers::Committable::Repo.new create(:topic, :upstream => repo.topic) }
+  let(:repo) { Repository.new :topic => create(:topic) }
+  let(:fork) { Repository.new :topic => create(:topic, :upstream => repo.topic) }
 
   ##
   # Stubs and mocks

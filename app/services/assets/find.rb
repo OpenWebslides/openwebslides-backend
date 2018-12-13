@@ -6,11 +6,10 @@ module Assets
   #
   class Find < ApplicationService
     include Helpers::Lockable
-    include Helpers::Committable
 
     def call(asset)
       read_lock asset.topic do
-        repo = repo_for asset.topic
+        repo = Repository.new :topic => asset.topic
 
         # Find in filesystem
         Repo::Asset::Find.call repo, asset

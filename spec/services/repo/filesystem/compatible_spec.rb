@@ -21,7 +21,7 @@ RSpec.describe Repo::Filesystem::Compatible do
   ##
   # Test variables
   #
-  let(:repository) { build :repository }
+  let(:repo) { build :repository }
 
   let(:version) { OpenWebslides.config.repository.version }
 
@@ -42,7 +42,7 @@ RSpec.describe Repo::Filesystem::Compatible do
       FileUtils.mkdir_p repo.content_path
 
       # Dummy index file
-      File.write repo.index, { :version => version }.to_yaml
+      File.write repo.index, { 'version' => version }.to_yaml
     end
 
     context 'when the version is too low' do
@@ -62,7 +62,7 @@ RSpec.describe Repo::Filesystem::Compatible do
     end
 
     context 'when the version is in range' do
-      let(:version) { '1.2.0' }
+      let(:version) { '1.0.0' }
 
       it 'is incompatible' do
         expect(subject.call repo).to be true

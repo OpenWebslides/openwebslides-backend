@@ -14,7 +14,7 @@ RSpec.describe Repo::Filesystem::WriteIndex do
   ##
   # Test variables
   #
-  let(:repository) { Helpers::Committable::Repo.new create(:topic) }
+  let(:repo) { Repository.new :topic => create(:topic) }
 
   ##
   # Stubs and mocks

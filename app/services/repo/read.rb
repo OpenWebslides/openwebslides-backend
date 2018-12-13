@@ -6,11 +6,10 @@ module Repo
   #
   class Read < ApplicationService
     include Helpers::Lockable
-    include Helpers::Committable
 
     def call(topic)
       read_lock topic do
-        repo = repo_for topic
+        repo = Repository.new :topic => topic
 
         Filesystem::Read.call repo
       end

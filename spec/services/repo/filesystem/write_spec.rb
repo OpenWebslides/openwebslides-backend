@@ -14,7 +14,7 @@ RSpec.describe Repo::Filesystem::Write do
   ##
   # Test variables
   #
-  let(:repository) { Helpers::Committable::Repo.new create(:topic, :root_content_item_id => 'qyrgv0bcd6') }
+  let(:repo) { Repository.new :topic => create(:topic, :root_content_item_id => 'qyrgv0bcd6') }
 
   let(:content) do
     root = {
@@ -63,7 +63,9 @@ RSpec.describe Repo::Filesystem::Write do
   end
 
   it 'validates the repository version' do
-    expect(Repo::Filesystem::Compatible).to receive(:call).with repo
+    expect(Repo::Filesystem::Compatible).to receive(:call)
+      .with(repo)
+      .and_return true
 
     subject.call repo, content
   end

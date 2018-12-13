@@ -6,11 +6,10 @@ module Repo
   #
   class Delete < ApplicationService
     include Helpers::Lockable
-    include Helpers::Committable
 
     def call(topic)
       write_lock topic do
-        repo = repo_for topic
+        repo = Repository.new :topic => topic
 
         # Delete repository
         Repo::Filesystem::Delete.call repo

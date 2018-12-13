@@ -14,7 +14,7 @@ RSpec.describe Repo::Update do
   ##
   # Test variables
   #
-  let(:repository) { Helpers::Committable::Repo.new topic }
+  let(:repo) { Repository.new :topic => topic }
 
   let(:topic) { create :topic }
 

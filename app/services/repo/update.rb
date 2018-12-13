@@ -6,11 +6,10 @@ module Repo
   #
   class Update < ApplicationService
     include Helpers::Lockable
-    include Helpers::Committable
 
     def call(topic, content, user, message)
       write_lock topic do
-        repo = repo_for topic
+        repo = Repository.new :topic => topic
 
         # Write content items
         Repo::Filesystem::Write.call repo, content

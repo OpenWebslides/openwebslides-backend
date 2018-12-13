@@ -6,11 +6,10 @@ module Assets
   #
   class Delete < ApplicationService
     include Helpers::Lockable
-    include Helpers::Committable
 
     def call(asset, user)
       write_lock asset.topic do
-        repo = repo_for asset.topic
+        repo = Repository.new :topic => asset.topic
 
         # Delete in filesystem
         Repo::Asset::Delete.call repo, asset, user

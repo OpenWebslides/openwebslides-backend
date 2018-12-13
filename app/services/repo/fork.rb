@@ -6,13 +6,12 @@ module Repo
   #
   class Fork < ApplicationService
     include Helpers::Lockable
-    include Helpers::Committable
 
     def call(upstream, downstream)
       read_lock upstream do
         write_lock downstream do
-          repo = repo_for upstream
-          fork = repo_for downstream
+          repo = Repository.new :topic => upstream
+          fork = Repository.new :topic => downstream
 
           # Duplicate repository
           Repo::Filesystem::Fork.call repo, fork
