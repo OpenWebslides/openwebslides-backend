@@ -11,28 +11,22 @@ module Topics
                                 :access,
                                 :root_content_item_id
 
-      @fork = Topic.new fork_params
+      fork = Topic.new fork_params
 
       # Set upstream topic, new owner and title
-      @fork.upstream = topic
-      @fork.user = user
-      @fork.title = I18n.t('openwebslides.topics.forked', :title => topic.title)
+      fork.upstream = topic
+      fork.user = user
+      fork.title = I18n.t('openwebslides.topics.forked', :title => topic.title)
 
       # Duplicate assets
       topic.assets.each do |asset|
-        @fork.assets << Asset.new(:filename => asset.filename)
+        fork.assets << Asset.new(:filename => asset.filename)
       end
 
-      if @fork.save
-        # Fork repository in filesystem
-        Repository::Fork.call topic, @fork
-
-        # Generate appropriate notifications
-        Notifications::ForkTopic.call @fork
-      end
+      Topics::ForkWorker.perform_async topic.id, fork.id if fork.save
 
       # return AR record
-      @fork
+      fork
     end
   end
 end
