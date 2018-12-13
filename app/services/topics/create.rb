@@ -7,11 +7,8 @@ module Topics
   class Create < ApplicationService
     def call(topic)
       if topic.save
-        # Persist to file system
-        Repository::Create.call topic
-
-        # Generate appropriate notifications
-        Notifications::CreateTopic.call topic
+        # Dispatch job to persist in filesystem
+        Topics::CreateWorker.perform_async topic.id
       end
 
       topic

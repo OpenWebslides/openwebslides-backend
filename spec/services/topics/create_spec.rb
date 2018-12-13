@@ -6,8 +6,6 @@ RSpec.describe Topics::Create do
   ##
   # Configuration
   #
-  include_context 'repository'
-
   ##
   # Subject
   #
@@ -29,14 +27,8 @@ RSpec.describe Topics::Create do
       expect(topic).to be_persisted
     end
 
-    it 'persists the topic to the filesystem' do
-      expect(Repository::Create).to receive(:call).with topic
-
-      subject.call topic
-    end
-
-    it 'creates appropriate notifications' do
-      expect(Notifications::CreateTopic).to receive(:call).with topic
+    it 'dispatches a background job' do
+      expect(Topics::CreateWorker).to receive(:perform_async).with an_instance_of Integer
 
       subject.call topic
     end
@@ -51,14 +43,8 @@ RSpec.describe Topics::Create do
       subject.call topic
     end
 
-    it 'does not persist to the filesystem' do
-      expect(Repository::Create).not_to receive :new
-
-      subject.call topic
-    end
-
-    it 'does not create any notifications' do
-      expect(Notifications::CreateTopic).not_to receive :call
+    it 'does not dispatch a background job' do
+      expect(Topics::CreateWorker).not_to receive :perform_async
 
       subject.call topic
     end
