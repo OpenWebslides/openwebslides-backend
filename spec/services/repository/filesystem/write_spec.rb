@@ -63,7 +63,7 @@ RSpec.describe Repository::Filesystem::Write do
   end
 
   it 'validates the repository version' do
-    expect(repo).to receive(:validate_version!)
+    expect(Repository::Filesystem::Compatible).to receive(:call).with repo
 
     subject.call repo, content
   end

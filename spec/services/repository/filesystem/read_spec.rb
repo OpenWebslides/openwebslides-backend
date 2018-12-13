@@ -49,6 +49,14 @@ RSpec.describe Repository::Filesystem::Read do
       File.write File.join(repo.content_path, 'j0vcu0y7vk.yml'), content_item_hash.to_yaml
     end
 
-    it { is_expected.to eq [{ 'id' => 'j0vcu0y7vk', 'foo' => 'bar' }] }
+    it 'validates the repository version' do
+      expect(Repository::Filesystem::Compatible).to receive(:call).with repo
+
+      subject.call repo
+    end
+
+    it 'returns the content as an array' do
+      expect(subject.call repo).to eq [{ 'id' => 'j0vcu0y7vk', 'foo' => 'bar' }]
+    end
   end
 end

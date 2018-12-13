@@ -12,7 +12,8 @@ module Repository
         @repo = repo
 
         # Ensure repository data format version is compatible
-        repo.validate_version!
+        compatible = Repository::Filesystem::Compatible.call repo
+        raise OpenWebslides::Content::IncompatibleVersionError unless compatible
 
         # Find root content item
         root = content.find { |c| c['type'] == 'contentItemTypes/ROOT' }

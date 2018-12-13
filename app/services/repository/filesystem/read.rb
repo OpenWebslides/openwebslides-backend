@@ -9,7 +9,9 @@ module Repository
       def call(repo)
         raise OpenWebslides::Repo::RepoDoesNotExistError unless Dir.exist? repo.path
 
-        repo.validate_version!
+        # Ensure repository data format version is compatible
+        compatible = Repository::Filesystem::Compatible.call repo
+        raise OpenWebslides::Content::IncompatibleVersionError unless compatible
 
         # Read all content item files into a list
         Dir[File.join repo.content_path, '*.yml'].map { |f| YAML.safe_load File.read f }
