@@ -22,7 +22,7 @@ RSpec.describe Topics::DeleteWorker do
   ##
   # Tests
   #
-  before { Repository::Create.call topic }
+  before { Repo::Create.call topic }
 
   it 'destroys the topic in the database' do
     subject.perform topic.id
@@ -31,7 +31,7 @@ RSpec.describe Topics::DeleteWorker do
   end
 
   it 'deletes the topic in the filesystem' do
-    expect(Repository::Delete).to receive(:call).with topic
+    expect(Repo::Delete).to receive(:call).with topic
 
     subject.perform topic.id
   end

@@ -13,7 +13,7 @@ module Assets
         repo = repo_for asset.topic
 
         # Find in filesystem
-        Repository::Asset::Find.call repo, asset
+        Repo::Asset::Find.call repo, asset
       end
     end
   end

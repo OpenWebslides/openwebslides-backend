@@ -14,7 +14,7 @@ module Assets
 
         if asset.save
           # Persist to filesystem
-          Repository::Asset::UpdateFile.call repo, asset, user, file.path
+          Repo::Asset::UpdateFile.call repo, asset, user, file.path
         end
       end
 

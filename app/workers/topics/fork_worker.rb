@@ -10,7 +10,7 @@ module Topics
       fork = Topic.find fork_id
 
       # Fork repository in filesystem
-      Repository::Fork.call topic, fork
+      Repo::Fork.call topic, fork
 
       # Generate appropriate notifications
       Notifications::ForkTopic.call fork

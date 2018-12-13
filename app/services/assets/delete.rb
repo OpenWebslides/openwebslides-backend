@@ -13,7 +13,7 @@ module Assets
         repo = repo_for asset.topic
 
         # Delete in filesystem
-        Repository::Asset::Delete.call repo, asset, user
+        Repo::Asset::Delete.call repo, asset, user
 
         # Delete in database
         asset.destroy

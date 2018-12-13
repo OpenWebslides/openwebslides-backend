@@ -13,7 +13,7 @@ module Topics
       content = YAML.load_file file
 
       # Update in filesystem
-      Repository::Update.call topic, content, user, message
+      Repo::Update.call topic, content, user, message
 
       # Generate appropriate notifications
       Notifications::UpdateTopic.call topic, user

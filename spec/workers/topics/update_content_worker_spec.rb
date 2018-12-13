@@ -26,7 +26,7 @@ RSpec.describe Topics::UpdateContentWorker do
   # Tests
   #
   before do
-    Repository::Create.call topic
+    Repo::Create.call topic
 
     # Write temporary content file
     File.write file, 'foo'
@@ -39,7 +39,7 @@ RSpec.describe Topics::UpdateContentWorker do
   end
 
   it 'creates appropriate notifications' do
-    allow(Repository::Update).to receive(:call)
+    allow(Repo::Update).to receive(:call)
     expect(Notifications::UpdateTopic).to receive(:call).with topic, user
 
     subject.perform topic.id, file, user.id, message

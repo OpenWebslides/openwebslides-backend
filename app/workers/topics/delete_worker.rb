@@ -9,7 +9,7 @@ module Topics
       topic = Topic.find topic_id
 
       # Delete in filesystem
-      Repository::Delete.call topic
+      Repo::Delete.call topic
 
       # Delete in database
       topic.destroy

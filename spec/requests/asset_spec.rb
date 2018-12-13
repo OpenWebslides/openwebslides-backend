@@ -19,7 +19,7 @@ RSpec.describe 'Assets API', :type => :request do
 
       @body = fixture_file_upload(asset_file)
 
-      allow(Repository::Asset::UpdateFile).to receive :call
+      allow(Repo::Asset::UpdateFile).to receive :call
     end
 
     it 'rejects without Content-Disposition' do
@@ -84,7 +84,7 @@ RSpec.describe 'Assets API', :type => :request do
     before do
       add_auth_header
 
-      allow(Repository::Asset::Delete).to receive :call
+      allow(Repo::Asset::Delete).to receive :call
     end
 
     it 'rejects non-existant assets' do
@@ -113,7 +113,7 @@ RSpec.describe 'Assets API', :type => :request do
       @token.subject = user
       @token.object = asset
 
-      allow(Repository::Asset::Find).to receive(:call).and_return asset_file
+      allow(Repo::Asset::Find).to receive(:call).and_return asset_file
     end
 
     it 'rejects no token' do

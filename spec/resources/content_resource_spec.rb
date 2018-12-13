@@ -49,7 +49,7 @@ RSpec.describe ContentResource, :type => :resource do
   describe 'methods' do
     describe '#content' do
       it 'reads the contents of a repository' do
-        expect(Repository::Read).to receive(:call).with topic
+        expect(Repo::Read).to receive(:call).with topic
 
         subject.content
       end
