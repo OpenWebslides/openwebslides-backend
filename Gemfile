@@ -37,7 +37,6 @@ gem 'jsonapi-utils'
 
 # Asynchronous processing
 gem 'redis'
-gem 'redlock'
 gem 'sidekiq'
 
 # Filename sanitization
