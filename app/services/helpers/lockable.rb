@@ -8,26 +8,24 @@ module Helpers
     ##
     # Lock a repository for writing (exclusive lock)
     #
-    def write_lock(topic, &block)
-      lock topic, File::LOCK_EX, block
+    def write_lock(topic, type = File::LOCK_EX, &block)
+      lock topic, type, &block
     end
 
     ##
     # Lock a repository for reading (shared lock)
     #
-    def read_lock(topic, &block)
-      lock topic, File::LOCK_SH, block
+    def read_lock(topic, type = File::LOCK_SH, &block)
+      lock topic, type, &block
     end
 
     private
 
-    def lock(topic, type, block)
+    def lock(topic, type)
       file = File.join OpenWebslides.config.lockdir, "#{topic.id}.lock"
 
       File.open(file, File::RDWR | File::CREAT, 0o644) do |lock|
-        lock.flock type
-
-        block.call
+        yield if lock.flock type
       ensure
         lock.flock File::LOCK_UN
       end
