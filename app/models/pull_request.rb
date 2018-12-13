@@ -33,7 +33,7 @@ class PullRequest < ApplicationRecord
   # State
   #
   state_machine :initial => :pending do
-    state :pending, :open do
+    state :pending, :incompatible, :open do
       validates :feedback,
                 :absence => true
     end
@@ -77,7 +77,7 @@ class PullRequest < ApplicationRecord
   # Methods
   #
   def closed?
-    accepted? || rejected?
+    incompatible? || accepted? || rejected?
   end
 
   ##

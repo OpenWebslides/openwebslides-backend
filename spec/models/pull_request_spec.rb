@@ -31,6 +31,12 @@ RSpec.describe PullRequest, :type => :model do
       it { is_expected.to validate_absence_of :feedback }
     end
 
+    context 'when the PR is incompatible' do
+      before { subject.update :state => 'incompatible' }
+
+      it { is_expected.to validate_absence_of :feedback }
+    end
+
     context 'when the PR is open' do
       before { subject.update :state => 'open' }
 
@@ -137,6 +143,10 @@ RSpec.describe PullRequest, :type => :model do
       it { is_expected.to reject_events :accept, :reject, :when => :pending }
     end
 
+    context 'when the pull request is incompatible' do
+      it { is_expected.to reject_events :accept, :reject, :when => :incompatible }
+    end
+
     context 'when the pull request is open' do
       # Rejection needs feedback
       before { subject.feedback = 'feedback' }
@@ -158,6 +168,18 @@ RSpec.describe PullRequest, :type => :model do
 
   describe 'methods' do
     describe '#closed?' do
+      context 'when the pull request is pending' do
+        before { subject.update :state => 'pending' }
+
+        it { is_expected.not_to be_closed }
+      end
+
+      context 'when the pull request is incompatible' do
+        before { subject.update :state => 'incompatible' }
+
+        it { is_expected.to be_closed }
+      end
+
       context 'when the pull request is open' do
         before { subject.update :state => 'open' }
 
