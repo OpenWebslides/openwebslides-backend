@@ -17,7 +17,7 @@ RSpec.describe Repository, :type => :model do
   ##
   # Test variables
   #
-  let(:topic) { build :topic }
+  let(:topic) { create :topic }
 
   ##
   # Tests
@@ -52,6 +52,16 @@ RSpec.describe Repository, :type => :model do
     describe '#index' do
       it 'returns the index path' do
         expect(repository.index).to eq File.join OpenWebslides.config.repository.path, topic.user.id.to_s, topic.id.to_s, 'content.yml'
+      end
+    end
+
+    describe '#==' do
+      context 'when the topics are equal' do
+        it { is_expected.to eq Repository.new(:topic => topic) }
+      end
+
+      context 'when the topics are not equal' do
+        it { is_expected.not_to eq Repository.new(:topic => create(:topic)) }
       end
     end
   end

@@ -45,6 +45,10 @@ class Repository < ApplicationEntity
   ##
   # Overrides
   #
+  def ==(other)
+    topic == other.topic
+  end
+
   ##
   # Helpers and callback methods
   #
