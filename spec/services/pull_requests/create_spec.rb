@@ -6,10 +6,12 @@ RSpec.describe PullRequests::Create do
   ##
   # Configuration
   #
+  include_context 'repository'
+
   ##
   # Test variables
   #
-  let(:pull_request) { build :pull_request }
+  let(:pull_request) { create :pull_request }
 
   ##
   # Subject
@@ -22,12 +24,21 @@ RSpec.describe PullRequests::Create do
   #
   context 'when the pull request is valid' do
     it 'persists the pull request to the database' do
+      allow(PullRequests::CheckWorker).to receive(:perform_async)
+
       subject.call pull_request
 
       expect(pull_request).to be_persisted
     end
 
+    it 'dispatches a background job' do
+      expect(PullRequests::CheckWorker).to receive(:perform_async).with pull_request.id
+
+      subject.call pull_request
+    end
+
     it 'creates appropriate notifications' do
+      allow(PullRequests::CheckWorker).to receive(:perform_async)
       expect(Notifications::SubmitPR).to receive(:call).with pull_request
 
       subject.call pull_request
@@ -39,6 +50,12 @@ RSpec.describe PullRequests::Create do
 
     it 'does not persist the pull request to the database' do
       expect(pull_request).not_to be_persisted
+
+      subject.call pull_request
+    end
+
+    it 'does not dispatch a background job' do
+      expect(PullRequests::CheckWorker).not_to receive :perform_async
 
       subject.call pull_request
     end
