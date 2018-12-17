@@ -94,7 +94,7 @@ RSpec.describe Oauth::OmniauthCallbacksController do
       allow(subject).to receive(:email)
         .and_return nil
 
-      expect { subject.send :retrieve_identity }.to raise_error
+      expect { subject.send :retrieve_identity }.to raise_error ArgumentError
     end
 
     it 'calls find_or_create_user and find_or_create_identity' do

@@ -42,7 +42,7 @@ module Oauth
 
     def retrieve_identity
       # TODO: i18n
-      raise 'no email' unless email
+      raise ArgumentError, 'no email' unless email
 
       find_or_create_user
       find_or_create_identity
