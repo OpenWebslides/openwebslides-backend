@@ -23,8 +23,12 @@ RSpec.describe Topics::UpdateContent do
   ##
   # Tests
   #
+  it 'writes the content to a file' do
+    subject.call topic, content, user, message
+  end
+
   it 'dispatches a background job' do
-    expect(Topics::UpdateContentWorker).to receive(:perform_async).with topic.id, content, user.id, message
+    expect(Topics::UpdateContentWorker).to receive(:perform_async).with topic.id, an_instance_of(String), user.id, message
 
     subject.call topic, content, user, message
   end
