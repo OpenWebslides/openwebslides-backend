@@ -8,8 +8,6 @@ class ApplicationController < ActionController::API
   include ErrorHandling
   include Versioning
 
-  before_bugsnag_notify :add_bugsnag_data if Rails.env.production?
-
   protected
 
   ##
@@ -55,10 +53,5 @@ class ApplicationController < ActionController::API
   #
   def verify_authorized_or_policy_scoped
     raise AuthorizationNotPerformedError, self.class unless pundit_policy_authorized? || pundit_policy_scoped?
-  end
-
-  def add_bugsnag_data(report)
-    # Add Docker host hostname
-    report.host = ENV['HOSTNAME']
   end
 end
