@@ -8,6 +8,8 @@ class ApplicationController < ActionController::API
   include ErrorHandling
   include Versioning
 
+  before_bugsnag_notify :add_bugsnag_data if Rails.env.production?
+
   protected
 
   ##
@@ -63,5 +65,10 @@ class ApplicationController < ActionController::API
       :current_user => current_user,
       :host => ENV['HOSTNAME']
     }
+  end
+
+  def add_bugsnag_data(report)
+    # Add Docker host hostname
+    report.host = ENV['HOSTNAME']
   end
 end

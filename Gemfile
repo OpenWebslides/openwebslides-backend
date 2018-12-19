@@ -148,4 +148,7 @@ group :production do
   # Notify ops team of exceptions
   gem 'exception_notification'
   gem 'slack-notifier'
+
+  # Error tracking
+  gem 'bugsnag'
 end

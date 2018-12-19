@@ -61,6 +61,8 @@ GEM
     bcrypt (3.1.12)
     bcrypt (3.1.12-x64-mingw32)
     brakeman (4.3.1)
+    bugsnag (6.10.0)
+      concurrent-ruby (~> 1.0)
     builder (3.2.3)
     bundler-audit (0.6.0)
       bundler (~> 1.2)
@@ -357,6 +359,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt
   brakeman
+  bugsnag
   bundler-audit
   byebug
   coveralls
