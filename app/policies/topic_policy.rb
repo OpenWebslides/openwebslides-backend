@@ -149,7 +149,7 @@ class TopicPolicy < ApplicationPolicy
     def resolve
       if @user
         # Users can see public topics, protected topics and collaborations
-        query = 'topics.access != "private" OR topics.user_id = ? OR access_grants.user_id = ?'
+        query = "topics.access != 'private' OR topics.user_id = ? OR access_grants.user_id = ?"
 
         scope.joins('LEFT OUTER JOIN grants access_grants ON access_grants.topic_id = topics.id')
              .where(query, @user.id, @user.id)
