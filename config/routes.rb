@@ -1,10 +1,17 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web' unless Rails.env.production?
+
 Rails.application.routes.draw do
   ##
   # Root
   #
   root :to => proc { [404, {}, []] }
+
+  ##
+  # Sidekiq UI
+  #
+  mount Sidekiq::Web => '/sidekiq' unless Rails.env.production?
 
   ##
   # OAuth2 endpoints
