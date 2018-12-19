@@ -57,16 +57,6 @@ class ApplicationController < ActionController::API
     raise AuthorizationNotPerformedError, self.class unless pundit_policy_authorized? || pundit_policy_scoped?
   end
 
-  ##
-  # Attach additional information to exception notifications
-  #
-  def prepare_exception_notifier
-    request.env['exception_notifier.exception_data'] = {
-      :current_user => current_user,
-      :host => ENV['HOSTNAME']
-    }
-  end
-
   def add_bugsnag_data(report)
     # Add Docker host hostname
     report.host = ENV['HOSTNAME']

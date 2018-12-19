@@ -145,10 +145,6 @@ group :production do
   # Use PostgreSQL as database
   gem 'pg'
 
-  # Notify ops team of exceptions
-  gem 'exception_notification'
-  gem 'slack-notifier'
-
   # Error tracking
   gem 'bugsnag'
 end
