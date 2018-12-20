@@ -7,11 +7,25 @@ class ApplicationResource < JSONAPI::Resource
   abstract
 
   ##
+  # Properties
+  #
+  class << self
+    # List of lambdas taking meta options and a resource instance, and returning a hash
+    attr_accessor :metadata
+  end
+
+  ##
   # Callbacks
   #
   ##
-  # Methods
+  # Overrides
   #
+  def initialize(model, context)
+    super model, context
+
+    @metadata = []
+  end
+
   def fetchable_fields
     # Omit null values
     super.reject { |f| self.class._attributes.key?(f) && public_send(f).nil? }
@@ -31,9 +45,23 @@ class ApplicationResource < JSONAPI::Resource
     end
   end
 
+  def meta(options)
+    super_meta = super options
+
+    if self.class.metadata
+      super_meta.merge self.class.metadata.map { |m| m.call options, self }.reduce({}, :merge)
+    else
+      super_meta
+    end
+  end
+
   class << self
     def records(options = {})
       ::Pundit.policy_scope!(options[:context][:user] || options[:context][:current_user], _model_class)
     end
   end
+
+  ##
+  # Methods
+  #
 end
