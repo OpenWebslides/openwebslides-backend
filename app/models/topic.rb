@@ -69,6 +69,10 @@ class Topic < ApplicationRecord
            :dependent => :destroy,
            :inverse_of => :source
 
+  has_many :alerts,
+           :dependent => :destroy,
+           :inverse_of => :topic
+
   ##
   # Validations
   #
