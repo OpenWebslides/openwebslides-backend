@@ -32,7 +32,7 @@ RSpec.describe PullRequestResource, :type => :resource do
   it { is_expected.to have_one :source }
   it { is_expected.to have_one :target }
 
-  it { is_expected.to respond_to :meta }
+  it { is_expected.to have_metadata :created_at => pull_request.created_at.to_i.to_s }
 
   describe 'fields' do
     it 'has a valid set of fetchable fields' do

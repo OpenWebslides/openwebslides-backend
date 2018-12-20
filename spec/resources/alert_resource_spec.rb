@@ -31,6 +31,8 @@ RSpec.describe AlertResource, :type => :resource do
   it { is_expected.to have_one :pull_request }
   it { is_expected.to have_one(:subject).with_class_name('User') }
 
+  it { is_expected.to have_metadata :created_at => alert.created_at.to_i.to_s }
+
   describe 'fields' do
     context 'when the alert is an UpdateAlert' do
       let(:alert) { create :update_alert }
@@ -60,7 +62,5 @@ RSpec.describe AlertResource, :type => :resource do
       expect(described_class.default_sort.first[:field]).to eq 'created_at'
       expect(described_class.default_sort.first[:direction]).to eq :desc
     end
-
-    it { is_expected.to respond_to :meta }
   end
 end

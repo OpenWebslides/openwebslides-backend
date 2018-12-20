@@ -4,6 +4,8 @@
 # Recent Activity feed resource
 #
 class FeedItemResource < ApplicationResource
+  include CreatedAt
+
   immutable
 
   ##
@@ -50,11 +52,5 @@ class FeedItemResource < ApplicationResource
 
   def topic_title
     @model.topic.title
-  end
-
-  def meta(options)
-    {
-      options[:serializer].key_formatter.format(:created_at) => DateValueFormatter.format(_model.created_at)
-    }
   end
 end

@@ -32,6 +32,8 @@ RSpec.describe AnnotationResource, :type => :resource do
   it { is_expected.to have_one :user }
   it { is_expected.to have_one :topic }
 
+  it { is_expected.to have_metadata :created_at => annotation.created_at.to_i.to_s }
+
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
       expect(subject.fetchable_fields).to match_array %i[id content_item_id user topic rating rated secret edited flagged deleted]
@@ -48,8 +50,6 @@ RSpec.describe AnnotationResource, :type => :resource do
     it 'should have a valid set of sortable fields' do
       expect(described_class.sortable_fields context).to match_array %i[id content_item_id rating rated secret edited flagged deleted]
     end
-
-    it { is_expected.to respond_to :meta }
   end
 
   describe 'filters' do
