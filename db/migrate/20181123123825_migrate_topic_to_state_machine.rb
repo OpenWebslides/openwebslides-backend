@@ -8,7 +8,11 @@ class MigrateTopicToStateMachine < ActiveRecord::Migration[5.2]
       map_state_to_access = {
         'public_access' => 'public',
         'protected_access' => 'protected',
-        'private_access' => 'private'
+        'private_access' => 'private',
+
+        0 => 'public',
+        1 => 'protected',
+        2 => 'private'
       }
 
       Topic.all.each do |topic|
