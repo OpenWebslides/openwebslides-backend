@@ -8,7 +8,8 @@ if Rails.env.production?
     # Hostname
     if File.exist? '/etc/dockerhosts'
       # Process is running in Docker container, parse Docker host /etc/hosts file
-      config.hostname = `grep '127\.0\.0\.1' /etc/dockerhosts | grep -v localhost | head -1 | awk '{print $2}'`
+      host = `grep '127\.[0-9]*\.[0-9]*\.[0-9]*' /etc/dockerhosts | grep -v localhost | head -1 | awk '{print $2}'`
+      config.hostname = host
     else
       config.hostname = `hostname --fqdn`
     end
