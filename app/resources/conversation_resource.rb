@@ -4,6 +4,8 @@
 # Conversation resource
 #
 class ConversationResource < AnnotationResource
+  include Metadata::CommentCount
+
   ##
   # Attributes
   #
@@ -33,14 +35,6 @@ class ConversationResource < AnnotationResource
 
   def self.updatable_fields(context = {})
     super(context) - %i[conversation_type comments]
-  end
-
-  def meta(options)
-    meta = {
-      options[:serializer].key_formatter.format(:comment_count) => _model.comments.count
-    }
-
-    super.merge meta
   end
 
   # Omit title when annotation is deleted

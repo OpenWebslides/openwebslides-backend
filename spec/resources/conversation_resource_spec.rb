@@ -34,6 +34,8 @@ RSpec.describe ConversationResource, :type => :resource do
   it { is_expected.to have_one :topic }
   it { is_expected.to have_many :comments }
 
+  it { is_expected.to have_metadata :comment_count => conversation.comments.count, :created_at => conversation.created_at.to_i.to_s }
+
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
       expect(subject.fetchable_fields).to match_array %i[id content_item_id user topic conversation_type title text comments rating rated secret edited flagged deleted]

@@ -4,6 +4,8 @@
 # Alert resource
 #
 class AlertResource < ApplicationResource
+  include Metadata::CreatedAt
+
   ##
   # Attributes
   #
@@ -39,11 +41,5 @@ class AlertResource < ApplicationResource
 
   def self.default_sort
     [{ :field => 'created_at', :direction => :desc }]
-  end
-
-  def meta(options)
-    {
-      options[:serializer].key_formatter.format(:created_at) => DateValueFormatter.format(_model.created_at)
-    }
   end
 end

@@ -4,6 +4,8 @@
 # Base annotation resource
 #
 class AnnotationResource < ApplicationResource
+  include Metadata::CreatedAt
+
   ##
   # Attributes
   #
@@ -42,12 +44,6 @@ class AnnotationResource < ApplicationResource
 
   def self.updatable_fields(context = {})
     super(context) - %i[content_item_id user topic rating rated edited flagged deleted]
-  end
-
-  def meta(options)
-    {
-      options[:serializer].key_formatter.format(:created_at) => DateValueFormatter.format(_model.created_at)
-    }
   end
 
   def rating

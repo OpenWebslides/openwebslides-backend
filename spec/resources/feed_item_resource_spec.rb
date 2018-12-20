@@ -34,6 +34,8 @@ RSpec.describe FeedItemResource, :type => :resource do
   it { is_expected.to have_one(:user) }
   it { is_expected.to have_one(:topic) }
 
+  it { is_expected.to have_metadata :created_at => feed_item.created_at.to_i.to_s }
+
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
       expect(subject.fetchable_fields).to match_array %i[id feed_item_type topic_title user_name topic user]
@@ -47,8 +49,6 @@ RSpec.describe FeedItemResource, :type => :resource do
       expect(described_class.default_sort.first[:field]).to eq 'created_at'
       expect(described_class.default_sort.first[:direction]).to eq :desc
     end
-
-    it { is_expected.to respond_to :meta }
   end
 
   describe 'filters' do

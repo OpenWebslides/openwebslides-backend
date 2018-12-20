@@ -32,6 +32,8 @@ RSpec.describe CommentResource, :type => :resource do
   it { is_expected.to have_one :topic }
   it { is_expected.to have_one :conversation }
 
+  it { is_expected.to have_metadata :created_at => comment.created_at.to_i.to_s }
+
   describe 'fields' do
     it 'should have a valid set of fetchable fields' do
       expect(subject.fetchable_fields).to match_array %i[id content_item_id user topic text conversation rating rated secret edited flagged deleted]

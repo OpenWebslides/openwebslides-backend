@@ -4,6 +4,8 @@
 # Pull request resource
 #
 class PullRequestResource < ApplicationResource
+  include Metadata::CreatedAt
+
   immutable
 
   ##
@@ -43,11 +45,5 @@ class PullRequestResource < ApplicationResource
 
   def self.sortable_fields(context)
     super(context) - %i[state_event message feedback]
-  end
-
-  def meta(options)
-    {
-      options[:serializer].key_formatter.format(:created_at) => DateValueFormatter.format(_model.created_at)
-    }
   end
 end
