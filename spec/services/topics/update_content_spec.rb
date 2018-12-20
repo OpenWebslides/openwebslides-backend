@@ -6,6 +6,8 @@ RSpec.describe Topics::UpdateContent do
   ##
   # Configuration
   #
+  include_context 'repository'
+
   ##
   # Subject
   #
@@ -14,7 +16,7 @@ RSpec.describe Topics::UpdateContent do
   #
   let(:topic) { create :topic }
   let(:user) { create :user }
-  let(:content) { ['content'] }
+  let(:content) { build :content }
   let(:message) { 'This is a message' }
 
   ##
@@ -23,13 +25,11 @@ RSpec.describe Topics::UpdateContent do
   ##
   # Tests
   #
-  it 'writes the content to a file' do
-    subject.call topic, content, user, message
-  end
+  before { Topics::Create.call topic }
 
   it 'dispatches a background job' do
     expect(Topics::UpdateContentWorker).to receive(:perform_async).with topic.id, an_instance_of(String), user.id, message
 
-    subject.call topic, content, user, message
+    subject.call topic, content.content, user, message
   end
 end
