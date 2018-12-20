@@ -6,6 +6,8 @@ RSpec.describe Topics::Fork do
   ##
   # Configuration
   #
+  include_context 'repository'
+
   ##
   # Test variables
   #
