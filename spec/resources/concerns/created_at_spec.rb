@@ -10,11 +10,11 @@ RSpec.describe CreatedAt do
   # Stubs and mocks
   #
   class CreatedAtTestClass < ApplicationResource
-    include CreatedAt
+    include Metadata::CreatedAt
   end
 
   class CreatedAtTestOverriddenClass < ApplicationResource
-    include CreatedAt
+    include Metadata::CreatedAt
 
     def meta(options)
       super(options).merge :foo => 'bar'

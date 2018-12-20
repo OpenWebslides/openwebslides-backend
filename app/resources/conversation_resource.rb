@@ -4,7 +4,7 @@
 # Conversation resource
 #
 class ConversationResource < AnnotationResource
-  include CommentCount
+  include Metadata::CommentCount
 
   ##
   # Attributes

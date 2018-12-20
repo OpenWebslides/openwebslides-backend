@@ -4,7 +4,7 @@
 # Alert resource
 #
 class AlertResource < ApplicationResource
-  include CreatedAt
+  include Metadata::CreatedAt
 
   ##
   # Attributes

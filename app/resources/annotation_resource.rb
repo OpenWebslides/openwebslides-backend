@@ -4,7 +4,7 @@
 # Base annotation resource
 #
 class AnnotationResource < ApplicationResource
-  include CreatedAt
+  include Metadata::CreatedAt
 
   ##
   # Attributes

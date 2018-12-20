@@ -4,7 +4,7 @@
 # Recent Activity feed resource
 #
 class FeedItemResource < ApplicationResource
-  include CreatedAt
+  include Metadata::CreatedAt
 
   immutable
 

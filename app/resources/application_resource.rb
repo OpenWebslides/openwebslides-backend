@@ -9,12 +9,6 @@ class ApplicationResource < JSONAPI::Resource
   ##
   # Properties
   #
-
-  # List of lambdas taking meta options and a resource instance, and returning a hash
-  class_attribute :metadata
-
-  self.metadata = []
-
   ##
   # Callbacks
   #
@@ -40,16 +34,6 @@ class ApplicationResource < JSONAPI::Resource
     end
   end
 
-  def meta(options)
-    super_meta = super options
-
-    if self.class.metadata
-      super_meta.merge self.class.metadata.map { |m| m.call options, self }.reduce({}, :merge)
-    else
-      super_meta
-    end
-  end
-
   class << self
     def records(options = {})
       ::Pundit.policy_scope!(options[:context][:user] || options[:context][:current_user], _model_class)
@@ -59,4 +43,30 @@ class ApplicationResource < JSONAPI::Resource
   ##
   # Methods
   #
+  ##
+  # Metadata
+  #
+  # JSONAPI::Resources allows specifying a `meta` method to allow defining metadata on a resource.
+  # In order to use composable metadata, every class descended from ApplicationResource will have
+  # a `metadata` attribute, containing an array of lambdas taking two arguments: `options` and `resource`.
+  # On resource serialization, these lambdas will be called and merged into the meta object.
+  #
+  # Please note that the setters (`+=`) should be used on the attribute to ensure the correct
+  # operation of Rails' `class_attribute`.
+  #
+  class_attribute :metadata
+
+  # Initialize to empty array
+  self.metadata = []
+
+  # Merge all metadata into a meta object
+  def meta(options)
+    super_meta = super options
+
+    if self.class.metadata
+      super_meta.merge self.class.metadata.map { |m| m.call options, self }.reduce({}, :merge)
+    else
+      super_meta
+    end
+  end
 end

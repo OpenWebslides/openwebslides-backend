@@ -4,7 +4,7 @@
 # Pull request resource
 #
 class PullRequestResource < ApplicationResource
-  include CreatedAt
+  include Metadata::CreatedAt
 
   immutable
 
