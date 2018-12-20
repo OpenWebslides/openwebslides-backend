@@ -9,10 +9,11 @@ class ApplicationResource < JSONAPI::Resource
   ##
   # Properties
   #
-  class << self
-    # List of lambdas taking meta options and a resource instance, and returning a hash
-    attr_accessor :metadata
-  end
+
+  # List of lambdas taking meta options and a resource instance, and returning a hash
+  class_attribute :metadata
+
+  self.metadata = []
 
   ##
   # Callbacks
@@ -20,12 +21,6 @@ class ApplicationResource < JSONAPI::Resource
   ##
   # Overrides
   #
-  def initialize(model, context)
-    super model, context
-
-    @metadata = []
-  end
-
   def fetchable_fields
     # Omit null values
     super.reject { |f| self.class._attributes.key?(f) && public_send(f).nil? }

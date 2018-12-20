@@ -3,7 +3,11 @@
 require 'rspec/expectations'
 
 RSpec::Matchers.define :have_metadata do |metadata|
-  match do |resource|
-    expect(resource.meta(:serializer => DummySerializer.new)).to include metadata
+  match do |actual|
+    @actual = actual.meta(:serializer => DummySerializer.new)
+
+    expect(@actual).to include metadata
   end
+
+  diffable
 end

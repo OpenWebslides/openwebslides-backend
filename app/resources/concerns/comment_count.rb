@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 ##
-# Add a `created_at` metadata attribute
+# Add a `comment_count` metadata attribute
 #
-module CreatedAt
+module CommentCount
   extend ActiveSupport::Concern
 
   included do
     # Add an entry lambda to resource metadata
     self.metadata += [lambda do |options, resource|
       {
-        options[:serializer].key_formatter.format(:created_at) => DateValueFormatter.format(resource._model.created_at)
+        options[:serializer].key_formatter.format(:comment_count) => resource._model.comments.count
       }
     end]
   end
