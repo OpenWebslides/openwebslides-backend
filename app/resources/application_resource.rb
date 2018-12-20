@@ -64,7 +64,12 @@ class ApplicationResource < JSONAPI::Resource
     super_meta = super options
 
     if self.class.metadata
-      super_meta.merge self.class.metadata.map { |m| m.call options, self }.reduce({}, :merge)
+      metadata = self.class.metadata
+                     .map { |m| m.call options, self }
+                     .reduce({}, :merge)
+                     .transform_keys { |k| options[:serializer].key_formatter.format k }
+
+      super_meta.merge metadata
     else
       super_meta
     end

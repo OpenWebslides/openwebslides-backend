@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CreatedAt do
+RSpec.describe Metadata::CreatedAt do
   ##
   # Configuration
   #

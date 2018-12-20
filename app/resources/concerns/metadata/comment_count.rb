@@ -9,9 +9,9 @@ module Metadata
 
     included do
       # Add an entry lambda to resource metadata
-      self.metadata += [lambda do |options, resource|
+      self.metadata += [lambda do |_options, resource|
         {
-          options[:serializer].key_formatter.format(:comment_count) => resource._model.comments.count
+          :comment_count => resource._model.comments.count
         }
       end]
     end
