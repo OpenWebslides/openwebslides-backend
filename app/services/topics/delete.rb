@@ -6,11 +6,8 @@ module Topics
   #
   class Delete < ApplicationService
     def call(topic)
-      # Delete in filesystem
-      Repository::Delete.call topic
-
-      # Delete in database
-      topic.destroy
+      # Dispatch job to delete in database and filesystem
+      Topics::DeleteWorker.perform_async topic.id
     end
   end
 end

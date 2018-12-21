@@ -20,8 +20,8 @@ MODEL_BLACKLIST = [
 # Relations without API interaction
 #
 ACTION_BLACKLIST = {
-  UserPolicy => %i[show_identities? show_grants? show_ratings?],
-  TopicPolicy => %i[show_grants?],
+  UserPolicy => %i[show_identities? show_grants? show_ratings? show_alerts?],
+  TopicPolicy => %i[show_grants? show_alerts?],
   AnnotationPolicy => %i[show_ratings?],
   ConversationPolicy => %i[show_ratings?],
   CommentPolicy => %i[show_ratings?],

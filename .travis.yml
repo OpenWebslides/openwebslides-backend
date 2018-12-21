@@ -2,7 +2,7 @@ language: ruby
 cache:
   bundler: true
 rvm:
-  - 2.5.0
+  - 2.5.3
 before_script:
   - (git submodule init && git submodule update)
   - mkdir data

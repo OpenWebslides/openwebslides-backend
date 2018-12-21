@@ -6,8 +6,6 @@ RSpec.describe Topics::Delete do
   ##
   # Configuration
   #
-  include_context 'repository'
-
   ##
   # described_class
   #
@@ -22,24 +20,9 @@ RSpec.describe Topics::Delete do
   ##
   # Tests
   #
-  before { Repository::Create.call topic }
+  it 'dispatches a background job' do
+    expect(Topics::DeleteWorker).to receive(:perform_async).with an_instance_of Integer
 
-  it 'destroys the topic in the database' do
-    described_class.call topic
-
-    expect(topic).to be_destroyed
-  end
-
-  it 'deletes the topic in the filesystem' do
-    expect(Repository::Delete).to receive(:call).with topic
-
-    described_class.call topic
-  end
-
-  describe 'return value' do
-    subject { described_class.call topic }
-
-    it { is_expected.to be_instance_of Topic }
-    it { is_expected.to be_valid }
+    subject.call topic
   end
 end

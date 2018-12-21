@@ -11,11 +11,11 @@ services:
     environment:
       - RAILS_ENV=production
       - NODE_ENV=production
-      - HOSTNAME=`hostname -f`
     volumes:
       - public:/app/public/
       - data:/app/data/
       - uploads:/app/tmp/uploads/
+      - /etc/hosts:/etc/dockerhosts
     depends_on:
       - postgres
       - sidekiq
@@ -44,11 +44,11 @@ services:
     environment:
       - RAILS_ENV=production
       - NODE_ENV=production
-      - HOSTNAME=`hostname -f`
     volumes:
       - /var/run/postgresql/:/var/run/postgresql/
       - data:/app/data/
       - uploads:/app/tmp/uploads/
+      - /etc/hosts:/etc/dockerhosts
     depends_on:
       - postgres
       - redis

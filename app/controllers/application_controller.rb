@@ -54,14 +54,4 @@ class ApplicationController < ActionController::API
   def verify_authorized_or_policy_scoped
     raise AuthorizationNotPerformedError, self.class unless pundit_policy_authorized? || pundit_policy_scoped?
   end
-
-  ##
-  # Attach additional information to exception notifications
-  #
-  def prepare_exception_notifier
-    request.env['exception_notifier.exception_data'] = {
-      :current_user => current_user,
-      :host => ENV['HOSTNAME']
-    }
-  end
 end

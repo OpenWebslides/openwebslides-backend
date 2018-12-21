@@ -143,6 +143,7 @@ RSpec.describe Topic, :type => :model do
     it { is_expected.to have_many(:conversations).inverse_of :topic }
     it { is_expected.to have_many(:incoming_pull_requests).inverse_of(:target).class_name('PullRequest').dependent :destroy }
     it { is_expected.to have_many(:outgoing_pull_requests).inverse_of(:source).class_name('PullRequest').dependent :destroy }
+    it { is_expected.to have_many(:alerts).inverse_of(:topic).dependent :destroy }
 
     context 'when the upstream is not a fork' do
       subject { build :topic, :upstream => topic }

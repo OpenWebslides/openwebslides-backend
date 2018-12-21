@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '>= 2.3.3'
+ruby '~> 2.5'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
@@ -36,6 +36,7 @@ gem 'rugged'
 gem 'jsonapi-utils'
 
 # Asynchronous processing
+gem 'redis'
 gem 'sidekiq'
 
 # Filename sanitization
@@ -144,7 +145,6 @@ group :production do
   # Use PostgreSQL as database
   gem 'pg'
 
-  # Notify ops team of exceptions
-  gem 'exception_notification'
-  gem 'slack-notifier'
+  # Error tracking
+  gem 'bugsnag'
 end

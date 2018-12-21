@@ -44,8 +44,8 @@ RSpec.describe Topics::Fork do
     end
   end
 
-  it 'calls Notifications::Fork' do
-    expect(Notifications::ForkTopic).to receive(:call).with instance_of Topic
+  it 'dispatches a background job' do
+    expect(Topics::ForkWorker).to receive(:perform_async).with topic.id, instance_of(Integer)
 
     subject.call topic, user
   end
