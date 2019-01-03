@@ -29,8 +29,6 @@ RSpec.describe Repo::Filesystem::Read do
   end
 
   context 'when the repository already exists' do
-    subject { described_class.call repo }
-
     before do
       FileUtils.mkdir_p repo.content_path
 
