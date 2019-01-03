@@ -37,22 +37,22 @@ RSpec.describe FeedItemResource, :type => :resource do
   it { is_expected.to have_metadata :created_at => feed_item.created_at.to_i.to_s }
 
   describe 'fields' do
-    it 'should have a valid set of fetchable fields' do
+    it 'has a valid set of fetchable fields' do
       expect(subject.fetchable_fields).to match_array %i[id feed_item_type topic_title user_name topic user]
     end
 
-    it 'should have a valid set of sortable fields' do
+    it 'has a valid set of sortable fields' do
       expect(described_class.sortable_fields context).to match_array %i[created_at]
     end
 
-    it 'should sort on descending :created_at by default' do
+    it 'sorts on descending :created_at by default' do
       expect(described_class.default_sort.first[:field]).to eq 'created_at'
       expect(described_class.default_sort.first[:direction]).to eq :desc
     end
   end
 
   describe 'filters' do
-    it 'should have a valid set of filters' do
+    it 'has a valid set of filters' do
       expect(described_class.filters.keys).to match_array %i[id feed_item_type topic user]
     end
 

@@ -81,10 +81,6 @@ RSpec.describe User, :type => :model do
     it { is_expected.to have_many(:annotations).inverse_of(:user).dependent :destroy }
     it { is_expected.to have_many(:ratings).inverse_of(:user).dependent :destroy }
     it { is_expected.to have_many(:alerts).inverse_of(:user).dependent :destroy }
-
-    it 'has an email identity after creating' do
-      expect(user.identities.first&.provider).to eq 'email'
-    end
   end
 
   describe 'methods' do
@@ -98,8 +94,8 @@ RSpec.describe User, :type => :model do
       context 'when the user is unconfirmed' do
         subject(:user) { create :user }
 
-        it 'raises an UnconfirmedError' do
-          expect { User.find_by_token :id => user.id }.to raise_error JSONAPI::Exceptions::UnconfirmedError
+        it 'returns nil' do
+          expect(User.find_by_token :id => user.id).to be_nil
         end
       end
 

@@ -1,3 +1,4 @@
+require: rubocop-rspec
 AllCops:
   Exclude:
     - db/schema.rb
@@ -31,6 +32,9 @@ Naming/UncommunicativeMethodParamName:
 
 Rails/HasAndBelongsToMany:
   Enabled: False
+
+RSpec/NestedGroups:
+  Max: 4
 
 Style/HashSyntax:
   EnforcedStyle: hash_rockets

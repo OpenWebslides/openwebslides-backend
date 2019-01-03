@@ -6,7 +6,7 @@ RSpec.describe FeedItemsController do
   let(:user) { create :user, :confirmed }
   let(:feed_item) { create :feed_item }
 
-  before :each do
+  before do
     allow(controller).to receive(:verify_accept_header_version).and_return true
   end
 

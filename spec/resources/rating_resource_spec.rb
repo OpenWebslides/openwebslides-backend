@@ -29,7 +29,7 @@ RSpec.describe RatingResource, :type => :resource do
   it { is_expected.to have_one :user }
 
   describe 'fields' do
-    it 'should have a valid set of creatable fields' do
+    it 'has a valid set of creatable fields' do
       expect(described_class.creatable_fields).to match_array %i[annotation user]
     end
   end

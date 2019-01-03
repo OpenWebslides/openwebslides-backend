@@ -82,44 +82,28 @@ class User < ApplicationRecord
   ##
   # Callbacks
   #
-  before_create :create_email_identity
   after_initialize :set_default_locale
 
   ##
   # Methods
   #
   def self.find_by_token(params)
-    user = find_by params
-    return nil unless user
-
-    # TODO: raise another error and move this to the controller or something
-    raise JSONAPI::Exceptions::UnconfirmedError unless user.confirmed?
-
-    user
-  end
-
-  # TODO: deprecate in favor of #increment(:token_version)
-  def increment_token_version
-    self.token_version += 1
-  end
-
-  # TODO: deprecate in favor of #increment(:token_version)
-  def increment_token_version!
-    increment_token_version
-    save!
+    confirmed.find_by params
   end
 
   ##
   # Overrides
   #
   def password=(new_password)
-    increment_token_version
+    increment :token_version
     super new_password
   end
 
   ##
   # Helpers and callback methods
   #
+  scope :confirmed, -> { where.not(:confirmed_at => nil) }
+
   def readonly_email
     errors.add :email, I18n.t('openwebslides.validations.user.readonly_email') if email_changed?
   end
@@ -131,10 +115,6 @@ class User < ApplicationRecord
   end
 
   private
-
-  def create_email_identity
-    identities.build :provider => 'email', :uid => email
-  end
 
   def set_default_locale
     self.locale = 'en' if locale.blank?

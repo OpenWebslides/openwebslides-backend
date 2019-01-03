@@ -9,13 +9,14 @@ RSpec.describe Oauth::OmniauthCallbacksController do
   ##
   # Test variables
   #
+  subject { described_class.new }
+
   let(:user) { create :user, :with_identities }
   let(:auth_hash) { {} }
 
   ##
   # Test subject
   #
-  subject { described_class.new }
 
   ##
   # Mocks and stubs

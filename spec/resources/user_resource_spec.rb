@@ -10,10 +10,13 @@ RSpec.describe UserResource, :type => :resource do
   # Stubs and mocks
   #
   ##
-  # Test variables
+  # Subject
   #
   subject(:resource) { described_class.new user, context }
 
+  ##
+  # Test variables
+  #
   let(:user) { create :user }
   let(:context) { {} }
 

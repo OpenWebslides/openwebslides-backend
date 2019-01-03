@@ -2,12 +2,22 @@
 
 FactoryBot.define do
   factory :topic do
+    ##
+    # Attributes
+    #
     title { Faker::Lorem.words(4).join ' ' }
     description { Faker::Lorem.words(20).join ' ' }
     root_content_item_id { Faker::Lorem.words(3).join '' }
-    user { build :user, :confirmed }
     access { :public }
 
+    ##
+    # Associations
+    #
+    user { build :user, :confirmed }
+
+    ##
+    # Traits
+    #
     trait :with_collaborators do
       collaborators { build_list :user, 3 }
     end
@@ -19,5 +29,9 @@ FactoryBot.define do
     trait :with_conversations do
       conversations { build_list :conversation, 3 }
     end
+
+    ##
+    # Factories
+    #
   end
 end

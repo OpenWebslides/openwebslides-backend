@@ -31,6 +31,7 @@ RSpec.describe Repository::Filesystem::Fork do
 
   context 'when the downstream repository exists' do
     before { Repository::Create.call repo.topic }
+
     before { Repository::Create.call fork.topic }
 
     it 'raises a RepoExistsError' do

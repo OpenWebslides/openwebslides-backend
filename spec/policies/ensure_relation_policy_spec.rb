@@ -37,6 +37,7 @@ RSpec.describe 'relationship policy actions' do
     model.reflect_on_all_associations.each do |relation|
       describe policy_class do
         let(:subject) { policy_class.new nil, nil }
+
         action = :"show_#{relation.name}?"
 
         unless ACTION_BLACKLIST.key?(policy_class) && ACTION_BLACKLIST[policy_class].include?(action)
@@ -50,6 +51,7 @@ RSpec.describe 'relationship policy actions' do
 
       describe "#{inverse_policy_class} (inverse)" do
         let(:subject) { inverse_policy_class.new nil, nil }
+
         action = :"show_#{relation.inverse_of.name}?"
 
         unless ACTION_BLACKLIST.key?(inverse_policy_class) && ACTION_BLACKLIST[inverse_policy_class].include?(action)
