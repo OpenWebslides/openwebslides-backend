@@ -33,7 +33,7 @@ RSpec.describe Topics::UpdateContentWorker do
   end
 
   it 'updates the content in the filesystem' do
-    expect(Repository::Update).to receive(:call).with topic, 'foo', user, message
+    expect(Repo::Update).to receive(:call).with topic, 'foo', user, message
 
     subject.perform topic.id, file, user.id, message
   end
@@ -46,7 +46,7 @@ RSpec.describe Topics::UpdateContentWorker do
   end
 
   it 'deletes the temporary file' do
-    allow(Repository::Update).to receive :call
+    allow(Repo::Update).to receive :call
 
     subject.perform topic.id, file, user.id, message
 

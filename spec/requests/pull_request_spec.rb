@@ -6,6 +6,8 @@ RSpec.describe 'Pull Request API', :type => :request do
   ##
   # Configuration
   #
+  include_context 'repository'
+
   ##
   # Stubs and mocks
   #
@@ -22,6 +24,9 @@ RSpec.describe 'Pull Request API', :type => :request do
   let(:feedback) { Faker::Lorem.words(20).join ' ' }
 
   before do
+    Repo::Create.call source
+    Repo::Create.call target
+
     pr.source.collaborators << user
     pr.target.collaborators << user
 
