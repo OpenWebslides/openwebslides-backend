@@ -25,10 +25,22 @@ RSpec.describe PullRequest, :type => :model do
   describe 'attributes' do
     it { is_expected.to validate_presence_of(:message) }
 
+    context 'when the PR is pending' do
+      before { subject.update :state => 'pending' }
+
+      it { is_expected.to validate_absence_of :feedback }
+    end
+
+    context 'when the PR is incompatible' do
+      before { subject.update :state => 'incompatible' }
+
+      it { is_expected.to validate_absence_of :feedback }
+    end
+
     context 'when the PR is open' do
       before { subject.update :state => 'open' }
 
-      it { is_expected.not_to validate_presence_of :feedback }
+      it { is_expected.to validate_absence_of :feedback }
     end
 
     context 'when the PR is accepted' do
@@ -103,8 +115,18 @@ RSpec.describe PullRequest, :type => :model do
       it { is_expected.not_to be_valid }
     end
 
+    context 'when source already has a pending pull request' do
+      let(:pull_request) { create :pull_request, :state => 'pending' }
+      let(:subject) { build :pull_request, :source => pull_request.source, :target => pull_request.target }
+
+      # Reload source topic to refetch associations
+      before { pull_request.source.reload }
+
+      it { is_expected.not_to be_valid }
+    end
+
     context 'when source already has an open pull request' do
-      let(:pull_request) { create :pull_request }
+      let(:pull_request) { create :pull_request, :state => 'open' }
       let(:subject) { build :pull_request, :source => pull_request.source, :target => pull_request.target }
 
       # Reload source topic to refetch associations
@@ -115,7 +137,15 @@ RSpec.describe PullRequest, :type => :model do
   end
 
   describe 'state machine' do
-    it { is_expected.to have_states :open, :accepted, :rejected }
+    it { is_expected.to have_states :pending, :open, :accepted, :rejected }
+
+    context 'when the pull request is pending' do
+      it { is_expected.to reject_events :accept, :reject, :when => :pending }
+    end
+
+    context 'when the pull request is incompatible' do
+      it { is_expected.to reject_events :accept, :reject, :when => :incompatible }
+    end
 
     context 'when the pull request is open' do
       # Rejection needs feedback
@@ -138,6 +168,18 @@ RSpec.describe PullRequest, :type => :model do
 
   describe 'methods' do
     describe '#closed?' do
+      context 'when the pull request is pending' do
+        before { subject.update :state => 'pending' }
+
+        it { is_expected.not_to be_closed }
+      end
+
+      context 'when the pull request is incompatible' do
+        before { subject.update :state => 'incompatible' }
+
+        it { is_expected.to be_closed }
+      end
+
       context 'when the pull request is open' do
         before { subject.update :state => 'open' }
 

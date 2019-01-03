@@ -9,7 +9,7 @@ module Topics
       topic = Topic.find topic_id
 
       # Persist to file system
-      Repository::Create.call topic
+      Repo::Create.call topic
 
       # Generate appropriate notifications
       Notifications::CreateTopic.call topic

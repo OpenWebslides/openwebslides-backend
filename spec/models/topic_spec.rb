@@ -199,7 +199,7 @@ RSpec.describe Topic, :type => :model do
     end
 
     describe '#pull_request' do
-      let(:open_pr) { create :pull_request, :source => fork, :target => topic }
+      let(:open_pr) { create :pull_request, :source => fork, :target => topic, :state => 'open' }
 
       before do
         create :pull_request, :source => fork, :target => topic, :state => 'rejected', :feedback => 'feedback'

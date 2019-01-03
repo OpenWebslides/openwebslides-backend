@@ -23,10 +23,10 @@ RSpec.describe Topics::ForkWorker do
   ##
   # Tests
   #
-  before { Repository::Create.call topic }
+  before { Repo::Create.call topic }
 
   it 'persists the topic to the filesystem' do
-    expect(Repository::Fork).to receive(:call).with topic, fork
+    expect(Repo::Fork).to receive(:call).with topic, fork
 
     subject.perform topic.id, fork.id
   end

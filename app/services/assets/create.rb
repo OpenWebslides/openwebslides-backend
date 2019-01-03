@@ -6,15 +6,14 @@ module Assets
   #
   class Create < ApplicationService
     include Helpers::Lockable
-    include Helpers::Committable
 
     def call(asset, user, file)
       write_lock asset.topic do
-        repo = repo_for asset.topic
+        repo = Repository.new :topic => asset.topic
 
         if asset.save
           # Persist to filesystem
-          Repository::Asset::UpdateFile.call repo, asset, user, file.path
+          Repo::Asset::UpdateFile.call repo, asset, user, file.path
         end
       end
 

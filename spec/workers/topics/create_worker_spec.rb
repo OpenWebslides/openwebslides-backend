@@ -23,7 +23,7 @@ RSpec.describe Topics::CreateWorker do
   # Tests
   #
   it 'persists the topic to the filesystem' do
-    expect(Repository::Create).to receive(:call).with topic
+    expect(Repo::Create).to receive(:call).with topic
 
     subject.perform topic.id
   end

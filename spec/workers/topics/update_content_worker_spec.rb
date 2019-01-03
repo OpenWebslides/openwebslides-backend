@@ -26,27 +26,27 @@ RSpec.describe Topics::UpdateContentWorker do
   # Tests
   #
   before do
-    Repository::Create.call topic
+    Repo::Create.call topic
 
     # Write temporary content file
     File.write file, 'foo'
   end
 
   it 'updates the content in the filesystem' do
-    expect(Repository::Update).to receive(:call).with topic, 'foo', user, message
+    expect(Repo::Update).to receive(:call).with topic, 'foo', user, message
 
     subject.perform topic.id, file, user.id, message
   end
 
   it 'creates appropriate notifications' do
-    allow(Repository::Update).to receive(:call)
+    allow(Repo::Update).to receive(:call)
     expect(Notifications::UpdateTopic).to receive(:call).with topic, user
 
     subject.perform topic.id, file, user.id, message
   end
 
   it 'deletes the temporary file' do
-    allow(Repository::Update).to receive :call
+    allow(Repo::Update).to receive :call
 
     subject.perform topic.id, file, user.id, message
 
