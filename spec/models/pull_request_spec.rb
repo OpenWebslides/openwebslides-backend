@@ -167,35 +167,40 @@ RSpec.describe PullRequest, :type => :model do
   end
 
   describe 'methods' do
-    describe '#closed?' do
+    describe '#closed? and #open?' do
       context 'when the pull request is pending' do
         before { subject.update :state => 'pending' }
 
         it { is_expected.not_to be_closed }
+        it { is_expected.to be_open }
       end
 
       context 'when the pull request is incompatible' do
         before { subject.update :state => 'incompatible' }
 
         it { is_expected.to be_closed }
+        it { is_expected.not_to be_open }
       end
 
       context 'when the pull request is ready' do
         before { subject.update :state => 'ready' }
 
         it { is_expected.not_to be_closed }
+        it { is_expected.to be_open }
       end
 
       context 'when the pull request is accepted' do
         before { subject.update :state => 'accepted' }
 
         it { is_expected.to be_closed }
+        it { is_expected.not_to be_open }
       end
 
       context 'when the pull request is rejected' do
         before { subject.update :state => 'rejected' }
 
         it { is_expected.to be_closed }
+        it { is_expected.not_to be_open }
       end
     end
   end

@@ -127,7 +127,7 @@ class Topic < ApplicationRecord
 
   # Find read outgoing pull request
   def pull_request
-    outgoing_pull_requests.find(&:ready?)
+    outgoing_pull_requests.find(&:open?)
   end
 
   ##

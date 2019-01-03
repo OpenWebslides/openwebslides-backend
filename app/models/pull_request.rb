@@ -64,7 +64,7 @@ class PullRequest < ApplicationRecord
 
   validate :target_is_upstream_source
 
-  validate :source_has_one_ready_pr,
+  validate :source_has_one_open_pr,
            :on => :create
 
   validate :feedback_updated_only_on_state_change,
@@ -76,6 +76,10 @@ class PullRequest < ApplicationRecord
   ##
   # Methods
   #
+  def open?
+    pending? || ready?
+  end
+
   def closed?
     incompatible? || accepted? || rejected?
   end
@@ -92,10 +96,10 @@ class PullRequest < ApplicationRecord
     errors.add :source, I18n.t('openwebslides.validations.pull_request.target_is_upstream_source')
   end
 
-  def source_has_one_ready_pr
-    return unless source&.outgoing_pull_requests&.any? { |pr| pr.pending? || pr.ready? }
+  def source_has_one_open_pr
+    return unless source&.outgoing_pull_requests&.any?(&:open?)
 
-    errors.add :source, I18n.t('openwebslides.validations.pull_request.source_has_one_ready_pr')
+    errors.add :source, I18n.t('openwebslides.validations.pull_request.source_has_one_open_pr')
   end
 
   def feedback_updated_only_on_state_change

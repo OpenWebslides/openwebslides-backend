@@ -204,10 +204,10 @@ RSpec.describe Topic, :type => :model do
         create :pull_request, :source => fork, :target => topic, :state => 'accepted'
       end
 
-      context 'when there is a ready pull request' do
+      context 'when there is an open pull request' do
         let(:pr) { create :pull_request, :source => fork, :target => topic, :state => 'ready' }
 
-        it 'returns the only ready outgoing pull request' do
+        it 'returns the only open outgoing pull request' do
           # Reload objects to refetch associations
           pr.reload
           fork.reload
@@ -216,7 +216,7 @@ RSpec.describe Topic, :type => :model do
         end
       end
 
-      context 'when there is no ready pull request' do
+      context 'when there is no open pull request' do
         it 'returns nil' do
           # Don't reload objects
           expect(fork.pull_request).to be_nil
