@@ -34,7 +34,7 @@ Rails/HasAndBelongsToMany:
   Enabled: False
 
 RSpec/NestedGroups:
-  Max: 4
+  Max: 6
 
 Style/HashSyntax:
   EnforcedStyle: hash_rockets
