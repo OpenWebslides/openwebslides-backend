@@ -63,8 +63,8 @@ RSpec.describe PullRequestResource, :type => :resource do
     end
 
     it 'verifies state' do
-      expect(verify.call(%w[open foo accepted bar rejected], {}))
-        .to match_array %w[open accepted rejected]
+      expect(verify.call(%w[ready foo accepted bar rejected], {}))
+        .to match_array %w[ready accepted rejected]
     end
   end
 end

@@ -37,8 +37,8 @@ RSpec.describe PullRequest, :type => :model do
       it { is_expected.to validate_absence_of :feedback }
     end
 
-    context 'when the PR is open' do
-      before { subject.update :state => 'open' }
+    context 'when the PR is ready' do
+      before { subject.update :state => 'ready' }
 
       it { is_expected.to validate_absence_of :feedback }
     end
@@ -56,24 +56,24 @@ RSpec.describe PullRequest, :type => :model do
     end
 
     describe 'feedback can only be updated on state change' do
-      context 'from `open` to `open`' do
-        subject { create :pull_request, :state => 'open' }
+      context 'from `ready` to `ready`' do
+        subject { create :pull_request, :state => 'ready' }
 
         it 'rejects update on feedback' do
           expect { subject.update! :feedback => 'feedback' }.to raise_error ActiveRecord::RecordInvalid
         end
       end
 
-      context 'from `open` to `accepted`' do
-        subject { create :pull_request, :state => 'open' }
+      context 'from `ready` to `accepted`' do
+        subject { create :pull_request, :state => 'ready' }
 
         it 'accepts update on feedback' do
           expect { subject.update! :state_event => 'accept', :feedback => 'feedback' }.not_to raise_error
         end
       end
 
-      context 'from `open` to `rejected`' do
-        subject { create :pull_request, :state => 'open' }
+      context 'from `ready` to `rejected`' do
+        subject { create :pull_request, :state => 'ready' }
 
         it 'accepts update on feedback' do
           expect { subject.update! :state_event => 'reject', :feedback => 'feedback' }.not_to raise_error
@@ -125,8 +125,8 @@ RSpec.describe PullRequest, :type => :model do
       it { is_expected.not_to be_valid }
     end
 
-    context 'when source already has an open pull request' do
-      let(:pull_request) { create :pull_request, :state => 'open' }
+    context 'when source already has a ready pull request' do
+      let(:pull_request) { create :pull_request, :state => 'ready' }
       let(:subject) { build :pull_request, :source => pull_request.source, :target => pull_request.target }
 
       # Reload source topic to refetch associations
@@ -137,7 +137,7 @@ RSpec.describe PullRequest, :type => :model do
   end
 
   describe 'state machine' do
-    it { is_expected.to have_states :pending, :open, :accepted, :rejected }
+    it { is_expected.to have_states :pending, :ready, :accepted, :rejected }
 
     context 'when the pull request is pending' do
       it { is_expected.to reject_events :accept, :reject, :when => :pending }
@@ -147,14 +147,14 @@ RSpec.describe PullRequest, :type => :model do
       it { is_expected.to reject_events :accept, :reject, :when => :incompatible }
     end
 
-    context 'when the pull request is open' do
+    context 'when the pull request is ready' do
       # Rejection needs feedback
       before { subject.feedback = 'feedback' }
 
-      it { is_expected.to handle_events :accept, :reject, :when => :open }
+      it { is_expected.to handle_events :accept, :reject, :when => :ready }
 
-      it { is_expected.to transition_from :open, :to_state => :accepted, :on_event => :accept }
-      it { is_expected.to transition_from :open, :to_state => :rejected, :on_event => :reject }
+      it { is_expected.to transition_from :ready, :to_state => :accepted, :on_event => :accept }
+      it { is_expected.to transition_from :ready, :to_state => :rejected, :on_event => :reject }
     end
 
     context 'when the pull request is accepted' do
@@ -180,8 +180,8 @@ RSpec.describe PullRequest, :type => :model do
         it { is_expected.to be_closed }
       end
 
-      context 'when the pull request is open' do
-        before { subject.update :state => 'open' }
+      context 'when the pull request is ready' do
+        before { subject.update :state => 'ready' }
 
         it { is_expected.not_to be_closed }
       end
