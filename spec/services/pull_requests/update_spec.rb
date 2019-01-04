@@ -30,6 +30,12 @@ RSpec.describe PullRequests::Update do
         expect(pull_request).to be_persisted
       end
 
+      it 'dispatches a background job to merge the pull request' do
+        expect(PullRequests::MergeWorker).to receive(:perform_async).with pull_request.id
+
+        subject.call pull_request, params
+      end
+
       it 'creates appropriate notifications' do
         expect(Notifications::AcceptPR).to receive(:call).with pull_request
 
