@@ -47,7 +47,7 @@ class PullRequest < ApplicationRecord
 
     # Accept/approve a pull request
     event :accept do
-      transition :ready => :accepted
+      transition :ready => :working
     end
 
     # Reject a pull request

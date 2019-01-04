@@ -161,7 +161,7 @@ RSpec.describe PullRequest, :type => :model do
 
       it { is_expected.to handle_events :accept, :reject, :when => :ready }
 
-      it { is_expected.to transition_from :ready, :to_state => :accepted, :on_event => :accept }
+      it { is_expected.to transition_from :ready, :to_state => :working, :on_event => :accept }
       it { is_expected.to transition_from :ready, :to_state => :rejected, :on_event => :reject }
     end
 
