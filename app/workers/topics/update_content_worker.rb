@@ -15,6 +15,13 @@ module Topics
       # Update in filesystem
       Repo::Update.call topic, content, user, message
 
+      # Trigger a PR recheck on open incoming/outgoing pull requests
+      PullRequest.where(:source => topic)
+                 .or(PullRequest.where(:target => topic))
+                 .select(&:open?).each do |pull_request|
+        PullRequests::CheckWorker.perform_async pull_request.id
+      end
+
       # Generate appropriate notifications
       Notifications::UpdateTopic.call topic, user
 
