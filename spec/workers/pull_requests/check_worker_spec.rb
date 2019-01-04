@@ -21,7 +21,7 @@ RSpec.describe PullRequests::CheckWorker do
   # Tests
   #
   context 'when the pull request source is compatible with the target' do
-    it 'sets the pull request state to open' do
+    it 'sets the pull request state to ready' do
       expect(Repo::Check).to receive(:call)
         .with(pull_request.source, pull_request.target)
         .and_return true
@@ -29,7 +29,7 @@ RSpec.describe PullRequests::CheckWorker do
       subject.perform pull_request.id
 
       pull_request.reload
-      expect(pull_request).to have_attributes :state => 'open'
+      expect(pull_request).to have_attributes :state => 'ready'
     end
   end
 

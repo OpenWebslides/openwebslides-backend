@@ -9,7 +9,7 @@ RSpec.describe PullRequests::Update do
   ##
   # Test variables
   #
-  let(:pull_request) { create :pull_request, :state => 'open' }
+  let(:pull_request) { create :pull_request, :state => 'ready' }
 
   ##
   # Subject

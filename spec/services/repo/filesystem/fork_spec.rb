@@ -30,8 +30,10 @@ RSpec.describe Repo::Filesystem::Fork do
   end
 
   context 'when the downstream repository exists' do
-    before { Repo::Create.call repo.topic }
-    before { Repo::Create.call fork.topic }
+    before do
+      Repo::Create.call repo.topic
+      Repo::Create.call fork.topic
+    end
 
     it 'raises a RepoExistsError' do
       expect { subject.call repo, fork }.to raise_error OpenWebslides::Repo::RepoExistsError

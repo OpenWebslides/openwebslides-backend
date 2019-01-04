@@ -17,8 +17,8 @@ module Repo
           source_set = Set.new Repo::Git::Log.call source_repo
           target_set = Set.new Repo::Git::Log.call target_repo
 
-          # Check if source is a proper (not equal) subset of target
-          source_set.proper_subset? target_set
+          # Check if target is a proper (not equal) subset of source
+          target_set.proper_subset? source_set
         end
       end
     end

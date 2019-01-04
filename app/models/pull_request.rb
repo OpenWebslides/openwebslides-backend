@@ -33,7 +33,7 @@ class PullRequest < ApplicationRecord
   # State
   #
   state_machine :initial => :pending do
-    state :pending, :incompatible, :open do
+    state :pending, :incompatible, :ready do
       validates :feedback,
                 :absence => true
     end
@@ -47,12 +47,12 @@ class PullRequest < ApplicationRecord
 
     # Accept/approve a pull request
     event :accept do
-      transition :open => :accepted
+      transition :ready => :accepted
     end
 
     # Reject a pull request
     event :reject do
-      transition :open => :rejected
+      transition :ready => :rejected
     end
   end
 
@@ -76,6 +76,10 @@ class PullRequest < ApplicationRecord
   ##
   # Methods
   #
+  def open?
+    pending? || ready?
+  end
+
   def closed?
     incompatible? || accepted? || rejected?
   end
@@ -93,7 +97,7 @@ class PullRequest < ApplicationRecord
   end
 
   def source_has_one_open_pr
-    return unless source&.outgoing_pull_requests&.any? { |pr| pr.pending? || pr.open? }
+    return unless source&.outgoing_pull_requests&.any?(&:open?)
 
     errors.add :source, I18n.t('openwebslides.validations.pull_request.source_has_one_open_pr')
   end

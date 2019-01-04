@@ -14,7 +14,7 @@ RSpec.describe 'Pull Request API', :type => :request do
   ##
   # Test variables
   #
-  let(:pr) { create :pull_request, :state => 'open' }
+  let(:pr) { create :pull_request, :state => 'ready' }
 
   let(:source) { create :topic, :upstream => target }
   let(:target) { create :topic }
@@ -122,8 +122,8 @@ RSpec.describe 'Pull Request API', :type => :request do
       end
     end
 
-    context 'when the source already has an open pull request' do
-      before { create :pull_request, :source => source, :target => target }
+    context 'when the source already has a ready pull request' do
+      before { create :pull_request, :source => source, :target => target, :state => 'ready' }
 
       it 'rejects' do
         post pull_requests_path, :params => request_body(attributes), :headers => headers

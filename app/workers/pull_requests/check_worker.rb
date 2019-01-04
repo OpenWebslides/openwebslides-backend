@@ -10,7 +10,7 @@ module PullRequests
 
       compatible = Repo::Check.call pull_request.source, pull_request.target
 
-      pull_request.update :state => (compatible ? 'open' : 'incompatible')
+      pull_request.update :state => (compatible ? 'ready' : 'incompatible')
     end
   end
 end
