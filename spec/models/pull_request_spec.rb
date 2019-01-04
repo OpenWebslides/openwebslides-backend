@@ -43,6 +43,12 @@ RSpec.describe PullRequest, :type => :model do
       it { is_expected.to validate_absence_of :feedback }
     end
 
+    context 'when the PR is working' do
+      before { pull_request.update :state => 'working' }
+
+      it { is_expected.not_to validate_presence_of :feedback }
+    end
+
     context 'when the PR is accepted' do
       before { pull_request.update :state => 'accepted' }
 
@@ -139,7 +145,7 @@ RSpec.describe PullRequest, :type => :model do
   end
 
   describe 'state machine' do
-    it { is_expected.to have_states :pending, :ready, :accepted, :rejected }
+    it { is_expected.to have_states :pending, :ready, :incompatible, :working, :accepted, :rejected }
 
     context 'when the pull request is pending' do
       it { is_expected.to reject_events :accept, :reject, :when => :pending }
@@ -157,6 +163,10 @@ RSpec.describe PullRequest, :type => :model do
 
       it { is_expected.to transition_from :ready, :to_state => :accepted, :on_event => :accept }
       it { is_expected.to transition_from :ready, :to_state => :rejected, :on_event => :reject }
+    end
+
+    context 'when the pull request is working' do
+      it { is_expected.to reject_events :accept, :reject, :when => :working }
     end
 
     context 'when the pull request is accepted' do
@@ -189,6 +199,13 @@ RSpec.describe PullRequest, :type => :model do
 
         it { is_expected.not_to be_closed }
         it { is_expected.to be_open }
+      end
+
+      context 'when the pull request is working' do
+        before { pull_request.update :state => 'working' }
+
+        it { is_expected.to be_closed }
+        it { is_expected.not_to be_open }
       end
 
       context 'when the pull request is accepted' do
