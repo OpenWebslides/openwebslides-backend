@@ -24,7 +24,7 @@ RSpec.describe Topics::UpdateContentWorker do
 
   let(:pr1) { create :pull_request, :user => user, :source => downstream, :target => upstream, :message => 'foo', :state => 'accepted' }
   let(:pr2) { create :pull_request, :user => user, :source => downstream, :target => upstream, :message => 'foo', :state => 'ready' }
-  let(:pr3) { create :pull_request, :user => user, :source => downstream, :target => upstream, :message => 'foo', :state => 'pending' }
+  let(:pr3) { create :pull_request, :user => user, :source => downstream, :target => upstream, :message => 'foo', :state => 'incompatible' }
 
   ##
   # Stubs and mocks
