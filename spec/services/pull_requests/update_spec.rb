@@ -6,14 +6,19 @@ RSpec.describe PullRequests::Update do
   ##
   # Configuration
   #
+  include_context 'repository'
+
   ##
   # Subject
   #
   ##
   # Test variables
   #
-  let(:pull_request) { create :pull_request, :state => 'ready' }
+  let(:pull_request) { create :pull_request, :source => fork, :target => topic, :state => 'ready' }
   let(:user) { create :user }
+
+  let(:topic) { create :topic, :user => user }
+  let(:fork) { create :topic, :upstream => topic, :root_content_item_id => topic.root_content_item_id }
 
   ##
   # Stubs and mocks
@@ -21,6 +26,14 @@ RSpec.describe PullRequests::Update do
   ##
   # Tests
   #
+  before do
+    # Create the upstream repository
+    Repo::Create.call topic
+
+    # Fork the repository
+    Repo::Fork.call topic, fork
+  end
+
   context 'when the pull request is valid' do
     context 'when the pull request gets accepted' do
       let(:params) { { :state_event => 'accept', :feedback => 'foo' } }
@@ -71,7 +84,7 @@ RSpec.describe PullRequests::Update do
     end
 
     describe 'return value' do
-      subject { described_class.call pull_request, params }
+      subject { described_class.call pull_request, params, user }
 
       it { is_expected.to be_instance_of PullRequest }
       it { is_expected.not_to be_valid }
