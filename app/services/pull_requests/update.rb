@@ -5,11 +5,11 @@ module PullRequests
   # Update a pull request
   #
   class Update < ApplicationService
-    def call(pull_request, params)
+    def call(pull_request, params, user)
       if pull_request.update params
         if pull_request.working?
           # Merge pull request
-          PullRequests::MergeWorker.perform_async pull_request.id
+          PullRequests::MergeWorker.perform_async pull_request.id, user.id
 
           # Generate appropriate notifications
           Notifications::AcceptPR.call pull_request

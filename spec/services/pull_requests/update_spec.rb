@@ -7,13 +7,14 @@ RSpec.describe PullRequests::Update do
   # Configuration
   #
   ##
+  # Subject
+  #
+  ##
   # Test variables
   #
   let(:pull_request) { create :pull_request, :state => 'ready' }
+  let(:user) { create :user }
 
-  ##
-  # Subject
-  #
   ##
   # Stubs and mocks
   #
@@ -25,21 +26,21 @@ RSpec.describe PullRequests::Update do
       let(:params) { { :state_event => 'accept', :feedback => 'foo' } }
 
       it 'persists the pull request to the database' do
-        subject.call pull_request, params
+        subject.call pull_request, params, user
 
         expect(pull_request).to be_persisted
       end
 
       it 'dispatches a background job to merge the pull request' do
-        expect(PullRequests::MergeWorker).to receive(:perform_async).with pull_request.id
+        expect(PullRequests::MergeWorker).to receive(:perform_async).with pull_request.id, user.id
 
-        subject.call pull_request, params
+        subject.call pull_request, params, user
       end
 
       it 'creates appropriate notifications' do
         expect(Notifications::AcceptPR).to receive(:call).with pull_request
 
-        subject.call pull_request, params
+        subject.call pull_request, params, user
       end
     end
 
@@ -47,7 +48,7 @@ RSpec.describe PullRequests::Update do
       let(:params) { { :state_event => 'reject', :feedback => 'foo' } }
 
       it 'persists the pull request to the database' do
-        subject.call pull_request, params
+        subject.call pull_request, params, user
 
         expect(pull_request).to be_persisted
       end
@@ -55,7 +56,7 @@ RSpec.describe PullRequests::Update do
       it 'creates appropriate notifications' do
         expect(Notifications::RejectPR).to receive(:call).with pull_request
 
-        subject.call pull_request, params
+        subject.call pull_request, params, user
       end
     end
   end
@@ -66,7 +67,7 @@ RSpec.describe PullRequests::Update do
     it 'does not create any notifications' do
       expect(Notifications::RejectPR).not_to receive :call
 
-      subject.call pull_request, params
+      subject.call pull_request, params, user
     end
 
     describe 'return value' do
