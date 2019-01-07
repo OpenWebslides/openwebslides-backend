@@ -7,7 +7,7 @@ module Repo
   class Merge < ApplicationService
     include Helpers::Lockable
 
-    def call(source, target, user)
+    def call(source, target, user, message)
       source_repo = Repository.new :topic => source
       target_repo = Repository.new :topic => target
 
@@ -23,7 +23,7 @@ module Repo
           commit = Repo::Git::Log.call(source_repo).last
 
           # Create merge commit
-          Repo::Git::Merge.call target_repo, commit, user
+          Repo::Git::Merge.call target_repo, commit, user, message
         end
       end
     ensure

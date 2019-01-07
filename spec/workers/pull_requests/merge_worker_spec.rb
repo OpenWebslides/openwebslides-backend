@@ -14,6 +14,7 @@ RSpec.describe PullRequests::MergeWorker do
   #
   let(:pull_request) { create :pull_request, :state => 'ready' }
   let(:user) { create :user }
+  let(:message) { "Merge pull request ##{pull_request.id} from #{user.id}/#{pull_request.source.id}" }
 
   ##
   # Stubs and mocks
@@ -23,7 +24,7 @@ RSpec.describe PullRequests::MergeWorker do
   #
   it 'sets the pull request state to accepted' do
     expect(Repo::Merge).to receive(:call)
-      .with pull_request.source, pull_request.target, user
+      .with pull_request.source, pull_request.target, user, message
 
     subject.perform pull_request.id, user.id
 

@@ -6,7 +6,7 @@ module Repo
     # Merge a commit into master
     #
     class Merge < ApplicationService
-      def call(repo, commit, user)
+      def call(repo, commit, user, message)
         git = Rugged::Repository.new repo.path
 
         git.checkout 'refs/heads/master'
@@ -31,8 +31,7 @@ module Repo
         options = {
           :author => commit_author,
           :committer => commit_author,
-          # TODO: i18n
-          :message => 'Merge pull request',
+          :message => message,
           :parents => [git.head.target, commit],
           :tree => commit_tree,
           :update_ref => 'HEAD'

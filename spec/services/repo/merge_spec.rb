@@ -18,6 +18,7 @@ RSpec.describe Repo::Merge do
   let(:fork) { create :topic, :upstream => topic, :root_content_item_id => topic.root_content_item_id }
 
   let(:content) { [{ 'id' => topic.root_content_item_id, 'type' => 'contentItemTypes/ROOT' }] }
+  let(:message) { 'Merge repository' }
 
   let(:repository_path) { File.join OpenWebslides.config.repository.path, topic.user.id.to_s, topic.id.to_s }
 
@@ -46,7 +47,7 @@ RSpec.describe Repo::Merge do
   end
 
   it 'merges the commits from the fork using a merge commit' do
-    subject.call fork, topic, fork.user
+    subject.call fork, topic, fork.user, message
 
     # 4 commits: 'Initial commit', '[upstream] Add content', '[fork] Update content', 'Merge pull request'
     expect(`cd #{repository_path} && git rev-list --count master`.to_i).to eq 4
@@ -55,7 +56,7 @@ RSpec.describe Repo::Merge do
   end
 
   it 'leaves no remotes in the repository' do
-    subject.call fork, topic, fork.user
+    subject.call fork, topic, fork.user, message
 
     expect(`cd #{repository_path} && git remote`).to be_empty
   end
@@ -64,11 +65,11 @@ RSpec.describe Repo::Merge do
     it 'raises a ConflictsError' do
       allow(Repo::Git::Merge).to receive(:call).and_raise OpenWebslides::Repo::ConflictsError
 
-      expect { subject.call fork, topic, fork.user }.to raise_error OpenWebslides::Repo::ConflictsError
+      expect { subject.call fork, topic, fork.user, message }.to raise_error OpenWebslides::Repo::ConflictsError
     end
 
     it 'leaves no remotes in the repository' do
-      subject.call fork, topic, fork.user
+      subject.call fork, topic, fork.user, message
 
       expect(`cd #{repository_path} && git remote`).to be_empty
     end

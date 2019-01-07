@@ -9,7 +9,10 @@ module PullRequests
       pull_request = PullRequest.find pull_request_id
       user = User.find user_id
 
-      Repo::Merge.call pull_request.source, pull_request.target, user
+      # TODO: i18n
+      message = "Merge pull request ##{pull_request_id} from #{user.id}/#{pull_request.source.id}"
+
+      Repo::Merge.call pull_request.source, pull_request.target, user, message
 
       pull_request.update :state => 'accepted'
     end

@@ -18,6 +18,7 @@ RSpec.describe Repo::Git::Merge do
 
   let(:user) { create :user }
   let(:commit) { `cd #{repo.path} && git rev-parse mybranch`.strip }
+  let(:message) { 'Merging repository' }
 
   ##
   # Stubs and mocks
@@ -36,10 +37,18 @@ RSpec.describe Repo::Git::Merge do
 
   context 'when there are no conflicts' do
     it 'merges the commit into master using a merge commit' do
-      subject.call repo, commit, user
+      subject.call repo, commit, user, message
 
       # 4 commits: Initial commit, update commit and merge commit
-      expect(`cd #{repo.path} && git rev-list --count master`.strip).to eq 3
+      expect(`cd #{repo.path} && git rev-list --count master`.to_i).to eq 3
+      expect(`cd #{repo.path} && cat test`.strip).to eq 'test2'
+    end
+
+    it 'has the merge message and the current user as author' do
+      subject.call repo, commit, user, message
+
+      expect(`cd #{repo.path} && git log --format=%B -n 1 HEAD`.strip).to eq message
+      expect(`cd #{repo.path} && git log --format=%ae -n 1 HEAD`.strip).to eq user.email
     end
   end
 
@@ -50,7 +59,7 @@ RSpec.describe Repo::Git::Merge do
     end
 
     it 'raises a ConflictsError' do
-      expect { subject.call repo, commit, user }.to raise_error OpenWebslides::Repo::ConflictsError
+      expect { subject.call repo, commit, user, message }.to raise_error OpenWebslides::Repo::ConflictsError
     end
   end
 end
