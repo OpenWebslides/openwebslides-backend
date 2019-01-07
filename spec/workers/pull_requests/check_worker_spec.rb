@@ -29,7 +29,7 @@ RSpec.describe PullRequests::CheckWorker do
       subject.perform pull_request.id
 
       pull_request.reload
-      expect(pull_request).to have_attributes :state => 'ready'
+      expect(pull_request).to be_ready
     end
   end
 
@@ -42,7 +42,7 @@ RSpec.describe PullRequests::CheckWorker do
       subject.perform pull_request.id
 
       pull_request.reload
-      expect(pull_request).to have_attributes :state => 'incompatible'
+      expect(pull_request).to be_incompatible
     end
   end
 end

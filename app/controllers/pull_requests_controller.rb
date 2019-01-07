@@ -30,8 +30,6 @@ class PullRequestsController < ApplicationController
   def create
     @pull_request = PullRequest.new pull_request_params
 
-    # TODO: validate if the source topic is up to date with the target topic
-
     authorize @pull_request
 
     @pull_request = PullRequests::Create.call @pull_request
@@ -51,7 +49,7 @@ class PullRequestsController < ApplicationController
 
     authorize @pull_request
 
-    @pull_request = PullRequests::Update.call @pull_request, resource_params
+    @pull_request = PullRequests::Update.call @pull_request, resource_params, current_user
 
     if @pull_request.errors.any?
       jsonapi_render_errors :json => @pull_request,

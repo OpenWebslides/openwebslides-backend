@@ -38,7 +38,7 @@ class PullRequest < ApplicationRecord
                 :absence => true
     end
 
-    state :accepted
+    state :working, :accepted
 
     state :rejected do
       validates :feedback,
@@ -47,7 +47,7 @@ class PullRequest < ApplicationRecord
 
     # Accept/approve a pull request
     event :accept do
-      transition :ready => :accepted
+      transition :ready => :working
     end
 
     # Reject a pull request
@@ -81,7 +81,7 @@ class PullRequest < ApplicationRecord
   end
 
   def closed?
-    incompatible? || accepted? || rejected?
+    working? || incompatible? || accepted? || rejected?
   end
 
   ##

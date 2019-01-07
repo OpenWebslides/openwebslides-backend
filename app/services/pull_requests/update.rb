@@ -5,12 +5,16 @@ module PullRequests
   # Update a pull request
   #
   class Update < ApplicationService
-    def call(pull_request, params)
+    def call(pull_request, params, user)
       if pull_request.update params
-        # Generate appropriate notifications
-        if pull_request.previous_changes['state']&.last == 'accepted'
+        if pull_request.working?
+          # Merge pull request
+          PullRequests::MergeWorker.perform_async pull_request.id, user.id
+
+          # Generate appropriate notifications
           Notifications::AcceptPR.call pull_request
-        elsif pull_request.previous_changes['state']&.last == 'rejected'
+        elsif pull_request.rejected?
+          # Generate appropriate notifications
           Notifications::RejectPR.call pull_request
         end
       end
