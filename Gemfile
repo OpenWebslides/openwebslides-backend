@@ -44,6 +44,9 @@ gem 'zaru'
 # Accept header parsing
 gem 'http-accept'
 
+# List of countries
+gem 'countries'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails'
 # Use Puma as the application server
