@@ -16,6 +16,11 @@ class UserResource < ApplicationResource
   attribute :tos_accepted
   attribute :alert_emails
 
+  attribute :age
+  attribute :country
+  attribute :gender
+  attribute :role
+
   ##
   # Relationships
   #
@@ -42,7 +47,7 @@ class UserResource < ApplicationResource
     if context[:current_user] == _model
       super - %i[current_password password tos_accepted]
     else
-      super - %i[email locale current_password password tos_accepted alert_emails]
+      super - %i[email locale current_password password tos_accepted alert_emails age country gender role]
     end
   end
 
@@ -55,7 +60,8 @@ class UserResource < ApplicationResource
   end
 
   def self.sortable_fields(context)
-    super(context) - %i[gravatar_hash locale current_password password tos_accepted alert_emails alerts]
+    super(context) - %i[gravatar_hash locale current_password password
+                     tos_accepted alert_emails age country gender role alerts]
   end
 
   ##
