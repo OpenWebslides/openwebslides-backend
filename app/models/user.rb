@@ -17,6 +17,21 @@ class User < ApplicationRecord
   attribute :tos_accepted
   attribute :alert_emails
 
+  attribute :age
+  attribute :country
+
+  enum :gender => {
+    :male => 0,
+    :female => 1,
+    :other => 2
+  }
+
+  enum :role => {
+    :learner => 0,
+    :teacher => 1,
+    :coteacher => 2
+  }
+
   ##
   # Associations
   #
@@ -72,6 +87,20 @@ class User < ApplicationRecord
             :numericality => { :only_integer => true }
 
   validates :tos_accepted,
+            :presence => true
+
+  validates :age,
+            :presence => true,
+            :numericality => { :only_integer => true }
+
+  validates :country,
+            :presence => true,
+            :inclusion => { :in => ISO3166::Country.codes }
+
+  validates :gender,
+            :presence => true
+
+  validates :role,
             :presence => true
 
   validate :readonly_email,
