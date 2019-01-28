@@ -18,7 +18,6 @@ gem 'state_machines-activerecord'
 
 # Authentication
 gem 'devise'
-gem 'jwt'
 gem 'jwt-auth'
 gem 'omniauth'
 gem 'omniauth-cas'
