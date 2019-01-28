@@ -30,6 +30,7 @@ config/*.pem
 config/*.pub
 nginx/*.crt
 nginx/*.key
+nginx/dhparams.pem
 nginx/sites-enabled/
 
 # Coverage report
