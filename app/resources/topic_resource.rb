@@ -4,6 +4,9 @@
 # Slide topic resource
 #
 class TopicResource < ApplicationResource
+  include Metadata::CreatedAt
+  include Metadata::UpdatedAt
+
   ##
   # Attributes
   #

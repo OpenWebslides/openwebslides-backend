@@ -41,6 +41,11 @@ RSpec.describe TopicResource, :type => :resource do
   it { is_expected.to have_many(:incoming_pull_requests).with_class_name 'PullRequest' }
   it { is_expected.to have_many(:outgoing_pull_requests).with_class_name 'PullRequest' }
 
+  it {
+    is_expected.to have_metadata :created_at => topic.created_at.to_i.to_s,
+                                 :updated_at => topic.updated_at.to_i.to_s
+  }
+
   describe 'fields' do
     it 'has a valid set of fetchable fields' do
       expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets conversations incoming_pull_requests outgoing_pull_requests]
