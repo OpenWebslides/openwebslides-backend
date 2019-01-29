@@ -46,13 +46,13 @@ RSpec.describe User, :type => :model do
 
     it { is_expected.to allow_values(false).for :alert_emails }
 
-    it { is_expected.to validate_presence_of :age }
+    it { is_expected.not_to validate_presence_of :age }
     it { is_expected.to validate_numericality_of(:age).only_integer }
-    it { is_expected.to validate_presence_of :country }
+    it { is_expected.not_to validate_presence_of :country }
     it { is_expected.to validate_inclusion_of(:country).in_array ISO3166::Country.codes }
-    it { is_expected.to validate_presence_of :gender }
+    it { is_expected.not_to validate_presence_of :gender }
     it { is_expected.to define_enum_for(:gender).with %i[male female other] }
-    it { is_expected.to validate_presence_of :role }
+    it { is_expected.not_to validate_presence_of :role }
     it { is_expected.to define_enum_for(:role).with %i[learner teacher coteacher] }
 
     context 'when the terms are not accepted' do

@@ -90,18 +90,10 @@ class User < ApplicationRecord
             :presence => true
 
   validates :age,
-            :presence => true,
             :numericality => { :only_integer => true }
 
   validates :country,
-            :presence => true,
             :inclusion => { :in => ISO3166::Country.codes }
-
-  validates :gender,
-            :presence => true
-
-  validates :role,
-            :presence => true
 
   validate :readonly_email,
            :on => :update
