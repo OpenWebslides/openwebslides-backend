@@ -20,6 +20,7 @@ class UserResource < ApplicationResource
   attribute :country
   attribute :gender
   attribute :role
+  attribute :device_type
 
   ##
   # Relationships
@@ -45,14 +46,14 @@ class UserResource < ApplicationResource
   #
   def fetchable_fields
     if context[:current_user] == _model
-      super - %i[current_password password tos_accepted]
+      super - %i[current_password password tos_accepted device_type]
     else
-      super - %i[email locale current_password password tos_accepted alert_emails age country gender role]
+      super - %i[email locale current_password password tos_accepted alert_emails age country gender role device_type]
     end
   end
 
   def self.creatable_fields(context = {})
-    super(context) - %i[current_password gravatar_hash topics collaborations alerts]
+    super(context) - %i[current_password gravatar_hash device_type topics collaborations alerts]
   end
 
   def self.updatable_fields(context = {})
@@ -61,7 +62,7 @@ class UserResource < ApplicationResource
 
   def self.sortable_fields(context)
     super(context) - %i[gravatar_hash locale current_password password
-                     tos_accepted alert_emails age country gender role alerts]
+                        tos_accepted alert_emails age country gender role device_type alerts]
   end
 
   ##

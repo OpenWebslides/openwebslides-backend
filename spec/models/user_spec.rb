@@ -54,6 +54,8 @@ RSpec.describe User, :type => :model do
     it { is_expected.to define_enum_for(:gender).with %i[male female other] }
     it { is_expected.not_to validate_presence_of :role }
     it { is_expected.to define_enum_for(:role).with %i[learner teacher coteacher] }
+    it { is_expected.not_to validate_presence_of :device_type }
+    it { is_expected.to define_enum_for(:device_type).with %i[desktop phone tablet] }
 
     context 'when the terms are not accepted' do
       subject { build :user, :tos_accepted => false }

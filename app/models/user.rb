@@ -32,6 +32,12 @@ class User < ApplicationRecord
     :coteacher => 2
   }
 
+  enum :device_type => {
+    :desktop => 0,
+    :phone => 1,
+    :tablet => 2
+  }
+
   ##
   # Associations
   #

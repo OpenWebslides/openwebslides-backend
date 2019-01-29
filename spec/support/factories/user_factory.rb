@@ -15,6 +15,7 @@ FactoryBot.define do
     country { ISO3166::Country.codes.sample }
     gender { User.genders.keys.sample }
     role { User.roles.keys.sample }
+    device_type { User.device_types.keys.sample }
 
     ##
     # Associations

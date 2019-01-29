@@ -35,6 +35,7 @@ RSpec.describe UserResource, :type => :resource do
   it { is_expected.not_to have_attribute :country }
   it { is_expected.not_to have_attribute :gender }
   it { is_expected.not_to have_attribute :role }
+  it { is_expected.not_to have_attribute :device_type }
 
   it { is_expected.to have_many(:topics).with_class_name 'Topic' }
   it { is_expected.to have_many(:collaborations).with_class_name 'Topic' }
@@ -68,7 +69,7 @@ RSpec.describe UserResource, :type => :resource do
     end
 
     it 'has a valid set of updatable fields' do
-      expect(described_class.updatable_fields).to match_array %i[name locale current_password password alert_emails age country gender role topics collaborations]
+      expect(described_class.updatable_fields).to match_array %i[name locale current_password password alert_emails age country gender role device_type topics collaborations]
     end
 
     it 'has a valid set of sortable fields' do
