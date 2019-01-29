@@ -30,6 +30,8 @@ config/*.pem
 config/*.pub
 nginx/*.crt
 nginx/*.key
+nginx/dhparams.pem
+nginx/sites-enabled/
 
 # Coverage report
 coverage/
@@ -49,10 +51,3 @@ doc/
 
 # Local repositories
 data/*
-client/app/constants/exampleDecks.js
-
-# Production API url override
-client/config/config.js
-
-# test files
-client/app/testPrintView/*

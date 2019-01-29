@@ -3,6 +3,8 @@
 # certbot.sh - Run CertBot to renew Let's Encrypt certificates
 #
 
+PATH="${PATH}:/usr/local/bin/"
+
 function renew() {
   docker-compose -f docker-compose.yml -f docker-compose.certbot.yml run --rm certbot \
     certonly --agree-tos --email florian@floriandejonckheere.be \
