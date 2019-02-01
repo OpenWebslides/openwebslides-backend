@@ -25,6 +25,8 @@ RSpec.describe PullRequests::MergeWorker do
   it 'sets the pull request state to accepted' do
     expect(Repo::Merge).to receive(:call)
       .with pull_request.source, pull_request.target, user, message
+    expect(Repo::Pull).to receive(:call)
+      .with pull_request.target, pull_request.source
 
     subject.perform pull_request.id, user.id
 
