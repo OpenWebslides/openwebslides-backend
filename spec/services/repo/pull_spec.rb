@@ -62,4 +62,14 @@ RSpec.describe Repo::Pull do
 
     expect(`cd #{repository_path} && git remote`).to be_empty
   end
+
+  it 'touches the topic' do
+    timestamp = fork.updated_at
+
+    sleep 1
+
+    subject.call topic, fork
+
+    expect(fork.updated_at).to be > timestamp
+  end
 end

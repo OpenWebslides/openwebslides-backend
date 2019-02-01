@@ -47,4 +47,14 @@ RSpec.describe Repo::Fork do
 
     expect(`GIT_DIR=#{File.join repository_path, '.git'} git rev-list --count master`.to_i).to eq 1
   end
+
+  it 'touches the topic' do
+    timestamp = fork.updated_at
+
+    sleep 1
+
+    subject.call topic, fork
+
+    expect(fork.updated_at).to be > timestamp
+  end
 end

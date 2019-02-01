@@ -26,6 +26,9 @@ module Repo
 
           # Perform fast forward
           Repo::Git::Checkout.call target_repo, commit
+
+          # Update timestamps
+          target.touch
         end
       end
     ensure

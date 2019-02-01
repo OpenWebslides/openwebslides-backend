@@ -15,6 +15,9 @@ module Repo
 
           # Duplicate repository
           Repo::Filesystem::Fork.call repo, fork
+
+          # Update timestamps
+          downstream.touch
         end
       end
     end

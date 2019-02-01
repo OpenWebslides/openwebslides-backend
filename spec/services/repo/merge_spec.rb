@@ -74,4 +74,14 @@ RSpec.describe Repo::Merge do
       expect(`cd #{repository_path} && git remote`).to be_empty
     end
   end
+
+  it 'touches the topic' do
+    timestamp = topic.updated_at
+
+    sleep 1
+
+    subject.call fork, topic, fork.user, message
+
+    expect(topic.updated_at).to be > timestamp
+  end
 end

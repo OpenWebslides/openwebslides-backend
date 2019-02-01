@@ -24,6 +24,9 @@ module Repo
 
           # Create merge commit
           Repo::Git::Merge.call target_repo, commit, user, message
+
+          # Update timestamps
+          target.touch
         end
       end
     ensure
