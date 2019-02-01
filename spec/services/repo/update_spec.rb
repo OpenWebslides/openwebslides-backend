@@ -53,8 +53,6 @@ RSpec.describe Repo::Update do
 
     subject.call topic, content, user, message
 
-    new_timestamp = topic.updated_at
-
-    expect(new_timestamp).to be > timestamp
+    expect(topic.updated_at).to be > timestamp
   end
 end

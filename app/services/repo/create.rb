@@ -20,6 +20,9 @@ module Repo
         Repo::Git::Commit.call repo,
                                topic.user,
                                'Initial commit'
+
+        # Update timestamps
+        topic.touch
       end
     end
   end

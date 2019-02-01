@@ -13,6 +13,9 @@ module Repo
 
         # Delete repository
         Repo::Filesystem::Delete.call repo
+
+        # Update timestamps
+        topic.touch
       end
     end
   end

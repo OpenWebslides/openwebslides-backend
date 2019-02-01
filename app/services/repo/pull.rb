@@ -2,13 +2,15 @@
 
 module Repo
   ##
-  # Merge two repositories
+  # Pull updates from one repo into another
   #
-  class Merge < ApplicationService
+  class Pull < ApplicationService
     include Helpers::Lockable
 
-    def call(source, target, user, message)
+    def call(source, target)
+      # Repo that is most up to date
       source_repo = Repository.new :topic => source
+      # Repo that will be fast forwarded
       target_repo = Repository.new :topic => target
 
       remote_name = "topic_#{source.id}"
@@ -19,18 +21,18 @@ module Repo
           Repo::Git::Remote::Add.call target_repo, remote_name, source_repo.path
           Repo::Git::Remote::Fetch.call target_repo, remote_name
 
-          # Find out commit to merge
+          # Find out last commit
           commit = Repo::Git::Log.call(source_repo).last
 
-          # Create merge commit
-          Repo::Git::Merge.call target_repo, commit, user, message
+          # Perform fast forward
+          Repo::Git::Checkout.call target_repo, commit
 
           # Update timestamps
           target.touch
         end
       end
     ensure
-      # Remove source repo remote
+      # Remove target's source remote
       Repo::Git::Remote::Remove.call target_repo, remote_name
     end
   end

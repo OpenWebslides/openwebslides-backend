@@ -108,6 +108,7 @@ RSpec.describe PullRequest, :type => :model do
     it { is_expected.to belong_to(:user) }
     it { is_expected.to belong_to(:source).class_name('Topic').inverse_of(:outgoing_pull_requests) }
     it { is_expected.to belong_to(:target).class_name('Topic').inverse_of(:incoming_pull_requests) }
+    it { is_expected.to have_many(:alerts).dependent :destroy }
 
     context 'when source does not have an upstream' do
       subject { build :pull_request, :source => build(:topic) }

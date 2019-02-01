@@ -12,7 +12,11 @@ module PullRequests
       # TODO: i18n
       message = "Merge pull request ##{pull_request_id} from #{user.id}/#{pull_request.source.id}"
 
+      # Merge the pull request
       Repo::Merge.call pull_request.source, pull_request.target, user, message
+
+      # Pull the commits (including merge commit) back into the fork
+      Repo::Pull.call pull_request.target, pull_request.source
 
       pull_request.update :state => 'accepted'
     end

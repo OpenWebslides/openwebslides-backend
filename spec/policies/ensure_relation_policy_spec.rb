@@ -25,6 +25,7 @@ ACTION_BLACKLIST = {
   AnnotationPolicy => %i[show_ratings?],
   ConversationPolicy => %i[show_ratings?],
   CommentPolicy => %i[show_ratings?],
+  PullRequestPolicy => %i[show_alerts?],
   RatingPolicy => %i[show_annotation? show_user?]
 }.freeze
 

@@ -31,4 +31,14 @@ RSpec.describe Repo::Delete do
 
     expect(File).not_to exist repository_path
   end
+
+  it 'touches the topic' do
+    timestamp = topic.updated_at
+
+    sleep 1
+
+    subject.call topic
+
+    expect(topic.updated_at).to be > timestamp
+  end
 end
