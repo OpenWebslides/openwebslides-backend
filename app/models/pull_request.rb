@@ -29,6 +29,9 @@ class PullRequest < ApplicationRecord
              :class_name => 'Topic',
              :inverse_of => :incoming_pull_requests
 
+  has_many :alerts,
+           :dependent => :destroy
+
   ##
   # State
   #
