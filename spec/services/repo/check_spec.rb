@@ -11,13 +11,18 @@ RSpec.describe Repo::Check do
   ##
   # Subject
   #
-  subject { described_class.call source.topic, target.topic }
+  subject { described_class.call fork, topic }
 
   ##
   # Test variables
   #
-  let(:source) { Repository.new :topic => create(:topic) }
-  let(:target) { Repository.new :topic => create(:topic) }
+  let(:topic) { create :topic }
+  let(:fork) { create :topic, :upstream => topic, :root_content_item_id => topic.root_content_item_id }
+
+  let(:root) { [{ 'id' => topic.root_content_item_id, 'type' => 'contentItemTypes/ROOT' }] }
+  let(:content) { root + [{ 'id' => 'FILE_ONE', 'value' => 'FILE_ONE' }] }
+
+  let(:repository_path) { File.join OpenWebslides.config.repository.path, fork.user.id.to_s, fork.id.to_s }
 
   ##
   # Stubs and mocks
@@ -25,49 +30,114 @@ RSpec.describe Repo::Check do
   ##
   # Tests
   #
-  context 'when the target has commits A and B' do
-    before { allow(Repo::Git::Log).to receive(:call).with(target).and_return %w[A B] }
+  before do
+    # Create the upstream repository
+    Repo::Create.call topic
 
-    context 'when the source only has commit A' do
-      before { allow(Repo::Git::Log).to receive(:call).with(source).and_return %w[A] }
+    sleep 1
 
-      it { is_expected.to be false }
+    # Populate the upstream repository
+    Repo::Update.call topic, root, topic.user, '[upstream] Commit A: add root content item'
+    Repo::Update.call topic, content, topic.user, '[upstream] Commit B: add content to file one'
+
+    sleep 1
+
+    # Fork the repository
+    Repo::Fork.call topic, fork
+  end
+
+  context 'when the fork has commit A' do
+    before { `cd #{repository_path}; git reset --hard HEAD~` }
+
+    it { is_expected.to be false }
+
+    it 'leaves no remotes in the repository' do
+      expect(`cd #{repository_path} && git remote`).to be_empty
+    end
+  end
+
+  context 'when the fork has commit C' do
+    before do
+      `cd #{repository_path}; git reset --hard HEAD~~`
+      Repo::Update.call fork,
+                        content + [{ 'id' => 'FILE_TWO', 'value' => 'FILE_TWO' }],
+                        fork.user,
+                        '[fork] Commit C: add new content to file two'
     end
 
-    context 'when the source only has commit D' do
-      before { allow(Repo::Git::Log).to receive(:call).with(source).and_return %w[D] }
+    it { is_expected.to be true }
 
-      it { is_expected.to be false }
+    it 'leaves no remotes in the repository' do
+      expect(`cd #{repository_path} && git remote`).to be_empty
+    end
+  end
+
+  context 'when the fork has commits A and B' do
+    it { is_expected.to be false }
+
+    it 'leaves no remotes in the repository' do
+      expect(`cd #{repository_path} && git remote`).to be_empty
+    end
+  end
+
+  context 'when the fork has commits A, B and C (no conflicts)' do
+    before do
+      Repo::Update.call fork,
+                        content + [{ 'id' => 'FILE_TWO', 'value' => 'FILE_TWO' }],
+                        fork.user,
+                        '[fork] Commit C: add content to file two'
     end
 
-    context 'when the source has commits A and B' do
-      before { allow(Repo::Git::Log).to receive(:call).with(source).and_return %w[A B] }
+    it { is_expected.to be true }
 
-      it { is_expected.to be false }
+    it 'leaves no remotes in the repository' do
+      expect(`cd #{repository_path} && git remote`).to be_empty
+    end
+  end
+
+  context 'when the fork has commits A and C (no conflicts)' do
+    before do
+      `cd #{repository_path}; git reset --hard HEAD~`
+      Repo::Update.call fork,
+                        content + [{ 'id' => 'FILE_TWO', 'value' => 'FILE_TWO' }],
+                        fork.user,
+                        '[fork] Commit C: add content to file two'
+    end
+    it { is_expected.to be true }
+
+    it 'leaves no remotes in the repository' do
+      expect(`cd #{repository_path} && git remote`).to be_empty
+    end
+  end
+
+  context 'when the fork has commits A and D (conflicts)' do
+    before do
+      `cd #{repository_path}; git reset --hard HEAD~`
+      Repo::Update.call fork,
+                        content + [{ 'id' => 'FILE_ONE', 'value' => 'FILE_TWO' }],
+                        fork.user,
+                        '[fork] Commit D: add conflicting content to file one'
     end
 
-    context 'when the source has commits A, B and C' do
-      before { allow(Repo::Git::Log).to receive(:call).with(source).and_return %w[A B C] }
+    it { is_expected.to be false }
 
-      it { is_expected.to be true }
+    it 'leaves no remotes in the repository' do
+      expect(`cd #{repository_path} && git remote`).to be_empty
+    end
+  end
+
+  context 'when the fork has commits A, B and D' do
+    before do
+      Repo::Update.call fork,
+                        content + [{ 'id' => 'FILE_ONE', 'value' => 'FILE_TWO' }],
+                        fork.user,
+                        '[fork] Commit D: add conflicting content to file one'
     end
 
-    context 'when the source has commits A, C and B' do
-      before { allow(Repo::Git::Log).to receive(:call).with(source).and_return %w[A C B] }
+    it { is_expected.to be true }
 
-      it { is_expected.to be true }
-    end
-
-    context 'when the source has commits C, A and B' do
-      before { allow(Repo::Git::Log).to receive(:call).with(source).and_return %w[C A B] }
-
-      it { is_expected.to be true }
-    end
-
-    context 'when the source has commits A and D' do
-      before { allow(Repo::Git::Log).to receive(:call).with(source).and_return %w[A D] }
-
-      it { is_expected.to be false }
+    it 'leaves no remotes in the repository' do
+      expect(`cd #{repository_path} && git remote`).to be_empty
     end
   end
 end
