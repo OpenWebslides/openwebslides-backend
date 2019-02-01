@@ -8,7 +8,9 @@ module Repo
     include Helpers::Lockable
 
     def call(source, target, user, message)
+      # Repo where commits are taken from
       source_repo = Repository.new :topic => source
+      # Repo where commits are added toZ
       target_repo = Repository.new :topic => target
 
       remote_name = "topic_#{source.id}"
@@ -30,7 +32,7 @@ module Repo
         end
       end
     ensure
-      # Remove source repo remote
+      # Remove target's source remote
       Repo::Git::Remote::Remove.call target_repo, remote_name
     end
   end
