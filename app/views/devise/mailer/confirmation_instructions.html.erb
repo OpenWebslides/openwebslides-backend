@@ -1,5 +1,7 @@
-<p>Welcome <%= @email %>!</p>
+<p>Hey there!</p>
 
-<p>You can confirm your account email through the link below:</p>
+<p>You can confirm your account email through the link below.</p>
 
-<p><%= link_to 'Confirm my account', URI.join(root_url, '/auth/confirmation', "?confirmationToken=#{@token}").to_s %></p>
+<div class="row center">
+  <%= link_to 'Confirm my account', URI.join(root_url, '/auth/confirmation', "?confirmationToken=#{@token}").to_s, :class => 'button' %>
+</div>
