@@ -19,6 +19,8 @@ module PullRequests
       Repo::Pull.call pull_request.target, pull_request.source
 
       pull_request.update :state => 'accepted'
+    rescue OpenWebslides::Repo::ConflictsError => e
+      pull_request.update :state => 'incompatible'
     end
   end
 end

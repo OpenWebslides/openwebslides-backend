@@ -33,4 +33,15 @@ RSpec.describe PullRequests::MergeWorker do
     pull_request.reload
     expect(pull_request).to be_accepted
   end
+
+  it 'sets the pull request to incompatible when the merge yields conflicts' do
+    allow(Repo::Merge).to receive(:call)
+      .with(pull_request.source, pull_request.target, user, message)
+      .and_raise OpenWebslides::Repo::ConflictsError
+
+    subject.perform pull_request.id, user.id
+
+    pull_request.reload
+    expect(pull_request).to be_incompatible
+  end
 end
