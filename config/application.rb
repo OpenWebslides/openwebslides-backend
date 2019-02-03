@@ -45,5 +45,10 @@ module OpenWebslides
     config.before_initialize do
       require_relative 'openwebslides'
     end
+
+    config.to_prepare do
+      # Configure Devise mailer layout
+      Devise::Mailer.layout 'mailer'
+    end
   end
 end

@@ -11,9 +11,13 @@
         background: rgba(41, 35, 92, .04);
       }
 
-      a,
-      .ii a[href] { color: #d60b52; }
-      .button a { color: white; }
+      a {
+        color: rgba(0, 0, 0, 0.68);
+        text-decoration: underline;
+        font-weight: bold;
+      }
+
+      .button a { color: white !important; }
 
       .button {
         padding: 0.8em 1.5em 0.8em;
@@ -93,7 +97,7 @@
       </div>
 
       <footer class="row center">
-        You are receiving this email because you chose to receive important email notifications. If at any time you wish to stop receiving these, you can update <a href="#">your preferences</a>
+        You are receiving this email because you chose to receive important email notifications. If at any time you wish to stop receiving these, you can update <a href="<%= URI.join(root_url, '/user/settings').to_s %>">your preferences</a>
         <p><strong>
           &copy; 2018 Open Webslides
         </strong></p>
