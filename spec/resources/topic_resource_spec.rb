@@ -29,6 +29,7 @@ RSpec.describe TopicResource, :type => :resource do
   it { is_expected.to have_attribute :access }
   it { is_expected.to have_attribute :root_content_item_id }
   it { is_expected.to have_attribute :description }
+  it { is_expected.to have_attribute :has_open_pull_request }
 
   it { is_expected.to have_one :user }
   it { is_expected.to have_one :upstream }
@@ -48,12 +49,12 @@ RSpec.describe TopicResource, :type => :resource do
 
   describe 'fields' do
     it 'has a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets conversations incoming_pull_requests outgoing_pull_requests]
+      expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets conversations has_open_pull_request incoming_pull_requests outgoing_pull_requests]
     end
 
     it 'omits empty fields' do
       subject { described_class.new nil_topic, context }
-      expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets conversations incoming_pull_requests outgoing_pull_requests]
+      expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets conversations has_open_pull_request incoming_pull_requests outgoing_pull_requests]
     end
 
     it 'has a valid set of creatable fields' do
@@ -66,6 +67,17 @@ RSpec.describe TopicResource, :type => :resource do
 
     it 'has a valid set of sortable fields' do
       expect(described_class.sortable_fields context).to match_array %i[id title access description]
+    end
+
+    context 'when the topic has an open pull request' do
+      let(:topic) { create :topic, :upstream => create(:topic) }
+
+      before { create :pull_request, :source => topic, :target => topic.upstream, :state => :ready }
+
+      it 'sets has_open_pull_request to true' do
+        topic.reload
+        expect(subject.has_open_pull_request).to be true
+      end
     end
   end
 

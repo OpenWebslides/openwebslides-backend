@@ -200,7 +200,7 @@ RSpec.describe Topic, :type => :model do
       it { is_expected.to have_attributes :content => nil }
     end
 
-    describe '#pull_request' do
+    describe '#open_pull_request' do
       before do
         create :pull_request, :source => fork, :target => topic, :state => 'rejected', :feedback => 'feedback'
         create :pull_request, :source => fork, :target => topic, :state => 'accepted'
@@ -214,14 +214,14 @@ RSpec.describe Topic, :type => :model do
           pr.reload
           fork.reload
 
-          expect(fork.pull_request).to eq pr
+          expect(fork.open_pull_request).to eq pr
         end
       end
 
       context 'when there is no open pull request' do
         it 'returns nil' do
           # Don't reload objects
-          expect(fork.pull_request).to be_nil
+          expect(fork.open_pull_request).to be_nil
         end
       end
     end
