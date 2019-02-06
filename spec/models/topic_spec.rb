@@ -30,6 +30,8 @@ RSpec.describe Topic, :type => :model do
 
   describe 'attributes' do
     it { is_expected.to validate_presence_of :title }
+    it { is_expected.to validate_length_of(:title).is_at_most 100 }
+    it { is_expected.to validate_length_of(:description).is_at_most 200 }
     it { is_expected.to validate_presence_of :access }
     it { is_expected.to validate_presence_of :root_content_item_id }
 

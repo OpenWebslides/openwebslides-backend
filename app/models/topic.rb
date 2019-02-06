@@ -77,7 +77,11 @@ class Topic < ApplicationRecord
   # Validations
   #
   validates :title,
+            :length => { :maximum => 100 },
             :presence => true
+
+  validates :description,
+            :length => { :maximum => 200 }
 
   validates :access,
             :presence => true
