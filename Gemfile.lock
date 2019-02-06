@@ -136,7 +136,7 @@ GEM
     jsonapi-utils (0.7.2)
       jsonapi-resources (= 0.9.0)
     jwt (2.1.0)
-    jwt-auth (4.1.0)
+    jwt-auth (4.2.0)
       jwt (~> 2.0)
       rails (~> 5.2)
     kwalify (0.7.2)
