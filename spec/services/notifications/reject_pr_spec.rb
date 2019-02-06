@@ -9,8 +9,9 @@ RSpec.describe Notifications::RejectPR do
   ##
   # Test variables
   #
-  let(:pull_request) { create :pull_request, :target => target }
-  let(:target) { create :topic, :user => owner, :collaborators => collaborators }
+  let(:pull_request) { create :pull_request, :source => source, :target => target }
+  let(:source) { create :topic, :user => owner, :collaborators => collaborators, :upstream => target, :root_content_item_id => target.root_content_item_id }
+  let(:target) { create :topic }
 
   let(:owner) { create :user, :confirmed, :alert_emails => alert_emails }
   let(:collaborators) { create_list :user, 3, :confirmed, :alert_emails => alert_emails }
@@ -33,27 +34,27 @@ RSpec.describe Notifications::RejectPR do
   ##
   # Tests
   #
-  it 'generates an alert for the target topic owner and collaborators' do
+  it 'generates an alert for the source topic owner and collaborators' do
     expect(Alert).to receive(:create)
       .with :alert_type => :pr_rejected,
-            :user => target.user,
+            :user => source.user,
             :pull_request => pull_request,
             :topic => target,
-            :subject => pull_request.user
+            :subject => target.user
 
-    target.collaborators.each do |collaborator|
+    source.collaborators.each do |collaborator|
       expect(Alert).to receive(:create)
         .with :alert_type => :pr_rejected,
               :user => collaborator,
               :pull_request => pull_request,
               :topic => target,
-              :subject => pull_request.user
+              :subject => target.user
     end
 
     subject.call pull_request
   end
 
-  context 'when the target topic user and collaborators have email notifications enabled' do
+  context 'when the target topic owner and collaborators have email notifications enabled' do
     let(:alert_emails) { true }
 
     it 'sends an email' do
@@ -65,7 +66,7 @@ RSpec.describe Notifications::RejectPR do
     end
   end
 
-  context 'when the upstream topic owner has email notifications disabled' do
+  context 'when the target topic owner and collaborators have email notifications disabled' do
     let(:alert_emails) { false }
 
     it 'does not send an email' do
