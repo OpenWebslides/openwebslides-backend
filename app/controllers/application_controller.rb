@@ -8,6 +8,8 @@ class ApplicationController < ActionController::API
   include ErrorHandling
   include Versioning
 
+  before_action :validate_token
+
   protected
 
   ##

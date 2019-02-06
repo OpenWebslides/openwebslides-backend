@@ -14,6 +14,7 @@ class TopicResource < ApplicationResource
   attribute :access
   attribute :description
   attribute :root_content_item_id
+  attribute :has_open_pull_request
 
   ##
   # Relationships
@@ -46,18 +47,22 @@ class TopicResource < ApplicationResource
   def self.creatable_fields(context = {})
     super(context) - %i[
       upstream content forks collaborators assets conversations
-      incoming_pull_requests outgoing_pull_requests
+      has_open_pull_request incoming_pull_requests outgoing_pull_requests
     ]
   end
 
   def self.updatable_fields(context = {})
     super(context) - %i[
       upstream root_content_item_id content forks collaborators assets conversations
-      incoming_pull_requests outgoing_pull_requests
+      has_open_pull_request incoming_pull_requests outgoing_pull_requests
     ]
   end
 
   def self.sortable_fields(context)
-    super(context) - %i[root_content_item_id]
+    super(context) - %i[has_open_pull_request root_content_item_id]
+  end
+
+  def has_open_pull_request
+    !_model.open_pull_request.nil?
   end
 end

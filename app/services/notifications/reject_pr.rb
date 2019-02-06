@@ -7,12 +7,12 @@ module Notifications
   class RejectPR < ApplicationService
     def call(pull_request)
       # Generate alert
-      ([pull_request.target.user] + pull_request.target.collaborators).each do |user|
+      ([pull_request.source.user] + pull_request.source.collaborators).each do |user|
         alert = Alert.create :alert_type => :pr_rejected,
                              :user => user,
                              :pull_request => pull_request,
                              :topic => pull_request.target,
-                             :subject => pull_request.user
+                             :subject => pull_request.target.user
 
         next unless user.alert_emails?
 

@@ -100,7 +100,8 @@ RSpec.describe 'Topic', :type => :request do
         expect(data['attributes']).to match 'title' => title,
                                             'description' => description,
                                             'access' => 'public',
-                                            'rootContentItemId' => 'ivks4jgtxr'
+                                            'rootContentItemId' => 'ivks4jgtxr',
+                                            'hasOpenPullRequest' => false
       end
     end
 
@@ -139,7 +140,8 @@ RSpec.describe 'Topic', :type => :request do
         expect(data['attributes']).to match 'title' => title,
                                             'description' => description,
                                             'access' => 'protected',
-                                            'rootContentItemId' => 'ivks4jgtxr'
+                                            'rootContentItemId' => 'ivks4jgtxr',
+                                            'hasOpenPullRequest' => false
       end
     end
 
@@ -178,7 +180,8 @@ RSpec.describe 'Topic', :type => :request do
         expect(data['attributes']).to match 'title' => title,
                                             'description' => description,
                                             'access' => 'private',
-                                            'rootContentItemId' => 'ivks4jgtxr'
+                                            'rootContentItemId' => 'ivks4jgtxr',
+                                            'hasOpenPullRequest' => false
       end
     end
 

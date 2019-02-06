@@ -77,7 +77,11 @@ class Topic < ApplicationRecord
   # Validations
   #
   validates :title,
+            :length => { :maximum => 100 },
             :presence => true
+
+  validates :description,
+            :length => { :maximum => 200 }
 
   validates :access,
             :presence => true
@@ -125,8 +129,8 @@ class Topic < ApplicationRecord
   # Methods
   #
 
-  # Find read outgoing pull request
-  def pull_request
+  # Find open outgoing pull request
+  def open_pull_request
     outgoing_pull_requests.find(&:open?)
   end
 
