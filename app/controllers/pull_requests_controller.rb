@@ -6,7 +6,6 @@ class PullRequestsController < ApplicationController
 
   # Authentication
   before_action :authenticate_user, :only => %i[show]
-  after_action :renew_token
 
   # Authorization
   after_action :verify_authorized, :except => %i[show_relationship get_related_resources]

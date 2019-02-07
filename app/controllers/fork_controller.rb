@@ -5,7 +5,6 @@ class ForkController < ApplicationController
 
   # Authentication
   before_action :authenticate_user
-  after_action :renew_token
 
   # Authorization
   after_action :verify_authorized

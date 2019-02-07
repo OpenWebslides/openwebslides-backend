@@ -7,7 +7,6 @@ class ContentController < ApplicationController
 
   # Authentication
   before_action :authenticate_user, :only => %i[update]
-  after_action :renew_token
 
   prepend_before_action :add_dummy_update_id, :only => %i[update]
 

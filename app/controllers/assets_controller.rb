@@ -7,7 +7,6 @@ class AssetsController < ApplicationController
 
   # Authentication
   before_action :authenticate_user, :only => %i[create destroy]
-  after_action :renew_token, :except => :raw
 
   # Authorization
   after_action :verify_authorized, :except => %i[show_relationship get_related_resources]

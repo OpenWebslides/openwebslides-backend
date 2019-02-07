@@ -6,7 +6,6 @@ class TopicsController < ApplicationController
 
   # Authentication
   before_action :authenticate_user, :only => %i[create update destroy]
-  after_action :renew_token
 
   # Authorization
   after_action :verify_authorized, :except => %i[index show_relationship get_related_resources]
