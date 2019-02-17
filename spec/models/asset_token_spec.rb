@@ -17,7 +17,6 @@ RSpec.describe Asset::Token, :type => :model do
   ##
   # Test variables
   #
-  let(:lifetime) { OpenWebslides.config.api.asset_url_lifetime.from_now.to_i }
   let(:user) { create :user, :confirmed }
   let(:asset) { create :asset, :with_topic }
 
@@ -32,7 +31,9 @@ RSpec.describe Asset::Token, :type => :model do
     subject(:token) { Asset::Token.from_token asset_token.to_jwt }
 
     describe '#valid?' do
-      it { is_expected.to be_valid }
+      it do
+        is_expected.to be_valid
+      end
 
       context 'without token' do
         before { token.object = nil }
@@ -45,7 +46,7 @@ RSpec.describe Asset::Token, :type => :model do
   describe 'from token' do
     let(:jwt) do
       payload = {
-        :exp => lifetime,
+        :exp => asset.lifetime,
         :sub => user.id,
         :obj => asset.id
       }

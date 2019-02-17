@@ -45,15 +45,17 @@ class Asset < ApplicationRecord
 
     def valid?
       object&.reload
-      super && !object.nil?
+
+      super && !object.nil? && type == :asset
     end
 
     def payload
-      super.merge :obj => object.id
+      super.merge :typ => :asset,
+                  :obj => object.id
     end
 
     def lifetime
-      OpenWebslides.config.api.asset_url_lifetime
+      JWT::Auth.access_token_lifetime
     end
 
     def self.from_token(token)
