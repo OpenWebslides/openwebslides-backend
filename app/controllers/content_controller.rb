@@ -6,7 +6,8 @@ class ContentController < ApplicationController
   include AddDummyData
 
   # Authentication
-  before_action :authenticate_user, :only => %i[update]
+  before_action :validate_access_token
+  before_action :require_token, :only => %i[update]
 
   prepend_before_action :add_dummy_update_id, :only => %i[update]
 

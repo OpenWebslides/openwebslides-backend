@@ -2,6 +2,7 @@
 
 class FeedItemsController < ApplicationController
   # Authentication
+  before_action :validate_access_token
 
   # Authorization
   after_action :verify_authorized, :except => %i[index]

@@ -8,6 +8,7 @@ class ApplicationController < ActionController::API
   include ErrorHandling
   include Versioning
 
+  # Validate validity of token (if present) on all routes
   before_action :validate_token
 
   protected

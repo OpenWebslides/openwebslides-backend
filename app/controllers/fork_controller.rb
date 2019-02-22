@@ -4,7 +4,8 @@ class ForkController < ApplicationController
   include AddDummyData
 
   # Authentication
-  before_action :authenticate_user
+  before_action :validate_access_token
+  before_action :require_token
 
   # Authorization
   after_action :verify_authorized

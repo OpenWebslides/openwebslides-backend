@@ -62,7 +62,7 @@ class AssetsController < ApplicationController
     return head :not_found unless @asset
 
     # Authenticate from ?token=
-    token = Asset::Token.from_token params[:token]
+    token = Asset::Token.from_jwt params[:token]
 
     # Set @jwt for compatibility with jwt-auth's current_user for #authorize
     @jwt = JWT::Auth::Token.from_user token.subject
