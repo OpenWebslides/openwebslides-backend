@@ -33,7 +33,7 @@ RSpec.describe TokenResource, :type => :resource do
     end
 
     it 'has a valid set of updatable fields' do
-      expect(described_class.updatable_fields).to be_empty
+      expect(described_class.updatable_fields).to match_array %i[email]
     end
 
     it 'has a valid set of sortable fields' do
