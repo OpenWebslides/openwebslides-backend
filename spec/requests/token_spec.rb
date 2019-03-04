@@ -3,12 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe 'Token API', :type => :request do
-  let(:password) { Faker::Internet.password 6 }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject { response }
 
-  let(:unconfirmed_user) { create :user, :password => password }
-  let(:user) { create :user, :confirmed, :password => password }
+  ##
+  # Test variables
+  #
+  let(:user) { create :user, :confirmed, :password => 'foobar' }
 
-  def request_body(email, password)
+  def create_body(email, password)
     {
       :data => {
         :type => 'tokens',
@@ -20,52 +31,151 @@ RSpec.describe 'Token API', :type => :request do
     }.to_json
   end
 
+  def update_body(email)
+    {
+      :data => {
+        :type => 'tokens',
+        :attributes => {
+          :email => email
+        }
+      }
+    }.to_json
+  end
+
+  ##
+  # Tests
+  #
   describe 'POST /' do
-    before do
-      add_content_type_header
+    before { post token_path, :params => create_body(user.email, password), :headers => headers }
+
+    let(:password) { 'foobar' }
+
+    it { is_expected.to have_http_status :created }
+    it { is_expected.to return_token JWT::Auth::RefreshToken }
+
+    context 'when the credentials are incorrect' do
+      let(:password) { 'barfoo' }
+
+      it { is_expected.to have_http_status :unauthorized }
+      it { is_expected.not_to return_token }
     end
 
-    it 'rejects invalid credentials' do
-      post token_path, :params => request_body(user.email, 'foo'), :headers => headers
+    context 'when the user is not confirmed' do
+      let(:user) { create :user, :password => 'foobar' }
 
-      expect(response.status).to eq 401
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :unauthorized }
+      it { is_expected.not_to return_token }
+    end
+  end
+
+  describe 'PATCH /' do
+    before { patch token_path, :params => update_body(email), :headers => headers(header_tags) }
+
+    let(:email) { user.email }
+    let(:header_tags) { :refresh }
+
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to return_token JWT::Auth::AccessToken }
+
+    context 'when the credentials are incorrect' do
+      let(:email) { 'foo@bar.com' }
+
+      it { is_expected.to have_http_status :unauthorized }
+      it { is_expected.not_to return_token }
     end
 
-    it 'returns a valid token' do
-      post token_path, :params => request_body(user.email, password), :headers => headers
+    context 'when the user is not confirmed' do
+      let(:user) { create :user, :password => 'foobar' }
 
-      expect(response.status).to eq 201
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      expect(response.headers['Authorization']).to start_with 'Bearer'
+      it { is_expected.to have_http_status :unauthorized }
+      it { is_expected.not_to return_token }
+    end
 
-      token = JWT::Auth::Token.from_token response.headers['Authorization'].scan(/Bearer (.*)$/).flatten.last
-      expect(token).to be_valid
+    context 'when the token is invalid' do
+      let(:header_tags) { nil }
+
+      append_before do
+        # Temporarily set a fake, invalid token version
+        user.assign_attributes :token_version => 999
+
+        # Generate a token with this invalid token version
+        request.headers['Authorization'] = "Bearer #{JWT::Auth::AccessToken.new(:subject => user).to_jwt}"
+
+        # Reload real token version
+        user.reload
+      end
+
+      it { is_expected.to have_http_status :unauthorized }
+      it { is_expected.not_to return_token }
+    end
+
+    context 'when no token is present' do
+      let(:header_tags) { nil }
+
+      it { is_expected.to have_http_status :unauthorized }
+      it { is_expected.not_to return_token }
+    end
+
+    context 'when an access token is present' do
+      let(:header_tags) { :access }
+
+      it { is_expected.to have_http_status :unauthorized }
+      it { is_expected.not_to return_token }
     end
   end
 
   describe 'DELETE /' do
-    before do
-      add_auth_header
+    before { delete token_path, :headers => headers(header_tags) }
+
+    prepend_before { @version = user.token_version }
+
+    let(:header_tags) { :refresh }
+
+    it { is_expected.to have_http_status :no_content }
+    it { is_expected.not_to return_token }
+
+    it 'increments the token_version' do
+      user.reload
+      expect(user.token_version).to eq @version + 1
     end
 
-    it 'rejects unauthenticated requests' do
-      delete token_path, :headers => headers.except!('Authorization')
+    context 'when the user is not confirmed' do
+      let(:user) { create :user, :password => 'foobar' }
 
-      expect(response.status).to eq 401
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :unauthorized }
+      it { is_expected.not_to return_token }
     end
 
-    it 'invalidates all tokens' do
-      # Generate external token
-      jwt = JWT::Auth::Token.from_user(user).to_jwt
+    context 'when the token is invalid' do
+      let(:header_tags) { nil }
 
-      expect(JWT::Auth::Token.from_token jwt).to be_valid
+      append_before do
+        # Temporarily set a fake, invalid token version
+        user.assign_attributes :token_version => 999
 
-      delete token_path, :headers => headers
+        # Generate a token with this invalid token version
+        @request.headers['Authorization'] = "Bearer #{JWT::Auth::RefreshToken.new(:subject => user).to_jwt}"
 
-      expect(response.status).to eq 204
-      expect(JWT::Auth::Token.from_token jwt).not_to be_valid
+        # Reload real token version
+        user.reload
+      end
+
+      it { is_expected.to have_http_status :unauthorized }
+      it { is_expected.not_to return_token }
+    end
+
+    context 'when no token is present' do
+      let(:header_tags) { nil }
+
+      it { is_expected.to have_http_status :unauthorized }
+      it { is_expected.not_to return_token }
+    end
+
+    context 'when an access token is present' do
+      let(:header_tags) { :access }
+
+      it { is_expected.to have_http_status :unauthorized }
+      it { is_expected.not_to return_token }
     end
   end
 end

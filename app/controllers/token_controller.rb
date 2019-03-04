@@ -4,12 +4,16 @@ class TokenController < ApplicationController
   include AddDummyData
 
   # Authentication
-  before_action :authenticate_user, :only => :destroy
+  before_action :validate_refresh_token, :only => %i[update destroy]
+  before_action :require_token, :only => %i[update destroy]
 
   # Authorization
   after_action :verify_authorized
 
   prepend_before_action :add_dummy_destroy_id, :only => :destroy
+
+  prepend_before_action :add_dummy_update_id, :only => :update
+  prepend_before_action :add_dummy_type, :only => :update
 
   # POST /token
   def create
@@ -21,10 +25,25 @@ class TokenController < ApplicationController
 
     authorize :token
 
-    token = JWT::Auth::Token.from_user @user
-    headers['Authorization'] = "Bearer #{token.to_jwt}"
+    set_refresh_token @user
 
-    jsonapi_render :json => @user, :status => :created, :options => { :resource => UserResource }
+    jsonapi_render :json => @user,
+                   :status => :created,
+                   :options => { :resource => UserResource }
+  end
+
+  # PATCH /token
+  def update
+    @user = User.confirmed.find_by :email => resource_params[:email].downcase
+
+    raise JSONAPI::Exceptions::UnauthorizedError.new :update, :token unless @user == current_user
+
+    authorize :token
+
+    set_access_token @user
+
+    jsonapi_render :json => @user,
+                   :options => { :resource => UserResource }
   end
 
   # DELETE /token
