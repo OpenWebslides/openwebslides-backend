@@ -28,7 +28,7 @@ RSpec.describe Asset::Token, :type => :model do
   describe 'methods' do
     # Serialize and deserialize object to let JWT::Auth::Token
     # fill in the defaults for all attributes
-    subject(:token) { Asset::Token.from_token asset_token.to_jwt }
+    subject(:token) { Asset::Token.from_jwt asset_token.to_jwt }
 
     describe '#valid?' do
       it do
@@ -53,9 +53,9 @@ RSpec.describe Asset::Token, :type => :model do
       JWT.encode payload, Rails.application.secrets.secret_key_base
     end
 
-    let(:token) { Asset::Token.from_token jwt }
+    let(:token) { Asset::Token.from_jwt jwt }
 
-    describe '#from_token' do
+    describe '#from_jwt' do
       it { is_expected.to have_attributes :object => asset }
     end
   end

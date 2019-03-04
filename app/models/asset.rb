@@ -58,7 +58,7 @@ class Asset < ApplicationRecord
       JWT::Auth.access_token_lifetime
     end
 
-    def self.from_token(token)
+    def self.from_jwt(token)
       t = super token
 
       t.object = Asset.find_by :id => @decoded_payload['obj'] if @decoded_payload['obj']

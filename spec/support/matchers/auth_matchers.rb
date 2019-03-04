@@ -15,7 +15,7 @@ RSpec::Matchers.define :return_token do
     expect(header).not_to be_nil
     expect(header).to match(/^Bearer/)
 
-    token = JWT::Auth::Token.from_token header.split(' ').last
+    token = JWT::Auth::Token.from_jwt header.split(' ').last
 
     expect(token).not_to be_nil
     expect(token).to be_valid
