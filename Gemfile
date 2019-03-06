@@ -102,6 +102,7 @@ group :test do
   gem 'pundit-matchers'
 
   # JSONAPI RSpec matchers
+  gem 'jsonapi-matchers', :github => 'floriandejonckheere/jsonapi-matchers'
   gem 'jsonapi-resources-matchers'
 
   # Factory pattern for testing
