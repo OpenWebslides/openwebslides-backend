@@ -19,6 +19,9 @@ RSpec.describe 'Token API', :type => :request do
   #
   let(:user) { create :user, :confirmed, :password => 'foobar' }
 
+  ##
+  # Request variables
+  #
   def create_body(email, password)
     {
       :data => {
@@ -136,7 +139,7 @@ RSpec.describe 'Token API', :type => :request do
 
     it 'increments the token_version' do
       user.reload
-      expect(user.token_version).to eq @version + 1
+      expect(user.token_version).to eq @version + 1 # rubocop:disable RSpec/InstanceVariable
     end
 
     context 'when the user is not confirmed' do
@@ -154,7 +157,7 @@ RSpec.describe 'Token API', :type => :request do
         user.assign_attributes :token_version => 999
 
         # Generate a token with this invalid token version
-        @request.headers['Authorization'] = "Bearer #{JWT::Auth::RefreshToken.new(:subject => user).to_jwt}"
+        request.headers['Authorization'] = "Bearer #{JWT::Auth::RefreshToken.new(:subject => user).to_jwt}"
 
         # Reload real token version
         user.reload
