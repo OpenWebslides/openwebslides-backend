@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RequestHelper
+module Headers
   ##
   # Generate request headers
   #

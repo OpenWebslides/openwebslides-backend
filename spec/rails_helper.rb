@@ -36,8 +36,7 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  config.include RequestHelper
-  config.include ResponseHelper
+  config.include Headers
   config.include StateMachinesRspec::Matchers
   config.include OpenWebslides::Matchers
 
