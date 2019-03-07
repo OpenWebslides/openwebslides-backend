@@ -12,6 +12,11 @@ RSpec.describe 'Pull Request API', :type => :request do
   # Stubs and mocks
   #
   ##
+  # Subject
+  #
+  subject { response }
+
+  ##
   # Test variables
   #
   let(:pr) { create :pull_request, :state => 'ready' }
@@ -21,32 +26,20 @@ RSpec.describe 'Pull Request API', :type => :request do
 
   let(:user) { create :user, :confirmed }
 
-  let(:feedback) { Faker::Lorem.words(20).join ' ' }
-
-  before do
-    Repo::Create.call source
-    Repo::Create.call target
-
-    pr.source.collaborators << user
-    pr.target.collaborators << user
-
-    source.collaborators << user
-  end
-
   ##
-  # Request
+  # Request variables
   #
-  let(:attributes) do
+  def params
     {
-      :message => Faker::Lorem.words(20).join(' ')
+      :include => 'user,source,target'
     }
   end
 
-  def request_body(attributes)
+  def create_body(message)
     {
       :data => {
         :type => 'pullRequests',
-        :attributes => attributes,
+        :attributes => { :message => message },
         :relationships => {
           :user => {
             :data => {
@@ -84,174 +77,138 @@ RSpec.describe 'Pull Request API', :type => :request do
   ##
   # Tests
   #
+  before do
+    Repo::Create.call source
+    Repo::Create.call target
+
+    pr.source.collaborators << user
+    pr.target.collaborators << user
+
+    source.collaborators << user unless source.collaborators.include?(user)
+  end
+
   describe 'POST /' do
-    before do
-      add_content_type_header
-      add_auth_header
-    end
+    before { post pull_requests_path, :params => create_body(message), :headers => headers(:access) }
 
-    it 'rejects empty message' do
-      post pull_requests_path, :params => request_body(attributes.merge :message => ''), :headers => headers
+    let(:message) { Faker::Lorem.words(20).join ' ' }
 
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    it { is_expected.to have_http_status :created }
+    it { is_expected.to have_attribute(:message).with_value message }
+
+    context 'when the message is empty' do
+      let(:message) { '' }
+
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the source does not have an upstream' do
       let(:source) { create :topic }
 
-      it 'rejects' do
-        post pull_requests_path, :params => request_body(attributes), :headers => headers
-
-        expect(response.status).to eq 422
-        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      end
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the source has an upstream not equal to the target' do
       let(:source) { create :topic, :upstream => create(:topic) }
 
-      it 'rejects' do
-        post pull_requests_path, :params => request_body(attributes), :headers => headers
-
-        expect(response.status).to eq 422
-        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      end
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the source already has a ready pull request' do
-      before { create :pull_request, :source => source, :target => target, :state => 'ready' }
+      let(:pr) { create :pull_request, :source => source, :target => target, :state => 'ready' }
 
-      it 'rejects' do
-        post pull_requests_path, :params => request_body(attributes), :headers => headers
-
-        expect(response.status).to eq 422
-        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      end
-    end
-
-    it 'returns successful' do
-      post pull_requests_path, :params => request_body(attributes), :headers => headers
-
-      expect(response.status).to eq 201
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      json = JSON.parse response.body
-
-      expect(json['data']['attributes']['message']).to eq attributes[:message]
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
   end
 
   describe 'GET /:id' do
-    before do
-      add_content_type_header
-      add_auth_header
-    end
+    before { get pull_request_path(:id => id), :params => params, :headers => headers(:access) }
 
-    it 'rejects an invalid id' do
-      get pull_request_path(:id => 0), :headers => headers
+    let(:id) { pr.id }
 
-      expect(response.status).to eq 404
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_record pr }
+    it { is_expected.to have_relationship(:user).with_record pr.user }
+    it { is_expected.to have_relationship(:source).with_record pr.source }
+    it { is_expected.to have_relationship(:target).with_record pr.target }
 
-    it 'returns successful' do
-      get pull_request_path(:id => pr.id), :headers => headers
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
 
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
   end
 
   describe 'GET /incomingPullRequests' do
-    before do
-      add_content_type_header
-      add_auth_header
-    end
+    before { get topic_incomingPullRequests_path(:topic_id => pr.target.id), :headers => headers(:access) }
 
-    it 'returns successful' do
-      get topic_incomingPullRequests_path(:topic_id => pr.target.id), :headers => headers
-
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      json = JSON.parse response.body
-      expect(json['data'].count).to eq 1
-    end
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_records pr.target.incoming_pull_requests }
+    it { is_expected.to have_record_count 1 }
   end
 
   describe 'GET /outgoingPullRequests' do
-    before do
-      add_content_type_header
-      add_auth_header
-    end
+    before { get topic_outgoingPullRequests_path(:topic_id => pr.source.id), :headers => headers(:access) }
 
-    it 'returns successful' do
-      get topic_outgoingPullRequests_path(:topic_id => pr.source.id), :headers => headers
-
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      json = JSON.parse response.body
-      expect(json['data'].count).to eq 1
-    end
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_records pr.source.outgoing_pull_requests }
+    it { is_expected.to have_record_count 1 }
   end
 
   describe 'PUT/PATCH /:id' do
-    before do
-      add_content_type_header
-      add_auth_header
+    before { patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :stateEvent => 'reject', :feedback => feedback), :headers => headers(:access) }
+
+    let(:feedback) { Faker::Lorem.words(20).join ' ' }
+
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_record pr }
+    it { is_expected.to have_attribute(:state).with_value 'rejected' }
+    it { is_expected.to have_attribute(:feedback).with_value feedback }
+
+    context 'when the feedback is empty' do
+      let(:feedback) { '' }
+
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
-    it 'rejects empty feedback' do
-      patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :stateEvent => 'reject', :feedback => ''), :headers => headers
+    context 'when the pull request is pending' do
+      let(:pr) { create :pull_request, :state => 'pending' }
 
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+    end
+
+    context 'when the pull request is incompatible' do
+      let(:pr) { create :pull_request, :state => 'incompatible' }
+
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+    end
+
+    context 'when the pull request is working' do
+      let(:pr) { create :pull_request, :state => 'working' }
+
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the pull request is already accepted' do
-      before { pr.update :state => 'accepted', :feedback => 'feedback' }
+      let(:pr) { create :pull_request, :state => 'accepted', :feedback => 'feedback' }
 
-      it 'rejects' do
-        patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :stateEvent => 'reject', :feedback => feedback), :headers => headers
-
-        expect(response.status).to eq 422
-        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      end
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the pull request is already rejected' do
-      before { pr.update :state => 'rejected', :feedback => 'feedback' }
+      let(:pr) { create :pull_request, :state => 'rejected', :feedback => 'feedback' }
 
-      it 'rejects' do
-        patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :stateEvent => 'reject', :feedback => feedback), :headers => headers
-
-        expect(response.status).to eq 422
-        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      end
-    end
-
-    it 'returns successful' do
-      patch pull_request_path(:id => pr.id), :params => update_body(pr.id, :stateEvent => 'reject', :feedback => feedback), :headers => headers
-
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      json = JSON.parse response.body
-
-      expect(json['data']['attributes']['feedback']).to eq feedback
-      expect(json['data']['attributes']['state']).to eq 'rejected'
-
-      pr.reload
-      expect(pr).to be_rejected
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
   end
 end
