@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_03_134901) do
+ActiveRecord::Schema.define(version: 2019_03_07_133624) do
 
   create_table "alerts", force: :cascade do |t|
     t.integer "user_id"
@@ -26,23 +26,6 @@ ActiveRecord::Schema.define(version: 2019_01_03_134901) do
     t.index ["subject_id"], name: "index_alerts_on_subject_id"
     t.index ["topic_id"], name: "index_alerts_on_topic_id"
     t.index ["user_id"], name: "index_alerts_on_user_id"
-  end
-
-  create_table "annotations", force: :cascade do |t|
-    t.string "type"
-    t.string "content_item_id"
-    t.integer "user_id"
-    t.integer "topic_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "text"
-    t.integer "conversation_type"
-    t.integer "conversation_id"
-    t.integer "state"
-    t.string "title"
-    t.index ["conversation_id"], name: "index_annotations_on_conversation_id"
-    t.index ["topic_id"], name: "index_annotations_on_topic_id"
-    t.index ["user_id"], name: "index_annotations_on_user_id"
   end
 
   create_table "assets", force: :cascade do |t|
@@ -95,15 +78,6 @@ ActiveRecord::Schema.define(version: 2019_01_03_134901) do
     t.index ["source_id"], name: "index_pull_requests_on_source_id"
     t.index ["target_id"], name: "index_pull_requests_on_target_id"
     t.index ["user_id"], name: "index_pull_requests_on_user_id"
-  end
-
-  create_table "ratings", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "annotation_id", null: false
-    t.index ["annotation_id", "user_id"], name: "index_ratings_on_annotation_id_and_user_id", unique: true
-    t.index ["annotation_id"], name: "index_ratings_on_annotation_id"
-    t.index ["user_id", "annotation_id"], name: "index_ratings_on_user_id_and_annotation_id", unique: true
-    t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
   create_table "topics", force: :cascade do |t|
