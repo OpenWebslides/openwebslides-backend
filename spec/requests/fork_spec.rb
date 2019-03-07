@@ -14,6 +14,8 @@ RSpec.describe 'Fork API', :type => :request do
   ##
   # Subject
   #
+  subject { response }
+
   ##
   # Test variables
   #
@@ -21,41 +23,38 @@ RSpec.describe 'Fork API', :type => :request do
   let(:topic) { create :topic, :user => user }
 
   ##
+  # Request variables
+  #
+  ##
   # Tests
   #
   before { Topics::Create.call topic }
 
   describe 'POST /topics/:id/fork' do
-    before do
-      add_content_type_header
-      add_auth_header
+    before { post topic_fork_path(:topic_id => id), :headers => headers(:access) }
+
+    let(:id) { topic.id }
+
+    it { is_expected.to have_http_status :created }
+
+    describe 'creates a fork with upstream set to the topic' do
+      subject { Topic.last }
+
+      it { is_expected.to have_attributes :upstream => topic }
     end
 
-    it 'rejects non-existant alerts' do
-      post topic_fork_path(:topic_id => 999), :headers => headers
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
 
-      expect(response.status).to eq 404
-      expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
 
     context 'when the topic already has an upstream' do
       let(:topic) { create :topic, :upstream => create(:topic) }
 
-      it 'rejects forking' do
-        post topic_fork_path(:topic_id => topic.id), :headers => headers
-
-        expect(response.status).to eq 422
-        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      end
-    end
-
-    it 'creates a duplicate topic' do
-      post topic_fork_path(:topic_id => topic.id), :headers => headers
-
-      expect(response.status).to eq 201
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
   end
 end
