@@ -20,13 +20,9 @@ MODEL_BLACKLIST = [
 # Relations without API interaction
 #
 ACTION_BLACKLIST = {
-  UserPolicy => %i[show_identities? show_grants? show_ratings? show_alerts?],
+  UserPolicy => %i[show_identities? show_grants? show_alerts?],
   TopicPolicy => %i[show_grants? show_alerts?],
-  AnnotationPolicy => %i[show_ratings?],
-  ConversationPolicy => %i[show_ratings?],
-  CommentPolicy => %i[show_ratings?],
-  PullRequestPolicy => %i[show_alerts?],
-  RatingPolicy => %i[show_annotation? show_user?]
+  PullRequestPolicy => %i[show_alerts?]
 }.freeze
 
 RSpec.describe 'relationship policy actions' do

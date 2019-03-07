@@ -57,15 +57,6 @@ class UserPolicy < ApplicationPolicy
   end
 
   ##
-  # Relationships: annotations
-  #
-  def show_annotations?
-    # Users can show annotations relationship if the user is showable
-    # Policy scope the annotations separately in the controller
-    show?
-  end
-
-  ##
   # Relationship: alerts
   #
   def show_alerts?

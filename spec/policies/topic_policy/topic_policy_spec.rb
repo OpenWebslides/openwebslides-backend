@@ -42,8 +42,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_collaborators }
       it { is_expected.to permit_action :show_assets }
       it { is_expected.to permit_action :show_feed_items }
-      it { is_expected.to permit_action :show_conversations }
-      it { is_expected.to permit_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
     end
@@ -65,8 +63,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_collaborators }
       it { is_expected.to permit_action :show_assets }
       it { is_expected.to permit_action :show_feed_items }
-      it { is_expected.to permit_action :show_conversations }
-      it { is_expected.to permit_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
     end
@@ -88,8 +84,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_collaborators }
       it { is_expected.to permit_action :show_assets }
       it { is_expected.to permit_action :show_feed_items }
-      it { is_expected.to permit_action :show_conversations }
-      it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
     end
@@ -111,8 +105,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_collaborators }
       it { is_expected.to permit_action :show_assets }
       it { is_expected.to permit_action :show_feed_items }
-      it { is_expected.to permit_action :show_conversations }
-      it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
     end
@@ -138,8 +130,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to forbid_action :show_collaborators }
       it { is_expected.to forbid_action :show_assets }
       it { is_expected.to forbid_action :show_feed_items }
-      it { is_expected.to forbid_action :show_conversations }
-      it { is_expected.to forbid_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
     end
@@ -161,8 +151,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_collaborators }
       it { is_expected.to permit_action :show_assets }
       it { is_expected.to permit_action :show_feed_items }
-      it { is_expected.to permit_action :show_conversations }
-      it { is_expected.to permit_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
     end
@@ -184,8 +172,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_collaborators }
       it { is_expected.to permit_action :show_assets }
       it { is_expected.to permit_action :show_feed_items }
-      it { is_expected.to permit_action :show_conversations }
-      it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
     end
@@ -207,8 +193,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_collaborators }
       it { is_expected.to permit_action :show_assets }
       it { is_expected.to permit_action :show_feed_items }
-      it { is_expected.to permit_action :show_conversations }
-      it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
     end
@@ -234,8 +218,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to forbid_action :show_collaborators }
       it { is_expected.to forbid_action :show_assets }
       it { is_expected.to forbid_action :show_feed_items }
-      it { is_expected.to forbid_action :show_conversations }
-      it { is_expected.to forbid_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
     end
@@ -257,8 +239,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to forbid_action :show_collaborators }
       it { is_expected.to forbid_action :show_assets }
       it { is_expected.to forbid_action :show_feed_items }
-      it { is_expected.to forbid_action :show_conversations }
-      it { is_expected.to forbid_action :show_annotations }
       it { is_expected.to forbid_action :show_incoming_pull_requests }
       it { is_expected.to forbid_action :show_outgoing_pull_requests }
     end
@@ -280,8 +260,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_collaborators }
       it { is_expected.to permit_action :show_assets }
       it { is_expected.to permit_action :show_feed_items }
-      it { is_expected.to permit_action :show_conversations }
-      it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
     end
@@ -303,8 +281,6 @@ RSpec.describe TopicPolicy do
       it { is_expected.to permit_action :show_collaborators }
       it { is_expected.to permit_action :show_assets }
       it { is_expected.to permit_action :show_feed_items }
-      it { is_expected.to permit_action :show_conversations }
-      it { is_expected.to permit_action :show_annotations }
       it { is_expected.to permit_action :show_incoming_pull_requests }
       it { is_expected.to permit_action :show_outgoing_pull_requests }
     end
