@@ -40,14 +40,6 @@ class User < ApplicationRecord
            :dependent => :destroy,
            :inverse_of => :user
 
-  has_many :annotations,
-           :dependent => :destroy,
-           :inverse_of => :user
-
-  has_many :ratings,
-           :dependent => :destroy,
-           :inverse_of => :user
-
   has_many :alerts,
            :dependent => :destroy,
            :inverse_of => :user

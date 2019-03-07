@@ -141,8 +141,6 @@ RSpec.describe Topic, :type => :model do
     it { is_expected.to have_many(:collaborators).through(:grants).source(:user).class_name('User').inverse_of :collaborations }
     it { is_expected.to have_many(:assets).inverse_of(:topic).dependent :destroy }
     it { is_expected.to have_many(:feed_items).inverse_of(:topic).dependent :destroy }
-    it { is_expected.to have_many(:annotations).inverse_of(:topic).dependent :destroy }
-    it { is_expected.to have_many(:conversations).inverse_of :topic }
     it { is_expected.to have_many(:incoming_pull_requests).inverse_of(:target).class_name('PullRequest').dependent :destroy }
     it { is_expected.to have_many(:outgoing_pull_requests).inverse_of(:source).class_name('PullRequest').dependent :destroy }
     it { is_expected.to have_many(:alerts).inverse_of(:topic).dependent :destroy }

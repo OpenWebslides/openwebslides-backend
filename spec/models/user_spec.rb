@@ -78,8 +78,6 @@ RSpec.describe User, :type => :model do
     it { is_expected.to have_many(:grants).dependent :destroy }
     it { is_expected.to have_many(:collaborations).class_name('Topic').through(:grants).source(:topic).inverse_of :collaborators }
     it { is_expected.to have_many(:feed_items).inverse_of(:user).dependent :destroy }
-    it { is_expected.to have_many(:annotations).inverse_of(:user).dependent :destroy }
-    it { is_expected.to have_many(:ratings).inverse_of(:user).dependent :destroy }
     it { is_expected.to have_many(:alerts).inverse_of(:user).dependent :destroy }
   end
 
