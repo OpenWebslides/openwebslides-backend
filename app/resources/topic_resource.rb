@@ -26,7 +26,6 @@ class TopicResource < ApplicationResource
   has_many :forks
   has_many :collaborators
   has_many :assets
-  has_many :conversations
   has_many :incoming_pull_requests
   has_many :outgoing_pull_requests
 
@@ -46,14 +45,14 @@ class TopicResource < ApplicationResource
   #
   def self.creatable_fields(context = {})
     super(context) - %i[
-      upstream content forks collaborators assets conversations
+      upstream content forks collaborators assets
       has_open_pull_request incoming_pull_requests outgoing_pull_requests
     ]
   end
 
   def self.updatable_fields(context = {})
     super(context) - %i[
-      upstream root_content_item_id content forks collaborators assets conversations
+      upstream root_content_item_id content forks collaborators assets
       has_open_pull_request incoming_pull_requests outgoing_pull_requests
     ]
   end
