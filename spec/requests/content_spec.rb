@@ -12,22 +12,27 @@ RSpec.describe 'Content API', :type => :request do
   # Stubs and mocks
   #
   ##
+  # Subject
+  #
+  subject { response }
+
+  ##
   # Test variables
   #
   let(:user) { create :user, :confirmed }
   let(:topic) { create :topic, :user => user }
 
-  let(:message) { Faker::Lorem.words(4).join ' ' }
+  let(:content) { random_content 10, topic.root_content_item_id }
 
   ##
   # Request variables
   #
-  def content_body(commit_msg = message)
+  def update_body(message)
     {
       :data => {
         :type => 'contents',
         :attributes => {
-          :message => commit_msg,
+          :message => message,
           :content => [{
             :id => topic.root_content_item_id,
             :type => 'contentItemTypes/ROOT'
@@ -37,39 +42,38 @@ RSpec.describe 'Content API', :type => :request do
     }.to_json
   end
 
-  before { Topics::Create.call topic }
-
   ##
   # Tests
   #
-  describe 'GET /' do
-    it 'returns topic content' do
-      get topic_content_path(:topic_id => topic.id), :headers => headers
+  before { Topics::Create.call topic }
 
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+  describe 'GET /' do
+    before { get topic_content_path(:topic_id => topic.id), :headers => headers }
+
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_attribute(:content).with_value [] }
+
+    context 'when the topic already has some content' do
+      prepend_before { Topics::UpdateContent.call topic, content, user, 'Update content' }
+
+      it { is_expected.to have_http_status :ok }
+      it { is_expected.to have_attribute(:content).with_value [] }
     end
   end
 
   describe 'PUT/PATCH /' do
-    before do
-      add_content_type_header
-      add_auth_header
-    end
+    before { patch topic_content_path(:topic_id => topic.id), :params => update_body(message), :headers => headers(:access) }
 
-    # TODO: fix this when the commits API deploys
-    # it 'rejects update when no message is specified' do
-    #   patch topic_content_path(:topic_id => topic.id), :params => content_body(nil), :headers => headers
+    let(:message) { Faker::Lorem.words(4).join ' ' }
+
+    it { is_expected.to have_http_status :no_content }
+
+    # FIXME: reenable this test when async error handling is fixed
+    # context 'when the message is empty' do
+    #   let(:message) { '' }
     #
-    #   expect(response.status).to eq 422
-    #   expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-    #   expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    #   it { is_expected.to have_http_status :unprocessable_entity }
+    #   it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     # end
-
-    it 'updates topic content' do
-      patch topic_content_path(:topic_id => topic.id), :params => content_body, :headers => headers
-
-      expect(response.status).to eq 204
-    end
   end
 end
