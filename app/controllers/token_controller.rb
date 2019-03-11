@@ -27,23 +27,16 @@ class TokenController < ApplicationController
 
     set_refresh_token @user
 
-    jsonapi_render :json => @user,
-                   :status => :created,
-                   :options => { :resource => UserResource }
+    head :no_content
   end
 
   # PATCH /token
   def update
-    @user = User.confirmed.find_by :email => resource_params[:email]&.downcase
-
-    raise JSONAPI::Exceptions::UnauthorizedError.new :update, :token unless @user == current_user
-
     authorize :token
 
-    set_access_token @user
+    set_access_token current_user
 
-    jsonapi_render :json => @user,
-                   :options => { :resource => UserResource }
+    head :no_content
   end
 
   # DELETE /token

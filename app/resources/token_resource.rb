@@ -33,7 +33,7 @@ class TokenResource < ApplicationResource
   end
 
   def self.updatable_fields(context = {})
-    super(context) - %i[password]
+    super(context) - %i[email password]
   end
 
   def self.sortable_fields(context = {})

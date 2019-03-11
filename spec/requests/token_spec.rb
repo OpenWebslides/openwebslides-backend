@@ -34,17 +34,6 @@ RSpec.describe 'Token API', :type => :request do
     }.to_json
   end
 
-  def update_body(email)
-    {
-      :data => {
-        :type => 'tokens',
-        :attributes => {
-          :email => email
-        }
-      }
-    }.to_json
-  end
-
   ##
   # Tests
   #
@@ -53,7 +42,7 @@ RSpec.describe 'Token API', :type => :request do
 
     let(:password) { 'foobar' }
 
-    it { is_expected.to have_http_status :created }
+    it { is_expected.to have_http_status :no_content }
     it { is_expected.to return_token JWT::Auth::RefreshToken }
 
     context 'when the credentials are incorrect' do
@@ -72,20 +61,12 @@ RSpec.describe 'Token API', :type => :request do
   end
 
   describe 'PATCH /' do
-    before { patch token_path, :params => update_body(email), :headers => headers(header_tags) }
+    before { patch token_path, :headers => headers(header_tags) }
 
-    let(:email) { user.email }
     let(:header_tags) { :refresh }
 
-    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_http_status :no_content }
     it { is_expected.to return_token JWT::Auth::AccessToken }
-
-    context 'when the credentials are incorrect' do
-      let(:email) { 'foo@bar.com' }
-
-      it { is_expected.to have_http_status :unauthorized }
-      it { is_expected.not_to return_token }
-    end
 
     context 'when the user is not confirmed' do
       let(:user) { create :user, :password => 'foobar' }
