@@ -27,7 +27,9 @@ class TokenController < ApplicationController
 
     set_refresh_token @user
 
-    head :no_content
+    jsonapi_render :json => @user,
+                   :status => :created,
+                   :options => { :resource => UserResource }
   end
 
   # PATCH /token
@@ -36,7 +38,9 @@ class TokenController < ApplicationController
 
     set_access_token current_user
 
-    head :no_content
+    jsonapi_render :json => current_user,
+                   :status => :ok,
+                   :options => { :resource => UserResource }
   end
 
   # DELETE /token

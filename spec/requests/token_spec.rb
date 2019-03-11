@@ -42,8 +42,9 @@ RSpec.describe 'Token API', :type => :request do
 
     let(:password) { 'foobar' }
 
-    it { is_expected.to have_http_status :no_content }
+    it { is_expected.to have_http_status :created }
     it { is_expected.to return_token JWT::Auth::RefreshToken }
+    it { is_expected.to have_record user }
 
     context 'when the credentials are incorrect' do
       let(:password) { 'barfoo' }
@@ -65,8 +66,9 @@ RSpec.describe 'Token API', :type => :request do
 
     let(:header_tags) { :refresh }
 
-    it { is_expected.to have_http_status :no_content }
+    it { is_expected.to have_http_status :ok }
     it { is_expected.to return_token JWT::Auth::AccessToken }
+    it { is_expected.to have_record user }
 
     context 'when the user is not confirmed' do
       let(:user) { create :user, :password => 'foobar' }
