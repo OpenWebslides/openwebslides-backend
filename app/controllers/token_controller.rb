@@ -17,7 +17,7 @@ class TokenController < ApplicationController
 
   # POST /token
   def create
-    @user = User.confirmed.find_by :email => resource_params[:email].downcase
+    @user = User.confirmed.find_by :email => resource_params[:email]&.downcase
 
     unless @user && @user.valid_password?(resource_params[:password])
       raise JSONAPI::Exceptions::UnauthorizedError.new :create, :token
@@ -34,7 +34,7 @@ class TokenController < ApplicationController
 
   # PATCH /token
   def update
-    @user = User.confirmed.find_by :email => resource_params[:email].downcase
+    @user = User.confirmed.find_by :email => resource_params[:email]&.downcase
 
     raise JSONAPI::Exceptions::UnauthorizedError.new :update, :token unless @user == current_user
 
