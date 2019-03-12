@@ -47,14 +47,14 @@ RSpec.describe 'Fork API', :type => :request do
       let(:id) { 0 }
 
       it { is_expected.to have_http_status :not_found }
-      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
 
     context 'when the topic already has an upstream' do
       let(:topic) { create :topic, :upstream => create(:topic) }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
   end
 end

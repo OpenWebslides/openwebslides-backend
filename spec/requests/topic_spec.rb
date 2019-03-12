@@ -71,8 +71,8 @@ RSpec.describe 'Topic API', :type => :request do
     before { get topics_path, :headers => headers }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_records Topic.all }
-    it { is_expected.to have_record_count 3 }
+    it { is_expected.to have_jsonapi_records Topic.all }
+    it { is_expected.to have_jsonapi_record_count 3 }
   end
 
   describe 'POST /' do
@@ -81,34 +81,34 @@ RSpec.describe 'Topic API', :type => :request do
     let(:attrs) { attributes }
 
     it { is_expected.to have_http_status :created }
-    it { is_expected.to have_attribute(:title).with_value title }
+    it { is_expected.to have_jsonapi_attribute(:title).with_value title }
 
     context 'when the title is empty' do
       let(:attrs) { attributes.merge :title => '' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when there is no title' do
       let(:attrs) { attributes.except :title }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when access is invalid' do
       let(:attrs) { attributes.merge :access => 'foo' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when there is no access' do
       let(:attrs) { attributes.except :access }
 
       it { is_expected.to have_http_status :created }
-      it { is_expected.to have_attribute(:access).with_value 'public' }
+      it { is_expected.to have_jsonapi_attribute(:access).with_value 'public' }
     end
   end
 
@@ -118,13 +118,13 @@ RSpec.describe 'Topic API', :type => :request do
     let(:id) { topic.id }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_record topic }
+    it { is_expected.to have_jsonapi_record topic }
 
     context 'when the identifier is invalid' do
       let(:id) { 0 }
 
       it { is_expected.to have_http_status :not_found }
-      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
   end
 
@@ -135,20 +135,20 @@ RSpec.describe 'Topic API', :type => :request do
     let(:attrs) { attributes.except :rootContentItemId }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_record topic }
+    it { is_expected.to have_jsonapi_record topic }
 
     context 'when the identifier is invalid' do
       let(:id) { 0 }
 
       it { is_expected.to have_http_status :not_found }
-      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
 
     context 'when root_content_item_id changes' do
       let(:attrs) { { :rootContentItemId => 'foo' } }
 
       it { is_expected.to have_http_status :bad_request }
-      it { is_expected.to have_error.with_code JSONAPI::PARAM_NOT_ALLOWED }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::PARAM_NOT_ALLOWED }
     end
   end
 
@@ -169,7 +169,7 @@ RSpec.describe 'Topic API', :type => :request do
       let(:id) { 0 }
 
       it { is_expected.to have_http_status :not_found }
-      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
   end
 end

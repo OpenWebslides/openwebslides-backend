@@ -93,34 +93,34 @@ RSpec.describe 'Pull Request API', :type => :request do
     let(:message) { Faker::Lorem.words(20).join ' ' }
 
     it { is_expected.to have_http_status :created }
-    it { is_expected.to have_attribute(:message).with_value message }
+    it { is_expected.to have_jsonapi_attribute(:message).with_value message }
 
     context 'when the message is empty' do
       let(:message) { '' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the source does not have an upstream' do
       let(:source) { create :topic }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the source has an upstream not equal to the target' do
       let(:source) { create :topic, :upstream => create(:topic) }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the source already has a ready pull request' do
       let(:pr) { create :pull_request, :source => source, :target => target, :state => 'ready' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
   end
 
@@ -130,16 +130,16 @@ RSpec.describe 'Pull Request API', :type => :request do
     let(:id) { pr.id }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_record pr }
-    it { is_expected.to have_relationship(:user).with_record pr.user }
-    it { is_expected.to have_relationship(:source).with_record pr.source }
-    it { is_expected.to have_relationship(:target).with_record pr.target }
+    it { is_expected.to have_jsonapi_record pr }
+    it { is_expected.to have_jsonapi_relationship(:user).with_record pr.user }
+    it { is_expected.to have_jsonapi_relationship(:source).with_record pr.source }
+    it { is_expected.to have_jsonapi_relationship(:target).with_record pr.target }
 
     context 'when the identifier is invalid' do
       let(:id) { 0 }
 
       it { is_expected.to have_http_status :not_found }
-      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
   end
 
@@ -147,16 +147,16 @@ RSpec.describe 'Pull Request API', :type => :request do
     before { get topic_incomingPullRequests_path(:topic_id => pr.target.id), :headers => headers(:access) }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_records pr.target.incoming_pull_requests }
-    it { is_expected.to have_record_count 1 }
+    it { is_expected.to have_jsonapi_records pr.target.incoming_pull_requests }
+    it { is_expected.to have_jsonapi_record_count 1 }
   end
 
   describe 'GET /outgoingPullRequests' do
     before { get topic_outgoingPullRequests_path(:topic_id => pr.source.id), :headers => headers(:access) }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_records pr.source.outgoing_pull_requests }
-    it { is_expected.to have_record_count 1 }
+    it { is_expected.to have_jsonapi_records pr.source.outgoing_pull_requests }
+    it { is_expected.to have_jsonapi_record_count 1 }
   end
 
   describe 'PUT/PATCH /:id' do
@@ -165,50 +165,50 @@ RSpec.describe 'Pull Request API', :type => :request do
     let(:feedback) { Faker::Lorem.words(20).join ' ' }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_record pr }
-    it { is_expected.to have_attribute(:state).with_value 'rejected' }
-    it { is_expected.to have_attribute(:feedback).with_value feedback }
+    it { is_expected.to have_jsonapi_record pr }
+    it { is_expected.to have_jsonapi_attribute(:state).with_value 'rejected' }
+    it { is_expected.to have_jsonapi_attribute(:feedback).with_value feedback }
 
     context 'when the feedback is empty' do
       let(:feedback) { '' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the pull request is pending' do
       let(:pr) { create :pull_request, :state => 'pending' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the pull request is incompatible' do
       let(:pr) { create :pull_request, :state => 'incompatible' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the pull request is working' do
       let(:pr) { create :pull_request, :state => 'working' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the pull request is already accepted' do
       let(:pr) { create :pull_request, :state => 'accepted', :feedback => 'feedback' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the pull request is already rejected' do
       let(:pr) { create :pull_request, :state => 'rejected', :feedback => 'feedback' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
   end
 end

@@ -53,7 +53,11 @@ RSpec.describe 'Content API', :type => :request do
     before { get topic_content_path(:topic_id => topic.id), :headers => headers }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_attribute(:content).with_value(content.sort_by { |h| h['id'] }) }
+
+    it 'matches the content' do
+      response_content = JSON.parse(response.body)['data']['attributes']['content']
+      expect(response_content).to match_array content
+    end
   end
 
   describe 'PUT/PATCH /' do
@@ -68,7 +72,7 @@ RSpec.describe 'Content API', :type => :request do
     #   let(:message) { '' }
     #
     #   it { is_expected.to have_http_status :unprocessable_entity }
-    #   it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+    #   it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     # end
   end
 end

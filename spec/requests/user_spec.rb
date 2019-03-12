@@ -65,8 +65,8 @@ RSpec.describe 'User API', :type => :request do
     before { get users_path, :headers => headers }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_records User.all }
-    it { is_expected.to have_record_count 3 }
+    it { is_expected.to have_jsonapi_records User.all }
+    it { is_expected.to have_jsonapi_record_count 3 }
   end
 
   describe 'POST /' do
@@ -75,34 +75,34 @@ RSpec.describe 'User API', :type => :request do
     let(:attrs) { attributes }
 
     it { is_expected.to have_http_status :created }
-    it { is_expected.to have_attribute(:name).with_value name }
+    it { is_expected.to have_jsonapi_attribute(:name).with_value name }
 
     context 'when a user with the same email already exists' do
       let(:attrs) { attributes.merge :email => user.email }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when ToS is not accepted' do
       let(:attrs) { attributes.merge :tosAccepted => false }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the password is empty' do
       let(:attrs) { attributes.merge :password => '' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the name is empty' do
       let(:attrs) { attributes.merge :name => '' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
   end
 
@@ -112,14 +112,14 @@ RSpec.describe 'User API', :type => :request do
     let(:id) { user.id }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_record user }
-    it { is_expected.to have_attribute(:gravatarHash).with_value Digest::MD5.hexdigest(user.email) }
+    it { is_expected.to have_jsonapi_record user }
+    it { is_expected.to have_jsonapi_attribute(:gravatarHash).with_value Digest::MD5.hexdigest(user.email) }
 
     context 'when the identifier is invalid' do
       let(:id) { 0 }
 
       it { is_expected.to have_http_status :not_found }
-      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
   end
 
@@ -130,34 +130,34 @@ RSpec.describe 'User API', :type => :request do
     let(:attrs) { { :name => 'foobar' } }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_record user }
+    it { is_expected.to have_jsonapi_record user }
 
     context 'when the identifier is invalid' do
       let(:id) { 0 }
 
       it { is_expected.to have_http_status :not_found }
-      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
 
     context 'when email changes' do
       let(:attrs) { { :email => 'foo@bar' } }
 
       it { is_expected.to have_http_status :bad_request }
-      it { is_expected.to have_error.with_code JSONAPI::PARAM_NOT_ALLOWED }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::PARAM_NOT_ALLOWED }
     end
 
     context 'when password changes and current password is empty' do
       let(:attrs) { { :password => 'abcd1234' } }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when password changes and current password is invalid' do
       let(:attrs) { { :password => 'abcd1234', :currentPassword => 'foobar' } }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when password changes and current password is valid' do
@@ -198,7 +198,7 @@ RSpec.describe 'User API', :type => :request do
       let(:id) { 0 }
 
       it { is_expected.to have_http_status :not_found }
-      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
   end
 end

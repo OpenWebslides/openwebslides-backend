@@ -73,7 +73,7 @@ RSpec.describe 'Confirmation API', :type => :request do
     let(:token) { user.confirmation_token }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_record user }
+    it { is_expected.to have_jsonapi_record user }
 
     it 'confirmed the user' do
       user.reload
@@ -84,14 +84,14 @@ RSpec.describe 'Confirmation API', :type => :request do
       let(:token) { 'foo' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the user is already confirmed' do
       let(:user) { create :user, :confirmed }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
   end
 end

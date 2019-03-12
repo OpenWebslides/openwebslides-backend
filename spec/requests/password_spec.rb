@@ -86,7 +86,7 @@ RSpec.describe 'Password API', :type => :request do
     let(:token) { user.send_reset_password_instructions }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_record user }
+    it { is_expected.to have_jsonapi_record user }
 
     describe 'resets the password' do
       subject { user }
@@ -101,14 +101,14 @@ RSpec.describe 'Password API', :type => :request do
       let(:token) { 'foo' }
 
       it { is_expected.to have_http_status :unprocessable_entity }
-      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
     context 'when the user is already confirmed' do
       let(:user) { create :user, :confirmed }
 
       it { is_expected.to have_http_status :ok }
-      it { is_expected.to have_record user }
+      it { is_expected.to have_jsonapi_record user }
 
       describe 'resets the password' do
         subject { user }

@@ -29,7 +29,7 @@ RSpec.describe 'FeedItem API', :type => :request do
     prepend_before { create_list :feed_item, 3 }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_records FeedItem.all }
-    it { is_expected.to have_record_count 3 }
+    it { is_expected.to have_jsonapi_records FeedItem.all }
+    it { is_expected.to have_jsonapi_record_count 3 }
   end
 end
