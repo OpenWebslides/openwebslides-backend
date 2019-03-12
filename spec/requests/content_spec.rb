@@ -22,7 +22,7 @@ RSpec.describe 'Content API', :type => :request do
   let(:user) { create :user, :confirmed }
   let(:topic) { create :topic, :user => user }
 
-  let(:content) { random_content 10, topic.root_content_item_id }
+  let(:content) { random_content 1, topic.root_content_item_id }
 
   ##
   # Request variables
@@ -48,17 +48,12 @@ RSpec.describe 'Content API', :type => :request do
   before { Topics::Create.call topic }
 
   describe 'GET /' do
+    before { Topics::UpdateContent.call topic, content, user, 'Update content' }
+
     before { get topic_content_path(:topic_id => topic.id), :headers => headers }
 
     it { is_expected.to have_http_status :ok }
-    it { is_expected.to have_attribute(:content).with_value [] }
-
-    context 'when the topic already has some content' do
-      prepend_before { Topics::UpdateContent.call topic, content, user, 'Update content' }
-
-      it { is_expected.to have_http_status :ok }
-      it { is_expected.to have_attribute(:content).with_value [] }
-    end
+    it { is_expected.to have_attribute(:content).with_value(content.sort_by { |h| h['id'] }) }
   end
 
   describe 'PUT/PATCH /' do
