@@ -30,6 +30,12 @@ RSpec.describe Asset::Token, :type => :model do
     # fill in the defaults for all attributes
     subject(:token) { Asset::Token.from_jwt asset_token.to_jwt }
 
+    describe '#type' do
+      it 'returns the correct token type' do
+        expect(subject.type).to eq :asset
+      end
+    end
+
     describe '#valid?' do
       it do
         is_expected.to be_valid

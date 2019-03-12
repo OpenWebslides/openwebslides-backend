@@ -43,19 +43,22 @@ class Asset < ApplicationRecord
   class Token < JWT::Auth::Token
     attr_accessor :object
 
-    def valid?
-      object&.reload
-
-      super && !object.nil? && type == :asset
-    end
-
-    def payload
-      super.merge :typ => :asset,
-                  :obj => object.id
+    def type
+      :asset
     end
 
     def lifetime
       JWT::Auth.access_token_lifetime
+    end
+
+    def valid?
+      object&.reload
+
+      super && !object.nil?
+    end
+
+    def payload
+      super.merge :obj => object.id
     end
 
     def self.from_jwt(token)
