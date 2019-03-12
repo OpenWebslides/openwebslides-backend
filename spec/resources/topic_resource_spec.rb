@@ -38,7 +38,6 @@ RSpec.describe TopicResource, :type => :resource do
   it { is_expected.to have_many(:collaborators).with_class_name 'User' }
   it { is_expected.to have_many(:forks).with_class_name 'Topic' }
   it { is_expected.to have_many(:assets) }
-  it { is_expected.to have_many(:conversations) }
   it { is_expected.to have_many(:incoming_pull_requests).with_class_name 'PullRequest' }
   it { is_expected.to have_many(:outgoing_pull_requests).with_class_name 'PullRequest' }
 
@@ -49,12 +48,12 @@ RSpec.describe TopicResource, :type => :resource do
 
   describe 'fields' do
     it 'has a valid set of fetchable fields' do
-      expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets conversations has_open_pull_request incoming_pull_requests outgoing_pull_requests]
+      expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets has_open_pull_request incoming_pull_requests outgoing_pull_requests]
     end
 
     it 'omits empty fields' do
       subject { described_class.new nil_topic, context }
-      expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets conversations has_open_pull_request incoming_pull_requests outgoing_pull_requests]
+      expect(subject.fetchable_fields).to match_array %i[id title access description root_content_item_id user upstream content forks collaborators assets has_open_pull_request incoming_pull_requests outgoing_pull_requests]
     end
 
     it 'has a valid set of creatable fields' do

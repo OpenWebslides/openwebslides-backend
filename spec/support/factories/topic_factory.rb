@@ -26,10 +26,6 @@ FactoryBot.define do
       assets { build_list :asset, 3 }
     end
 
-    trait :with_conversations do
-      conversations { build_list :conversation, 3 }
-    end
-
     ##
     # Factories
     #

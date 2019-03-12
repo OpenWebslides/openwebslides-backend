@@ -88,10 +88,6 @@ Rails.application.routes.draw do
       jsonapi_related_resources :assets
       jsonapi_links :assets, :only => :show
 
-      # Relationship: Conversations
-      jsonapi_related_resources :conversations
-      jsonapi_links :conversations, :only => :show
-
       # Relationship: Incoming pull requests
       jsonapi_related_resources :incoming_pull_requests
       jsonapi_links :incoming_pull_requests, :only => :show
@@ -142,49 +138,6 @@ Rails.application.routes.draw do
     # Recent Activity (feed) API (immutable)
     #
     jsonapi_resources :feed_items, :only => %i[index] do end
-
-    ##
-    # Annotations API
-    #
-    jsonapi_resources :conversations, :except => %i[index] do
-      # Relationship: Topic
-      jsonapi_related_resource :topic
-      jsonapi_link :topic, :only => :show
-
-      # Relationship: User
-      jsonapi_related_resource :user
-      jsonapi_links :user, :only => :show
-
-      # Relationship: Comments
-      jsonapi_related_resources :comments
-      jsonapi_links :comments, :only => :show
-
-      # Nested resource: Rating
-      jsonapi_resource :rating, :only => %i[create destroy] do end
-
-      # Nested resource: Flag
-      jsonapi_resource :flag, :only => %i[create] do end
-    end
-
-    jsonapi_resources :comments, :except => %i[index] do
-      # Relationship: Topic
-      jsonapi_related_resource :topic
-      jsonapi_links :topic, :only => :show
-
-      # Relationship: User
-      jsonapi_related_resource :user
-      jsonapi_links :user, :only => :show
-
-      # Relationship: Conversation
-      jsonapi_related_resource :conversation
-      jsonapi_link :conversation, :only => :show
-
-      # Nested resource: Rating
-      jsonapi_resource :rating, :only => %i[create destroy] do end
-
-      # Nested resource: Flag
-      jsonapi_resource :flag, :only => %i[create] do end
-    end
 
     ##
     # Authentication API

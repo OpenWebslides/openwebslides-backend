@@ -50,13 +50,6 @@ class Topic < ApplicationRecord
            :dependent => :destroy,
            :inverse_of => :topic
 
-  has_many :annotations,
-           :dependent => :destroy,
-           :inverse_of => :topic
-
-  has_many :conversations,
-           :inverse_of => :topic
-
   has_many :incoming_pull_requests,
            :class_name => 'PullRequest',
            :foreign_key => :target_id,

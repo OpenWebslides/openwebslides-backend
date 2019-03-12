@@ -107,24 +107,6 @@ class TopicPolicy < ApplicationPolicy
   end
 
   ##
-  # Relationship: conversations
-  #
-  def show_conversations?
-    # Users can only show conversations if the topic is showable
-    # Policy scope separately in the controller
-    show?
-  end
-
-  ##
-  # Relationships: annotations
-  #
-  def show_annotations?
-    # Users can show annotations relationship if the topic is showable
-    # Policy scope the annotations separately in the controller
-    show?
-  end
-
-  ##
   # Relationships: incoming_pull_requests
   #
   def show_incoming_pull_requests?
