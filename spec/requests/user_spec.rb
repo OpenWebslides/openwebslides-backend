@@ -3,11 +3,30 @@
 require 'rails_helper'
 
 RSpec.describe 'User API', :type => :request do
+  ##
+  # Configuration
+  #
+  include_context 'repository'
+
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject { response }
+
+  ##
+  # Test variables
+  #
   let(:user) { create :user, :confirmed, :password => password }
 
   let(:name) { Faker::Name.name }
   let(:password) { Faker::Internet.password 6 }
 
+  ##
+  # Request variables
+  #
   let(:attributes) do
     {
       :email => Faker::Internet.email,
@@ -17,7 +36,7 @@ RSpec.describe 'User API', :type => :request do
     }
   end
 
-  def request_body(attributes)
+  def create_body(attributes)
     {
       :data => {
         :type => 'users',
@@ -36,281 +55,150 @@ RSpec.describe 'User API', :type => :request do
     }.to_json
   end
 
+  ##
+  # Tests
+  #
+
   describe 'GET /' do
-    before do
-      create_list :user, 3
-    end
+    before { create_list :user, 3 }
 
-    it 'returns successful' do
-      get users_path, :headers => headers
+    before { get users_path, :headers => headers }
 
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      json = JSON.parse response.body
-      expect(json['data'].count).to eq 3
-    end
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_records User.all }
+    it { is_expected.to have_record_count 3 }
   end
 
   describe 'POST /' do
-    before do
-      add_content_type_header
+    before { post users_path, :params => create_body(attrs), :headers => headers }
+
+    let(:attrs) { attributes }
+
+    it { is_expected.to have_http_status :created }
+    it { is_expected.to have_attribute(:name).with_value name }
+
+    context 'when a user with the same email already exists' do
+      let(:attrs) { attributes.merge :email => user.email }
+
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
-    it 'rejects an already existing email' do
-      post users_path, :params => request_body(attributes.merge :email => user.email), :headers => headers
+    context 'when ToS is not accepted' do
+      let(:attrs) { attributes.merge :tosAccepted => false }
 
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
-    it 'rejects TOS not accepted' do
-      post users_path, :params => request_body(attributes.merge :tosAccepted => false), :headers => headers
+    context 'when the password is empty' do
+      let(:attrs) { attributes.merge :password => '' }
 
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq [JSONAPI::VALIDATION_ERROR, JSONAPI::VALIDATION_ERROR]
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
-    it 'rejects empty passwords' do
-      post users_path, :params => request_body(attributes.merge :password => ''), :headers => headers
+    context 'when the name is empty' do
+      let(:attrs) { attributes.merge :name => '' }
 
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'rejects no first name' do
-      post users_path, :params => request_body(attributes.except :name), :headers => headers
-
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'returns successful' do
-      post users_path, :params => request_body(attributes), :headers => headers
-
-      expect(response.status).to eq 201
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      json = JSON.parse response.body
-
-      # Email is hidden for unauthenticated users
-      expect(json['data']['attributes']).to include 'name' => attributes[:name]
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
   end
 
   describe 'GET /:id' do
-    before do
-    end
+    before { get user_path(:id => id), :headers => headers }
 
-    it 'rejects an invalid id' do
-      get user_path(:id => 0), :headers => headers
+    let(:id) { user.id }
 
-      expect(response.status).to eq 404
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_record user }
+    it { is_expected.to have_attribute(:gravatarHash).with_value Digest::MD5.hexdigest(user.email) }
 
-    it 'returns successful' do
-      get user_path(:id => user.id), :headers => headers
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
 
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      json = JSON.parse response.body
-
-      expect(json['data']['attributes']['gravatarHash']).to eq Digest::MD5.hexdigest(user.email)
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
   end
 
   describe 'PUT/PATCH /:id' do
-    before do
-      add_content_type_header
-      add_auth_header
+    before { patch user_path(:id => id), :params => update_body(id, attrs), :headers => headers(:access) }
+
+    let(:id) { user.id }
+    let(:attrs) { { :name => 'foobar' } }
+
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_record user }
+
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
+
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
 
-    it 'rejects id not equal to URL' do
-      patch user_path(:id => user.id), :params => update_body(999, :name => 'foo'), :headers => headers
+    context 'when email changes' do
+      let(:attrs) { { :email => 'foo@bar' } }
 
-      expect(response.status).to eq 400
-      expect(jsonapi_error_code(response)).to eq JSONAPI::KEY_NOT_INCLUDED_IN_URL
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :bad_request }
+      it { is_expected.to have_error.with_code JSONAPI::PARAM_NOT_ALLOWED }
     end
 
-    it 'rejects non-existant users' do
-      patch user_path(:id => 999), :params => update_body(999, :name => 'foo'), :headers => headers
+    context 'when password changes and current password is empty' do
+      let(:attrs) { { :password => 'abcd1234' } }
 
-      expect(response.status).to eq 404
-      expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
-    it 'rejects email changes' do
-      patch user_path(:id => user.id), :params => update_body(user.id, :email => user.email), :headers => headers
+    context 'when password changes and current password is invalid' do
+      let(:attrs) { { :password => 'abcd1234', :currentPassword => 'foobar' } }
 
-      expect(response.status).to eq 400
-      expect(jsonapi_error_code(response)).to eq JSONAPI::PARAM_NOT_ALLOWED
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
-    it 'rejects empty passwords' do
-      patch user_path(:id => user.id), :params => update_body(user.id, :password => ''), :headers => headers
+    context 'when password changes and current password is valid' do
+      let(:attrs) { { :password => 'abcd1234', :currentPassword => password } }
 
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :ok }
+
+      it 'changes password' do
+        user.reload
+        expect(user).to be_valid_password 'abcd1234'
+      end
     end
 
-    it 'rejects update on password when current password is not specified' do
-      patch user_path(:id => user.id), :params => update_body(user.id, :password => 'abcd1234'), :headers => headers
+    context 'when email notifications are disabled' do
+      let(:attrs) { { :alertEmails => false } }
 
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
+      it { is_expected.to have_http_status :ok }
 
-    it 'rejects update on password when current password is invalid' do
-      patch user_path(:id => user.id), :params => update_body(user.id, :currentPassword => 'foobar', :password => 'abcd1234'), :headers => headers
-
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'updates name' do
-      expect(user.name).not_to eq name
-      patch user_path(:id => user.id), :params => update_body(user.id, :name => name), :headers => headers
-
-      user.reload
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      expect(user.name).to eq name
-    end
-
-    it 'disables email notifications' do
-      expect(user).to be_alert_emails
-      patch user_path(:id => user.id), :params => update_body(user.id, :alertEmails => false), :headers => headers
-
-      user.reload
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      expect(user).not_to be_alert_emails
+      it 'disables email notifications' do
+        user.reload
+        expect(user).not_to be_alert_emails
+      end
     end
   end
 
   describe 'DELETE /:id' do
-    before do
-      add_auth_header
+    before { delete user_path(:id => id), :headers => headers(:access) }
+
+    let(:id) { user.id }
+
+    it { is_expected.to have_http_status :no_content }
+
+    it 'is destroyed' do
+      expect { user.reload }.to raise_error ActiveRecord::RecordNotFound
     end
 
-    it 'rejects non-existant users' do
-      delete user_path(:id => '0'), :params => user_path(:id => 999), :headers => headers
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
 
-      user.reload
-      expect(user).not_to be_destroyed
-
-      expect(response.status).to eq 404
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
-
-    it 'deletes a user' do
-      id = user.id
-      delete user_path(:id => user.id), :params => user_path(:id => user.id), :headers => headers
-
-      expect { User.find id }.to raise_error ActiveRecord::RecordNotFound
-
-      expect(response.status).to eq 204
-    end
-  end
-
-  describe 'topics relationship' do
-    describe 'GET /relationships/topics' do
-      before do
-        add_auth_header
-
-        create :topic, :user => user
-      end
-
-      it 'returns successful' do
-        get user_relationships_topics_path(:user_id => user.id), :headers => headers
-
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-        json = JSON.parse response.body
-        expect(json['data'].count).to eq Topic.where(:user => user).count
-        expect(json['data'].first['type']).to eq 'topics'
-      end
-    end
-
-    describe 'related resources do' do
-      before do
-        add_auth_header
-
-        user.topics << create(:topic)
-      end
-
-      it 'returns successful' do
-        get user_topics_path(:user_id => user.id), :headers => headers
-
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-        json = JSON.parse response.body
-        expect(json['data'].count).to eq user.topics.count
-        expect(json['data'].first['type']).to eq 'topics'
-      end
-    end
-
-    # TODO: POST /relationships/topics
-    # TODO: PATCH /relationships/topics
-    # TODO: DELETE /relationships/topics
-  end
-
-  describe 'collaborations relationship' do
-    describe 'GET /relationships/collaborations' do
-      before do
-        add_auth_header
-
-        topic = create :topic
-        topic.collaborators << user
-      end
-
-      it 'returns successful' do
-        get user_relationships_collaborations_path(:user_id => user.id), :headers => headers
-
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-        json = JSON.parse response.body
-        expect(json['data'].count).to eq 1
-        expect(json['data'].first['type']).to eq 'topics'
-      end
-    end
-
-    describe 'related resources do' do
-      before do
-        add_auth_header
-
-        user.collaborations << create(:topic)
-      end
-
-      it 'returns successful' do
-        get user_collaborations_path(:user_id => user.id), :headers => headers
-
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-        json = JSON.parse response.body
-        expect(json['data'].count).to eq user.collaborations.count
-        expect(json['data'].first['type']).to eq 'topics'
-      end
-    end
-
-    # TODO: POST /relationships/collaborations
-    # TODO: PATCH /relationships/collaborations
-    # TODO: DELETE /relationships/collaborations
   end
 end
