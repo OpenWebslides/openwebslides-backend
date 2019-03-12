@@ -3,135 +3,111 @@
 require 'rails_helper'
 
 RSpec.describe 'Assets API', :type => :request do
+  ##
+  # Configuration
+  #
   include_context 'repository'
 
+  ##
+  # Stubs and mocks
+  #
+  before do
+    allow(Repo::Asset::UpdateFile).to receive :call
+    allow(Repo::Asset::Delete).to receive :call
+  end
+
+  ##
+  # Subject
+  #
+  subject { response }
+
+  ##
+  # Test variables
+  #
   let(:asset) { create :asset, :with_topic }
+
   let(:topic) { asset.topic }
   let(:user) { topic.user }
 
   let(:asset_file) { Rails.root.join 'spec', 'support', 'asset.png' }
 
+  ##
+  # Request variables
+  #
+  let(:body) { fixture_file_upload asset_file }
+
+  ##
+  # Tests
+  #
   describe 'POST /' do
-    before do
-      add_auth_header
-      @headers['Content-Type'] = 'image/png'
-      @headers['Content-Disposition'] = 'attachment; filename="asset.png"'
+    before { post topic_assets_path(:topic_id => topic.id), :params => body, :headers => asset_headers }
 
-      @body = fixture_file_upload(asset_file)
+    let(:asset_headers) { headers(:access).merge 'Content-Type' => content_type, 'Content-Disposition' => "attachment; filename=\"#{filename}\"" }
+    let(:filename) { 'asset.png' }
+    let(:content_type) { 'image/png' }
 
-      allow(Repo::Asset::UpdateFile).to receive :call
+    it { is_expected.to have_http_status :created }
+    it { is_expected.to have_attribute(:filename).with_value 'asset.png' }
+
+    context 'when Content-Disposition is omitted' do
+      let(:asset_headers) { headers(:access).merge 'Content-Type' => 'image/png' }
+
+      it { is_expected.to have_http_status :bad_request }
+      it { is_expected.to have_error.with_code JSONAPI::BAD_REQUEST }
     end
 
-    it 'rejects without Content-Disposition' do
-      post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers.except('Content-Disposition')
+    context 'when the filename is already taken' do
+      let(:filename) { asset.filename }
 
-      expect(response.status).to eq 400
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
-    it 'rejects filename already taken' do
-      post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers.merge('Content-Disposition' => "attachment; filename=\"#{asset.filename}\"")
+    context 'when the media type is not allowed' do
+      let(:content_type) { 'application/octet-stream' }
 
-      expect(response.status).to eq 422
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-    end
-
-    it 'rejects media types not allowed' do
-      post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers.merge('Content-Type' => 'application/octet-stream')
-
-      expect(response.status).to eq 415
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'returns successful' do
-      post topic_assets_path(:topic_id => topic.id), :params => @body, :headers => headers
-
-      expect(response.status).to eq 201
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      attributes = (JSON.parse response.body)['data']['attributes']
-      expect(attributes['filename']).to eq 'asset.png'
+      it { is_expected.to have_http_status :unsupported_media_type }
+      it { is_expected.to have_error.with_code JSONAPI::UNSUPPORTED_MEDIA_TYPE }
     end
   end
 
   describe 'GET /:id' do
-    before { add_auth_header }
+    before { get asset_path(:id => id), :headers => headers(:access) }
 
-    it 'rejects an invalid id' do
-      get asset_path(:id => 0), :headers => headers
+    let(:id) { asset.id }
 
-      expect(response.status).to eq 404
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_record asset }
 
-    it 'returns successful' do
-      get asset_path(:id => asset.id), :headers => headers
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
 
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
 
     it 'has a raw link' do
-      get asset_path(:id => asset.id), :headers => headers
-
       links = (JSON.parse response.body)['data']['links']
       expect(links['raw']).not_to be_nil
     end
   end
 
   describe 'DELETE /:id' do
-    before do
-      add_auth_header
+    before { delete asset_path(:id => id), :headers => headers(:access) }
 
-      allow(Repo::Asset::Delete).to receive :call
+    let(:id) { asset.id }
+
+    it { is_expected.to have_http_status :no_content }
+
+    it 'is deleted' do
+      expect { asset.reload }.to raise_error ActiveRecord::RecordNotFound
     end
 
-    it 'rejects non-existant assets' do
-      delete asset_path(:id => '0'), :headers => headers
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
 
-      asset.reload
-      expect(asset).not_to be_destroyed
-
-      expect(response.status).to eq 404
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'deletes an asset' do
-      id = asset.id
-      delete asset_path(:id => asset.id), :headers => headers
-
-      expect { Asset.find id }.to raise_error ActiveRecord::RecordNotFound
-
-      expect(response.status).to eq 204
-    end
-  end
-
-  describe 'GET /:id/raw' do
-    before do
-      @token = Asset::Token.new
-      @token.subject = user
-      @token.object = asset
-
-      allow(Repo::Asset::Find).to receive(:call).and_return asset_file
-    end
-
-    it 'rejects no token' do
-      get asset_raw_path(:asset_id => asset.id), :headers => headers
-
-      expect(response.status).to eq 401
-    end
-
-    it 'rejects invalid token' do
-      get asset_raw_path(:asset_id => asset.id), :params => { :token => 'foo' }, :headers => headers
-
-      expect(response.status).to eq 401
-    end
-
-    it 'returns successful' do
-      get asset_raw_path(:asset_id => asset.id), :params => { :token => @token.to_jwt }, :headers => headers
-
-      expect(response.status).to eq 200
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
   end
 end
