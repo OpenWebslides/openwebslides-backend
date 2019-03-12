@@ -61,12 +61,20 @@ class Asset < ApplicationRecord
       super.merge :obj => object.id
     end
 
-    def self.from_jwt(token)
-      t = super token
+    class << self
+      def parse(payload)
+        # Use #find_by instead of #find to prevent RecordNotFound errors being raised
+        super.merge :object => Asset.find_by(:id => payload['obj'])
+      end
 
-      t.object = Asset.find_by :id => @decoded_payload['obj'] if @decoded_payload['obj']
-
-      t
+      def token_for(type)
+        case type
+        when 'asset'
+          Asset::Token
+        else
+          super type
+        end
+      end
     end
   end
 end
