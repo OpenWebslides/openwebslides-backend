@@ -3,13 +3,29 @@
 require 'rails_helper'
 
 RSpec.describe 'Topic API', :type => :request do
+  ##
+  # Configuration
+  #
   include_context 'repository'
 
-  let(:title) { Faker::Lorem.words(4).join(' ') }
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject { response }
 
+  ##
+  # Test variables
+  #
   let(:user) { create :user, :confirmed }
   let(:topic) { create :topic, :user => user }
 
+  ##
+  # Request variables
+  #
+  let(:title) { Faker::Lorem.words(4).join ' ' }
   let(:attributes) do
     {
       :title => title,
@@ -19,7 +35,7 @@ RSpec.describe 'Topic API', :type => :request do
     }
   end
 
-  def request_body(attributes)
+  def create_body(attributes)
     {
       :data => {
         :type => 'topics',
@@ -46,235 +62,114 @@ RSpec.describe 'Topic API', :type => :request do
     }.to_json
   end
 
+  ##
+  # Tests
+  #
   describe 'GET /' do
-    before do
-      create_list :topic, 3
-    end
+    before { create_list :topic, 3 }
 
-    it 'returns successful' do
-      get topics_path, :headers => headers
+    before { get topics_path, :headers => headers }
 
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      json = JSON.parse response.body
-      expect(json['data'].count).to eq 3
-    end
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_records Topic.all }
+    it { is_expected.to have_record_count 3 }
   end
 
   describe 'POST /' do
-    before do
-      add_content_type_header
-      add_auth_header
+    before { post topics_path, :params => create_body(attrs), :headers => headers(:access) }
+
+    let(:attrs) { attributes }
+
+    it { is_expected.to have_http_status :created }
+    it { is_expected.to have_attribute(:title).with_value title }
+
+    context 'when the title is empty' do
+      let(:attrs) { attributes.merge :title => '' }
+
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
-    it 'rejects empty title' do
-      post topics_path, :params => request_body(attributes.merge :title => ''), :headers => headers
+    context 'when there is no title' do
+      let(:attrs) { attributes.except :title }
 
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
-    it 'rejects no title' do
-      post topics_path, :params => request_body(attributes.except :title), :headers => headers
+    context 'when access is invalid' do
+      let(:attrs) { attributes.merge :access => 'foo' }
 
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_error.with_code JSONAPI::VALIDATION_ERROR }
     end
 
-    it 'rejects invalid access' do
-      post topics_path, :params => request_body(attributes.merge :access => 'foo'), :headers => headers
+    context 'when there is no access' do
+      let(:attrs) { attributes.except :access }
 
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'defaults empty access to public' do
-      post topics_path, :params => request_body(attributes.merge :access => ''), :headers => headers
-
-      expect(response.status).to eq 201
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      attributes = JSON.parse(response.body)['data']['attributes']
-
-      expect(attributes['access']).to eq 'public'
-    end
-
-    it 'returns successful' do
-      post topics_path, :params => request_body(attributes), :headers => headers
-
-      expect(response.status).to eq 201
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      json = JSON.parse response.body
-
-      expect(json['data']['attributes']['title']).to eq attributes[:title]
+      it { is_expected.to have_http_status :created }
+      it { is_expected.to have_attribute(:access).with_value 'public' }
     end
   end
 
   describe 'GET /:id' do
-    it 'rejects an invalid id' do
-      get topic_path(:id => 0), :headers => headers
+    before { get topic_path(:id => id), :headers => headers }
 
-      expect(response.status).to eq 404
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
+    let(:id) { topic.id }
 
-    it 'returns successful' do
-      get topic_path(:id => topic.id), :headers => headers
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_record topic }
 
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
 
-    describe 'upstream' do
-      let(:fork) { create :topic, :upstream => topic }
-
-      # Explicitly call fork to create the object
-      before { fork }
-
-      it 'downstream has an upstream' do
-        get topic_path(:id => fork.id), :params => { :include => 'upstream' }, :headers => headers
-
-        expect(response.status).to eq 200
-
-        json = JSON.parse response.body
-        expect(json['data']['relationships']['upstream']['data']['id']).to eq topic.id.to_s
-      end
-
-      it 'upstream has no upstream' do
-        get topic_path(:id => topic.id), :params => { :include => 'upstream' }, :headers => headers
-
-        expect(response.status).to eq 200
-
-        json = JSON.parse response.body
-        expect(json['data']['relationships']['upstream']['data']).to be_nil
-      end
-    end
-
-    describe 'forks' do
-      let(:fork) { create :topic, :upstream => topic }
-
-      # Explicitly call fork to create the object
-      before { fork }
-
-      it 'upstream has a fork' do
-        get topic_path(:id => topic.id), :params => { :include => 'forks' }, :headers => headers
-
-        expect(response.status).to eq 200
-
-        json = JSON.parse response.body
-        expect(json['data']['relationships']['forks']['data'].count).to eq 1
-      end
-
-      it 'downstream has no forks' do
-        get topic_path(:id => fork.id), :params => { :include => 'forks' }, :headers => headers
-
-        expect(response.status).to eq 200
-
-        json = JSON.parse response.body
-        expect(json['data']['relationships']['forks']['data'].count).to eq 0
-      end
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
   end
 
   describe 'PUT/PATCH /:id' do
-    before do
-      add_content_type_header
-      add_auth_header
+    before { patch topic_path(:id => id), :params => update_body(id, attrs), :headers => headers(:access) }
+
+    let(:id) { topic.id }
+    let(:attrs) { attributes.except :rootContentItemId }
+
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_record topic }
+
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
+
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
 
-    it 'rejects id not equal to URL' do
-      patch topic_path(:id => topic.id), :params => update_body(999, :title => 'foo'), :headers => headers
+    context 'when root_content_item_id changes' do
+      let(:attrs) { { :rootContentItemId => 'foo' } }
 
-      expect(response.status).to eq 400
-      expect(jsonapi_error_code(response)).to eq JSONAPI::KEY_NOT_INCLUDED_IN_URL
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'rejects non-existant topics' do
-      patch topic_path(:id => 999), :params => update_body(999, :title => 'foo'), :headers => headers
-
-      expect(response.status).to eq 404
-      expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'rejects empty title' do
-      patch topic_path(:id => topic.id), :params => update_body(topic.id, :title => ''), :headers => headers
-
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'rejects empty access' do
-      patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes.except(:rootContentItemId).merge(:access => '')), :headers => headers
-
-      expect(response.status).to eq 422
-      # Two validation errors: `access` cannot be blank, `access` is invalid
-      expect(jsonapi_error_code(response)).to eq [JSONAPI::VALIDATION_ERROR, JSONAPI::VALIDATION_ERROR]
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'rejects invalid access' do
-      patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes.except(:rootContentItemId).merge(:access => 'foo')), :headers => headers
-
-      expect(response.status).to eq 422
-      expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'rejects rootContentItemId changes' do
-      patch topic_path(:id => topic.id), :params => update_body(topic.id, attributes), :headers => headers
-
-      expect(response.status).to eq 400
-      expect(jsonapi_error_code(response)).to eq JSONAPI::PARAM_NOT_ALLOWED
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'updates title' do
-      expect(topic.title).not_to eq title
-      patch topic_path(:id => topic.id), :params => update_body(topic.id, :title => title), :headers => headers
-
-      topic.reload
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-      expect(topic.title).to eq title
+      it { is_expected.to have_http_status :bad_request }
+      it { is_expected.to have_error.with_code JSONAPI::PARAM_NOT_ALLOWED }
     end
   end
 
   describe 'DELETE /:id' do
-    before do
-      add_auth_header
+    before { Topics::Create.call topic }
 
-      Topics::Create.call topic
+    before { delete topic_path(:id => id), :headers => headers(:access) }
+
+    let(:id) { topic.id }
+
+    it { is_expected.to have_http_status :no_content }
+
+    it 'is destroyed' do
+      expect { topic.reload }.to raise_error ActiveRecord::RecordNotFound
     end
 
-    it 'rejects non-existant topics' do
-      delete topic_path(:id => '0'), :headers => headers
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
 
-      topic.reload
-      expect(topic).not_to be_destroyed
-
-      expect(response.status).to eq 404
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    it 'deletes a topic' do
-      id = topic.id
-      delete topic_path(:id => topic.id), :headers => headers
-
-      expect { Topic.find id }.to raise_error ActiveRecord::RecordNotFound
-
-      expect(response.status).to eq 204
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
   end
-
-  # TODO: user relationship
-  # TODO: collaborators relationship
-  # TODO: assets relationship
 end
