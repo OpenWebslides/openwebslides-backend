@@ -5,8 +5,8 @@ class PullRequestsController < ApplicationController
   include RelatedResources
 
   # Authentication
-  before_action :authenticate_user, :only => %i[show]
-  after_action :renew_token
+  before_action :validate_access_token
+  before_action :require_token, :only => %i[create update]
 
   # Authorization
   after_action :verify_authorized, :except => %i[show_relationship get_related_resources]

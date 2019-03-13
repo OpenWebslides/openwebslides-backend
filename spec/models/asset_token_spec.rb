@@ -17,7 +17,6 @@ RSpec.describe Asset::Token, :type => :model do
   ##
   # Test variables
   #
-  let(:lifetime) { OpenWebslides.config.api.asset_url_lifetime.from_now.to_i }
   let(:user) { create :user, :confirmed }
   let(:asset) { create :asset, :with_topic }
 
@@ -29,10 +28,18 @@ RSpec.describe Asset::Token, :type => :model do
   describe 'methods' do
     # Serialize and deserialize object to let JWT::Auth::Token
     # fill in the defaults for all attributes
-    subject(:token) { Asset::Token.from_token asset_token.to_jwt }
+    subject(:token) { Asset::Token.from_jwt asset_token.to_jwt }
+
+    describe '#type' do
+      it 'returns the correct token type' do
+        expect(subject.type).to eq :asset
+      end
+    end
 
     describe '#valid?' do
-      it { is_expected.to be_valid }
+      it do
+        is_expected.to be_valid
+      end
 
       context 'without token' do
         before { token.object = nil }
@@ -45,16 +52,16 @@ RSpec.describe Asset::Token, :type => :model do
   describe 'from token' do
     let(:jwt) do
       payload = {
-        :exp => lifetime,
+        :exp => asset.lifetime,
         :sub => user.id,
         :obj => asset.id
       }
       JWT.encode payload, Rails.application.secrets.secret_key_base
     end
 
-    let(:token) { Asset::Token.from_token jwt }
+    let(:token) { Asset::Token.from_jwt jwt }
 
-    describe '#from_token' do
+    describe '#from_jwt' do
       it { is_expected.to have_attributes :object => asset }
     end
   end

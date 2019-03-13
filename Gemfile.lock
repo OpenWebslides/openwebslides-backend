@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/floriandejonckheere/jsonapi-matchers.git
+  revision: fbf62270ed7c2c94680b6bd1edc5fb184f273495
+  specs:
+    jsonapi-matchers (0.1.0)
+      activesupport (>= 4.0, < 6)
+      awesome_print
+
+GIT
   remote: https://github.com/thoughtbot/shoulda-matchers.git
   revision: 4b160bd19ecca7f97d7ac22dccd5fde9b0da5a9f
   branch: rails-5
@@ -54,6 +62,7 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     arel (9.0.0)
     ast (2.4.0)
+    awesome_print (1.8.0)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
@@ -74,7 +83,7 @@ GEM
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     colorize (0.8.1)
-    concurrent-ruby (1.1.4)
+    concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
     coveralls (0.8.22)
       json (>= 1.8, < 3)
@@ -118,7 +127,7 @@ GEM
       activesupport (>= 4.2.0)
     hashie (3.6.0)
     http-accept (1.7.0)
-    i18n (1.5.3)
+    i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     iniparse (1.4.4)
@@ -136,9 +145,9 @@ GEM
     jsonapi-utils (0.7.2)
       jsonapi-resources (= 0.9.0)
     jwt (2.1.0)
-    jwt-auth (4.2.0)
-      jwt (~> 2.0)
-      rails (~> 5.2)
+    jwt-auth (5.0.1)
+      jwt
+      rails
     kwalify (0.7.2)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -365,9 +374,10 @@ DEPENDENCIES
   http-accept
   jbuilder
   json
+  jsonapi-matchers!
   jsonapi-resources-matchers
   jsonapi-utils
-  jwt-auth
+  jwt-auth (~> 5.0.1)
   listen
   lograge
   net-ssh

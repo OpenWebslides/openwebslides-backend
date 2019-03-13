@@ -3,10 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe 'Confirmation API', :type => :request do
-  let(:unconfirmed_user) { create :user }
-  let(:user) { create :user, :confirmed }
+  ##
+  # Configuration
+  #
+  ##
+  # Stubs and mocks
+  #
+  ##
+  # Subject
+  #
+  subject { response }
 
-  def request_body(email)
+  ##
+  # Test variables
+  #
+  let(:user) { create :user }
+
+  ##
+  # Request variables
+  #
+  def create_body(email)
     {
       :data => {
         :type => 'confirmations',
@@ -17,7 +33,7 @@ RSpec.describe 'Confirmation API', :type => :request do
     }.to_json
   end
 
-  def confirm_body(token)
+  def update_body(token)
     {
       :data => {
         :type => 'confirmations',
@@ -28,61 +44,54 @@ RSpec.describe 'Confirmation API', :type => :request do
     }.to_json
   end
 
+  ##
+  # Tests
+  #
   describe 'POST /' do
-    before do
-      add_content_type_header
+    before { post confirmation_path, :params => create_body(email), :headers => headers }
+
+    let(:email) { user.email }
+
+    it { is_expected.to have_http_status :no_content }
+
+    context 'when the user is already confirmed' do
+      let(:user) { create :user, :confirmed }
+
+      it { is_expected.to have_http_status :no_content }
     end
 
-    it 'accepts confirmed users' do
-      post confirmation_path, :params => request_body(user.email), :headers => headers
+    context 'when the email is invalid' do
+      let(:email) { 'foo' }
 
-      expect(response.status).to eq 204
-    end
-
-    it 'accepts invalid emails' do
-      post confirmation_path, :params => request_body('foo'), :headers => headers
-
-      expect(response.status).to eq 204
-    end
-
-    it 'requests a password reset token' do
-      post confirmation_path, :params => request_body(unconfirmed_user.email), :headers => headers
-
-      expect(response.status).to eq 204
+      it { is_expected.to have_http_status :no_content }
     end
   end
 
   describe 'PUT/PATCH /' do
-    before do
-      add_content_type_header
-    end
+    before { patch confirmation_path, :params => update_body(token), :headers => headers }
 
-    it 'rejects invalid confirmation tokens' do
-      patch confirmation_path, :params => confirm_body('foo'), :headers => headers
+    let(:token) { user.confirmation_token }
 
-      expect(response.status).to eq 422
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_jsonapi_record user }
 
-    it 'rejects already confirmed users' do
+    it 'confirmed the user' do
+      user.reload
       expect(user).to be_confirmed
-
-      patch confirmation_path, :params => confirm_body(user.confirmation_token), :headers => headers
-
-      expect(response.status).to eq 422
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
     end
 
-    it 'confirms a user' do
-      expect(unconfirmed_user).not_to be_confirmed
+    context 'when the token is invalid' do
+      let(:token) { 'foo' }
 
-      patch confirmation_path, :params => confirm_body(unconfirmed_user.confirmation_token), :headers => headers
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
+    end
 
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    context 'when the user is already confirmed' do
+      let(:user) { create :user, :confirmed }
 
-      unconfirmed_user.reload
-      expect(unconfirmed_user).to be_confirmed
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
   end
 end

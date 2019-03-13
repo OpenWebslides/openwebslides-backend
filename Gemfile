@@ -18,7 +18,7 @@ gem 'state_machines-activerecord'
 
 # Authentication
 gem 'devise'
-gem 'jwt-auth'
+gem 'jwt-auth', '~> 5.0.1'
 gem 'omniauth'
 gem 'omniauth-cas'
 gem 'omniauth-facebook'
@@ -102,6 +102,7 @@ group :test do
   gem 'pundit-matchers'
 
   # JSONAPI RSpec matchers
+  gem 'jsonapi-matchers', :github => 'floriandejonckheere/jsonapi-matchers'
   gem 'jsonapi-resources-matchers'
 
   # Factory pattern for testing

@@ -43,8 +43,17 @@ class Asset < ApplicationRecord
   class Token < JWT::Auth::Token
     attr_accessor :object
 
+    def type
+      :asset
+    end
+
+    def lifetime
+      JWT::Auth.access_token_lifetime
+    end
+
     def valid?
       object&.reload
+
       super && !object.nil?
     end
 
@@ -52,16 +61,20 @@ class Asset < ApplicationRecord
       super.merge :obj => object.id
     end
 
-    def lifetime
-      OpenWebslides.config.api.asset_url_lifetime
-    end
+    class << self
+      def parse(payload)
+        # Use #find_by instead of #find to prevent RecordNotFound errors being raised
+        super.merge :object => Asset.find_by(:id => payload['obj'])
+      end
 
-    def self.from_token(token)
-      t = super token
-
-      t.object = Asset.find_by :id => @decoded_payload['obj'] if @decoded_payload['obj']
-
-      t
+      def token_for(type)
+        case type
+        when 'asset'
+          Asset::Token
+        else
+          super type
+        end
+      end
     end
   end
 end

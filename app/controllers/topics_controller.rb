@@ -5,8 +5,8 @@ class TopicsController < ApplicationController
   include RelatedResources
 
   # Authentication
-  before_action :authenticate_user, :only => %i[create update destroy]
-  after_action :renew_token
+  before_action :validate_access_token
+  before_action :require_token, :only => %i[create update destroy]
 
   # Authorization
   after_action :verify_authorized, :except => %i[index show_relationship get_related_resources]

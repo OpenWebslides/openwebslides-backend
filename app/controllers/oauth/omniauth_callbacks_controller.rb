@@ -32,7 +32,7 @@ module Oauth
 
       @resource.save!
 
-      token = JWT::Auth::Token.from_user @resource
+      token = JWT::Auth::RefreshToken.new :subject => @resource
       redirect_to "/auth/sso?apiToken=#{token.to_jwt}&userId=#{token.subject.id}"
     rescue StandardError => e
       redirect_to "/auth/sso?error=#{CGI.escape e.message}"

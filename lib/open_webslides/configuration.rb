@@ -69,8 +69,6 @@ module OpenWebslides
     # Verify API configuration
     #
     def verify_api!
-      raise 'api.token_lifetime' unless api.token_lifetime&.is_a? ActiveSupport::Duration
-      raise 'api.asset_url_lifetime' unless api.token_lifetime&.is_a? ActiveSupport::Duration
       raise 'repository.version' if Semverse::Version.new(api.version).nil?
     end
 

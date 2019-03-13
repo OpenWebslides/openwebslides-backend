@@ -9,6 +9,16 @@ AllCops:
 Documentation:
   Enabled: false
 
+Layout/BlockEndNewline:
+  # Allow compact multiline blocks in request specs
+  Exclude:
+    - spec/requests/**/*.rb
+
+Layout/MultilineBlockLayout:
+  # Allow compact multiline blocks in request specs
+  Exclude:
+    - spec/requests/**/*.rb
+
 Metrics/AbcSize:
   Max: 40
 
@@ -32,6 +42,11 @@ Naming/UncommunicativeMethodParamName:
 
 Rails/HasAndBelongsToMany:
   Enabled: False
+
+RSpec/ImplicitSubject:
+  # Allow `subject { response }` in request specs
+  Exclude:
+    - spec/requests/**/*.rb
 
 RSpec/NestedGroups:
   Max: 6

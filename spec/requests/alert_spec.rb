@@ -10,6 +10,11 @@ RSpec.describe 'Alerts API', :type => :request do
   # Stubs and mocks
   #
   ##
+  # Subject
+  #
+  subject { response }
+
+  ##
   # Test variables
   #
   let(:alert) { create :update_alert, :user => user }
@@ -17,6 +22,9 @@ RSpec.describe 'Alerts API', :type => :request do
   let(:user) { create :user, :confirmed }
   let(:topic) { create :topic, :user => user }
 
+  ##
+  # Request variables
+  #
   def params
     {
       :include => 'user,topic,pullRequest,subject'
@@ -37,185 +45,111 @@ RSpec.describe 'Alerts API', :type => :request do
   # Tests
   #
   describe 'GET /:id' do
-    before do
-      add_content_type_header
-      add_auth_header
+    before { get alert_path(:id => id), :params => params, :headers => headers(:access) }
+
+    let(:id) { alert.id }
+
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
+
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
 
-    it 'rejects an invalid id' do
-      get alert_path(:id => 0), :headers => headers
-
-      expect(response.status).to eq 404
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
-
-    context 'when the alert_type is `topic_updated`' do
+    context 'when the alert_type is topic_updated' do
       let(:alert) { create :update_alert, :user => user, :alert_type => :topic_updated, :topic => topic }
 
-      it 'returns successful' do
-        get alert_path(:id => alert.id), :params => params, :headers => headers
+      it { is_expected.to have_http_status :ok }
 
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-        json = JSON.parse(response.body)['data']
-
-        expect(json['attributes']['alertType']).to eq 'topic_updated'
-        expect(json['attributes']['count']).to eq alert.count
-        expect(json['relationships']['user']['data']['id']).to eq user.id.to_s
-        expect(json['relationships']['topic']['data']['id']).to eq topic.id.to_s
-        expect(json['relationships']['subject']['data']).to be_nil
-        expect(json['relationships']['pullRequest']['data']).to be_nil
-      end
+      it { is_expected.to have_jsonapi_record alert }
+      it { is_expected.to have_jsonapi_id alert.id }
+      it { is_expected.to have_jsonapi_attribute(:alertType).with_value 'topic_updated' }
+      it { is_expected.to have_jsonapi_attribute(:count).with_value alert.count }
+      it { is_expected.to have_jsonapi_relationship(:user).with_record user }
+      it { is_expected.to have_jsonapi_relationship(:topic).with_record topic }
+      it { is_expected.to have_jsonapi_relationship(:subject).is_empty }
+      it { is_expected.to have_jsonapi_relationship(:pullRequest).is_empty }
     end
 
-    context 'when the alert_type is `pr_submitted`' do
+    context 'when the alert_type is pr_submitted' do
       let(:alert) { create :pull_request_alert, :user => user, :alert_type => :pr_submitted }
 
-      it 'returns successful' do
-        get alert_path(:id => alert.id), :params => params, :headers => headers
-
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-        json = JSON.parse(response.body)['data']
-
-        expect(json['attributes']['alertType']).to eq 'pr_submitted'
-        expect(json['relationships']['user']['data']['id']).to eq alert.user.id.to_s
-        expect(json['relationships']['topic']['data']['id']).to eq alert.topic.id.to_s
-        expect(json['relationships']['subject']['data']['id']).to eq alert.subject.id.to_s
-        expect(json['relationships']['pullRequest']['data']['id']).to eq alert.pull_request.id.to_s
-      end
+      it { is_expected.to have_http_status :ok }
+      it { is_expected.to have_jsonapi_attribute(:alertType).with_value 'pr_submitted' }
+      it { is_expected.to have_jsonapi_relationship(:user).with_record alert.user }
+      it { is_expected.to have_jsonapi_relationship(:topic).with_record alert.topic }
+      it { is_expected.to have_jsonapi_relationship(:subject).with_record alert.subject }
+      it { is_expected.to have_jsonapi_relationship(:pullRequest).with_record alert.pull_request }
     end
 
-    context 'when the alert_type is `pr_accepted`' do
+    context 'when the alert_type is pr_accepted' do
       let(:alert) { create :pull_request_alert, :user => user, :alert_type => :pr_accepted }
 
-      it 'returns successful' do
-        get alert_path(:id => alert.id), :params => params, :headers => headers
-
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-        json = JSON.parse(response.body)['data']
-
-        expect(json['attributes']['alertType']).to eq 'pr_accepted'
-        expect(json['relationships']['user']['data']['id']).to eq alert.user.id.to_s
-        expect(json['relationships']['topic']['data']['id']).to eq alert.topic.id.to_s
-        expect(json['relationships']['subject']['data']['id']).to eq alert.subject.id.to_s
-        expect(json['relationships']['pullRequest']['data']['id']).to eq alert.pull_request.id.to_s
-      end
+      it { is_expected.to have_http_status :ok }
+      it { is_expected.to have_jsonapi_attribute(:alertType).with_value 'pr_accepted' }
+      it { is_expected.to have_jsonapi_relationship(:user).with_record alert.user }
+      it { is_expected.to have_jsonapi_relationship(:topic).with_record alert.topic }
+      it { is_expected.to have_jsonapi_relationship(:subject).with_record alert.subject }
+      it { is_expected.to have_jsonapi_relationship(:pullRequest).with_record alert.pull_request }
     end
 
-    context 'when the alert_type is `pr_rejected`' do
+    context 'when the alert_type is pr_rejected' do
       let(:alert) { create :pull_request_alert, :user => user, :alert_type => :pr_rejected }
 
-      it 'returns successful' do
-        get alert_path(:id => alert.id), :params => params, :headers => headers
-
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-        json = JSON.parse(response.body)['data']
-
-        expect(json['attributes']['alertType']).to eq 'pr_rejected'
-        expect(json['relationships']['user']['data']['id']).to eq alert.user.id.to_s
-        expect(json['relationships']['topic']['data']['id']).to eq alert.topic.id.to_s
-        expect(json['relationships']['subject']['data']['id']).to eq alert.subject.id.to_s
-        expect(json['relationships']['pullRequest']['data']['id']).to eq alert.pull_request.id.to_s
-      end
+      it { is_expected.to have_http_status :ok }
+      it { is_expected.to have_jsonapi_attribute(:alertType).with_value 'pr_rejected' }
+      it { is_expected.to have_jsonapi_relationship(:user).with_record alert.user }
+      it { is_expected.to have_jsonapi_relationship(:topic).with_record alert.topic }
+      it { is_expected.to have_jsonapi_relationship(:subject).with_record alert.subject }
+      it { is_expected.to have_jsonapi_relationship(:pullRequest).with_record alert.pull_request }
     end
   end
 
   describe 'GET /' do
-    before do
-      add_content_type_header
-      add_auth_header
+    before { get user_alerts_path(:user_id => user.id), :params => params, :headers => headers(:access) }
 
+    prepend_before do
       create :update_alert, :user => user, :alert_type => :topic_updated
       create :pull_request_alert, :user => user, :alert_type => :pr_submitted
       create :pull_request_alert, :user => user, :alert_type => :pr_accepted
       create :pull_request_alert, :user => user, :alert_type => :pr_rejected
+
+      create :update_alert, :user => create(:user), :alert_type => :topic_updated
     end
 
-    it 'returns successful' do
-      get user_alerts_path(:user_id => user.id), :params => params, :headers => headers
-
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-      json = JSON.parse response.body
-      expect(json['data'].count).to eq 4
-
-      expect(json['data'][0]['attributes']['alertType']).to eq 'topic_updated'
-      expect(json['data'][1]['attributes']['alertType']).to eq 'pr_submitted'
-      expect(json['data'][2]['attributes']['alertType']).to eq 'pr_accepted'
-      expect(json['data'][3]['attributes']['alertType']).to eq 'pr_rejected'
-    end
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_jsonapi_records user.alerts }
+    it { is_expected.to have_jsonapi_record_count 4 }
   end
 
   describe 'PUT/PATCH /alerts/:id' do
-    before do
-      add_content_type_header
-      add_auth_header
-    end
+    before { patch alert_path(:id => id), :params => update_body(id, :read => read), :headers => headers(:access) }
 
-    it 'rejects non-existant alerts' do
-      patch alert_path(:id => 999), :params => update_body(999, :read => true), :headers => headers
+    let(:id) { alert.id }
+    let(:read) { true }
 
-      expect(response.status).to eq 404
-      expect(jsonapi_error_code(response)).to eq JSONAPI::RECORD_NOT_FOUND
-      expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-    end
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_jsonapi_attribute(:read).with_value true }
 
-    context 'when the alert is not read' do
-      let(:alert) { create :update_alert, :user => user, :read => false }
+    context 'when the identifier is invalid' do
+      let(:id) { 0 }
 
-      it 'rejects requests with read set to false' do
-        patch alert_path(:id => alert.id), :params => update_body(alert.id, :read => false), :headers => headers
-
-        expect(response.status).to eq 422
-        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-        alert.reload
-        expect(alert.read).to be false
-      end
-
-      it 'sets read to true' do
-        patch alert_path(:id => alert.id), :params => update_body(alert.id, :read => true), :headers => headers
-
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-        alert.reload
-        expect(alert.read).to be true
-      end
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
 
     context 'when the alert is already read' do
       let(:alert) { create :update_alert, :user => user, :read => true }
 
-      it 'rejects requests with read set to false' do
-        patch alert_path(:id => alert.id), :params => update_body(alert.id, :read => false), :headers => headers
+      it { is_expected.to have_http_status :ok }
+      it { is_expected.to have_jsonapi_attribute(:read).with_value true }
+    end
 
-        expect(response.status).to eq 422
-        expect(jsonapi_error_code(response)).to eq JSONAPI::VALIDATION_ERROR
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
+    context 'when the request sets an alert to unread' do
+      let(:read) { false }
 
-        alert.reload
-        expect(alert.read).to be true
-      end
-
-      it 'sets read to true' do
-        patch alert_path(:id => alert.id), :params => update_body(alert.id, :read => true), :headers => headers
-
-        expect(response.status).to eq 200
-        expect(response.content_type).to eq "application/vnd.api+json, application/vnd.openwebslides+json; version=#{OpenWebslides.config.api.version}"
-
-        alert.reload
-        expect(alert.read).to be true
-      end
+      it { is_expected.to have_http_status :unprocessable_entity }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::VALIDATION_ERROR }
     end
   end
 end

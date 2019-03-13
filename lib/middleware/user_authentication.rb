@@ -25,7 +25,7 @@ class UserAuthentication
   def call(env)
     if env['HTTP_AUTHORIZATION']&.starts_with? 'User'
       user = User.find env['HTTP_AUTHORIZATION']&.split(' ')&.last
-      token = JWT::Auth::Token.from_user(user).to_jwt if user
+      token = JWT::Auth::AccessToken.new(:subject => user).to_jwt if user
       env['HTTP_AUTHORIZATION'] = "Bearer #{token}" if token
     end
 

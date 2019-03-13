@@ -6,8 +6,8 @@ class AssetsController < ApplicationController
   include RelatedResources
 
   # Authentication
-  before_action :authenticate_user, :only => %i[create destroy]
-  after_action :renew_token, :except => :raw
+  before_action :validate_access_token
+  before_action :require_token, :only => %i[create destroy]
 
   # Authorization
   after_action :verify_authorized, :except => %i[show_relationship get_related_resources]
@@ -63,7 +63,7 @@ class AssetsController < ApplicationController
     return head :not_found unless @asset
 
     # Authenticate from ?token=
-    token = Asset::Token.from_token params[:token]
+    token = Asset::Token.from_jwt params[:token]
 
     # Set @jwt for compatibility with jwt-auth's current_user for #authorize
     @jwt = JWT::Auth::Token.from_user token.subject

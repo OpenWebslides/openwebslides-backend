@@ -63,16 +63,6 @@ OpenWebslides.configure do |config|
   #########################################
 
   ##
-  # Access token lifetime
-  #
-  config.api.token_lifetime = 24.hours
-
-  ##
-  # Signed asset URL lifetime
-  #
-  config.api.asset_url_lifetime = 5.hours
-
-  ##
   # API version
   #
   config.api.version = YAML.load_file Rails.root.join 'config', 'version.yml'
