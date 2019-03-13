@@ -64,7 +64,7 @@ gem 'lograge'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.3.6'
 
   # Enforce code style using Rubocop
   gem 'rubocop', :require => false
@@ -76,12 +76,6 @@ group :development, :test do
   # Coverage report
   gem 'coveralls', :require => false
   gem 'simplecov', :require => false
-
-  # SCSS-lint rendering
-  gem 'sass', :require => false
-
-  # Process manager
-  gem 'foreman', :require => false
 
   # Detect code smells
   gem 'reek', :require => false
