@@ -77,9 +77,6 @@ group :development, :test do
   gem 'coveralls', :require => false
   gem 'simplecov', :require => false
 
-  # SCSS-lint rendering
-  gem 'sass', :require => false
-
   # Process manager
   gem 'foreman', :require => false
 
