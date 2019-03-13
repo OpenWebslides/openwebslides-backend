@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/floriandejonckheere/jsonapi-matchers.git
-  revision: f60d5e3bf9d05bc39876b824e75212edd2279274
+  revision: fbf62270ed7c2c94680b6bd1edc5fb184f273495
   specs:
     jsonapi-matchers (0.1.0)
       activesupport (>= 4.0, < 6)
@@ -83,7 +83,7 @@ GEM
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     colorize (0.8.1)
-    concurrent-ruby (1.1.4)
+    concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
     coveralls (0.8.22)
       json (>= 1.8, < 3)
@@ -127,7 +127,7 @@ GEM
       activesupport (>= 4.2.0)
     hashie (3.6.0)
     http-accept (1.7.0)
-    i18n (1.5.3)
+    i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     iniparse (1.4.4)
@@ -145,7 +145,7 @@ GEM
     jsonapi-utils (0.7.2)
       jsonapi-resources (= 0.9.0)
     jwt (2.1.0)
-    jwt-auth (5.0.0)
+    jwt-auth (5.0.1)
       jwt
       rails
     kwalify (0.7.2)
@@ -377,7 +377,7 @@ DEPENDENCIES
   jsonapi-matchers!
   jsonapi-resources-matchers
   jsonapi-utils
-  jwt-auth
+  jwt-auth (~> 5.0.1)
   listen
   lograge
   net-ssh
