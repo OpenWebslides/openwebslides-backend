@@ -53,11 +53,11 @@ $ bundle exec overcommit --sign
 
 ## Development
 
-Use Foreman to start both the Rails server and the Webpack server:
+Start the Rails server
 
 ```
 $ bundle exec rails db:migrate
-$ bundle exec foreman start
+$ bundle exec rails server
 ```
 
 Use RuboCop to enforce code conventions:

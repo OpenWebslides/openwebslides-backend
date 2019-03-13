@@ -77,9 +77,6 @@ group :development, :test do
   gem 'coveralls', :require => false
   gem 'simplecov', :require => false
 
-  # Process manager
-  gem 'foreman', :require => false
-
   # Detect code smells
   gem 'reek', :require => false
 end
