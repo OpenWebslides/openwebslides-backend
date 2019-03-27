@@ -8,9 +8,7 @@ class GraphqlController < ApplicationController
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
-    context = {
-      :current_user => current_user
-    }
+    context = { :current_user => current_user }
 
     result = OpenWebslides::Schema.execute query,
                                            :variables => variables,

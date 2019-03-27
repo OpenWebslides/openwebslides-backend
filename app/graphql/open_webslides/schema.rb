@@ -7,7 +7,7 @@ module OpenWebslides
     query Types::QueryType
 
     # Overrides
-    context_class Context
+    context_class OpenWebslides::Context
 
     # Request limits
     max_depth 10
