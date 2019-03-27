@@ -11,8 +11,10 @@ require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'action_view/railtie'
 # require "action_cable/engine"
-# require "sprockets/railtie"
 # require 'rails/test_unit/railtie'
+
+# Allow GraphiQL to work in Rails API-only mode
+require 'sprockets/railtie' unless Rails.env.production?
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

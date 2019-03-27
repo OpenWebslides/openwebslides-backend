@@ -67,4 +67,7 @@ Rails.application.configure do
 
   # Allow specifying a user instead of an authentication token
   config.middleware.use UserAuthentication
+
+  # Allow GraphiQL to work in Rails API-only mode
+  config.middleware.use Rack::MethodOverride
 end

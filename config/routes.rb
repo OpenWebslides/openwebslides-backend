@@ -11,7 +11,12 @@ Rails.application.routes.draw do
   ##
   # Sidekiq UI
   #
-  mount Sidekiq::Web => '/sidekiq' unless Rails.env.production?
+  mount Sidekiq::Web => '/sidekiq' if Rails.env.development?
+
+  ##
+  # GraphQL UI
+  #
+  mount GraphiQL::Rails::Engine, :at => '/graphiql', :graphql_path => '/graphql' if Rails.env.development?
 
   ##
   # OAuth2 endpoints

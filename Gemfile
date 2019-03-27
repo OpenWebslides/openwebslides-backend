@@ -134,6 +134,9 @@ group :development do
 
   # Security vulnerability scanner
   gem 'brakeman', :require => false
+
+  # GraphQL UI
+  gem 'graphiql-rails'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -123,6 +123,9 @@ GEM
     ffi (1.10.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    graphiql-rails (1.7.0)
+      railties
+      sprockets-rails
     graphql (1.9.3)
     hashie (3.6.0)
     http-accept (1.7.0)
@@ -366,6 +369,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   fasterer
+  graphiql-rails
   graphql
   http-accept
   jbuilder
