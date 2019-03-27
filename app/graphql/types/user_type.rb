@@ -56,5 +56,12 @@ module Types
     def gravatar_hash
       Digest::MD5.hexdigest(object.email).downcase
     end
+
+    ##
+    # Authorization
+    #
+    def self.authorized?(record, context)
+      super && context.pundit.send(:authorize, record, :show?)
+    end
   end
 end

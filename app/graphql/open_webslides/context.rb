@@ -5,5 +5,9 @@ module OpenWebslides
     def current_user
       self[:current_user]
     end
+
+    def pundit
+      self[:pundit]
+    end
   end
 end
