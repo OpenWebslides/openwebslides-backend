@@ -6,13 +6,4 @@ class ApplicationController < ActionController::API
 
   # Validate validity of token (if present) on all routes
   before_action :validate_token
-
-  protected
-
-  ##
-  # Request context
-  #
-  def context
-    { :current_user => current_user }
-  end
 end

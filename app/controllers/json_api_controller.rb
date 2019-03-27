@@ -9,6 +9,13 @@ class JSONApiController < ApplicationController
   protected
 
   ##
+  # Request context
+  #
+  def context
+    { :current_user => current_user }
+  end
+
+  ##
   # API url for link generation
   #
   def base_url
