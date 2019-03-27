@@ -34,6 +34,9 @@ gem 'rugged'
 # JSON:API spec compliant resources
 gem 'jsonapi-utils'
 
+# GraphQL API
+gem 'graphql'
+
 # Asynchronous processing
 gem 'redis'
 gem 'sidekiq'

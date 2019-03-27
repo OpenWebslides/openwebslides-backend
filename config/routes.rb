@@ -21,6 +21,11 @@ Rails.application.routes.draw do
              :controllers => { :omniauth_callbacks => 'oauth/omniauth_callbacks' }
 
   ##
+  # GraphQL endpoint
+  #
+  post '/graphql', :to => 'graphql#execute'
+
+  ##
   # API endpoints
   #
   scope :api, :constraints => { :format => :json } do
