@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class GraphqlController < ApplicationController
+  # Verify authorization
+  after_action :verify_authorized_or_policy_scoped
+
   ##
   # GraphQL endpoint
   #
