@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PasswordController < ApplicationController
+class PasswordController < JSONApiController
   include AddDummyData
 
   # Authorization

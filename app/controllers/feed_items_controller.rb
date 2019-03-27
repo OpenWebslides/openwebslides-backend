@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class FeedItemsController < ApplicationController
+class FeedItemsController < JSONApiController
   # Authentication
   before_action :validate_access_token
 

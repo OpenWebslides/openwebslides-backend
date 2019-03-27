@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AlertsController < ApplicationController
+class AlertsController < JSONApiController
   include Relationships
   include RelatedResources
 

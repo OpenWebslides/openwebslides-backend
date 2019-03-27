@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ForkController < ApplicationController
+class ForkController < JSONApiController
   include AddDummyData
 
   # Authentication

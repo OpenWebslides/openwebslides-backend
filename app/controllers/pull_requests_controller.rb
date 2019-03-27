@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PullRequestsController < ApplicationController
+class PullRequestsController < JSONApiController
   include Relationships
   include RelatedResources
 

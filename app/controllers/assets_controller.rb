@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AssetsController < ApplicationController
+class AssetsController < JSONApiController
   include BinaryUploadable
   include Relationships
   include RelatedResources

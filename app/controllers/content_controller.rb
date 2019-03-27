@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ContentController < ApplicationController
+class ContentController < JSONApiController
   include Relationships
   include RelatedResources
   include AddDummyData

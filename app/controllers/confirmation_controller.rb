@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ConfirmationController < ApplicationController
+class ConfirmationController < JSONApiController
   include AddDummyData
 
   # Authorization

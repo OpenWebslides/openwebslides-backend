@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TokenController < ApplicationController
+class TokenController < JSONApiController
   include AddDummyData
 
   # Authentication

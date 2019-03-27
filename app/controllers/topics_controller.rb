@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TopicsController < ApplicationController
+class TopicsController < JSONApiController
   include Relationships
   include RelatedResources
 
