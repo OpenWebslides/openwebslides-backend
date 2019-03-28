@@ -3,7 +3,7 @@
 module OpenWebslides
   class Schema < GraphQL::Schema
     # Root fields
-    mutation Types::MutationType
+    mutation Mutations::MutationType
     query Types::QueryType
 
     # Overrides
