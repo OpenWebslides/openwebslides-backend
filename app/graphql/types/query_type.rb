@@ -5,10 +5,6 @@ module Types
     ##
     # Root-level fields
     #
-    field :users,
-          [UserType],
-          :null => false
-
     field :alerts,
           [AlertType],
           :null => false
@@ -16,10 +12,6 @@ module Types
     ##
     # Resolvers
     #
-    def users
-      context.pundit.send :policy_scope, User.all
-    end
-
     def alerts
       context.pundit.send :policy_scope, Alert.all
     end

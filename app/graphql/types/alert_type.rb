@@ -31,15 +31,15 @@ module Types
           'User that generated the alert',
           :null => false
 
-    # field :topic,
-    #       TopicType,
-    #       'Topic referenced in the alert',
-    #       :null => true
+    field :topic,
+          TopicType,
+          'Topic referenced in the alert',
+          :null => true
 
-    # field :pull_request,
-    #       PullRequestType,
-    #       'Pull request referenced in the alert',
-    #       :null => true
+    field :pull_request,
+          PullRequestType,
+          'Pull request referenced in the alert',
+          :null => true
 
     field :subject,
           UserType,
