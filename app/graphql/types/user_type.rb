@@ -2,7 +2,7 @@
 
 module Types
   class UserType < Types::BaseObject
-    implements Types::Identifyable
+    implements Interfaces::Identifyable
 
     ##
     # Attributes
@@ -51,7 +51,8 @@ module Types
     # field :alerts,
     #       [AlertType],
     #       'Alerts',
-    #       :null => false
+    #       :null => false,
+    #       :authorized => true
 
     ##
     # Resolvers
@@ -64,7 +65,7 @@ module Types
     # Authorization
     #
     def self.authorized?(record, context)
-      context.pundit.send :authorize, record, :show?
+      context.pundit.send(:authorize, record, :show?)
     end
   end
 end

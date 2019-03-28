@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module Types
+module Interfaces
   module Identifyable
-    include Types::BaseInterface
+    include Interfaces::BaseInterface
 
     ##
     # Metadata
