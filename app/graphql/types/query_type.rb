@@ -13,7 +13,7 @@ module Types
     # Resolvers
     #
     def users
-      User.all
+      context.pundit.send :policy_scope, User.all
     end
   end
 end
