@@ -15,7 +15,8 @@ module Types
     field :email,
           String,
           'Email address',
-          :null => false
+          :null => true,
+          :authorized => true
 
     field :gravatar_hash,
           String,
@@ -25,12 +26,14 @@ module Types
     field :locale,
           String,
           'Locale',
-          :null => true
+          :null => true,
+          :authorized => true
 
     field :alert_emails,
           Boolean,
           'Email alerts enabled',
-          :null => true
+          :null => true,
+          :authorized => true
 
     ##
     # Relationships
@@ -61,7 +64,7 @@ module Types
     # Authorization
     #
     def self.authorized?(record, context)
-      super && context.pundit.send(:authorize, record, :show?)
+      context.pundit.send :authorize, record, :show?
     end
   end
 end
