@@ -69,7 +69,7 @@ RSpec.describe Oauth::OmniauthCallbacksController do
       expect(subject.instance_variable_get :@resource).to receive :save!
 
       expect(subject).to receive(:redirect_to)
-        .with %r{/auth/sso\?apiToken=.*&userId=.*}
+        .with %r{/auth/sso\?refreshToken=.*&userId=.*}
 
       subject.callback
     end
