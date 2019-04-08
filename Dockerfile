@@ -47,7 +47,7 @@ COPY . /app/
 ##
 # Build public assets
 #
-RUN cd /app/web && ./node_modules/.bin/webpack --config webpack.config.js --mode production
+RUN cd /app/web && rm -rf dist/ && ./node_modules/.bin/webpack --config webpack.config.js --mode production
 
 ##
 # Run application
