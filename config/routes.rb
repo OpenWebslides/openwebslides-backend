@@ -97,7 +97,7 @@ Rails.application.routes.draw do
       jsonapi_links :outgoing_pull_requests, :only => :show
 
       # Nested resource: Assets
-      jsonapi_resources :assets, :only => :create
+      jsonapi_resources :assets, :only => :create do end
 
       # Nested resource: Content
       jsonapi_resource :content, :only => %i[show update]
