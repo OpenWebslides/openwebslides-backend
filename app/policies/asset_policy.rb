@@ -14,6 +14,11 @@ class AssetPolicy < ApplicationPolicy
     topic_policy.show?
   end
 
+  def raw?
+    # Everyone can view raw assets
+    true
+  end
+
   def update?
     # Users can update but only for updatable content
     topic_policy.update_content?
