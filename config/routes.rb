@@ -98,6 +98,7 @@ Rails.application.routes.draw do
 
       # Nested resource: Assets
       jsonapi_resources :assets, :only => :create do end
+      get 'assets/:filename' => 'assets#raw', :as => 'asset', :filename => %r{[^/]+}
 
       # Nested resource: Content
       jsonapi_resource :content, :only => %i[show update]
@@ -130,8 +131,6 @@ Rails.application.routes.draw do
       # Topic relationship
       jsonapi_related_resource :topic
       jsonapi_link :topic, :only => :show
-
-      get '/raw' => 'assets#raw'
     end
 
     ##
