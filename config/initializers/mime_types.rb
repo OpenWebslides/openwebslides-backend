@@ -5,6 +5,8 @@
 # Add new mime types for use in respond_to blocks:
 # Mime::Type.register "text/richtext", :rtf
 
+Mime::Type.register 'image/webp', :webp
+
 module JSONAPI
   # MIME type for file uploads
   UPLOAD_MEDIA_TYPE = 'multipart/form-data'
