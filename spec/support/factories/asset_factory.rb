@@ -5,7 +5,8 @@ FactoryBot.define do
     ##
     # Attributes
     #
-    filename { Faker::File.unique.file_name('')[1..-1] }
+    # TODO: sample allowed file extensions
+    filename { Faker::File.unique.file_name('', nil, %i[png jpeg gif webp].sample)[1..-1] }
 
     ##
     # Associations

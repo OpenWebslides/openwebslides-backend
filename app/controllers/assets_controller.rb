@@ -5,6 +5,8 @@ class AssetsController < ApplicationController
   include Relationships
   include RelatedResources
 
+  include ContentTypeHelper
+
   # Authentication
   before_action :validate_access_token
   before_action :require_token, :only => %i[create destroy]
@@ -16,7 +18,7 @@ class AssetsController < ApplicationController
 
   upload_action :create
 
-  skip_before_action :jsonapi_request_handling, :only => :raw
+  skip_after_action :add_content_type_header_version, :only => :raw
 
   # POST /assets
   def create
@@ -46,6 +48,18 @@ class AssetsController < ApplicationController
     jsonapi_render :json => @asset
   end
 
+  # GET /assets/:id
+  def raw
+    @topic = Topic.find params[:topic_id]
+    @asset = @topic&.assets.find_by! :filename => params[:filename]
+
+    authorize @asset, :raw?
+
+
+    # Send file
+    send_file Assets::Find.call(@asset), :type => content_type_for(@asset.filename)
+  end
+
   # DELETE /assets/:id
   def destroy
     @asset = Asset.find params[:id]
@@ -55,23 +69,5 @@ class AssetsController < ApplicationController
     Assets::Delete.call @asset, current_user
 
     head :no_content
-  end
-
-  # GET /assets/:id/raw
-  def raw
-    @asset = Asset.find params[:asset_id]
-    return head :not_found unless @asset
-
-    # Authenticate from ?token=
-    token = Asset::Token.from_jwt params[:token]
-
-    # Set @jwt for compatibility with jwt-auth's current_user for #authorize
-    @jwt = JWT::Auth::Token.from_user token.subject
-
-    authorize @asset, :show?
-    return head :unauthorized unless token && token.valid?
-
-    # Send file
-    send_file Assets::Find.call @asset
   end
 end
