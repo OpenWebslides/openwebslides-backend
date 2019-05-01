@@ -3,19 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe 'Assets API', :type => :request do
+  include ContentTypeHelper
+
   ##
   # Configuration
-  #
+  #Mime::Type.lookup_by_extension(File.extname(filename)[1..-1])&.to_s
   include_context 'repository'
 
   ##
   # Stubs and mocks
   #
-  before do
-    allow(Repo::Asset::UpdateFile).to receive :call
-    allow(Repo::Asset::Delete).to receive :call
-  end
-
   ##
   # Subject
   #
@@ -24,9 +21,8 @@ RSpec.describe 'Assets API', :type => :request do
   ##
   # Test variables
   #
-  let(:asset) { create :asset, :with_topic }
-
-  let(:topic) { asset.topic }
+  let(:topic) { create :topic }
+  let(:asset) { create :asset, :topic => topic }
   let(:user) { topic.user }
 
   let(:asset_file) { Rails.root.join 'spec', 'support', 'asset.png' }
@@ -39,18 +35,20 @@ RSpec.describe 'Assets API', :type => :request do
   ##
   # Tests
   #
+  before { Topics::Create.call topic }
+
   describe 'POST /' do
     before { post topic_assets_path(:topic_id => topic.id), :params => body, :headers => asset_headers }
 
     let(:asset_headers) { headers(:access).merge 'Content-Type' => content_type, 'Content-Disposition' => "attachment; filename=\"#{filename}\"" }
-    let(:filename) { 'asset.png' }
-    let(:content_type) { 'image/png' }
+    let(:filename) { build(:asset).filename }
+    let(:content_type) { content_type_for asset.filename }
 
     it { is_expected.to have_http_status :created }
-    it { is_expected.to have_jsonapi_attribute(:filename).with_value 'asset.png' }
+    it { is_expected.to have_jsonapi_attribute(:filename).with_value filename }
 
     context 'when Content-Disposition is omitted' do
-      let(:asset_headers) { headers(:access).merge 'Content-Type' => 'image/png' }
+      let(:asset_headers) { headers(:access).merge 'Content-Type' => content_type }
 
       it { is_expected.to have_http_status :bad_request }
       it { is_expected.to have_jsonapi_error.with_code JSONAPI::BAD_REQUEST }
@@ -72,6 +70,7 @@ RSpec.describe 'Assets API', :type => :request do
   end
 
   describe 'GET /:id' do
+    before { Assets::Create.call asset, topic.user, body }
     before { get asset_path(:id => id), :headers => headers(:access) }
 
     let(:id) { asset.id }
@@ -85,14 +84,27 @@ RSpec.describe 'Assets API', :type => :request do
       it { is_expected.to have_http_status :not_found }
       it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
+  end
 
-    it 'has a raw link' do
-      links = (JSON.parse response.body)['data']['links']
-      expect(links['raw']).not_to be_nil
+  describe 'GET /:id/raw' do
+    before { Assets::Create.call asset, topic.user, body }
+    before { get topic_asset_path(:topic_id => topic.id, :filename => filename), :headers => headers }
+
+    let(:filename) { asset.filename }
+
+    it { is_expected.to have_http_status :ok }
+    it { is_expected.to have_http_header 'Content-Type' => content_type_for(filename) }
+
+    context 'when the filename is invalid' do
+      let(:filename) { 'foo.png' }
+
+      it { is_expected.to have_http_status :not_found }
+      it { is_expected.to have_jsonapi_error.with_code JSONAPI::RECORD_NOT_FOUND }
     end
   end
 
   describe 'DELETE /:id' do
+    before { Assets::Create.call asset, topic.user, body }
     before { delete asset_path(:id => id), :headers => headers(:access) }
 
     let(:id) { asset.id }

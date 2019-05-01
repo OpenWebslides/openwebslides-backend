@@ -15,8 +15,8 @@ module Repo
         Repo::Git::Commit.call repo, user, "Delete #{asset.filename}"
 
         # Update timestamps
-        receiver.touch
-        receiver.topic.touch
+        asset.touch
+        asset.topic.touch
       end
     end
   end

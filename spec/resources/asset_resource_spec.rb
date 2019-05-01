@@ -56,10 +56,6 @@ RSpec.describe AssetResource, :type => :resource do
     it 'has a valid set of sortable fields' do
       expect(described_class.sortable_fields context).to match_array %i[id filename]
     end
-
-    it 'has a custom link' do
-      expect(subject).to respond_to :custom_links
-    end
   end
 
   describe 'filters' do
