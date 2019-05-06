@@ -77,6 +77,7 @@ services:
       - certs:/etc/letsencrypt/:ro
       - certs-data:/data/letsencrypt/
       - uploads:/app/tmp/uploads/
+      - ${PWD}/site/:/app/site/
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
