@@ -12,6 +12,8 @@ function renew() {
     -d $1
 }
 
+cd /opt/openwebslides/openwebslides/
+
 # Renew certificates
 for HOST in $@; do
   renew ${HOST}
